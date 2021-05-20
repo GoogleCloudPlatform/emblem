@@ -22,6 +22,12 @@ use GitHub pull requests for this purpose. Consult
 [GitHub Help](https://help.github.com/articles/about-pull-requests/) for more
 information on using pull requests.
 
+## Significant Contributions
+
+**Significant contributions** change the architecture, developer experience, or add exciting new capabilities to the application. This requires making technical decisions, and in this project we do our best to capture the considerations in these moments to tell a story of software evolution and preserve context to revisit our design.
+
+Every significant contribution is expected to [add a decision record](docs/decisions.md). To make sure implementation time is not wasted, please propose design in an issue before opening a code editor.
+
 ## Community Guidelines
 
 This project follows
