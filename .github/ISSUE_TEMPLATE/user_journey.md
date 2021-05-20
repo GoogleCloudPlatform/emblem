@@ -1,5 +1,5 @@
 ---
-name: User Journey
+name: User Journey Proposal
 about: Propose a new User Journey (business requirement)
 title: "(Journey) UJ1: Journey Title"
 labels: 'status: investigating, priority: p2, type: journey'

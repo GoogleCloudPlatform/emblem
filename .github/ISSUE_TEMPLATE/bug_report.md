@@ -36,4 +36,4 @@ If applicable, add screenshots to help explain your problem.
 **User environment:**
  - OS: [e.g. iOS]
  - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+ - Emblem Project Version [e.g. v0.5.3]
