@@ -6,10 +6,11 @@ labels: 'status: investigating, priority: p2, type: journey'
 assignees: ''
 
 ---
+*<Please apply relevant `component` and `persona` labels to this issue>*
 
 ## Description
 
-As a contributor, I make a contribution to an identified giving campaign. 
+As a contributor, I make a contribution to an identified giving campaign.
 Note: No financial transaction will take place.
 
 ## Phase 1 Requirements
@@ -20,7 +21,7 @@ Note: No financial transaction will take place.
 
 ## Related Decision Records
 
-*<This section will be filled out as this journey progresses through design>*
+*<This section will be filled out as this journey's tasks pass through design>*
 
 ## Possible Future Enhancements
 
