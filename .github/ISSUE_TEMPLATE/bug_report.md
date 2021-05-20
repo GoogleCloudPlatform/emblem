@@ -2,12 +2,17 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: 'type: bug, priority: p2'
+labels: 'type: bug, priority: p1'
 assignees: ''
 
 ---
 
+Thanks for stopping by to let us know something could be better!
+
+**PLEASE READ**: This repository is dedicated to a sample application that uses multiple Google Cloud products. We will only be able to address issues related to this application, not to underlying issues in a client library or one of the products. Please visit the [Support page](https://cloud.google.com/support) to reach the most relevant engineers.
+
 ## Problem
+
 A clear and concise description of what the bug is.
 
 ## Steps to Reproduce
