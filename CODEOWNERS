@@ -1,0 +1,15 @@
+# These owners will be the default owners for everything in
+# the repo. Unless a later match takes precedence,
+# global owners will be requested for
+# review when someone opens a pull request.
+*                   @emblem-approvers
+
+# Pipelines, Operations, & Infrastructure Management
+terraform/          @emblem-approvers @dinagraves
+ops/                @emblem-approvers @dinagraves
+*.cloudbuild.yaml   @emblem-approvers @dinagraves
+/.github/           @emblem-approvers @dinagraves
+
+# Local development
+/.vscode/           @emblem-approvers @kelsk
+.cctemplate         @emblem-approvers @kelsk
