@@ -43,7 +43,7 @@ SAMPLE_CAMPAIGNS = [
 
 
 @app.route('/')
-def listCampaigns():
+def webapp_list_campaigns():
     return render_template(
         'home.html',
         campaigns=SAMPLE_CAMPAIGNS
