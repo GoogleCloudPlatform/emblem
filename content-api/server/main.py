@@ -15,10 +15,12 @@
 from flask import Flask, request
 
 from resources import approvers
+from resources import donors
 
 
 resource = {
-    "approvers": approvers
+    "approvers": approvers,
+    "donors": donors,
 }
 
 app = Flask(__name__)
