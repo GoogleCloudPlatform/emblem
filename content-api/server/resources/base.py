@@ -33,16 +33,16 @@ db = firestore.Client()
 #
 # This function returns a JSON representation of a stored
 # resource, and inserts the resource kind, selfLink, and etag.
-# 
+#
 # Values missing from the dictionary are treated as None (null
 # in JSON).
 def canonical_resource(resource, resource_kind, user_fields):
     representation = {
-        'kind': resource_kind,
-        'id': resource.get('id', None),
-        'timeCreated': resource.get('timeCreated', None),
-        'updated': resource.get('updated', None),
-        'selfLink': '/{}/{}'.format(resource_kind, resource.get('id', None))
+        "kind": resource_kind,
+        "id": resource.get("id", None),
+        "timeCreated": resource.get("timeCreated", None),
+        "updated": resource.get("updated", None),
+        "selfLink": "/{}/{}".format(resource_kind, resource.get("id", None)),
     }
 
     for field_name in user_fields:

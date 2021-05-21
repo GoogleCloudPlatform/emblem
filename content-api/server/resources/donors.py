@@ -17,54 +17,56 @@ import json
 from resources import base
 
 
-user_fields = ['name', 'email', 'mailing_address']
+user_fields = ["name", "email", "mailing_address"]
 
 
 def list():
-    donors_collection = base.db.collection('donors')
+    donors_collection = base.db.collection("donors")
     representations_list = []
     for donor in donors_collection.stream():
         resource = donor.to_dict()
-        resource['id'] = donor.id
-        resource['timeCreated'] = donor.create_time.rfc3339()
-        resource['updated'] = donor.update_time.rfc3339()
-        representations_list.append(base.canonical_resource(resource, 'donors', user_fields))
-    
+        resource["id"] = donor.id
+        resource["timeCreated"] = donor.create_time.rfc3339()
+        resource["updated"] = donor.update_time.rfc3339()
+        representations_list.append(
+            base.canonical_resource(resource, "donors", user_fields)
+        )
+
     return json.dumps(representations_list)
 
 
 def get(id):
-    donor_reference = base.db.document('donors/{}'.format(id))
+    donor_reference = base.db.document("donors/{}".format(id))
     donor_snapshot = donor_reference.get()
     if not donor_snapshot.exists:
-        return 'Not found', 404
-    
-    resource = donor_snapshot.to_dict()
-    resource['id'] = donor_snapshot.id
-    resource['timeCreated'] = donor_snapshot.create_time.rfc3339()
-    resource['updated'] = donor_snapshot.update_time.rfc3339()
+        return "Not found", 404
 
-    resource = base.canonical_resource(resource, 'donors', user_fields)
+    resource = donor_snapshot.to_dict()
+    resource["id"] = donor_snapshot.id
+    resource["timeCreated"] = donor_snapshot.create_time.rfc3339()
+    resource["updated"] = donor_snapshot.update_time.rfc3339()
+
+    resource = base.canonical_resource(resource, "donors", user_fields)
 
     return json.dumps(resource)
 
 
 def insert(representation):
-    resource = {'kind': 'donors'}
+    resource = {"kind": "donors"}
     for field in user_fields:
         resource[field] = representation.get(field, None)
-    
-    doc_ref = base.db.collection('donors').document()
+
+    doc_ref = base.db.collection("donors").document()
     doc_ref.set(resource)
 
-    return 'Created', 201
+    return "Created", 201
 
 
 def patch(id, representation):
-    donor_reference = base.db.document('donors/{}'.format(id))
+    donor_reference = base.db.document("donors/{}".format(id))
     donor_snapshot = donor_reference.get()
     if not donor_snapshot.exists:
-        return 'Not found', 404
+        return "Not found", 404
 
     changed_fields = []
     for field in user_fields:
@@ -73,14 +75,14 @@ def patch(id, representation):
 
     donor_reference.set(representation, merge=changed_fields)
 
-    return 'OK', 200
+    return "OK", 200
 
 
 def delete(id):
-    donor_reference = base.db.document('donors/{}'.format(id))
+    donor_reference = base.db.document("donors/{}".format(id))
     donor_snapshot = donor_reference.get()
     if not donor_snapshot.exists:
-        return 'Not found', 404
+        return "Not found", 404
 
     donor_reference.delete()
-    return '', 204
+    return "", 204
