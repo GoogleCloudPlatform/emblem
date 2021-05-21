@@ -14,7 +14,6 @@
 
 
 import json
-from google.cloud import firestore
 from resources import base
 
 
@@ -22,9 +21,7 @@ user_fields = ['name', 'email', 'active']
 
 
 def list():
-    db = firestore.Client()
-
-    approvers_collection = db.collection('approvers')
+    approvers_collection = base.db.collection('approvers')
     representations_list = []
     for approver in approvers_collection.stream():
         resource = approver.to_dict()
@@ -37,9 +34,7 @@ def list():
 
 
 def get(id):
-    db = firestore.Client()
-
-    approver_reference = db.document('approvers/{}'.format(id))
+    approver_reference = base.db.document('approvers/{}'.format(id))
     approver_snapshot = approver_reference.get()
     if not approver_snapshot.exists:
         return 'Not found', 404
@@ -59,16 +54,14 @@ def insert(representation):
     for field in user_fields:
         resource[field] = representation.get(field, None)
     
-    db = firestore.Client()
-    doc_ref = db.collection('approvers').document()
+    doc_ref = base.db.collection('approvers').document()
     doc_ref.set(resource)
 
     return 'Created', 201
 
 
 def patch(id, representation):
-    db = firestore.Client()
-    approver_reference = db.document('approvers/{}'.format(id))
+    approver_reference = base.db.document('approvers/{}'.format(id))
     approver_snapshot = approver_reference.get()
     if not approver_snapshot.exists:
         return 'Not found', 404
@@ -84,8 +77,7 @@ def patch(id, representation):
 
 
 def delete(id):
-    db = firestore.Client()
-    approver_reference = db.document('approvers/{}'.format(id))
+    approver_reference = base.db.document('approvers/{}'.format(id))
     approver_snapshot = approver_reference.get()
     if not approver_snapshot.exists:
         return 'Not found', 404

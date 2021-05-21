@@ -13,9 +13,16 @@
 # limitations under the License.
 
 
+from google.cloud import firestore
+
+
 """
     Utility functions and values that apply to every type of resource.
 """
+
+
+# Reuse a global Firestore client to prevent repeated initializations
+db = firestore.Client()
 
 
 # Stored resources are dictionaries containing all user fields,
