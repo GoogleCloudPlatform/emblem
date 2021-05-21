@@ -28,11 +28,15 @@ app = Flask(__name__)
 
 @app.route('/<string:resource_name>', methods=['GET'])
 def handle_list(resource_name):
+    if resource_name not in resource:
+        return 'Not found', 404
     return resource[resource_name].list()
 
 
 @app.route('/<string:resource_name>', methods=['POST'])
 def handle_insert(resource_name):
+    if resource_name not in resource:
+        return 'Not found', 404
     if not request.is_json:
         return 'Unsupported media type', 415
 
@@ -47,16 +51,22 @@ def handle_insert(resource_name):
 
 @app.route('/<string:resource_name>/<string:id>', methods=['GET'])
 def handle_get(resource_name, id):
+    if resource_name not in resource:
+        return 'Not found', 404
     return resource[resource_name].get(id)
 
 
 @app.route('/<string:resource_name>/<string:id>', methods=['DELETE'])
 def handle_delete(resource_name, id):
+    if resource_name not in resource:
+        return 'Not found', 404
     return resource[resource_name].delete(id)
 
 
 @app.route('/<string:resource_name>/<string:id>', methods=['PATCH'])
 def handle_patch(resource_name, id):
+    if resource_name not in resource:
+        return 'Not found', 404
     if not request.is_json:
         return 'Unsupported media type', 415
 
