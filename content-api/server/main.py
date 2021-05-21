@@ -24,42 +24,47 @@ resource = {
 app = Flask(__name__)
 
 
+# Resource collection methods
 
-@app.route('/<string:resource_name>/', defaults={'idZ': None}, methods=['GET', 'POST'])
-@app.route('/<string:resource_name>/<string:id>', methods=['GET', 'PUT', 'DELETE', 'PATCH'])
-def handle_resource(resource_name, id):
-    if id is None:
-        if request.method == 'GET':
-            return resource[resource_name].list()
+@app.route('/<string:resource_name>', methods=['GET'])
+def handle_list(resource_name):
+    return resource[resource_name].list()
 
-        elif request.method == 'POST':
-            if not request.is_json:
-                return 'Unsupported media type', 415
 
-            body = request.get_json(silent=True)
-            if body is None:
-                return 'Bad request', 400
+@app.route('/<string:resource_name>', methods=['POST'])
+def handle_insert(resource_name):
+    if not request.is_json:
+        return 'Unsupported media type', 415
 
-            return resource[resource_name].insert(body)
-        else:
-            return 'Method not allowed', 405
+    body = request.get_json(silent=True)
+    if body is None:
+        return 'Bad request', 400
 
-    else:
-        if request.method == 'GET':
-            return resource[resource_name].get(id)
-        elif request.method == 'DELETE':
-            return resource[resource_name].delete(id)
-        elif request.method == 'PATCH':
-            if not request.is_json:
-                return 'Unsupported media type', 415
+    return resource[resource_name].insert(body)
 
-            body = request.get_json(silent=True)
-            if body is None:
-                return 'Bad request', 400
 
-            return resource[resource_name].patch(id, body)
-        else:
-            return 'Method not allowed', 405
+# Individual resource methods
+
+@app.route('/<string:resource_name>/<string:id>', methods=['GET'])
+def handle_get(resource_name, id):
+    return resource[resource_name].get(id)
+
+
+@app.route('/<string:resource_name>/<string:id>', methods=['DELETE'])
+def handle_delete(resource_name, id):
+    return resource[resource_name].delete(id)
+
+
+@app.route('/<string:resource_name>/<string:id>', methods=['PATCH'])
+def handle_patch(resource_name, id):
+    if not request.is_json:
+        return 'Unsupported media type', 415
+
+    body = request.get_json(silent=True)
+    if body is None:
+        return 'Bad request', 400
+
+    return resource[resource_name].patch(id, body)
 
 
 if __name__ == '__main__':
