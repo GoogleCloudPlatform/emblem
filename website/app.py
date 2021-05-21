@@ -23,28 +23,22 @@ app = Flask(__name__)
 
 SAMPLE_CAMPAIGNS = [
     {
-        'name': 'cash for camels',
-        'goal': 2500,
-        'managers': [
-            'Chris the camel',
-            'Carissa the camel'
-        ],
-        'updated': datetime.date(2021, 2, 1)
+        "name": "cash for camels",
+        "goal": 2500,
+        "managers": ["Chris the camel", "Carissa the camel"],
+        "updated": datetime.date(2021, 2, 1),
     },
     {
-        'name': 'water for fish',
-        'goal': 2500,
-        'managers': [
-            'Fred the fish',
+        "name": "water for fish",
+        "goal": 2500,
+        "managers": [
+            "Fred the fish",
         ],
-        'updated': datetime.date(2021, 5, 10)
-    }
+        "updated": datetime.date(2021, 5, 10),
+    },
 ]
 
 
-@app.route('/')
+@app.route("/")
 def webapp_list_campaigns():
-    return render_template(
-        'home.html',
-        campaigns=SAMPLE_CAMPAIGNS
-    )
+    return render_template("home.html", campaigns=SAMPLE_CAMPAIGNS)
