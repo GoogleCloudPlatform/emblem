@@ -17,16 +17,20 @@ from flask import Flask, request
 from resources import approvers
 
 
+resource = {
+    "approvers": approvers
+}
+
 app = Flask(__name__)
 
 
 
-@app.route('/approvers/', defaults={'approver': None}, methods=['GET', 'POST'])
-@app.route('/approvers/<string:approver>', methods=['GET', 'PUT', 'DELETE', 'PATCH'])
-def handle_approvers(approver):
-    if approver is None:
+@app.route('/<string:resource_name>/', defaults={'idZ': None}, methods=['GET', 'POST'])
+@app.route('/<string:resource_name>/<string:id>', methods=['GET', 'PUT', 'DELETE', 'PATCH'])
+def handle_resource(resource_name, id):
+    if id is None:
         if request.method == 'GET':
-            return approvers.list()
+            return resource[resource_name].list()
 
         elif request.method == 'POST':
             if not request.is_json:
@@ -36,15 +40,15 @@ def handle_approvers(approver):
             if body is None:
                 return 'Bad request', 400
 
-            return approvers.insert(body)
+            return resource[resource_name].insert(body)
         else:
             return 'Method not allowed', 405
 
     else:
         if request.method == 'GET':
-            return approvers.get(approver)
+            return resource[resource_name].get(id)
         elif request.method == 'DELETE':
-            return approvers.delete(approver)
+            return resource[resource_name].delete(id)
         elif request.method == 'PATCH':
             if not request.is_json:
                 return 'Unsupported media type', 415
@@ -53,7 +57,7 @@ def handle_approvers(approver):
             if body is None:
                 return 'Bad request', 400
 
-            return approvers.patch(approver, body)
+            return resource[resource_name].patch(id, body)
         else:
             return 'Method not allowed', 405
 
