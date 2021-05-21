@@ -1,0 +1,27 @@
+<!doctype html>
+<title>View Campaigns | Cymbal Giving</title>
+
+{% for campaign in campaigns %}
+    <div>
+        <p>
+            <b>Campaign name:</b>
+            {{ campaign.name }}
+        </p>
+        <p>
+            <b>Goal:</b>
+            {{ campaign.goal }}
+        <p>
+            <b>Managers:</b>
+            <ul>
+            {% for manager in campaign.managers %}
+                <li>{{ manager }}</li>
+            {% endfor %}
+            </ul>
+        </p>
+        <p>
+            <b>Last updated:</b>
+            {{ campaign.updated }}
+        </p>
+    </div>
+    <hr />
+{% endfor %}
