@@ -16,7 +16,10 @@ import datetime
 
 from flask import Flask, redirect, request, render_template
 
+from views.errors import errors_bp
+
 app = Flask(__name__)
+app.register_blueprint(errors_bp)
 
 # TODO(anassri, engelke): use API call instead of this
 # (This is based on the API design doc for now.)
@@ -68,6 +71,5 @@ def webapp_view_campaign():
         campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
     ][0]
     return render_template("view-campaign.html", campaign=campaign_instance)
-
 
 app.run()
