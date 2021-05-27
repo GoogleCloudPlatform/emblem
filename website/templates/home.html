@@ -16,6 +16,8 @@
 <!doctype html>
 <title>View Campaigns | Cymbal Giving</title>
 
+<a href="/createCampaign">Create new campaign</a>
+
 {% for campaign in campaigns %}
     <div>
         <p>
@@ -25,6 +27,7 @@
         <p>
             <b>Goal:</b>
             {{ campaign.goal }}
+        </p>
         <p>
             <b>Managers:</b>
             <ul>
@@ -36,6 +39,11 @@
         <p>
             <b>Last updated:</b>
             {{ campaign.updated }}
+        </p>
+        <p>
+            <a href="/viewCampaign?campaign_id={{ campaign.id }}">
+                Campaign details
+            </a>
         </p>
     </div>
     <hr />

@@ -14,7 +14,7 @@
 
 import datetime
 
-from flask import Flask, render_template
+from flask import Flask, redirect, request, render_template
 
 app = Flask(__name__)
 
@@ -23,12 +23,14 @@ app = Flask(__name__)
 
 SAMPLE_CAMPAIGNS = [
     {
+        "id": "aaaa-bbbb-cccc-dddd",
         "name": "cash for camels",
         "goal": 2500,
         "managers": ["Chris the camel", "Carissa the camel"],
         "updated": datetime.date(2021, 2, 1),
     },
     {
+        "id": "eeee-ffff-gggg-hhhh",
         "name": "water for fish",
         "goal": 2500,
         "managers": [
@@ -42,6 +44,30 @@ SAMPLE_CAMPAIGNS = [
 @app.route("/")
 def webapp_list_campaigns():
     return render_template("home.html", campaigns=SAMPLE_CAMPAIGNS)
+
+
+@app.route("/createCampaign", methods=["GET"])
+def webapp_create_campaign_get():
+    return render_template("create-campaign.html")
+
+
+@app.route("/createCampaign", methods=["POST"])
+def webapp_create_campaign_post():
+    # TODO: do something with the collected data
+    print("Name: ", request.form["name"])
+    print("Goal: ", request.form["goal"])
+    print("Managers: ", request.form["managers"])
+
+    return redirect("/")
+
+
+@app.route("/viewCampaign")
+def webapp_view_campaign():
+    campaign_id = request.args["campaign_id"]
+    campaign_instance = [
+        campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
+    ][0]
+    return render_template("view-campaign.html", campaign=campaign_instance)
 
 
 app.run()
