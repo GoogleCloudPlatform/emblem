@@ -10,6 +10,41 @@ Decision records should attempt to follow the Y-statement format for consistency
 In the context of **<use case/user story u>**, facing **<concern c>** we decided for **<option o>** and neglected <other options>, to achieve <system qualities/desired consequences>, accepting <downside d/undesired consequences>, because <additional rationale>.
 ```
 
+## Decision: Use a two-folder-level split for Jinja templates
+
+In order to organize our Jinja HTML templates, we decided to **use a two-level folder level split**. This will be combined with Jinja inheritance (i.e. the `extends` clause) for common components where possible.
+
+Concretely, our _templates_ file architecture might look like this:
+```
+website/
+  templates/
+    campaigns/
+      view_campaign.html
+      create_or_edit_campaign.html
+    users/
+      view_user.html
+    ...
+```
+
+See [this GitHub issue](https://github.com/GoogleCloudPlatform/emblem/issues/37) for more information.
+
+## Decision: Use a one-folder-level split for Flask view functions
+
+In order to organize our Flask view functions, we decided to **use a single folder level split combined with Flask blueprints**, accepting that this may be subject to revision in the future.
+
+Concretely, our _views_ file architecture might look like this:
+```
+website/
+  views/
+    campaigns.py
+    users.py
+    ...
+```
+
+See [this GitHub issue](https://github.com/GoogleCloudPlatform/emblem/issues/37) for more information.
+
+* **Date:** 2021/06
+
 ## Decision: Frontend Avoids JS Frameworks
 
 In the context of the **frontend tech stack**, deciding to use plain JavaScript + libraries or use a rich framework such as Angular, React, or Vue, we decided to **use plain JavaScript to keep the frontend implementation approachable to backend developers**, accepting we will be less effective engaging with frontend engineers attempting to use serverless and may eventually outgrow a plain JavaScript code architecture.
