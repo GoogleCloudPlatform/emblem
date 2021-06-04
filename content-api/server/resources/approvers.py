@@ -13,7 +13,40 @@
 # limitations under the License.
 
 
+"""
+    Manages API operations for the approvers resource type, implementing
+    standard methods:
+
+        list    Return all approvers
+        get     Return a single approver
+        insert  Create a new approver
+        patch   Update an approver
+        delete  Remove an approver
+
+    Includes these standard properties:
+
+        kind        "approvers"
+        id          unique system generated identifier
+        timeCreated timestamp; when this was created
+        updated     timestamp; when this was last updated
+        selfLink    the path of the URI for this resource
+
+    Includes Approver specific properties:
+
+        name        the person's actual name
+        email       how to reach this person
+        active      boolean; whether this person can currently approve
+
+    All properties are strings, unless otherwise noted in the description.
+
+    Since JSON does not have a date or datetime format, all timestamps are
+    strings in RFC 3339 format for UTC, as in YYYY-MM-DDTHH:MM:SS.ffffffZ.
+"""
+
+
 import json
+from google.cloud import firestore
+
 from resources import base
 
 
@@ -32,7 +65,7 @@ def list():
             base.canonical_resource(resource, "approvers", user_fields)
         )
 
-    return json.dumps(representations_list)
+    return json.dumps(representations_list), 200
 
 
 def get(id):
@@ -48,7 +81,7 @@ def get(id):
 
     resource = base.canonical_resource(resource, "approvers", user_fields)
 
-    return json.dumps(resource)
+    return json.dumps(resource), 200
 
 
 def insert(representation):
@@ -63,19 +96,27 @@ def insert(representation):
 
 
 def patch(id, representation):
+    transaction = base.db.transaction()
     approver_reference = base.db.document("approvers/{}".format(id))
-    approver_snapshot = approver_reference.get()
-    if not approver_snapshot.exists:
-        return "Not found", 404
 
-    changed_fields = []
-    for field in user_fields:
-        if field in representation:
-            changed_fields.append(field)
+    @firestore.transactional
+    def update_in_transaction(transaction, approver_reference, representation):
+        approver_snapshot = approver_reference.get(transaction=transaction)
+        if not approver_snapshot.exists:
+            return "Not found", 404
 
-    approver_reference.set(representation, merge=changed_fields)
+        resource = base.canonical_resource(
+            base.snapshot_to_resource(approver_snapshot), "approvers", user_fields
+        )
 
-    return "OK", 200
+        if "etag" in representation:
+            if representation["etag"] != resource["etag"]:
+                return "Conflict", 409
+
+        transaction.update(approver_reference, representation)
+        return "OK", 200
+
+    return update_in_transaction(transaction, approver_reference, representation)
 
 
 def delete(id):

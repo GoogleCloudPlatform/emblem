@@ -13,16 +13,33 @@
 # limitations under the License.
 
 
+import hashlib
+import json
+
 from google.cloud import firestore
 
 
 """
     Utility functions and values that apply to every type of resource.
+
+    db - exported value representing a Firestore Client.
+
+    canonical_resource - given a stored resource, add standard fields that
+        are derived, rather than stored, such as timestamps and etags.
 """
 
 
 # Reuse a global Firestore client to prevent repeated initializations
 db = firestore.Client()
+
+
+def snapshot_to_resource(snapshot):
+    resource = snapshot.to_dict()
+    resource["id"] = snapshot.id
+    resource["timeCreated"] = snapshot.create_time.rfc3339()
+    resource["updated"] = snapshot.update_time.rfc3339()
+
+    return resource
 
 
 # Stored resources are dictionaries containing all user fields,
@@ -31,8 +48,8 @@ db = firestore.Client()
 #
 # They do not contain the resource kind or selfLink.
 #
-# This function returns a JSON representation of a stored
-# resource, and inserts the resource kind, selfLink, and etag.
+# This function returns a JSON representation of a resource
+# dictionary, and inserts the resource kind, selfLink, and etag.
 #
 # Values missing from the dictionary are treated as None (null
 # in JSON).
@@ -42,10 +59,11 @@ def canonical_resource(resource, resource_kind, user_fields):
         "id": resource.get("id", None),
         "timeCreated": resource.get("timeCreated", None),
         "updated": resource.get("updated", None),
-        "selfLink": "/{}/{}".format(resource_kind, resource.get("id", None)),
+        "selfLink": "/{}/{}".format(resource_kind, resource.get("id", "")),
     }
 
     for field_name in user_fields:
         representation[field_name] = resource.get(field_name, None)
 
+    representation["etag"] = hashlib.sha256(json.dumps(representation).encode()).hexdigest()
     return representation

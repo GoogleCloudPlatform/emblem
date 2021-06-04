@@ -74,6 +74,7 @@ def handle_patch(resource_name, id):
     if not request.is_json:
         return "Unsupported media type", 415
 
+    print("data = '{}'".format(request.get_data()))
     body = request.get_json(silent=True)
     if body is None:
         return "Bad request", 400
