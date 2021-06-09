@@ -20,6 +20,14 @@ again.
 This project follows
 [Google's Open Source Community Guidelines](https://opensource.google/conduct/) as well as the included [Code of Conduct](/CODE_OF_CONDUCT.md).
 
+## Proposing Changes
+
+We represent business requirements as "User Journeys". Each user journey may represent a new use case for the application, an operational requirement for the architecture, or a demo requirement for how this application is used as a learning resource.
+
+Journeys should be created via the [User Journey Proposal](https://github.com/GoogleCloudPlatform/emblem/issues/new?assignees=&labels=status%3A+investigating%2C+priority%3A+p2%2C+type%3A+journey&template=user_journey.md&title=%28Journey%29+UJ1%3A+Journey+Title) template.
+
+For more incremental changes, a feature request will be considered but should relate to an existing User Journey.
+
 ## Design & Project Philosophy
 
 ### Positive & Helpful in Feedback
