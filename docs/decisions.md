@@ -28,9 +28,17 @@ website/
 
 See [this GitHub issue](https://github.com/GoogleCloudPlatform/emblem/issues/37) for more information.
 
+### Rationale
+Templates often mirror API actions (`create`, `read`, `update`, `delete`, etc). Since the API itself is organized by data types (e.g. `users`, `donations`, `causes`, etc), we saw it fit to mirror that information hierarchy here.
+
+### Revision Criteria
+We will review this decision if the number of templates per file becomes difficult to manage and/or keep track of.
+
+We may also review this decision if large changes to the API occur. However, we are not expecting any such changes.
+
 ## Decision: Use a one-folder-level split for Flask view functions
 
-In order to organize our Flask view functions, we decided to **use a single folder level split combined with Flask blueprints**, accepting that this may be subject to revision in the future.
+In order to organize our Flask view functions, we decided to **use a single folder level split combined with Flask blueprints**.
 
 Concretely, our _views_ file architecture might look like this:
 ```
@@ -42,6 +50,14 @@ website/
 ```
 
 See [this GitHub issue](https://github.com/GoogleCloudPlatform/emblem/issues/37) for more information.
+
+### Rationale
+Flask views themselves are (usually) no more than 5-10 lines of code. A one-folder-level split is not too high-level (which makes finding _individual views_ difficult) and not too low-level (which would make finding _the file associated with a view_ more difficult).
+
+### Revision Criteria
+If views start becoming longer, or each file starts to accrue more views than we can reason about at a time, we may opt for a greater degree of splitting between views.
+
+We do not expect the total number of views to become smaller and/or less complex, however - and thus, we do not expect to opt for a lesser degree of splitting.
 
 * **Date:** 2021/06
 
