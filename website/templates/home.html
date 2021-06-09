@@ -13,38 +13,94 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!doctype html>
-<title>View Campaigns | Cymbal Giving</title>
 
-<a href="/createCampaign">Create new campaign</a>
+{% extends "base.html" %}
 
-{% for campaign in campaigns %}
-    <div>
-        <p>
-            <b>Campaign name:</b>
-            {{ campaign.name }}
-        </p>
-        <p>
-            <b>Goal:</b>
-            {{ campaign.goal }}
-        </p>
-        <p>
-            <b>Managers:</b>
-            <ul>
-            {% for manager in campaign.managers %}
-                <li>{{ manager }}</li>
-            {% endfor %}
-            </ul>
-        </p>
-        <p>
-            <b>Last updated:</b>
-            {{ campaign.updated }}
-        </p>
-        <p>
-            <a href="/viewCampaign?campaign_id={{ campaign.id }}">
-                Campaign details
-            </a>
-        </p>
+{% block title %}View campaigns{% endblock %}
+
+{% block content %}
+  <!-- Hero image -->
+  <div class="emblem-unpadded-grid mdc-layout-grid">
+    <div class="mdc-layout-grid__inner">
+      <div class="emblem-hero-image mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+        <img src="https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" />
+      </div>
+      </div>
+  </div>
+
+  <!-- Hero subtitle -->
+  <div class="mdc-layout-grid">
+    <div class="mdc-layout-grid__inner">
+
+      <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+        Discover a giving campaign for your contribution!
+      </div>
+      <div class="emblem-align-right mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+        $1,234.00 contributed
+      </div>
     </div>
-    <hr />
-{% endfor %}
+  </div>
+
+  <!-- Campaign list -->
+  <div class="mdc-layout-grid">
+    <div class="mdc-layout-grid__inner">
+      {% for campaign in campaigns %}
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+          <div class="emblem-campaign-card mdc-card mdc-card--outlined">
+            <div class="mdc-list-group">
+              <ul class="mdc-list">
+
+                <!-- Campaign name -->
+                <li class="emblem-campaign-title mdc-list-item">
+                  <span class="mdc-list-item__text">
+                    <span class="material-icons">favorite</span>
+                    {{ campaign.name }}
+                  </span>
+                </li>
+                <li role="separator" class="mdc-list-divider"></li>
+
+                <!-- Campaign image -->
+                <li class="emblem-campaign-image mdc-list-item">
+                  <img src="{{ campaign.image_url }}" />
+                </li>
+                <li role="separator" class="mdc-list-divider"></li>
+
+                <!-- Campaign description -->
+                <li class="mdc-list-item">
+                  <span class="mdc-list-item__text">
+                    {{ campaign.description }}
+                  </span>
+                </li>
+                <li role="separator" class="mdc-list-divider"></li>
+
+                <!-- Donate button -->
+                <li class="emblem-campaign-donate mdc-list-item">
+                  <span class="mdc-list-item__ripple"></span>
+                  <a class="mdc-list-item__text" href="/viewCampaign?campaign_id={{ campaign.id }}">
+                      <span class="material-icons">card_giftcard</span>
+                      DONATE
+                  </a>
+                </li>
+                <li role="separator" class="mdc-list-divider"></li>
+
+                <!-- Learn more button -->
+                <li class="emblem-campaign-learn-more mdc-list-item">
+                  <span class="mdc-list-item__ripple"></span>
+                  <span class="mdc-list-item__text">
+                    <span class="material-icons">chevron_right</span>
+                    <a href="/viewCampaign?campaign_id={{ campaign.id }}">
+                        Learn more
+                    </a>
+                  </span>
+                </li>
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <a href="/createCampaign">Create new campaign</a>
+{% endblock %}
