@@ -1,0 +1,62 @@
+<!--
+  Copyright 2021 Google LLC
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!doctype html>
+
+<head>
+  <!-- Include Material Design components -->
+  <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <!--
+    Site-wide CSS
+    TODO(anassri): move this to a CDN of some sort (GCS?)
+  -->
+  <link href="/static/site.css" rel="stylesheet">
+
+  <!-- Page title -->
+  <title>{% block title %}{% endblock %} | Cymbal Giving</title>
+</head>
+
+<body>
+  <!-- App bar -->
+  <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+    <div class="mdc-top-app-bar__row">
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+        <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button" aria-label="Open navigation menu">menu</button>
+        <span class="mdc-top-app-bar__title">{{ self.title() }}</span>
+      </section>
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Help">help_outline</button>
+        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Search Campaigns">search</button>
+        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Profile">account_circle</button>
+      </section>
+    </div>
+  </header>
+
+  <main class="mdc-top-app-bar--fixed-adjust">
+
+    <!-- Messages -->
+    <div class="emblem-message">
+      <span class="material-icons">
+        info
+      </span>
+      Emblem Giving is a demo app; no money will be moved in exploring these features.
+    </div>
+
+    {% block content %}{% endblock %}
+  </main>
+</body>
