@@ -31,6 +31,7 @@ SAMPLE_CAMPAIGNS = [
         "goal": 2500,
         "managers": ["Chris the camel", "Carissa the camel"],
         "updated": datetime.date(2021, 2, 1),
+        "donations": ["cccc-oooo-oooo-llll"],
     },
     {
         "id": "eeee-ffff-gggg-hhhh",
@@ -40,13 +41,49 @@ SAMPLE_CAMPAIGNS = [
             "Fred the fish",
         ],
         "updated": datetime.date(2021, 5, 10),
+        "donations": [],
     },
+]
+
+SAMPLE_DONATIONS = [
+    {
+        "id": "cccc-oooo-oooo-llll",
+        "campaign": "aaaa-bbbb-cccc-dddd",
+        "donor": "aaaa-dddd-aaaa-mmmm",
+        "amount": 100,
+        "timeCreated": datetime.date(2021, 5, 20),
+    }
 ]
 
 
 @app.route("/")
 def webapp_list_campaigns():
     return render_template("home.html", campaigns=SAMPLE_CAMPAIGNS)
+
+
+@app.route("/donate", methods=["GET"])
+def webapp_donate_get():
+    campaign_id = request.args["campaign_id"]
+    campaign_instance = [
+        campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
+    ][0]
+    return render_template("donate-to-campaign.html", campaign=campaign_instance)
+
+
+@app.route("/donate", methods=["POST"])
+def webapp_donate_post():
+    # TODO: do something with the collected data
+    campaign_id = request.form["campaignId"]
+    campaign_instance = [
+        campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
+    ][0]
+
+    donation_id = campaign_instance["donations"][0]
+
+    print("Amount: ", request.form["amount"])
+    print("Anonymous?: ", request.form.get("anonymous", False))
+
+    return redirect("/viewDonation?donation_id=" + donation_id)
 
 
 @app.route("/createCampaign", methods=["GET"])
@@ -71,5 +108,23 @@ def webapp_view_campaign():
         campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
     ][0]
     return render_template("view-campaign.html", campaign=campaign_instance)
+
+
+@app.route("/viewDonation", methods=["GET"])
+def webapp_view_donation():
+    donation_id = "cccc-oooo-oooo-llll"  # TODO: fetch value from API
+    donation_instance = [
+        donation for donation in SAMPLE_DONATIONS if donation["id"] == donation_id
+    ][0]
+
+    campaign_id = donation_instance["campaign"]
+    campaign_instance = [
+        campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
+    ][0]
+
+    return render_template(
+        "view-donation.html", donation=donation_instance, campaign=campaign_instance
+    )
+
 
 app.run()
