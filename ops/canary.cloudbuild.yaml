@@ -17,9 +17,10 @@ steps:
   - name: gcr.io/cloud-builders/gcloud
     entrypoint: /bin/bash
     args:
-      - echo
-      - '${_BODY}'
-      
+      - '-c'
+      - |
+        echo '${_BODY}'
+
   # Cloud Run Canary
   - id: 'Update Traffic'
     name: 'gcr.io/cloud-builders/gcloud'
