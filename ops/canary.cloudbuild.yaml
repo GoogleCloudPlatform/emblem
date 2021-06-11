@@ -13,14 +13,6 @@
 # limitations under the License.
 
 steps:
-  # TODO: Step 1, run tests
-  - name: gcr.io/cloud-builders/gcloud
-    entrypoint: /bin/bash
-    args:
-      - '-c'
-      - |
-        echo ${_BODY}
-
   # Cloud Run Canary
   - id: 'Update Traffic'
     name: 'gcr.io/cloud-builders/gcloud'
@@ -35,7 +27,7 @@ steps:
     - '--platform=managed'
 
   # Iterate above steps, increasing traffic until 100%
-  # TODO: If 100, start deploy --no-traffic to prod
+  # TODO: If 100, start canary rollout to prod
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: /bin/bash
     args:
