@@ -27,7 +27,7 @@ steps:
       - --revision-suffix=${_SHA}
       - --project=${_TARGET_PROJECT}
       - --allow-unauthenticated
-      - --no-traffic
+    #  - --no-traffic
 
   # Send message to pub/sub to start canary rollout process
   - name: 'gcr.io/cloud-builders/gcloud'
