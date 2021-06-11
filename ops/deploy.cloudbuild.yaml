@@ -13,12 +13,6 @@
 # limitations under the License.
 
 steps:
-  - name: gcr.io/cloud-builders/gcloud
-    entrypoint: /bin/bash
-    args:
-      - echo
-      - '${_BODY}'
-
   # Cloud Run Deploy
   - name: gcr.io/cloud-builders/gcloud
     args:

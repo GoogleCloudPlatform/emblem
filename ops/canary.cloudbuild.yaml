@@ -14,7 +14,12 @@
 
 steps:
   # TODO: Step 1, run tests
-
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: /bin/bash
+    args:
+      - echo
+      - '${_BODY}'
+      
   # Cloud Run Canary
   - id: 'Update Traffic'
     name: 'gcr.io/cloud-builders/gcloud'
