@@ -14,12 +14,12 @@
 
 steps:
    # Print the stuff
-  - name: gcr.io/cloud-builders/gcloud
-    entrypoint: /bin/bash
-    args:
+  - name: 'google/cloud-sdk'
+    entrypoint: '/bin/bash'
+    args: 
       - -c
       - |
-        echo ${_BODY}
+        echo '${_BODY}'
 
   # Cloud Run Deploy
   - name: gcr.io/cloud-builders/gcloud
