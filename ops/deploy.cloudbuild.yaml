@@ -22,8 +22,11 @@ steps:
       - '--image'
       - '${_IMAGE_NAME}'
       - '--region'
-      - 'us-central1'
+      - '${_REGION}'
       - '--platform'
       - 'managed'
       - '--allow-unauthenticated'
       - '--no-traffic'
+      - '--revision-suffix=${_SHA}'
+
+  # TODO: Step 2, Trigger Canary Rollout

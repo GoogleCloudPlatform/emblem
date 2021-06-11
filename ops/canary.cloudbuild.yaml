@@ -24,8 +24,10 @@ steps:
     - 'update-traffic'
     - '${_SERVICE}'
     - '--to-revisions'
-    - 'LATEST=${_TRAFFIC}'
+    - '${_SERVICE}-${_SUFFIX}=${_TRAFFIC}'
     - '--region'
-    - 'us-central1'
+    - '${_REGION}'
     - '--platform'
     - 'managed'
+
+  # TOOD: Step 3, send new traffic param to Pub/Sub, re-trigger until 100%
