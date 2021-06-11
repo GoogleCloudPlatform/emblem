@@ -24,7 +24,7 @@ steps:
     - 'update-traffic'
     - '${_SERVICE}'
     - '--to-revisions'
-    - '${_SERVICE}-${_SUFFIX}=${_TRAFFIC}'
+    - '${_SERVICE}-${_REVISION}=${_TRAFFIC}'
     - '--region=${_REGION}'
     - '--platform=managed'
 
@@ -37,6 +37,6 @@ steps:
       - |
         if [ ${_TRAFFIC} -lt 100 ]
         gcloud pubsub topics publish canary \
-        --message={'_SERVICE':'${_SERVICE}','_SUFFIX':'${_SHA}', \
+        --message={'_SERVICE':'${_SERVICE}','_REVISION':'${_REVISION}', \
                    '_REGION':'${_REGION}', '_TRAFFIC':${_TRAFFIC}+5} \
         fi

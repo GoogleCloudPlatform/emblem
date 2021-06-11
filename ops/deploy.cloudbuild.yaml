@@ -13,14 +13,6 @@
 # limitations under the License.
 
 steps:
-   # Print the stuff
-  - name: 'google/cloud-sdk'
-    entrypoint: '/bin/bash'
-    args: 
-      - -c
-      - |
-        echo '${_BODY}'
-
   # Cloud Run Deploy
   - name: gcr.io/cloud-builders/gcloud
     args:
@@ -30,7 +22,7 @@ steps:
       - --image=${_IMAGE_NAME}
       - --region=${_REGION}
       - --platform=managed
-      - --revision-suffix=${_SHA}
+      - --revision-suffix=${_REVISION}
       - --project=${_TARGET_PROJECT}
       - --allow-unauthenticated
       - --service-account=cloud-run-manager@${_TARGET_PROJECT}.iam.gserviceaccount.com
@@ -43,5 +35,5 @@ steps:
       - topics
       - publish
       - canary
-      - --message={'_SERVICE':'${_SERVICE}','_SUFFIX':'${_SHA}', '_REGION':'${_REGION}', '_TRAFFIC':'5'}
+      - --message={'_SERVICE':'${_SERVICE}','_REVISION':'${_REVISION}', '_REGION':'${_REGION}', '_TRAFFIC':'5'}
       - --project=${_TARGET_PROJECT}
