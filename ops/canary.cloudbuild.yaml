@@ -19,7 +19,7 @@ steps:
     args:
       - '-c'
       - |
-        echo '${_BODY}'
+        echo ${_BODY}
 
   # Cloud Run Canary
   - id: 'Update Traffic'
