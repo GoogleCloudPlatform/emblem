@@ -13,17 +13,19 @@
 # limitations under the License.
 
 steps:
-  # Cloud Run Deploy
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args: 
-      - 'run'
-      - 'deploy'
-      - '${_SERVICE}'
-      - '--image'
-      - '${_IMAGE_NAME}'
-      - '--region'
-      - 'us-central1'
-      - '--platform'
-      - 'managed'
-      - '--allow-unauthenticated'
-      - '--no-traffic'
+  # TODO: Step 1, run tests
+
+  # Cloud Run Canary
+  - id: 'Update Traffic'
+    name: 'gcr.io/cloud-builders/gcloud'
+    args:
+    - 'run'
+    - 'services'
+    - 'update-traffic'
+    - '${_SERVICE}'
+    - '--to-revisions'
+    - 'LATEST=${_TRAFFIC}'
+    - '--region'
+    - 'us-central1'
+    - '--platform'
+    - 'managed'
