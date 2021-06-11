@@ -34,7 +34,7 @@ steps:
       - -c
       - |
         if [ ${_TRAFFIC} -lt 100 ]
-        gcloud pubsub topics publish canary \
-        --message={'_SERVICE':'${_SERVICE}','_REVISION':'${_REVISION}', \
-                   '_REGION':'${_REGION}', '_TRAFFIC':${_TRAFFIC}+5} \
+        then gcloud pubsub topics publish canary \
+        --message="Increase traffic to $(${_TRAFFIC}+5)"
+        --attribute=_SERVICE=${_SERVICE},_REVISION=${_REVISION},_REGION=${_REGION},_TRAFFIC=$(${_TRAFFIC}+5)
         fi
