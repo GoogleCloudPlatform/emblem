@@ -25,10 +25,8 @@ steps:
     - '${_SERVICE}'
     - '--to-revisions'
     - '${_SERVICE}-${_SUFFIX}=${_TRAFFIC}'
-    - '--region'
-    - '${_REGION}'
-    - '--platform'
-    - 'managed'
+    - '--region=${_REGION}'
+    - '--platform=managed'
 
   # Iterate above steps, increasing traffic until 100%
   # TODO: If 100, start deploy --no-traffic to prod

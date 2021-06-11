@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-# BIG question - In which project do I run this?  Probably emblem-ops b/c of pub/sub limitations.
 steps:
   # Cloud Run Deploy
   - name: gcr.io/cloud-builders/gcloud
@@ -28,7 +26,7 @@ steps:
       - --project=${_TARGET_PROJECT}
       - --allow-unauthenticated
       - --service-account=cloud-run-manager@${_TARGET_PROJECT}.iam.gserviceaccount.com
-    #  - --no-traffic
+      - --no-traffic
 
   # Send message to pub/sub to start canary rollout process
   - name: 'gcr.io/cloud-builders/gcloud'
