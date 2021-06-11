@@ -30,4 +30,15 @@ steps:
     - '--platform'
     - 'managed'
 
-  # TOOD: Step 3, send new traffic param to Pub/Sub, re-trigger until 100%
+  # Iterate above steps, increasing traffic until 100%
+  # TODO: If 100, start deploy --no-traffic to prod
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: /bin/bash
+    args:
+      - -c
+      - |
+        if [ ${_TRAFFIC} -lt 100 ]
+        gcloud pubsub topics publish canary \
+        --message={'_SERVICE':'${_SERVICE}','_SUFFIX':'${_SHA}', \
+                   '_REGION':'${_REGION}', '_TRAFFIC':${_TRAFFIC}+5} \
+        fi

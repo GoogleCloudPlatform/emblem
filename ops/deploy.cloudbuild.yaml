@@ -12,21 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+# BIG question - In which project do I run this?  Probably emblem-ops b/c of pub/sub limitations.
 steps:
   # Cloud Run Deploy
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args: 
-      - 'run'
-      - 'deploy'
-      - '${_SERVICE}'
-      - '--image'
-      - '${_IMAGE_NAME}'
-      - '--region'
-      - '${_REGION}'
-      - '--platform'
-      - 'managed'
-      - '--allow-unauthenticated'
-      - '--no-traffic'
-      - '--revision-suffix=${_SHA}'
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE}
+      - --image=${_IMAGE_NAME}
+      - --region=${_REGION}
+      - --platform=managed
+      - --revision-suffix=${_SHA}
+      - --project=${_TARGET_PROJECT}
+      - --allow-unauthenticated
+      - --no-traffic
 
-  # TODO: Step 2, Trigger Canary Rollout
+  # Send message to pub/sub to start canary rollout process
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - pubsub
+      - topics
+      - publish
+      - canary
+      - --message={'_SERVICE':'${_SERVICE}','_SUFFIX':'${_SHA}', '_REGION':'${_REGION}', '_TRAFFIC':'5'}
+      - --project=${_TARGET_PROJECT}
