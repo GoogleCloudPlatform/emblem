@@ -13,6 +13,8 @@
 # limitations under the License.
 
 steps:
+  # TODO: Run tests, revert back to previous revision if failure
+
   # Cloud Run Canary
   - id: 'Update Traffic'
     name: 'gcr.io/cloud-builders/gcloud'
