@@ -18,9 +18,13 @@ steps:
     args: 
       - 'build'
       - '-t'
-      - 'us-central1-docker.pkg.dev/${PROJECT_ID}/${_DIR}/${_DIR}:${SHORT_SHA}'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_DIR}/${_DIR}:${SHORT_SHA}'
       - '${_DIR}/.'
+
+# Default to us-central1
+substitutions:
+  _REGION: us-central1
 
 # Store in Artifact Registry
 images:
-  - 'us-central1-docker.pkg.dev/${PROJECT_ID}/${_DIR}/${_DIR}:${SHORT_SHA}'
+  - '${_REGION}.pkg.dev/${PROJECT_ID}/${_DIR}/${_DIR}:${SHORT_SHA}'
