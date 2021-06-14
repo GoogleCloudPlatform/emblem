@@ -28,8 +28,9 @@ steps:
     - '--region=${_REGION}'
     - '--platform=managed'
 
-  # Iterate above steps, increasing traffic until 100%
-  # TODO: If 100, start canary rollout to prod
+  # This build uses Pub/Sub to trigger *subsequent* builds that 
+  # increase traffic until it reaches 100%.
+  # Once this is complete, this build will (TODO) start the canary rollout to prod.
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: /bin/bash
     args:
