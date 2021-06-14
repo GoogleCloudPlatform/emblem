@@ -35,6 +35,6 @@ steps:
       - topics
       - publish
       - canary
-      - --message="Start rollout"
+      - --message="Start ${_SERVICE}-${_REVISION} rollout"
       - --attribute=_SERVICE=${_SERVICE},_REVISION=${_REVISION},_REGION=${_REGION},_TRAFFIC=5
       - --project=${_TARGET_PROJECT}
