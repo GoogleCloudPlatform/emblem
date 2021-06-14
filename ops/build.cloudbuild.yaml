@@ -27,4 +27,4 @@ substitutions:
 
 # Store in Artifact Registry
 images:
-  - '${_REGION}.pkg.dev/${PROJECT_ID}/${_DIR}/${_DIR}:${SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_DIR}/${_DIR}:${SHORT_SHA}'
