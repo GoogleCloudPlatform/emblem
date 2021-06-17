@@ -15,11 +15,13 @@
 from flask import Flask, request
 
 from resources import approvers
+from resources import campaigns
 from resources import donors
 
 
 resource = {
     "approvers": approvers,
+    "campaigns": campaigns,
     "donors": donors,
 }
 
@@ -29,14 +31,14 @@ app = Flask(__name__)
 # Resource collection methods
 
 
-@app.route("/<string:resource_name>", methods=["GET"])
+@app.route("/<resource_name>", methods=["GET"])
 def handle_list(resource_name):
     if resource_name not in resource:
         return "Not found", 404
     return resource[resource_name].list()
 
 
-@app.route("/<string:resource_name>", methods=["POST"])
+@app.route("/<resource_name>", methods=["POST"])
 def handle_insert(resource_name):
     if resource_name not in resource:
         return "Not found", 404
