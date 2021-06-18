@@ -30,9 +30,8 @@
         timeCreated timestamp; when this was created
         updated     timestamp; when this was last updated
         selfLink    the path of the URI for this resource
-        etag        a value unique to the current state of the campaign resource
 
-    Includes campaign specific properties:
+    Includes Campaign specific properties:
 
         name        the display name of the campaign
         description string describing the purpose of the campaign
@@ -52,6 +51,7 @@
 import json
 from google.cloud import firestore
 
+from main import request
 from resources import base
 
 
@@ -86,7 +86,10 @@ def get(id):
 
     resource = base.canonical_resource(resource, "campaigns", user_fields)
 
-    return json.dumps(resource), 200, {"Content-Type": "application/json"}
+    return json.dumps(resource), 200, {
+        "Content-Type": "application/json",
+        "ETag": base.etag(resource)
+    }
 
 
 def insert(representation):
@@ -105,7 +108,8 @@ def insert(representation):
 
     return json.dumps(resource), 201, {
         "Content-Type": "application/json",
-        "Location": resource["selfLink"]
+        "Location": resource["selfLink"],
+        "ETag": base.etag(resource)
         }
 
 
@@ -123,12 +127,12 @@ def patch(id, representation):
             base.snapshot_to_resource(campaign_snapshot), "campaigns", user_fields
         )
 
-        if "etag" in representation:
-            if representation["etag"] != resource["etag"]:
+        if 'If-Match' in request.headers:   # Only apply if resource has not changed
+            if request.headers.get('If-Match') != base.etag(resource):
                 return "Conflict", 409
 
         transaction.update(campaign_reference, representation)
-        return "OK", 200
+        return "Updated", 204
 
     return update_in_transaction(transaction, campaign_reference, representation)
 
@@ -139,5 +143,13 @@ def delete(id):
     if not campaign_snapshot.exists:
         return "Not found", 404
 
+    resource = base.canonical_resource(
+        base.snapshot_to_resource(campaign_snapshot), "campaigns", user_fields
+    )
+
+    if 'If-Match' in request.headers:   # Only apply if resource has not changed
+        if request.headers.get('If-Match') != base.etag(resource):
+            return "Conflict", 409
+
     campaign_reference.delete()
-    return "", 204
+    return "Deleted", 204

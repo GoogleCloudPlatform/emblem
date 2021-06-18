@@ -55,28 +55,27 @@ def handle_insert(resource_name):
 # Individual resource methods
 
 
-@app.route("/<string:resource_name>/<string:id>", methods=["GET"])
+@app.route("/<resource_name>/<id>", methods=["GET"])
 def handle_get(resource_name, id):
     if resource_name not in resource:
         return "Not found", 404
     return resource[resource_name].get(id)
 
 
-@app.route("/<string:resource_name>/<string:id>", methods=["DELETE"])
+@app.route("/<resource_name>/<id>", methods=["DELETE"])
 def handle_delete(resource_name, id):
     if resource_name not in resource:
         return "Not found", 404
     return resource[resource_name].delete(id)
 
 
-@app.route("/<string:resource_name>/<string:id>", methods=["PATCH"])
+@app.route("/<resource_name>/<id>", methods=["PATCH"])
 def handle_patch(resource_name, id):
     if resource_name not in resource:
         return "Not found", 404
     if not request.is_json:
         return "Unsupported media type", 415
 
-    print("data = '{}'".format(request.get_data()))
     body = request.get_json(silent=True)
     if body is None:
         return "Bad request", 400
