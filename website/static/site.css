@@ -32,6 +32,7 @@ a {
   display: block;
   padding: 0.75em;
   font-size: 14px;
+  text-align: center;
 }
 
 .material-icons {
