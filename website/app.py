@@ -13,18 +13,13 @@
 # limitations under the License.
 
 import datetime
-import os
 
 from flask import Flask, redirect, request, render_template
 
-from views.campaigns import campaigns_bp
-from views.donations import donations_bp
 from views.errors import errors_bp
 
 app = Flask(__name__)
 app.register_blueprint(errors_bp)
-app.register_blueprint(donations_bp)
-app.register_blueprint(campaigns_bp)
 
 # TODO(anassri, engelke): use API call instead of this
 # (This is based on the API design doc for now.)
@@ -65,9 +60,81 @@ SAMPLE_DONATIONS = [
 ]
 
 
+@app.route("/")
+def webapp_list_campaigns():
+    return render_template("home.html", campaigns=SAMPLE_CAMPAIGNS)
+
+
+@app.route("/donate", methods=["GET"])
+def webapp_donate_get():
+    campaign_id = request.args["campaign_id"]
+    campaign_instance = [
+        campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
+    ][0]
+    return render_template("donate-to-campaign.html", campaign=campaign_instance)
+
+
+@app.route("/donate", methods=["POST"])
+def webapp_donate_post():
+    # TODO: do something with the collected data
+    campaign_id = request.form["campaignId"]
+    campaign_instance = [
+        campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
+    ][0]
+
+    donation_id = campaign_instance["donations"][0]
+
+    print("Amount: ", request.form["amount"])
+    print("Anonymous?: ", request.form.get("anonymous", False))
+
+    return redirect("/viewDonation?donation_id=" + donation_id)
+
+
+@app.route("/createCampaign", methods=["GET"])
+def webapp_create_campaign_get():
+    return render_template("create-campaign.html")
+
+
+@app.route("/createCampaign", methods=["POST"])
+def webapp_create_campaign_post():
+    # TODO: do something with the collected data
+    print("Name: ", request.form["name"])
+    print("Goal: ", request.form["goal"])
+    print("Managers: ", request.form["managers"])
+
+    return redirect("/")
+
+
+@app.route("/viewCampaign")
+def webapp_view_campaign():
+    campaign_id = request.args["campaign_id"]
+    campaign_instance = [
+        campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
+    ][0]
+    return render_template("view-campaign.html", campaign=campaign_instance)
+
+
+@app.route("/viewDonation", methods=["GET"])
+def webapp_view_donation():
+    donation_id = "cccc-oooo-oooo-llll"  # TODO: fetch value from API
+    donation_instance = [
+        donation for donation in SAMPLE_DONATIONS if donation["id"] == donation_id
+    ][0]
+
+    campaign_id = donation_instance["campaign"]
+    campaign_instance = [
+        campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
+    ][0]
+
+    return render_template(
+        "view-donation.html", donation=donation_instance, campaign=campaign_instance
+    )
+
+
 if __name__ == "__main__":
     PORT = int(os.getenv("PORT")) if os.getenv("PORT") else 8080
 
     # This is used when running locally. Gunicorn is used to run the
     # application on Cloud Run; see "entrypoint" parameter in the Dockerfile.
     app.run(host="127.0.0.1", port=PORT, debug=True)
+
