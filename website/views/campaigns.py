@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# TODO(ace-n): replace this with an API call
 from sample_data import SAMPLE_DONATIONS
 
 from flask import Blueprint, redirect, request, render_template
