@@ -13,17 +13,20 @@
 # limitations under the License.
 
 # TODO(ace-n): replace this with an API call
-from sample_data import SAMPLE_CAMPAIGNS, SAMPLE_DONATIONS
+from sample_data import SAMPLE_DONATIONS
 
 from flask import Blueprint, redirect, request, render_template
 
+import requests
 
 campaigns_bp = Blueprint("campaigns", __name__, template_folder="templates")
 
+API_URL = 'https://api-pwrmtjf4hq-uc.a.run.app'
 
 @campaigns_bp.route("/")
 def list_campaigns():
-    return render_template("home.html", campaigns=SAMPLE_CAMPAIGNS)
+    campaigns = requests.get(API_URL + '/campaigns').json()
+    return render_template("home.html", campaigns=campaigns)
 
 
 @campaigns_bp.route("/createCampaign", methods=["GET"])
@@ -43,8 +46,6 @@ def save_campaign():
 
 @campaigns_bp.route("/viewCampaign")
 def webapp_view_campaign():
-    campaign_id = request.args["campaign_id"]
-    campaign_instance = [
-        campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
-    ][0]
+    campaigns = requests.get(API_URL + '/campaigns').json()
+    campaign_instance = campaigns[0]
     return render_template("view-campaign.html", campaign=campaign_instance)
