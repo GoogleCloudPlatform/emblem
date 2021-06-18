@@ -12,22 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 import datetime
-import os
 
-from flask import Flask, redirect, request, render_template
-
-from views.campaigns import campaigns_bp
-from views.donations import donations_bp
-from views.errors import errors_bp
-
-app = Flask(__name__)
-app.register_blueprint(errors_bp)
-app.register_blueprint(donations_bp)
-app.register_blueprint(campaigns_bp)
-
-# TODO(anassri, engelke): use API call instead of this
-# (This is based on the API design doc for now.)
 
 SAMPLE_CAMPAIGNS = [
     {
@@ -63,11 +50,3 @@ SAMPLE_DONATIONS = [
         "timeCreated": datetime.date(2021, 5, 20),
     }
 ]
-
-
-if __name__ == "__main__":
-    PORT = int(os.getenv("PORT")) if os.getenv("PORT") else 8080
-
-    # This is used when running locally. Gunicorn is used to run the
-    # application on Cloud Run; see "entrypoint" parameter in the Dockerfile.
-    app.run(host="127.0.0.1", port=PORT, debug=True)
