@@ -16,12 +16,16 @@ from flask import Flask, request
 
 from resources import approvers
 from resources import campaigns
+from resources import causes
+from resources import donations
 from resources import donors
 
 
 resource = {
     "approvers": approvers,
     "campaigns": campaigns,
+    "causes": causes,
+    "donations": donations,
     "donors": donors,
 }
 
