@@ -14,12 +14,24 @@
   limitations under the License.
 -->
 
-<!doctype html>
-<title>{% block title %}{% endblock %} | Cymbal Giving</title>
+{% extends "base.html" %}
 
-<h1>{% block error_message %}{% endblock %}</h1>
-<p>
-  {% block error_tips %}{% endblock %}
-</p>
+{% block content %}
+<div class="error-root">
+  <p>
+    <span class="error-message">{% block error_message %}{% endblock %}</span>
+    <span class="error-caption">{% block error_caption %}{% endblock %}</span>
 
-<a href="/">Go to the home page.</a>
+  <p>
+    {% block error_tips %}{% endblock %}
+  </p>
+
+  <a href="/" class="mdc-button mdc-button--raised">
+    <span class="mdc-button__ripple"></span>
+    <i class="material-icons mdc-button__icon" aria-hidden="true"
+      >home</i
+    >
+    <span class="mdc-button__label">Back to homepage</span>
+  </a>
+</div>
+{% endblock %}
