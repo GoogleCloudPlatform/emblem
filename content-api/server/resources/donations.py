@@ -14,28 +14,28 @@
 
 
 """
-    Manages API operations for the Donors resource type, implementing
+    Manages API operations for the donations resource type, implementing
     standard methods:
 
-        list    Return all donors
-        get     Return a single donor
-        insert  Create a new donor
-        patch   Update a donor
-        delete  Remove a donor
+        list    Return all donations
+        get     Return a single donation
+        insert  Create a new donation
+        patch   Update a donation
+        delete  Remove a donation
 
     Includes these standard properties:
 
-        kind        "donors"
+        kind        "donations"
         id          unique system generated identifier
         timeCreated timestamp; when this was created
         updated     timestamp; when this was last updated
         selfLink    the path of the URI for this resource
 
-    Includes donor specific properties:
+    Includes donation specific properties:
 
-        name            the display name of the donor
-        email           the donor's email address
-        mailing_address the physical address of the donor
+        campaign    ID of the campaign this donation is for
+        donor       ID of the donor making this donation
+        amount      the amount in USD of the donation
 
     All properties are strings, unless otherwise noted in the description.
 
@@ -51,36 +51,36 @@ from main import request
 from resources import base
 
 
-user_fields = ["name", "email", "mailing_address"]
+user_fields = ["campaign", "donor", "amount"]
 
 
 def list():
-    donors_collection = base.db.collection("donors")
+    donations_collection = base.db.collection("donations")
     representations_list = []
-    for donor in donors_collection.stream():
-        resource = donor.to_dict()
-        resource["id"] = donor.id
-        resource["timeCreated"] = donor.create_time.rfc3339()
-        resource["updated"] = donor.update_time.rfc3339()
+    for donation in donations_collection.stream():
+        resource = donation.to_dict()
+        resource["id"] = donation.id
+        resource["timeCreated"] = donation.create_time.rfc3339()
+        resource["updated"] = donation.update_time.rfc3339()
         representations_list.append(
-            base.canonical_resource(resource, "donors", user_fields)
+            base.canonical_resource(resource, "donations", user_fields)
         )
 
     return json.dumps(representations_list), 200, {"Content-Type": "application/json"}
 
 
 def get(id):
-    donor_reference = base.db.document("donors/{}".format(id))
-    donor_snapshot = donor_reference.get()
-    if not donor_snapshot.exists:
+    donation_reference = base.db.document("donations/{}".format(id))
+    donation_snapshot = donation_reference.get()
+    if not donation_snapshot.exists:
         return "Not found", 404
 
-    resource = donor_snapshot.to_dict()
-    resource["id"] = donor_snapshot.id
-    resource["timeCreated"] = donor_snapshot.create_time.rfc3339()
-    resource["updated"] = donor_snapshot.update_time.rfc3339()
+    resource = donation_snapshot.to_dict()
+    resource["id"] = donation_snapshot.id
+    resource["timeCreated"] = donation_snapshot.create_time.rfc3339()
+    resource["updated"] = donation_snapshot.update_time.rfc3339()
 
-    resource = base.canonical_resource(resource, "donors", user_fields)
+    resource = base.canonical_resource(resource, "donations", user_fields)
 
     return json.dumps(resource), 200, {
         "Content-Type": "application/json",
@@ -89,16 +89,16 @@ def get(id):
 
 
 def insert(representation):
-    resource = {"kind": "donors"}
+    resource = {"kind": "donations"}
     for field in user_fields:
         resource[field] = representation.get(field, None)
 
-    doc_ref = base.db.collection("donors").document()
+    doc_ref = base.db.collection("donations").document()
     doc_ref.set(resource)
 
     resource = base.canonical_resource(
         base.snapshot_to_resource(doc_ref.get()),
-        "donors",
+        "donations",
         user_fields,
     )
 
@@ -111,41 +111,41 @@ def insert(representation):
 
 def patch(id, representation):
     transaction = base.db.transaction()
-    donor_reference = base.db.document("donors/{}".format(id))
+    donation_reference = base.db.document("donations/{}".format(id))
 
     @firestore.transactional
-    def update_in_transaction(transaction, donor_reference, representation):
-        donor_snapshot = donor_reference.get(transaction=transaction)
-        if not donor_snapshot.exists:
+    def update_in_transaction(transaction, donation_reference, representation):
+        donation_snapshot = donation_reference.get(transaction=transaction)
+        if not donation_snapshot.exists:
             return "Not found", 404
 
         resource = base.canonical_resource(
-            base.snapshot_to_resource(donor_snapshot), "donors", user_fields
+            base.snapshot_to_resource(donation_snapshot), "donations", user_fields
         )
 
         if 'If-Match' in request.headers:   # Only apply if resource has not changed
             if request.headers.get('If-Match') != base.etag(resource):
                 return "Conflict", 409
 
-        transaction.update(donor_reference, representation)
+        transaction.update(donation_reference, representation)
         return "Updated", 204
 
-    return update_in_transaction(transaction, donor_reference, representation)
+    return update_in_transaction(transaction, donation_reference, representation)
 
 
 def delete(id):
-    donor_reference = base.db.document("donors/{}".format(id))
-    donor_snapshot = donor_reference.get()
-    if not donor_snapshot.exists:
+    donation_reference = base.db.document("donations/{}".format(id))
+    donation_snapshot = donation_reference.get()
+    if not donation_snapshot.exists:
         return "Not found", 404
 
     resource = base.canonical_resource(
-        base.snapshot_to_resource(donor_snapshot), "donors", user_fields
+        base.snapshot_to_resource(donation_snapshot), "donations", user_fields
     )
 
     if 'If-Match' in request.headers:   # Only apply if resource has not changed
         if request.headers.get('If-Match') != base.etag(resource):
             return "Conflict", 409
 
-    donor_reference.delete()
+    donation_reference.delete()
     return "Deleted", 204
