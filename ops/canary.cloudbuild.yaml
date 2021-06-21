@@ -1,0 +1,51 @@
+# Copyright 2021 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+steps:
+  # Prints entire body of pub/sub message for debugging
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: /bin/bash
+    args:
+      - '-c'
+      - |
+        echo ${_BODY}
+        
+  # TODO: Run tests, revert back to previous revision if failure
+
+  # Cloud Run Canary
+  - id: 'Update Traffic'
+    name: 'gcr.io/cloud-builders/gcloud'
+    args:
+    - 'run'
+    - 'services'
+    - 'update-traffic'
+    - '${_SERVICE}'
+    - '--to-revisions'
+    - '${_SERVICE}-${_REVISION}=${_TRAFFIC}'
+    - '--region=${_REGION}'
+    - '--platform=managed'
+
+  # This build uses Pub/Sub to trigger *subsequent* builds that 
+  # increase traffic until it reaches 100%.
+  # Once this is complete, this build will (TODO) start the canary rollout to prod.
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: /bin/bash
+    args:
+      - -c
+      - |
+        if [ ${_TRAFFIC} -lt 100 ]
+        then gcloud pubsub topics publish canary \
+        --message="Increase ${_SERVICE}-${_REVISION} traffic to $((${_TRAFFIC}+5))" \
+        --attribute=_SERVICE=${_SERVICE},_REVISION=${_REVISION},_REGION=${_REGION},_TRAFFIC=$((${_TRAFFIC}+5))
+        fi
