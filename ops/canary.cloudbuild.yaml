@@ -13,6 +13,14 @@
 # limitations under the License.
 
 steps:
+  # Prints entire body of pub/sub message for debugging
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: /bin/bash
+    args:
+      - '-c'
+      - |
+        echo ${_BODY}
+        
   # TODO: Run tests, revert back to previous revision if failure
 
   # Cloud Run Canary
