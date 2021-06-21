@@ -47,6 +47,7 @@
 import json
 from google.cloud import firestore
 
+from main import request
 from resources import base
 
 
@@ -65,7 +66,7 @@ def list():
             base.canonical_resource(resource, "approvers", user_fields)
         )
 
-    return json.dumps(representations_list), 200
+    return json.dumps(representations_list), 200, {"Content-Type": "application/json"}
 
 
 def get(id):
@@ -81,7 +82,10 @@ def get(id):
 
     resource = base.canonical_resource(resource, "approvers", user_fields)
 
-    return json.dumps(resource), 200
+    return json.dumps(resource), 200, {
+        "Content-Type": "application/json",
+        "ETag": base.etag(resource)
+    }
 
 
 def insert(representation):
@@ -92,7 +96,17 @@ def insert(representation):
     doc_ref = base.db.collection("approvers").document()
     doc_ref.set(resource)
 
-    return "Created", 201
+    resource = base.canonical_resource(
+        base.snapshot_to_resource(doc_ref.get()),
+        "approvers",
+        user_fields,
+    )
+
+    return json.dumps(resource), 201, {
+        "Content-Type": "application/json",
+        "Location": resource["selfLink"],
+        "ETag": base.etag(resource)
+        }
 
 
 def patch(id, representation):
@@ -109,12 +123,12 @@ def patch(id, representation):
             base.snapshot_to_resource(approver_snapshot), "approvers", user_fields
         )
 
-        if "etag" in representation:
-            if representation["etag"] != resource["etag"]:
+        if 'If-Match' in request.headers:   # Only apply if resource has not changed
+            if request.headers.get('If-Match') != base.etag(resource):
                 return "Conflict", 409
 
         transaction.update(approver_reference, representation)
-        return "OK", 200
+        return "Updated", 204
 
     return update_in_transaction(transaction, approver_reference, representation)
 
@@ -125,5 +139,13 @@ def delete(id):
     if not approver_snapshot.exists:
         return "Not found", 404
 
+    resource = base.canonical_resource(
+        base.snapshot_to_resource(approver_snapshot), "approvers", user_fields
+    )
+
+    if 'If-Match' in request.headers:   # Only apply if resource has not changed
+        if request.headers.get('If-Match') != base.etag(resource):
+            return "Conflict", 409
+
     approver_reference.delete()
-    return "", 204
+    return "Deleted", 204

@@ -15,11 +15,17 @@
 from flask import Flask, request
 
 from resources import approvers
+from resources import campaigns
+from resources import causes
+from resources import donations
 from resources import donors
 
 
 resource = {
     "approvers": approvers,
+    "campaigns": campaigns,
+    "causes": causes,
+    "donations": donations,
     "donors": donors,
 }
 
@@ -29,14 +35,14 @@ app = Flask(__name__)
 # Resource collection methods
 
 
-@app.route("/<string:resource_name>", methods=["GET"])
+@app.route("/<resource_name>", methods=["GET"])
 def handle_list(resource_name):
     if resource_name not in resource:
         return "Not found", 404
     return resource[resource_name].list()
 
 
-@app.route("/<string:resource_name>", methods=["POST"])
+@app.route("/<resource_name>", methods=["POST"])
 def handle_insert(resource_name):
     if resource_name not in resource:
         return "Not found", 404
@@ -53,28 +59,27 @@ def handle_insert(resource_name):
 # Individual resource methods
 
 
-@app.route("/<string:resource_name>/<string:id>", methods=["GET"])
+@app.route("/<resource_name>/<id>", methods=["GET"])
 def handle_get(resource_name, id):
     if resource_name not in resource:
         return "Not found", 404
     return resource[resource_name].get(id)
 
 
-@app.route("/<string:resource_name>/<string:id>", methods=["DELETE"])
+@app.route("/<resource_name>/<id>", methods=["DELETE"])
 def handle_delete(resource_name, id):
     if resource_name not in resource:
         return "Not found", 404
     return resource[resource_name].delete(id)
 
 
-@app.route("/<string:resource_name>/<string:id>", methods=["PATCH"])
+@app.route("/<resource_name>/<id>", methods=["PATCH"])
 def handle_patch(resource_name, id):
     if resource_name not in resource:
         return "Not found", 404
     if not request.is_json:
         return "Unsupported media type", 415
 
-    print("data = '{}'".format(request.get_data()))
     body = request.get_json(silent=True)
     if body is None:
         return "Bad request", 400

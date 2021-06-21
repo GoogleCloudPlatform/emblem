@@ -18,6 +18,8 @@ import json
 
 from google.cloud import firestore
 
+from main import request
+
 
 """
     Utility functions and values that apply to every type of resource.
@@ -53,17 +55,25 @@ def snapshot_to_resource(snapshot):
 #
 # Values missing from the dictionary are treated as None (null
 # in JSON).
-def canonical_resource(resource, resource_kind, user_fields):
+def canonical_resource(resource, resource_kind, user_fields, host_url=""):
+    location = "{}{}/{}".format(request.host_url, resource_kind, resource.get("id", ""))
+    # Environment may use http: scheme internally, but externally should be https:
+    if location.startswith("http:"):
+        location = location.replace("http:", "https:")
+
     representation = {
         "kind": resource_kind,
         "id": resource.get("id", None),
         "timeCreated": resource.get("timeCreated", None),
         "updated": resource.get("updated", None),
-        "selfLink": "/{}/{}".format(resource_kind, resource.get("id", "")),
+        "selfLink": location,
     }
 
     for field_name in user_fields:
         representation[field_name] = resource.get(field_name, None)
 
-    representation["etag"] = hashlib.sha256(json.dumps(representation).encode()).hexdigest()
     return representation
+
+
+def etag(representation):
+    return hashlib.sha256(json.dumps(representation).encode()).hexdigest()

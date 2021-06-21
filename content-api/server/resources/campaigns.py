@@ -14,28 +14,32 @@
 
 
 """
-    Manages API operations for the Donors resource type, implementing
+    Manages API operations for the campaigns resource type, implementing
     standard methods:
 
-        list    Return all donors
-        get     Return a single donor
-        insert  Create a new donor
-        patch   Update a donor
-        delete  Remove a donor
+        list    Return all campaigns
+        get     Return a single campaign
+        insert  Create a new campaign
+        patch   Update a campaign
+        delete  Remove a campaign
 
     Includes these standard properties:
 
-        kind        "donors"
+        kind        "campaigns"
         id          unique system generated identifier
         timeCreated timestamp; when this was created
         updated     timestamp; when this was last updated
         selfLink    the path of the URI for this resource
 
-    Includes donor specific properties:
+    Includes Campaign specific properties:
 
-        name            the display name of the donor
-        email           the donor's email address
-        mailing_address the physical address of the donor
+        name        the display name of the campaign
+        description string describing the purpose of the campaign
+        cause       the id of the cause this campaign is for
+        managers    array of strings containing email addresses of contact persons
+        goal        the amount in USD this campaign is trying to raise
+        imageUrl    string containing URL of an image to display
+        active      boolean; whether this person can currently approve
 
     All properties are strings, unless otherwise noted in the description.
 
@@ -51,36 +55,36 @@ from main import request
 from resources import base
 
 
-user_fields = ["name", "email", "mailing_address"]
+user_fields = ["name", "description", "cause", "managers", "goal", "imageUrl", "active"]
 
 
 def list():
-    donors_collection = base.db.collection("donors")
+    campaigns_collection = base.db.collection("campaigns")
     representations_list = []
-    for donor in donors_collection.stream():
-        resource = donor.to_dict()
-        resource["id"] = donor.id
-        resource["timeCreated"] = donor.create_time.rfc3339()
-        resource["updated"] = donor.update_time.rfc3339()
+    for campaign in campaigns_collection.stream():
+        resource = campaign.to_dict()
+        resource["id"] = campaign.id
+        resource["timeCreated"] = campaign.create_time.rfc3339()
+        resource["updated"] = campaign.update_time.rfc3339()
         representations_list.append(
-            base.canonical_resource(resource, "donors", user_fields)
+            base.canonical_resource(resource, "campaigns", user_fields)
         )
 
     return json.dumps(representations_list), 200, {"Content-Type": "application/json"}
 
 
 def get(id):
-    donor_reference = base.db.document("donors/{}".format(id))
-    donor_snapshot = donor_reference.get()
-    if not donor_snapshot.exists:
+    campaign_reference = base.db.document("campaigns/{}".format(id))
+    campaign_snapshot = campaign_reference.get()
+    if not campaign_snapshot.exists:
         return "Not found", 404
 
-    resource = donor_snapshot.to_dict()
-    resource["id"] = donor_snapshot.id
-    resource["timeCreated"] = donor_snapshot.create_time.rfc3339()
-    resource["updated"] = donor_snapshot.update_time.rfc3339()
+    resource = campaign_snapshot.to_dict()
+    resource["id"] = campaign_snapshot.id
+    resource["timeCreated"] = campaign_snapshot.create_time.rfc3339()
+    resource["updated"] = campaign_snapshot.update_time.rfc3339()
 
-    resource = base.canonical_resource(resource, "donors", user_fields)
+    resource = base.canonical_resource(resource, "campaigns", user_fields)
 
     return json.dumps(resource), 200, {
         "Content-Type": "application/json",
@@ -89,16 +93,16 @@ def get(id):
 
 
 def insert(representation):
-    resource = {"kind": "donors"}
+    resource = {"kind": "campaigns"}
     for field in user_fields:
         resource[field] = representation.get(field, None)
 
-    doc_ref = base.db.collection("donors").document()
+    doc_ref = base.db.collection("campaigns").document()
     doc_ref.set(resource)
 
     resource = base.canonical_resource(
         base.snapshot_to_resource(doc_ref.get()),
-        "donors",
+        "campaigns",
         user_fields,
     )
 
@@ -111,41 +115,41 @@ def insert(representation):
 
 def patch(id, representation):
     transaction = base.db.transaction()
-    donor_reference = base.db.document("donors/{}".format(id))
+    campaign_reference = base.db.document("campaigns/{}".format(id))
 
     @firestore.transactional
-    def update_in_transaction(transaction, donor_reference, representation):
-        donor_snapshot = donor_reference.get(transaction=transaction)
-        if not donor_snapshot.exists:
+    def update_in_transaction(transaction, campaign_reference, representation):
+        campaign_snapshot = campaign_reference.get(transaction=transaction)
+        if not campaign_snapshot.exists:
             return "Not found", 404
 
         resource = base.canonical_resource(
-            base.snapshot_to_resource(donor_snapshot), "donors", user_fields
+            base.snapshot_to_resource(campaign_snapshot), "campaigns", user_fields
         )
 
         if 'If-Match' in request.headers:   # Only apply if resource has not changed
             if request.headers.get('If-Match') != base.etag(resource):
                 return "Conflict", 409
 
-        transaction.update(donor_reference, representation)
+        transaction.update(campaign_reference, representation)
         return "Updated", 204
 
-    return update_in_transaction(transaction, donor_reference, representation)
+    return update_in_transaction(transaction, campaign_reference, representation)
 
 
 def delete(id):
-    donor_reference = base.db.document("donors/{}".format(id))
-    donor_snapshot = donor_reference.get()
-    if not donor_snapshot.exists:
+    campaign_reference = base.db.document("campaigns/{}".format(id))
+    campaign_snapshot = campaign_reference.get()
+    if not campaign_snapshot.exists:
         return "Not found", 404
 
     resource = base.canonical_resource(
-        base.snapshot_to_resource(donor_snapshot), "donors", user_fields
+        base.snapshot_to_resource(campaign_snapshot), "campaigns", user_fields
     )
 
     if 'If-Match' in request.headers:   # Only apply if resource has not changed
         if request.headers.get('If-Match') != base.etag(resource):
             return "Conflict", 409
 
-    donor_reference.delete()
+    campaign_reference.delete()
     return "Deleted", 204
