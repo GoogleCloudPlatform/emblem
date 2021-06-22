@@ -18,12 +18,14 @@
 
 {% block title %}Internal Error{% endblock %}
 
-{% block error_message %}500: Internal Server Error{% endblock %}
+{% block error_message %}Error 500: Internal Server Error{% endblock %}
+{% block error_caption %}
+If you want to be a good archaeologist, you've got to check the logs.
+{% endblock %}
 
 {% block error_tips %}
-Sorry, an unknown error occurred. The issue has been reported to the
-application owner.
-
+An unknown error occurred. Details have been forwarded to the application owner.
+<br /><br />
 If this is your application, here are some steps you can take to diagnose the
 issue:
 <ul>
