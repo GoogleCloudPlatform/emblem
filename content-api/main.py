@@ -14,19 +14,15 @@
 
 from flask import Flask, request
 
-from resources import approvers
-from resources import campaigns
-from resources import causes
-from resources import donations
-from resources import donors
+from resources import methods
 
 
 resource = {
-    "approvers": approvers,
-    "campaigns": campaigns,
-    "causes": causes,
-    "donations": donations,
-    "donors": donors,
+    "approvers",
+    "campaigns",
+    "causes",
+    "donations",
+    "donors",
 }
 
 app = Flask(__name__)
@@ -39,7 +35,7 @@ app = Flask(__name__)
 def handle_list(resource_name):
     if resource_name not in resource:
         return "Not found", 404
-    return resource[resource_name].list()
+    return methods.list(resource_name)
 
 
 @app.route("/<resource_name>", methods=["POST"])
@@ -53,7 +49,7 @@ def handle_insert(resource_name):
     if body is None:
         return "Bad request", 400
 
-    return resource[resource_name].insert(body)
+    return methods.insert(resource_name, body)
 
 
 # Individual resource methods
@@ -63,14 +59,14 @@ def handle_insert(resource_name):
 def handle_get(resource_name, id):
     if resource_name not in resource:
         return "Not found", 404
-    return resource[resource_name].get(id)
+    return methods.get(resource_name, id)
 
 
 @app.route("/<resource_name>/<id>", methods=["DELETE"])
 def handle_delete(resource_name, id):
     if resource_name not in resource:
         return "Not found", 404
-    return resource[resource_name].delete(id)
+    return methods.delete(resource_name, id)
 
 
 @app.route("/<resource_name>/<id>", methods=["PATCH"])
@@ -84,7 +80,7 @@ def handle_patch(resource_name, id):
     if body is None:
         return "Bad request", 400
 
-    return resource[resource_name].patch(id, body)
+    return methods.patch(resource_name, id, body)
 
 
 if __name__ == "__main__":
