@@ -17,6 +17,7 @@ import json
 from google.cloud import firestore
 
 from main import request
+from data import cloud_firestore as db
 from resources import base
 
 
@@ -30,51 +31,29 @@ resource_fields = {
 
 
 def list(resource_kind):
-    resources_collection = base.db.collection(resource_kind)
-    representations_list = []
-    for resource_ref in resources_collection.stream():
-        resource = resource_ref.to_dict()
-        resource["id"] = resource_ref.id
-        resource["timeCreated"] = resource_ref.create_time.rfc3339()
-        resource["updated"] = resource_ref.update_time.rfc3339()
-        representations_list.append(
-            base.canonical_resource(resource, resource_kind, resource_fields[resource_kind])
-        )
-
-    return json.dumps(representations_list), 200, {"Content-Type": "application/json"}
+    results = db.list(
+        resource_kind,
+        resource_fields[resource_kind]
+    )
+    return json.dumps(results), 200, {"Content-Type": "application/json"}
 
 
 def get(resource_kind, id):
-    resource_reference = base.db.document("{}/{}".format(resource_kind, id))
-    resource_snapshot = resource_reference.get()
-    if not resource_snapshot.exists:
+    result = db.fetch(resource_kind, id, resource_fields[resource_kind])
+    if result is None:
         return "Not found", 404
 
-    resource = resource_snapshot.to_dict()
-    resource["id"] = resource_snapshot.id
-    resource["timeCreated"] = resource_snapshot.create_time.rfc3339()
-    resource["updated"] = resource_snapshot.update_time.rfc3339()
-
-    resource = base.canonical_resource(resource, resource_kind, resource_fields[resource_kind])
-
-    return json.dumps(resource), 200, {
+    return json.dumps(result), 200, {
         "Content-Type": "application/json",
-        "ETag": base.etag(resource)
+        "ETag": base.etag(result)
     }
 
 
 def insert(resource_kind, representation):
-    resource = {"kind": resource_kind}
-    for field in resource_fields[resource_kind]:
-        resource[field] = representation.get(field, None)
-
-    doc_ref = base.db.collection(resource_kind).document()
-    doc_ref.set(resource)
-
-    resource = base.canonical_resource(
-        base.snapshot_to_resource(doc_ref.get()),
+    resource = db.insert(
         resource_kind,
-        resource_fields[resource_kind],
+        representation,
+        resource_fields[resource_kind]
     )
 
     return json.dumps(resource), 201, {
