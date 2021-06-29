@@ -64,56 +64,31 @@ def insert(resource_kind, representation):
 
 
 def patch(resource_kind, id, representation):
-    transaction = base.db.transaction()
-    resource_reference = base.db.document("{}/{}".format(resource_kind, id))
+    match_etag = request.headers.get('If-Match', None)
+    resource, status = db.update(
+        resource_kind,
+        id,
+        representation,
+        resource_fields[resource_kind],
+        match_etag)
 
-    @firestore.transactional
-    def update_in_transaction(transaction, resource_reference, representation):
-        resource_snapshot = resource_reference.get(transaction=transaction)
-        if not resource_snapshot.exists:
-            return "Not found", 404
+    if resource is None:
+        return "", status
 
-        resource = base.canonical_resource(
-            base.snapshot_to_resource(resource_snapshot),
-            resource_kind,
-            resource_fields[resource_kind]
-        )
-
-        if 'If-Match' in request.headers:   # Only apply if resource has not changed
-            if request.headers.get('If-Match') != base.etag(resource):
-                return "Conflict", 409
-
-        transaction.update(resource_reference, representation)
-
-        for key in representation:
-            if key in resource:
-                resource[key] = representation[key]
-                
-        return json.dumps(resource), 201, {
-            "Content-Type": "application/json",
-            "Location": resource["selfLink"],
-            "ETag": base.etag(resource)
-        }
-
-
-    return update_in_transaction(transaction, resource_reference, representation)
+    return json.dumps(resource), 201, {
+        "Content-Type": "application/json",
+        "Location": resource["selfLink"],
+        "ETag": base.etag(resource)
+    }
 
 
 def delete(resource_kind, id):
-    resource_reference = base.db.document("{}/{}".format(resource_kind, id))
-    resource_snapshot = resource_reference.get()
-    if not resource_snapshot.exists:
-        return "Not found", 404
-
-    resource = base.canonical_resource(
-        base.snapshot_to_resource(resource_snapshot),
+    match_etag = request.headers.get('If-Match', None)
+    status = db.delete(
         resource_kind,
-        resource_fields[resource_kind]
+        id,
+        resource_fields[resource_kind],
+        match_etag
     )
 
-    if 'If-Match' in request.headers:   # Only apply if resource has not changed
-        if request.headers.get('If-Match') != base.etag(resource):
-            return "Conflict", 409
-
-    resource_reference.delete()
-    return "", 204
+    return "", status

@@ -69,7 +69,7 @@ def insert(resource_kind, representation, resource_fields):
     return resource
 
 
-def update(resource_kind, id, representation):
+def update(resource_kind, id, representation, resource_fields, match_etag):
     transaction = client.transaction()
     resource_reference = client.document("{}/{}".format(resource_kind, id))
 
@@ -77,17 +77,17 @@ def update(resource_kind, id, representation):
     def update_in_transaction(transaction, resource_reference, representation):
         resource_snapshot = resource_reference.get(transaction=transaction)
         if not resource_snapshot.exists:
-            return None
+            return None, 404
 
         resource = canonical_resource(
             snapshot_to_resource(resource_snapshot),
             resource_kind,
-            resource_fields[resource_kind]
+            resource_fields
         )
 
-        if 'If-Match' in request.headers:   # Only apply if resource has not changed
-            if request.headers.get('If-Match') != etag(resource):
-                return "Conflict", 409
+        if match_etag is not None:   # Only apply if resource has not changed
+            if match_etag != etag(resource):
+                return None, 409
 
         transaction.update(resource_reference, representation)
 
@@ -95,27 +95,27 @@ def update(resource_kind, id, representation):
             if key in resource:
                 resource[key] = representation[key]
                 
-        return resource
+        return resource, 201
 
 
     return update_in_transaction(transaction, resource_reference, representation)
 
 
-def delete(resource_kind, id):
+def delete(resource_kind, id, resource_fields, match_etag):
     resource_reference = client.document("{}/{}".format(resource_kind, id))
     resource_snapshot = resource_reference.get()
     if not resource_snapshot.exists:
-        return None
+        return 404
 
     resource = canonical_resource(
         snapshot_to_resource(resource_snapshot),
         resource_kind,
-        resource_fields[resource_kind]
+        resource_fields
     )
 
-    if 'If-Match' in request.headers:   # Only apply if resource has not changed
-        if request.headers.get('If-Match') != etag(resource):
-            return "Conflict", 409
+    if match_etag is not None:   # Only apply if resource has not changed
+        if match_etag != etag(resource):
+            return 409
 
     resource_reference.delete()
-    return None
+    return 204
