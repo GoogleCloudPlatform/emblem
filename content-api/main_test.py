@@ -35,3 +35,68 @@ def test_list(client):
         assert r.headers.get("Content-Type") == "application/json"
         payload = json.loads(r.data)
         assert type(payload) == list
+
+
+# Create, fetch, modify, and delete resources
+def test_lifecycle(client):
+    for kind in kinds:
+        if kind == "donations":     #Special case for later
+            continue
+
+        # Create a resource. Note that only name is mandatory
+        representation = {"name": "test name"}
+        r = client.post("/{}".format(kind), json=representation)
+        assert r.status_code == 201
+        resource = r.get_json(r.data)
+        assert type(resource) == dict
+        assert resource["name"] == representation["name"]
+
+        etag, _ = r.get_etag()
+        id = resource["id"]
+
+        # Update only if same etag, given wrong etag
+        representation = {"name": "changed name"}
+        r = client.patch(
+            "/{}/{}".format(kind, id),
+            json=representation,
+            headers={"If-Match": "wrong data"}
+        )
+        assert r.status_code == 409
+
+        # Update only if same etag, given right etag
+        representation = {"name": "changed name"}
+        r = client.patch(
+            "/{}/{}".format(kind, id),
+            json=representation,
+            headers={"If-Match": etag}
+        )
+        assert r.status_code == 201
+        resource = r.get_json(r.data)
+        assert type(resource) == dict
+        assert resource["name"] == representation["name"]
+
+        # Fetch updated resource
+        r = client.get("/{}/{}".format(kind, id))
+        assert r.status_code == 200
+        resource = r.get_json(r.data)
+        assert type(resource) == dict
+        assert resource["name"] == representation["name"]
+        new_etag, _ = r.get_etag()
+
+        # Try to delete, given wrong etag
+        r = client.delete(
+            "/{}/{}".format(kind, id),
+            headers={"If-Match": "wrong"}
+        )
+        assert r.status_code == 409
+
+        # Try to delete, given correct etag
+        r = client.delete(
+            "/{}/{}".format(kind, id),
+            headers={"If-Match": new_etag}
+        )
+        assert r.status_code == 204
+
+        # Try to fetch deleted resource
+        r = client.get("/{}/{}".format(kind, id))
+        assert r.status_code == 404
