@@ -41,7 +41,7 @@ def test_list(client):
 # Create, fetch, modify, and delete resources
 def test_lifecycle(client):
     for kind in kinds:
-        if kind == "donations":     #Special case for later
+        if kind == "donations":  # Special case for later
             continue
 
         # Create a resource. Note that only the name field is mandatory
@@ -70,16 +70,14 @@ def test_lifecycle(client):
         r = client.patch(
             "/{}/{}".format(kind, id),
             json=representation,
-            headers={"If-Match": "wrong data"}
+            headers={"If-Match": "wrong data"},
         )
         assert r.status_code == 409
 
         # Update only if same etag, given right etag
         representation = {"name": "changed name"}
         r = client.patch(
-            "/{}/{}".format(kind, id),
-            json=representation,
-            headers={"If-Match": etag}
+            "/{}/{}".format(kind, id), json=representation, headers={"If-Match": etag}
         )
         assert r.status_code == 201
         resource = r.get_json(r.data)
@@ -95,17 +93,11 @@ def test_lifecycle(client):
         new_etag, _ = r.get_etag()
 
         # Try to delete, given wrong etag
-        r = client.delete(
-            "/{}/{}".format(kind, id),
-            headers={"If-Match": "wrong"}
-        )
+        r = client.delete("/{}/{}".format(kind, id), headers={"If-Match": "wrong"})
         assert r.status_code == 409
 
         # Try to delete, given correct etag
-        r = client.delete(
-            "/{}/{}".format(kind, id),
-            headers={"If-Match": new_etag}
-        )
+        r = client.delete("/{}/{}".format(kind, id), headers={"If-Match": new_etag})
         assert r.status_code == 204
 
         # Try to fetch deleted resource
@@ -130,12 +122,12 @@ def test_donation(client):
     donor = r.get_json(r.data)
     assert type(donor) == dict
     assert donor["name"] == donor_representation["name"]
-    
+
     # Create the only donation for that campaign or donor
     donation_representation = {
         "campaign": campaign["id"],
         "donor": donor["id"],
-        "amount": 50
+        "amount": 50,
     }
     r = client.post("/{}".format("donations"), json=donation_representation)
     assert r.status_code == 201

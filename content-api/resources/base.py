@@ -77,4 +77,3 @@ def canonical_resource(resource, resource_kind, user_fields, host_url=""):
 
 def etag(representation):
     return hashlib.sha256(json.dumps(representation).encode()).hexdigest()
-    

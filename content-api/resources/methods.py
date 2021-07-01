@@ -23,7 +23,15 @@ from resources import base
 
 resource_fields = {
     "approvers": ["name", "email", "active"],
-    "campaigns": ["name", "description", "cause", "managers", "goal", "imageUrl", "active"],
+    "campaigns": [
+        "name",
+        "description",
+        "cause",
+        "managers",
+        "goal",
+        "imageUrl",
+        "active",
+    ],
     "causes": ["name", "description", "imageUrl", "active"],
     "donations": ["campaign", "donor", "amount"],
     "donors": ["name", "email", "mailing_address"],
@@ -31,10 +39,7 @@ resource_fields = {
 
 
 def list(resource_kind):
-    results = db.list(
-        resource_kind,
-        resource_fields[resource_kind]
-    )
+    results = db.list(resource_kind, resource_fields[resource_kind])
     return json.dumps(results), 200, {"Content-Type": "application/json"}
 
 
@@ -45,12 +50,12 @@ def list_subresource(resource_kind, id, subresource_kind):
     resource = db.fetch(resource_kind, id, resource_fields[resource_kind])
     if resource is None:
         return "Not found", 404
-    
+
     results = db.list_matching(
         subresource_kind,
         resource_fields[subresource_kind],
-        resource_kind[:-1],      # Subresource field for singular resource_kind
-        id                  # Value must match parent id
+        resource_kind[:-1],  # Subresource field for singular resource_kind
+        id,  # Value must match parent id
     )
 
     return json.dumps(results), 200, {"Content-Type": "application/json"}
@@ -61,52 +66,49 @@ def get(resource_kind, id):
     if result is None:
         return "Not found", 404
 
-    return json.dumps(result), 200, {
-        "Content-Type": "application/json",
-        "ETag": base.etag(result)
-    }
+    return (
+        json.dumps(result),
+        200,
+        {"Content-Type": "application/json", "ETag": base.etag(result)},
+    )
 
 
 def insert(resource_kind, representation):
-    resource = db.insert(
-        resource_kind,
-        representation,
-        resource_fields[resource_kind]
-    )
+    resource = db.insert(resource_kind, representation, resource_fields[resource_kind])
 
-    return json.dumps(resource), 201, {
-        "Content-Type": "application/json",
-        "Location": resource["selfLink"],
-        "ETag": base.etag(resource)
-        }
+    return (
+        json.dumps(resource),
+        201,
+        {
+            "Content-Type": "application/json",
+            "Location": resource["selfLink"],
+            "ETag": base.etag(resource),
+        },
+    )
 
 
 def patch(resource_kind, id, representation):
-    match_etag = request.headers.get('If-Match', None)
+    match_etag = request.headers.get("If-Match", None)
     resource, status = db.update(
-        resource_kind,
-        id,
-        representation,
-        resource_fields[resource_kind],
-        match_etag)
+        resource_kind, id, representation, resource_fields[resource_kind], match_etag
+    )
 
     if resource is None:
         return "", status
 
-    return json.dumps(resource), 201, {
-        "Content-Type": "application/json",
-        "Location": resource["selfLink"],
-        "ETag": base.etag(resource)
-    }
+    return (
+        json.dumps(resource),
+        201,
+        {
+            "Content-Type": "application/json",
+            "Location": resource["selfLink"],
+            "ETag": base.etag(resource),
+        },
+    )
 
 
 def delete(resource_kind, id):
-    match_etag = request.headers.get('If-Match', None)
-    status = db.delete(
-        resource_kind,
-        id,
-        resource_fields[resource_kind],
-        match_etag
-    )
+    match_etag = request.headers.get("If-Match", None)
+    status = db.delete(resource_kind, id, resource_fields[resource_kind], match_etag)
 
     return "", status

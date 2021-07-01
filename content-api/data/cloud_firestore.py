@@ -38,7 +38,7 @@ def list(resource_kind, resource_fields):
 
 def list_matching(resource_kind, resource_fields, field_name, value):
     resource_collection = client.collection(resource_kind)
-    query = resource_collection.where(field_name, '==', value)
+    query = resource_collection.where(field_name, "==", value)
 
     representations_list = []
     for resource_ref in query.stream():
@@ -78,9 +78,7 @@ def insert(resource_kind, representation, resource_fields):
     doc_ref.set(resource)
 
     resource = canonical_resource(
-        snapshot_to_resource(doc_ref.get()),
-        resource_kind,
-        resource_fields
+        snapshot_to_resource(doc_ref.get()), resource_kind, resource_fields
     )
 
     return resource
@@ -97,12 +95,10 @@ def update(resource_kind, id, representation, resource_fields, match_etag):
             return None, 404
 
         resource = canonical_resource(
-            snapshot_to_resource(resource_snapshot),
-            resource_kind,
-            resource_fields
+            snapshot_to_resource(resource_snapshot), resource_kind, resource_fields
         )
 
-        if match_etag is not None:   # Only apply if resource has not changed
+        if match_etag is not None:  # Only apply if resource has not changed
             if match_etag != etag(resource):
                 return None, 409
 
@@ -111,9 +107,8 @@ def update(resource_kind, id, representation, resource_fields, match_etag):
         for key in representation:
             if key in resource:
                 resource[key] = representation[key]
-                
-        return resource, 201
 
+        return resource, 201
 
     return update_in_transaction(transaction, resource_reference, representation)
 
@@ -125,12 +120,10 @@ def delete(resource_kind, id, resource_fields, match_etag):
         return 404
 
     resource = canonical_resource(
-        snapshot_to_resource(resource_snapshot),
-        resource_kind,
-        resource_fields
+        snapshot_to_resource(resource_snapshot), resource_kind, resource_fields
     )
 
-    if match_etag is not None:   # Only apply if resource has not changed
+    if match_etag is not None:  # Only apply if resource has not changed
         if match_etag != etag(resource):
             return 409
 
