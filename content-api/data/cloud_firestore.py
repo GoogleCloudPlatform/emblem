@@ -22,9 +22,26 @@ client = firestore.Client()
 
 
 def list(resource_kind, resource_fields):
-    resources_collection = client.collection(resource_kind)
+    resource_collection = client.collection(resource_kind)
     representations_list = []
-    for resource_ref in resources_collection.stream():
+    for resource_ref in resource_collection.stream():
+        resource = resource_ref.to_dict()
+        resource["id"] = resource_ref.id
+        resource["timeCreated"] = resource_ref.create_time.rfc3339()
+        resource["updated"] = resource_ref.update_time.rfc3339()
+        representations_list.append(
+            canonical_resource(resource, resource_kind, resource_fields)
+        )
+
+    return representations_list
+
+
+def list_matching(resource_kind, resource_fields, field_name, value):
+    resource_collection = client.collection(resource_kind)
+    query = resource_collection.where(field_name, '==', value)
+
+    representations_list = []
+    for resource_ref in query.stream():
         resource = resource_ref.to_dict()
         resource["id"] = resource_ref.id
         resource["timeCreated"] = resource_ref.create_time.rfc3339()

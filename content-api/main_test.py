@@ -28,6 +28,7 @@ def client():
     return main.app.test_client()
 
 
+# Can we list every kind of resource?
 def test_list(client):
     for kind in kinds:
         r = client.get("/{}".format(kind))
@@ -43,7 +44,7 @@ def test_lifecycle(client):
         if kind == "donations":     #Special case for later
             continue
 
-        # Create a resource. Note that only name is mandatory
+        # Create a resource. Note that only the name field is mandatory
         representation = {"name": "test name"}
         r = client.post("/{}".format(kind), json=representation)
         assert r.status_code == 201
@@ -51,8 +52,18 @@ def test_lifecycle(client):
         assert type(resource) == dict
         assert resource["name"] == representation["name"]
 
+        # Check that the id is in the list response
         etag, _ = r.get_etag()
         id = resource["id"]
+        r = client.get("/{}".format(kind))
+        assert r.status_code == 200
+        payload = r.get_json(r.data)
+        found = False
+        for item in payload:
+            if item["id"] == id:
+                found = True
+                break
+        assert found
 
         # Update only if same etag, given wrong etag
         representation = {"name": "changed name"}
@@ -100,3 +111,67 @@ def test_lifecycle(client):
         # Try to fetch deleted resource
         r = client.get("/{}/{}".format(kind, id))
         assert r.status_code == 404
+
+
+# Create a campaign and donor, and then a donation for them
+def test_donation(client):
+    # Create a campaign
+    campaign_representation = {"name": "test campaign"}
+    r = client.post("/{}".format("campaigns"), json=campaign_representation)
+    assert r.status_code == 201
+    campaign = r.get_json(r.data)
+    assert type(campaign) == dict
+    assert campaign["name"] == campaign_representation["name"]
+
+    # Create a donor
+    donor_representation = {"name": "test donor"}
+    r = client.post("/{}".format("donors"), json=donor_representation)
+    assert r.status_code == 201
+    donor = r.get_json(r.data)
+    assert type(donor) == dict
+    assert donor["name"] == donor_representation["name"]
+    
+    # Create the only donation for that campaign or donor
+    donation_representation = {
+        "campaign": campaign["id"],
+        "donor": donor["id"],
+        "amount": 50
+    }
+    r = client.post("/{}".format("donations"), json=donation_representation)
+    assert r.status_code == 201
+    donation = r.get_json(r.data)
+    assert type(donation) == dict
+    assert donation["campaign"] == donation_representation["campaign"]
+    assert donation["donor"] == donation_representation["donor"]
+
+    # List of donations to campaign should have exactly one element
+    r = client.get("/campaigns/{}/donations".format(campaign["id"]))
+    assert r.status_code == 200
+    assert r.headers.get("Content-Type") == "application/json"
+    payload = json.loads(r.data)
+    assert type(payload) == list
+    assert len(payload) == 1
+    resource = payload[0]
+    assert resource["amount"] == 50
+    assert resource["campaign"] == campaign["id"]
+    assert resource["donor"] == donor["id"]
+
+    # List of donations from donor should have exactly one element
+    r = client.get("/donors/{}/donations".format(donor["id"]))
+    assert r.status_code == 200
+    assert r.headers.get("Content-Type") == "application/json"
+    payload = json.loads(r.data)
+    assert type(payload) == list
+    assert len(payload) == 1
+    resource = payload[0]
+    assert resource["amount"] == 50
+    assert resource["campaign"] == campaign["id"]
+    assert resource["donor"] == donor["id"]
+
+    # Clean up the three new resource
+    r = client.delete("/donations/{}".format(donation["id"]))
+    assert r.status_code == 204
+    r = client.delete("/campaigns/{}".format(campaign["id"]))
+    assert r.status_code == 204
+    r = client.delete("/donors/{}".format(donor["id"]))
+    assert r.status_code == 204

@@ -38,6 +38,24 @@ def list(resource_kind):
     return json.dumps(results), 200, {"Content-Type": "application/json"}
 
 
+def list_subresource(resource_kind, id, subresource_kind):
+    if resource_kind not in resource_fields or subresource_kind not in resource_fields:
+        return "Not found", 404
+
+    resource = db.fetch(resource_kind, id, resource_fields[resource_kind])
+    if resource is None:
+        return "Not found", 404
+    
+    results = db.list_matching(
+        subresource_kind,
+        resource_fields[subresource_kind],
+        resource_kind[:-1],      # Subresource field for singular resource_kind
+        id                  # Value must match parent id
+    )
+
+    return json.dumps(results), 200, {"Content-Type": "application/json"}
+
+
 def get(resource_kind, id):
     result = db.fetch(resource_kind, id, resource_fields[resource_kind])
     if result is None:

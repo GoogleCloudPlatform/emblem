@@ -38,6 +38,11 @@ def handle_list(resource_name):
     return methods.list(resource_name)
 
 
+@app.route("/<resource_name>/<id>/<subresource_name>", methods=["GET"])
+def handle_list_subresource(resource_name, id, subresource_name):
+    return methods.list_subresource(resource_name, id, subresource_name)
+
+
 @app.route("/<resource_name>", methods=["POST"])
 def handle_insert(resource_name):
     if resource_name not in resource:
