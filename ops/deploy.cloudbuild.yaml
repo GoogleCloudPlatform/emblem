@@ -25,7 +25,6 @@ steps:
       - --revision-suffix=${_REVISION}
       - --project=${_TARGET_PROJECT}
       - --allow-unauthenticated
-      - --service-account=cloud-run-manager@${_TARGET_PROJECT}.iam.gserviceaccount.com
       - --no-traffic
 
   # Send message to pub/sub to start canary rollout process

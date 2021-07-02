@@ -13,7 +13,8 @@
 # limitations under the License.
 
 steps:
-  # Docker Build
+  # Docker Build 
+  # Update the _DIR variable to build the website or the content-api directory
   - name: 'gcr.io/cloud-builders/docker'
     args: 
       - 'build'

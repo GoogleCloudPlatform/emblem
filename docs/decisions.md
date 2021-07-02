@@ -110,3 +110,9 @@ In choosing how to **handle rollbacks for Cloud Run services**, deciding between
 reverting deployments to a previous stable revision and rerouting traffic to a previous known-good revision, we decided to **re-route traffic** for highest recovery speed and least chance of unintended side-effects, accepting this capability is not consistent across all hosting platforms and does not address state management.
 
 * **Date:** 2021/03
+
+## Decision: Using Cloud Run for Website and Content API
+
+Deciding **which Serverless platform to use for the Website _and_ Content API**, facing the options of **Cloud Functions, App Engine, or Cloud Run**, we decided to **deploy to Cloud Run** for _both_ tasks.  Cloud Run has more flexibility than Cloud Functions or App Engine, and additionally offers concurrency and traffic splitting, allowing for a more natural canary rollout pipeline.
+
+* **Date:** 2021/06

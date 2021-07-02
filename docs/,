@@ -1,0 +1,9 @@
+{
+        "name": "Demo Campaign",
+        "description": "A campaign created to demonstrate the API",
+        "cause": "Something useful",
+        "managers": ["nobody@example.com", "nobodyelse@example.com"],
+        "goal": 1000.00,
+        "imageUrl": "https://github.githubassets.com/images/icons/emoji/unicode/1f4a0.png",
+        "active": true
+    }
