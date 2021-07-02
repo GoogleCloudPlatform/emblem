@@ -17,7 +17,7 @@ fundraising *campaigns* for worthy *causes*.
 A *cause* is an organization of some kind (often a charity) that
 accepts *donations* from *donors*. Donations reach *causes*
 through *campaigns*. Campaigns are promoted by sponsors, and can
-only be for an approved *cause*.*Donors* are individuals who
+only be for an approved *cause*. *Donors* are individuals who
 are authenticated and approved by a campaign.
 
 A *cause* may only accept donations if it has been approved by
@@ -27,16 +27,15 @@ fundraising site to vet causes according to the site's criteria.
 ## Resources in general
 
 Each resource, regardless of type, consists of _name/value_ pairs.
-Every resource has a _kind_ (the name of the resource type, a
-system assigned _id_, which, along with the _kind_, uniquely specifies
-that resource.
+Every resource has a _kind_ (the name of the resource type), and
+several *core* system assigned properties that are common to every
+kind of resource:
 
-All resources, of whatever _kind_, have _timeCreated_ and
-_updated_ values, which represent specific points in time.
-
-Every resource has a unique URI that can be used with the API
-to operate on it. Each resource has a _selfLink_ value that
-contains that API.
+ - _id_, which, along with the _kind_, uniquely specifies
+that resource
+- _timeCreated_
+- _updated_
+- _selfLink_, a unique URI of this resource
 
 Every resource contains additional values specific to their
 _kind_.
@@ -58,7 +57,7 @@ might be represented by:
     }
 
 Every resource sent to or returned from the API must have a
-Content-Type of application/json.
+Content-Type of `application/json`.
 
 ## General Operations
 
@@ -100,7 +99,7 @@ Returns a list of all resources of a specific kind.
 
     GET base_uri://kinds
 
-Note that there should not be a trailing slash */*.
+Note that there should not be a trailing slash `/`.
 
 #### list_subresources
 
@@ -117,7 +116,7 @@ particular donor, for example.
 
     GET base_uri://parents/parent_id/childs
 
-Note that there should not be a trailing slash */*.
+Note that there should not be a trailing slash `/`.
 
 #### get
 
@@ -189,7 +188,7 @@ Each *campaign* has seven non-core properties:
 | description | string describing the purpose of the campaign |
 | cause | the id of the cause this campaign is for |
 | managers | array of strings containing email addresses of contact persons |
-| goal | the amount in USD this campaign is trying to raise |
+| goal | number; the amount in USD this campaign is trying to raise |
 | imageUrl | string containing URL of an image to display |
 | active | boolean; whether this person can currently approve |
 
@@ -228,7 +227,7 @@ Each *donation* has three non-core properties:
 | --- | --- |
 | campaign | ID of the campaign this donation is for |
 | donor | ID of the donor making this donation |
-| amount | the amount in USD of the donation |
+| amount | number; the amount in USD of the donation |
 
 The value of the _campaign_ property must be the _id_ of an
 existing *campaign*. The value of the _donor_ property must
