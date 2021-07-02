@@ -58,7 +58,7 @@ might be represented by:
     }
 
 Every resource sent to or returned from the API must have a
-Content-Type of application/json.
+Content-Type of `application/json`.
 
 ## General Operations
 
