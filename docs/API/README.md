@@ -100,7 +100,7 @@ Returns a list of all resources of a specific kind.
 
     GET base_uri://kinds
 
-Note that there should not be a trailing slash */*.
+Note that there should not be a trailing slash `/`.
 
 #### get
 
