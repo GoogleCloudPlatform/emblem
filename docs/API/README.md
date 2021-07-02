@@ -17,7 +17,7 @@ fundraising *campaigns* for worthy *causes*.
 A *cause* is an organization of some kind (often a charity) that
 accepts *donations* from *donors*. Donations reach *causes*
 through *campaigns*. Campaigns are promoted by sponsors, and can
-only be for an approved *cause*.*Donors* are individuals who
+only be for an approved *cause*. *Donors* are individuals who
 are authenticated and approved by a campaign.
 
 A *cause* may only accept donations if it has been approved by
