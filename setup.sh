@@ -15,14 +15,17 @@
 
 PARENT_PROJECT=$(gcloud config get-value project 2>/dev/null)
 BILLING_ACCOUNT=$(gcloud beta billing projects describe ${PARENT_PROJECT} --format="value(billingAccountName)" | sed 's/billingAccounts\///')
-EMBLEM_SUFFIX=$((RANDOM%9999999))
+EMBLEM_SUFFIX=$(printf "%06d"  $((RANDOM%999999)))
 
 cat > terraform/terraform.tfvars <<EOF
 suffix = "${EMBLEM_SUFFIX}"
 billing_account = "${BILLING_ACCOUNT}"
 EOF
 
-# Set up the projects
+######################
+# Terraform Projects #
+######################
+
 cd terraform/
 terraform init
 terraform apply --auto-approve
@@ -31,31 +34,66 @@ terraform apply --auto-approve
 terraform apply --auto-approve 
 cd ..
 
-# Run the setup Cloud Build to do initial build and deploy
-gcloud builds submit --config=setup.cloudbuild.yaml \
---substitutions=_DIR=website,_SUFFIX=${EMBLEM_SUFFIX}
+
+###################
+# Deploy Services #
+###################
 
 gcloud builds submit --config=setup.cloudbuild.yaml \
---substitutions=_DIR=content-api,_SUFFIX=${EMBLEM_SUFFIX}
+--substitutions=_DIR=website,_SUFFIX=${EMBLEM_SUFFIX} \
+--project="emblem-ops-${EMBLEM_SUFFIX}"
+
+gcloud builds submit --config=setup.cloudbuild.yaml \
+--substitutions=_DIR=content-api,_SUFFIX=${EMBLEM_SUFFIX} \
+--project="emblem-ops-${EMBLEM_SUFFIX}"
 
 
+################
+# Set up CI/CD #
+################
 
-## Connect Repos: https://console.cloud.google.com/cloud-build/triggers/connect?project=35351384869
-## THEN RUN
-# gcloud alpha builds triggers create github \
-# --name=web-push-to-main \
-# --repo-owner=GoogleCloudPlatform --repo-name=emblem \
-# --branch-pattern="^main$" --build-config=ops/build.cloudbuild.yaml \
-# --included-files="website/*" --substitutions="_DIR"="website" \
-# --project="emblem-ops-${EMBLEM_SUFFIX}"
+REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?\
+project=emblem-ops-${EMBLEM_SUFFIX}"
+echo "Connect your repos: ${REPO_CONNECT_URL}"
+python3 -m webbrowser ${REPO_CONNECT_URL}
 
-# gcloud alpha builds triggers create pubsub \
-# --name=web-deploy-staging --topic="projects/emblem-ops-${EMBLEM_SUFFIX}/topics/gcr" \
-# --repo=https://www.github.com/GoogleCloudPlatform/emblem \
-# --branch=cicd --build-config=ops/deploy.cloudbuild.yaml \
-# --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
-# _REGION=us-central1,_REVISION='$(body.message.messageId)',\
-# _SERVICE=website,_TARGET_PROJECT='emblem-stage-${EMBLEM_SUFFIX}' \
-# --project="emblem-ops-${EMBLEM_SUFFIX}"
+read -p "Once your repo is connected, please continue by typing any key."
+
+continue=1
+while [[ ${continue} -gt 0 ]]
+do
+
+read -p "Please input the repo-owner [GoogleCloudPlatform]: " repo_owner
+repo_owner=${name:-GoogleCloudPlatform}
+read -p "Please input the repo name [emblem]: " repo_name
+repo_name=${name:-emblem}
+
+read -p "Is this the correct repo: ${repo_owner}/${repo_name}? (y/n) " yesno
+
+if [[ ${yesno} == "y" ]]
+then continue=0
+fi
+
+done
+
+###################
+# Create Triggers #
+###################
+
+gcloud alpha builds triggers create github \
+--name=web-push-to-main \
+--repo-owner=${repo_owner} --repo-name=${repo_name} \
+--branch-pattern="^main$" --build-config=ops/build.cloudbuild.yaml \
+--included-files="website/*" --substitutions="_DIR"="website" \
+--project="emblem-ops-${EMBLEM_SUFFIX}"
+
+gcloud alpha builds triggers create pubsub \
+--name=web-deploy-staging --topic="projects/emblem-ops-${EMBLEM_SUFFIX}/topics/gcr" \
+--repo=https://www.github.com/${repo_owner}/${repo_name} \
+--branch=main --build-config=ops/deploy.cloudbuild.yaml \
+--substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
+_REGION=us-central1,_REVISION='$(body.message.messageId)',\
+_SERVICE=website,_TARGET_PROJECT='emblem-stage-${EMBLEM_SUFFIX}' \
+--project="emblem-ops-${EMBLEM_SUFFIX}"
 
 

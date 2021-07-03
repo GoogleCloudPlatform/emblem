@@ -43,24 +43,15 @@ resource "google_project_service" "stage_pubsub_api" {
   disable_dependent_services = true
 }
 
-data "google_iam_policy" "ops_cloudbuild_service_account_user_iam" {
+resource "google_project_iam_member" "stage_cloudbuild_service_account_user_iam" {
   provider = google.stage
-  binding {
-    role = "roles/iam.serviceAccountUser"
-
-    members = [
-      "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com",
-    ]
-  }
+  role   = "roles/iam.serviceAccountUser"
+  member = "serviceAccount:${google_project.stage_project.number}@cloudbuild.gserviceaccount.com"
 }
 
-data "google_iam_policy" "ops_cloudbuild_run_admin_iam" {
+resource "google_project_iam_member" "stage_cloudbuild_run_admin_iam" {
   provider = google.stage
-  binding {
-    role = "roles/run.admin"
-
-    members = [
-      "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com",
-    ]
-  }
+  role   = "roles/run.admin"
+  member = "serviceAccount:${google_project.stage_project.number}@cloudbuild.gserviceaccount.com"
 }
+

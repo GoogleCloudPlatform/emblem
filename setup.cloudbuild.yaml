@@ -23,6 +23,12 @@ steps:
       - '-t'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_DIR}/${_DIR}'
       - '${_DIR}/.'
+
+  # Docker Push
+  - name: 'gcr.io/cloud-builders/docker'
+    args: 
+      - 'push'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_DIR}/${_DIR}'
   
   # Cloud Run Deploy Stage
   - name: gcr.io/cloud-builders/gcloud
@@ -38,17 +44,17 @@ steps:
       - --service-account=cloud-run-manager@emblem-stage-${_SUFFIX}.iam.gserviceaccount.com
 
   # Cloud Run Deploy Prod
-  # - name: gcr.io/cloud-builders/gcloud
-  #   args:
-  #     - run
-  #     - deploy
-  #     - ${_DIR}
-  #     - --image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_DIR}/${_DIR}
-  #     - --region=${_REGION}
-  #     - --platform=managed
-  #     - --project=emblem-prod-${_SUFFIX}
-  #     - --allow-unauthenticated
-  #     - --service-account=cloud-run-manager@emblem-prod-${_SUFFIX}.iam.gserviceaccount.com
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      - run
+      - deploy
+      - ${_DIR}
+      - --image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_DIR}/${_DIR}
+      - --region=${_REGION}
+      - --platform=managed
+      - --project=emblem-prod-${_SUFFIX}
+      - --allow-unauthenticated
+      - --service-account=cloud-run-manager@emblem-prod-${_SUFFIX}.iam.gserviceaccount.com
 
 
 # Default to us-central1
