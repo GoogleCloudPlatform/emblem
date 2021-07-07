@@ -17,13 +17,13 @@ from flask import Flask, request
 from resources import methods
 
 
-resource = {
+resource = [
     "approvers",
     "campaigns",
     "causes",
     "donations",
     "donors",
-}
+]
 
 app = Flask(__name__)
 

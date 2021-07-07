@@ -39,6 +39,9 @@ resource_fields = {
 
 
 def list(resource_kind):
+    if resource_kind not in resource_fields:
+        return "Not found", 404
+
     results = db.list(resource_kind, resource_fields[resource_kind])
     return json.dumps(results), 200, {"Content-Type": "application/json"}
 
@@ -62,6 +65,9 @@ def list_subresource(resource_kind, id, subresource_kind):
 
 
 def get(resource_kind, id):
+    if resource_kind not in resource_fields:
+        return "Not found", 404
+
     result = db.fetch(resource_kind, id, resource_fields[resource_kind])
     if result is None:
         return "Not found", 404
@@ -74,6 +80,9 @@ def get(resource_kind, id):
 
 
 def insert(resource_kind, representation):
+    if resource_kind not in resource_fields:
+        return "Not found", 404
+
     resource = db.insert(resource_kind, representation, resource_fields[resource_kind])
 
     return (
@@ -88,6 +97,9 @@ def insert(resource_kind, representation):
 
 
 def patch(resource_kind, id, representation):
+    if resource_kind not in resource_fields:
+        return "Not found", 404
+
     match_etag = request.headers.get("If-Match", None)
     resource, status = db.update(
         resource_kind, id, representation, resource_fields[resource_kind], match_etag
@@ -108,6 +120,9 @@ def patch(resource_kind, id, representation):
 
 
 def delete(resource_kind, id):
+    if resource_kind not in resource_fields:
+        return "Not found", 404
+
     match_etag = request.headers.get("If-Match", None)
     status = db.delete(resource_kind, id, resource_fields[resource_kind], match_etag)
 
