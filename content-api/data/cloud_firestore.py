@@ -25,10 +25,7 @@ def list(resource_kind, resource_fields):
     resource_collection = client.collection(resource_kind)
     representations_list = []
     for resource_ref in resource_collection.stream():
-        resource = resource_ref.to_dict()
-        resource["id"] = resource_ref.id
-        resource["timeCreated"] = resource_ref.create_time.rfc3339()
-        resource["updated"] = resource_ref.update_time.rfc3339()
+        resource = snapshot_to_resource(resource_ref)
         representations_list.append(
             canonical_resource(resource, resource_kind, resource_fields)
         )
@@ -42,10 +39,7 @@ def list_matching(resource_kind, resource_fields, field_name, value):
 
     representations_list = []
     for resource_ref in query.stream():
-        resource = resource_ref.to_dict()
-        resource["id"] = resource_ref.id
-        resource["timeCreated"] = resource_ref.create_time.rfc3339()
-        resource["updated"] = resource_ref.update_time.rfc3339()
+        resource = snapshot_to_resource(resource_ref)
         representations_list.append(
             canonical_resource(resource, resource_kind, resource_fields)
         )
@@ -59,11 +53,7 @@ def fetch(resource_kind, id, resource_fields):
     if not resource_snapshot.exists:
         return None
 
-    resource = resource_snapshot.to_dict()
-    resource["id"] = resource_snapshot.id
-    resource["timeCreated"] = resource_snapshot.create_time.rfc3339()
-    resource["updated"] = resource_snapshot.update_time.rfc3339()
-
+    resource = snapshot_to_resource(resource_snapshot)
     resource = canonical_resource(resource, resource_kind, resource_fields)
 
     return resource
