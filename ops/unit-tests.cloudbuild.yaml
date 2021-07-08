@@ -15,10 +15,12 @@
 steps:
   # Install dependencies
   - name: python
+    dir: ${_DIR}
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
 
   # Run unit tests
   - name: python
+    dir: ${_DIR}
     entrypoint: python
     args: ["-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml"] 
