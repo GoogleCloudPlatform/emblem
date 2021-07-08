@@ -14,13 +14,19 @@
 
 steps:
   # Install dependencies
-  - name: python
+  - name: python:3.9-alpine
     dir: ${_DIR}
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
 
+  # Install pytest
+  - name: python:3.9-alpine
+    dir: ${_DIR}
+    entrypoint: pip
+    args: ["install", "pytest", "--user"]
+
   # Run unit tests
-  - name: python
+  - name: python:3.9-alpine
     dir: ${_DIR}
     entrypoint: python
-    args: ["-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml"] 
+    args: ["-m", "pytest"]
