@@ -1,0 +1,98 @@
+openapi: 3.0.0
+info:
+  title: Emblem API
+  description: REST API for any Emblem server
+  version: '2021-07-07'
+
+servers:
+- url: https://api-pwrmtjf4hq-uc.a.run.app
+  description: Development server
+
+paths:
+  /campaigns:
+    get:
+      summary: Returns a list of campaigns
+      responses:
+        '200':
+          description: A JSON array of compaigns
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Campaign'
+        '404':
+          description: not found. The path must have a typo
+        default:
+          description: Unexpected error
+
+  /campaigns/{id}:
+    get:
+      summary: returns a single campaign
+      parameters:
+        - name: id
+          in: path
+          description: Campaign Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: JSON representation of a campaign
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+        '404':
+          description: not found. The path must have a typo
+        default:
+          description: Unexpected error
+
+components:
+  schemas:
+    Campaign:
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: unique, system-assigned identifier
+        name:
+          type: string
+          description: the campaign's display name
+        description:
+          type: string
+          description: the purpose of the campaign
+        cause:
+          type: string
+          description: the id of the Cause this campaign is for
+        managers:
+          type: array
+          items:
+            type: string
+            format: email
+            description: a manager's email address
+        goal:
+          type: number
+          description: the fundraising goal, in USD
+        imageUrl:
+          type: string
+          format: uri
+          description: location of image to display for the campaign
+        active:
+          type: boolean
+          description: is this campaign accepting donations at this time?
+        timeCreated:
+          type: string
+          format: date-time
+          readOnly: true
+          description: system-assigned creation timestamp
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+          description: system-assigned update timestamp
+        selfLink:
+          type: string
+          format: uri
+          readOnly: true
+          description: full URI of the resource
