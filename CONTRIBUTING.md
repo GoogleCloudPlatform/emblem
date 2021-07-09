@@ -56,6 +56,7 @@ The following automated checks are run against every Pull Request:
 
 * *cla/google*: Ensure Google's [Contributor License Agreement](#contributor-license-agreement) has been met for the proposed change.
 * *[header-check](https://github.com/googleapis/repo-automation-bots/tree/master/packages/header-checker-lint)*: Ensure all applicable files have copyright headers.
+* *[style-terraform](/.github/workflows/style-terraform.yml)*: Propose corrections in PRs that add `terraform fmt` violations.
 
 ### Creating a New Static Analysis Check
 
