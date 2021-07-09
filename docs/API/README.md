@@ -101,6 +101,23 @@ Returns a list of all resources of a specific kind.
 
 Note that there should not be a trailing slash `/`.
 
+#### list_subresources
+
+Returns a list of all child resources of a specific kind, of a specific resource.
+
+For example, if a resource has a property whose name is the singular
+version of another resource (such as a _donations_ resource has a property
+name _campaign_, which is the singular version of _campaigns_, then that
+resource is a child resource if that property matches the _id_ property of
+the parent resource).
+
+This allows fetching all donations for a particular campaign or for a
+particular donor, for example.
+
+    GET base_uri://parents/parent_id/childs
+
+Note that there should not be a trailing slash `/`.
+
 #### get
 
 Returns a single resource, if available.
