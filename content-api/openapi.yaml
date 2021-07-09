@@ -26,6 +26,21 @@ paths:
         default:
           description: Unexpected error
 
+    post:
+      summary: Create a new campaign
+      requestBody:
+        description: JSON representation of a single campaign
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+      responses:
+        '201':
+          description: Created
+        '404':
+          description: campaigns must have been misspelled in path
+
   /campaigns/{id}:
     get:
       summary: returns a single campaign
@@ -44,7 +59,56 @@ paths:
               schema:
                 $ref: '#/components/schemas/Campaign'
         '404':
-          description: not found. The path must have a typo
+          description: not found
+        default:
+          description: Unexpected error
+
+    patch:
+      summary: updates a single campaign
+      parameters:
+        - name: id
+          in: path
+          description: Campaign Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: JSON representation of a single campaign
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+      responses:
+        '201':
+          description: JSON representation of a campaign
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+        '404':
+          description: not found
+        '409':
+          description: Conflict. If-Match header provided does not match current contents
+        default:
+          description: Unexpected error
+
+    delete:
+      summary: deletes a single campaign
+      parameters:
+        - name: id
+          in: path
+          description: Campaign Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: not found
+        '409':
+          description: Conflict. If-Match header provided does not match current contents
         default:
           description: Unexpected error
 

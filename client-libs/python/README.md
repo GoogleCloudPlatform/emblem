@@ -66,11 +66,43 @@ api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration)
 id = 'id_example' # str | Campaign Id
 
 try:
+    # deletes a single campaign
+    api_instance.campaigns_id_delete(id)
+except ApiException as e:
+    print("Exception when calling DefaultApi->campaigns_id_delete: %s\n" % e)
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration))
+id = 'id_example' # str | Campaign Id
+
+try:
     # returns a single campaign
     api_response = api_instance.campaigns_id_get(id)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling DefaultApi->campaigns_id_get: %s\n" % e)
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration))
+body = swagger_client.Campaign() # Campaign | JSON representation of a single campaign
+id = 'id_example' # str | Campaign Id
+
+try:
+    # updates a single campaign
+    api_response = api_instance.campaigns_id_patch(body, id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->campaigns_id_patch: %s\n" % e)
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration))
+body = swagger_client.Campaign() # Campaign | JSON representation of a single campaign
+
+try:
+    # Create a new campaign
+    api_instance.campaigns_post(body)
+except ApiException as e:
+    print("Exception when calling DefaultApi->campaigns_post: %s\n" % e)
 ```
 
 ## Documentation for API Endpoints
@@ -80,7 +112,10 @@ All URIs are relative to *https://api-pwrmtjf4hq-uc.a.run.app*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**campaigns_get**](docs/DefaultApi.md#campaigns_get) | **GET** /campaigns | Returns a list of campaigns
+*DefaultApi* | [**campaigns_id_delete**](docs/DefaultApi.md#campaigns_id_delete) | **DELETE** /campaigns/{id} | deletes a single campaign
 *DefaultApi* | [**campaigns_id_get**](docs/DefaultApi.md#campaigns_id_get) | **GET** /campaigns/{id} | returns a single campaign
+*DefaultApi* | [**campaigns_id_patch**](docs/DefaultApi.md#campaigns_id_patch) | **PATCH** /campaigns/{id} | updates a single campaign
+*DefaultApi* | [**campaigns_post**](docs/DefaultApi.md#campaigns_post) | **POST** /campaigns | Create a new campaign
 
 ## Documentation For Models
 
