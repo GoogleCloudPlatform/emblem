@@ -1,0 +1,9 @@
+{
+    "name": "Demo Campaign",
+    "description": "A campaign created to demonstrate the API",
+    "cause": "Something useful",
+    "managers": ["nobody@example.com", "nobodyelse@example.com"],
+    "goal": 1000.00,
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moonbase-app.appspot.com/o/asset_versions%2F-LPTBA6RyRaKeTLAHg95%2Fpreview.jpg?alt=media&token=323c8046-2bc2-4a78-bea8-56391aead162",
+    "active": true
+}
