@@ -49,12 +49,13 @@ def list_matching(resource_kind, resource_fields, field_name, value):
 
 def fetch(resource_kind, id, resource_fields):
     resource_reference = client.document("{}/{}".format(resource_kind, id))
-    resource_snapshot = resource_reference.get()
-    if not resource_snapshot.exists:
+    snapshot = resource_reference.get()
+    if not snapshot.exists:
         return None
 
-    resource = snapshot_to_resource(resource_snapshot)
-    resource = canonical_resource(resource, resource_kind, resource_fields)
+    resource = canonical_resource(
+        snapshot_to_resource(snapshot), resource_kind, resource_fields
+    )
 
     return resource
 
