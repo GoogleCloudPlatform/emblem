@@ -1,6 +1,6 @@
 on:
   pull_request_target:
-    types: [opened, synchronize]
+    types: [opened, reopened, edited, synchronize]
     branches:
       - terraform-style
 name: style-terraform
