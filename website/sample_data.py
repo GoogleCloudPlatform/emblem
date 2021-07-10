@@ -45,8 +45,15 @@ SAMPLE_DONATIONS = [
     {
         "id": "cccc-oooo-oooo-llll",
         "campaign": "aaaa-bbbb-cccc-dddd",
-        "donor": "aaaa-dddd-aaaa-mmmm",
+        "donor": "Adam Ross",
         "amount": 100,
         "timeCreated": datetime.date(2021, 5, 20),
+    },
+    {
+        "id": "ssss-cccc-hhhh-oooo-oooo-llll",
+        "campaign": "aaaa-bbbb-cccc-dddd",
+        "donor": "Ace Nassri",
+        "amount": 50,
+        "timeCreated": datetime.date(2021, 6, 20),
     }
 ]
