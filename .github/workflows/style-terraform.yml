@@ -1,8 +1,6 @@
 on:
-  pull_request_target:
+  pull_request:
     types: [opened, reopened, edited, synchronize]
-    branches:
-      - terraform-style
 name: style-terraform
 jobs:
   terraform-fmt:
