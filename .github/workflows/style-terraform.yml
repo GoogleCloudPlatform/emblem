@@ -2,7 +2,7 @@ on:
   pull_request_target:
     types: [opened, synchronize]
     branches:
-      - main
+      - terraform-style
 name: style-terraform
 jobs:
   terraform-fmt:
