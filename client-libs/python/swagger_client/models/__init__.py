@@ -14,6 +14,8 @@
 from __future__ import absolute_import
 
 # import models into model package
+from swagger_client.models.approver import Approver
 from swagger_client.models.campaign import Campaign
 from swagger_client.models.cause import Cause
 from swagger_client.models.donation import Donation
+from swagger_client.models.donor import Donor

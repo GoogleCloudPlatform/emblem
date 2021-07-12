@@ -4,6 +4,11 @@ All URIs are relative to *https://api-pwrmtjf4hq-uc.a.run.app*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**approvers_get**](DefaultApi.md#approvers_get) | **GET** /approvers | Returns a list of approvers
+[**approvers_id_delete**](DefaultApi.md#approvers_id_delete) | **DELETE** /approvers/{id} | deletes a single approver
+[**approvers_id_get**](DefaultApi.md#approvers_id_get) | **GET** /approvers/{id} | returns a single approver
+[**approvers_id_patch**](DefaultApi.md#approvers_id_patch) | **PATCH** /approvers/{id} | updates a single approver
+[**approvers_post**](DefaultApi.md#approvers_post) | **POST** /approvers | Create a new approver
 [**campaigns_get**](DefaultApi.md#campaigns_get) | **GET** /campaigns | Returns a list of campaigns
 [**campaigns_id_delete**](DefaultApi.md#campaigns_id_delete) | **DELETE** /campaigns/{id} | deletes a single campaign
 [**campaigns_id_donations_get**](DefaultApi.md#campaigns_id_donations_get) | **GET** /campaigns/{id}/donations | lists all donations for the specified campaign
@@ -20,6 +25,238 @@ Method | HTTP request | Description
 [**donations_id_get**](DefaultApi.md#donations_id_get) | **GET** /donations/{id} | returns a single donation
 [**donations_id_patch**](DefaultApi.md#donations_id_patch) | **PATCH** /donations/{id} | updates a single donation
 [**donations_post**](DefaultApi.md#donations_post) | **POST** /donations | Create a new donation
+[**donors_get**](DefaultApi.md#donors_get) | **GET** /donors | Returns a list of donors
+[**donors_id_delete**](DefaultApi.md#donors_id_delete) | **DELETE** /donors/{id} | deletes a single donor
+[**donors_id_donations_get**](DefaultApi.md#donors_id_donations_get) | **GET** /donors/{id}/donations | lists all donations for the specified donor
+[**donors_id_get**](DefaultApi.md#donors_id_get) | **GET** /donors/{id} | returns a single donor
+[**donors_id_patch**](DefaultApi.md#donors_id_patch) | **PATCH** /donors/{id} | updates a single donor
+[**donors_post**](DefaultApi.md#donors_post) | **POST** /donors | Create a new donor
+
+# **approvers_get**
+> list[Approver] approvers_get()
+
+Returns a list of approvers
+
+### Example
+```python
+from __future__ import print_function
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+
+try:
+    # Returns a list of approvers
+    api_response = api_instance.approvers_get()
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->approvers_get: %s\n" % e)
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**list[Approver]**](Approver.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **approvers_id_delete**
+> approvers_id_delete(id)
+
+deletes a single approver
+
+### Example
+```python
+from __future__ import print_function
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+id = 'id_example' # str | Approver Id
+
+try:
+    # deletes a single approver
+    api_instance.approvers_id_delete(id)
+except ApiException as e:
+    print("Exception when calling DefaultApi->approvers_id_delete: %s\n" % e)
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**| Approver Id | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **approvers_id_get**
+> Approver approvers_id_get(id)
+
+returns a single approver
+
+### Example
+```python
+from __future__ import print_function
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+id = 'id_example' # str | Approver Id
+
+try:
+    # returns a single approver
+    api_response = api_instance.approvers_id_get(id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->approvers_id_get: %s\n" % e)
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**| Approver Id | 
+
+### Return type
+
+[**Approver**](Approver.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **approvers_id_patch**
+> Approver approvers_id_patch(body, id)
+
+updates a single approver
+
+### Example
+```python
+from __future__ import print_function
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+body = swagger_client.Approver() # Approver | JSON representation of a single approver
+id = 'id_example' # str | Approver Id
+
+try:
+    # updates a single approver
+    api_response = api_instance.approvers_id_patch(body, id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->approvers_id_patch: %s\n" % e)
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**Approver**](Approver.md)| JSON representation of a single approver | 
+ **id** | **str**| Approver Id | 
+
+### Return type
+
+[**Approver**](Approver.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **approvers_post**
+> approvers_post(body)
+
+Create a new approver
+
+### Example
+```python
+from __future__ import print_function
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+body = swagger_client.Approver() # Approver | JSON representation of a single approver
+
+try:
+    # Create a new approver
+    api_instance.approvers_post(body)
+except ApiException as e:
+    print("Exception when calling DefaultApi->approvers_post: %s\n" % e)
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**Approver**](Approver.md)| JSON representation of a single approver | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **campaigns_get**
 > list[Campaign] campaigns_get()
@@ -729,6 +966,278 @@ except ApiException as e:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**Donation**](Donation.md)| JSON representation of a single donation | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **donors_get**
+> list[Donor] donors_get()
+
+Returns a list of donors
+
+### Example
+```python
+from __future__ import print_function
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+
+try:
+    # Returns a list of donors
+    api_response = api_instance.donors_get()
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->donors_get: %s\n" % e)
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**list[Donor]**](Donor.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **donors_id_delete**
+> donors_id_delete(id)
+
+deletes a single donor
+
+### Example
+```python
+from __future__ import print_function
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+id = 'id_example' # str | Donor Id
+
+try:
+    # deletes a single donor
+    api_instance.donors_id_delete(id)
+except ApiException as e:
+    print("Exception when calling DefaultApi->donors_id_delete: %s\n" % e)
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**| Donor Id | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **donors_id_donations_get**
+> list[Donation] donors_id_donations_get(id)
+
+lists all donations for the specified donor
+
+### Example
+```python
+from __future__ import print_function
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+id = 'id_example' # str | Donor Id
+
+try:
+    # lists all donations for the specified donor
+    api_response = api_instance.donors_id_donations_get(id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->donors_id_donations_get: %s\n" % e)
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**| Donor Id | 
+
+### Return type
+
+[**list[Donation]**](Donation.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **donors_id_get**
+> Donor donors_id_get(id)
+
+returns a single donor
+
+### Example
+```python
+from __future__ import print_function
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+id = 'id_example' # str | Donor Id
+
+try:
+    # returns a single donor
+    api_response = api_instance.donors_id_get(id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->donors_id_get: %s\n" % e)
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**| Donor Id | 
+
+### Return type
+
+[**Donor**](Donor.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **donors_id_patch**
+> Donor donors_id_patch(body, id)
+
+updates a single donor
+
+### Example
+```python
+from __future__ import print_function
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+body = swagger_client.Donor() # Donor | JSON representation of a single donor
+id = 'id_example' # str | Donor Id
+
+try:
+    # updates a single donor
+    api_response = api_instance.donors_id_patch(body, id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->donors_id_patch: %s\n" % e)
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**Donor**](Donor.md)| JSON representation of a single donor | 
+ **id** | **str**| Donor Id | 
+
+### Return type
+
+[**Donor**](Donor.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **donors_post**
+> donors_post(body)
+
+Create a new donor
+
+### Example
+```python
+from __future__ import print_function
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+body = swagger_client.Donor() # Donor | JSON representation of a single donor
+
+try:
+    # Create a new donor
+    api_instance.donors_post(body)
+except ApiException as e:
+    print("Exception when calling DefaultApi->donors_post: %s\n" % e)
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**Donor**](Donor.md)| JSON representation of a single donor | 
 
 ### Return type
 

@@ -55,6 +55,59 @@ from pprint import pprint
 api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration))
 
 try:
+    # Returns a list of approvers
+    api_response = api_instance.approvers_get()
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->approvers_get: %s\n" % e)
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration))
+id = 'id_example' # str | Approver Id
+
+try:
+    # deletes a single approver
+    api_instance.approvers_id_delete(id)
+except ApiException as e:
+    print("Exception when calling DefaultApi->approvers_id_delete: %s\n" % e)
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration))
+id = 'id_example' # str | Approver Id
+
+try:
+    # returns a single approver
+    api_response = api_instance.approvers_id_get(id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->approvers_id_get: %s\n" % e)
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration))
+body = swagger_client.Approver() # Approver | JSON representation of a single approver
+id = 'id_example' # str | Approver Id
+
+try:
+    # updates a single approver
+    api_response = api_instance.approvers_id_patch(body, id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->approvers_id_patch: %s\n" % e)
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration))
+body = swagger_client.Approver() # Approver | JSON representation of a single approver
+
+try:
+    # Create a new approver
+    api_instance.approvers_post(body)
+except ApiException as e:
+    print("Exception when calling DefaultApi->approvers_post: %s\n" % e)
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration))
+
+try:
     # Returns a list of campaigns
     api_response = api_instance.campaigns_get()
     pprint(api_response)
@@ -220,6 +273,70 @@ try:
     api_instance.donations_post(body)
 except ApiException as e:
     print("Exception when calling DefaultApi->donations_post: %s\n" % e)
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration))
+
+try:
+    # Returns a list of donors
+    api_response = api_instance.donors_get()
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->donors_get: %s\n" % e)
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration))
+id = 'id_example' # str | Donor Id
+
+try:
+    # deletes a single donor
+    api_instance.donors_id_delete(id)
+except ApiException as e:
+    print("Exception when calling DefaultApi->donors_id_delete: %s\n" % e)
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration))
+id = 'id_example' # str | Donor Id
+
+try:
+    # lists all donations for the specified donor
+    api_response = api_instance.donors_id_donations_get(id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->donors_id_donations_get: %s\n" % e)
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration))
+id = 'id_example' # str | Donor Id
+
+try:
+    # returns a single donor
+    api_response = api_instance.donors_id_get(id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->donors_id_get: %s\n" % e)
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration))
+body = swagger_client.Donor() # Donor | JSON representation of a single donor
+id = 'id_example' # str | Donor Id
+
+try:
+    # updates a single donor
+    api_response = api_instance.donors_id_patch(body, id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->donors_id_patch: %s\n" % e)
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi(swagger_client.ApiClient(configuration))
+body = swagger_client.Donor() # Donor | JSON representation of a single donor
+
+try:
+    # Create a new donor
+    api_instance.donors_post(body)
+except ApiException as e:
+    print("Exception when calling DefaultApi->donors_post: %s\n" % e)
 ```
 
 ## Documentation for API Endpoints
@@ -228,6 +345,11 @@ All URIs are relative to *https://api-pwrmtjf4hq-uc.a.run.app*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**approvers_get**](docs/DefaultApi.md#approvers_get) | **GET** /approvers | Returns a list of approvers
+*DefaultApi* | [**approvers_id_delete**](docs/DefaultApi.md#approvers_id_delete) | **DELETE** /approvers/{id} | deletes a single approver
+*DefaultApi* | [**approvers_id_get**](docs/DefaultApi.md#approvers_id_get) | **GET** /approvers/{id} | returns a single approver
+*DefaultApi* | [**approvers_id_patch**](docs/DefaultApi.md#approvers_id_patch) | **PATCH** /approvers/{id} | updates a single approver
+*DefaultApi* | [**approvers_post**](docs/DefaultApi.md#approvers_post) | **POST** /approvers | Create a new approver
 *DefaultApi* | [**campaigns_get**](docs/DefaultApi.md#campaigns_get) | **GET** /campaigns | Returns a list of campaigns
 *DefaultApi* | [**campaigns_id_delete**](docs/DefaultApi.md#campaigns_id_delete) | **DELETE** /campaigns/{id} | deletes a single campaign
 *DefaultApi* | [**campaigns_id_donations_get**](docs/DefaultApi.md#campaigns_id_donations_get) | **GET** /campaigns/{id}/donations | lists all donations for the specified campaign
@@ -244,12 +366,20 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**donations_id_get**](docs/DefaultApi.md#donations_id_get) | **GET** /donations/{id} | returns a single donation
 *DefaultApi* | [**donations_id_patch**](docs/DefaultApi.md#donations_id_patch) | **PATCH** /donations/{id} | updates a single donation
 *DefaultApi* | [**donations_post**](docs/DefaultApi.md#donations_post) | **POST** /donations | Create a new donation
+*DefaultApi* | [**donors_get**](docs/DefaultApi.md#donors_get) | **GET** /donors | Returns a list of donors
+*DefaultApi* | [**donors_id_delete**](docs/DefaultApi.md#donors_id_delete) | **DELETE** /donors/{id} | deletes a single donor
+*DefaultApi* | [**donors_id_donations_get**](docs/DefaultApi.md#donors_id_donations_get) | **GET** /donors/{id}/donations | lists all donations for the specified donor
+*DefaultApi* | [**donors_id_get**](docs/DefaultApi.md#donors_id_get) | **GET** /donors/{id} | returns a single donor
+*DefaultApi* | [**donors_id_patch**](docs/DefaultApi.md#donors_id_patch) | **PATCH** /donors/{id} | updates a single donor
+*DefaultApi* | [**donors_post**](docs/DefaultApi.md#donors_post) | **POST** /donors | Create a new donor
 
 ## Documentation For Models
 
+ - [Approver](docs/Approver.md)
  - [Campaign](docs/Campaign.md)
  - [Cause](docs/Cause.md)
  - [Donation](docs/Donation.md)
+ - [Donor](docs/Donor.md)
 
 ## Documentation For Authorization
 

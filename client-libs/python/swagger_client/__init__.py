@@ -20,6 +20,8 @@ from swagger_client.api.default_api import DefaultApi
 from swagger_client.api_client import ApiClient
 from swagger_client.configuration import Configuration
 # import models into sdk package
+from swagger_client.models.approver import Approver
 from swagger_client.models.campaign import Campaign
 from swagger_client.models.cause import Cause
 from swagger_client.models.donation import Donation
+from swagger_client.models.donor import Donor
