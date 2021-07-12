@@ -21,6 +21,13 @@
 # `gcloud builds submit --config setup.cloudbuild.yaml \
 # --substitutions=_DIR=content-api,_SUFFIX=0029383
 
+# NOTE: This deployment config is to be used for both the API and 
+# website.  When they need to diverge, they should diverge.
+# This will require adding additional steps this file, with explicit
+# builds for both the API and website. 
+# It will also require creating new files for deployments in the ops/ 
+# directory, which is used for CI/CD.
+
 steps:
   # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
