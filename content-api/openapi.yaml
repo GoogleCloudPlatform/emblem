@@ -2,19 +2,122 @@ openapi: 3.0.0
 info:
   title: Emblem API
   description: REST API for any Emblem server
-  version: '2021-07-07'
+  version: '2021-07-12'
 
 servers:
 - url: https://api-pwrmtjf4hq-uc.a.run.app
   description: Development server
 
 paths:
+  /approvers:
+    get:
+      summary: Returns a list of approvers
+      responses:
+        '200':
+          description: A JSON array of approvers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Approver'
+        '404':
+          description: not found. The path must have a typo
+        default:
+          description: Unexpected error
+
+    post:
+      summary: Create a new approver
+      requestBody:
+        description: JSON representation of a single approver
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Approver'
+      responses:
+        '201':
+          description: Created
+        '404':
+          description: approvers must have been misspelled in path
+
+  /approvers/{id}:
+    get:
+      summary: returns a single approver
+      parameters:
+        - name: id
+          in: path
+          description: Approver Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: JSON representation of a approver
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Approver'
+        '404':
+          description: not found
+        default:
+          description: Unexpected error
+
+    patch:
+      summary: updates a single approver
+      parameters:
+        - name: id
+          in: path
+          description: Approver Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: JSON representation of a single approver
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Approver'
+      responses:
+        '201':
+          description: JSON representation of a approver
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Approver'
+        '404':
+          description: not found
+        '409':
+          description: Conflict. If-Match header provided does not match current contents
+        default:
+          description: Unexpected error
+
+    delete:
+      summary: deletes a single approver
+      parameters:
+        - name: id
+          in: path
+          description: Approver Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: not found
+        '409':
+          description: Conflict. If-Match header provided does not match current contents
+        default:
+          description: Unexpected error
+
   /campaigns:
     get:
       summary: Returns a list of campaigns
       responses:
         '200':
-          description: A JSON array of compaigns
+          description: A JSON array of campaigns
           content:
             application/json:
               schema:
@@ -112,8 +215,396 @@ paths:
         default:
           description: Unexpected error
 
+  /campaigns/{id}/donations:
+    get:
+      summary: lists all donations for the specified campaign
+      parameters:
+        - name: id
+          in: path
+          description: Campaign Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: JSON representation of an array of donations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Donation'
+        '404':
+          description: not found
+        default:
+          description: Unexpected error
+
+  /causes:
+    get:
+      summary: Returns a list of causes
+      responses:
+        '200':
+          description: A JSON array of causes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cause'
+        '404':
+          description: not found. The path must have a typo
+        default:
+          description: Unexpected error
+
+    post:
+      summary: Create a new cause
+      requestBody:
+        description: JSON representation of a single cause
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cause'
+      responses:
+        '201':
+          description: Created
+        '404':
+          description: causes must have been misspelled in path
+
+  /causes/{id}:
+    get:
+      summary: returns a single cause
+      parameters:
+        - name: id
+          in: path
+          description: Cause Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: JSON representation of a cause
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cause'
+        '404':
+          description: not found
+        default:
+          description: Unexpected error
+
+    patch:
+      summary: updates a single cause
+      parameters:
+        - name: id
+          in: path
+          description: Cause Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: JSON representation of a single cause
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cause'
+      responses:
+        '201':
+          description: JSON representation of a cause
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cause'
+        '404':
+          description: not found
+        '409':
+          description: Conflict. If-Match header provided does not match current contents
+        default:
+          description: Unexpected error
+
+    delete:
+      summary: deletes a single cause
+      parameters:
+        - name: id
+          in: path
+          description: Cause Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: not found
+        '409':
+          description: Conflict. If-Match header provided does not match current contents
+        default:
+          description: Unexpected error
+
+  /donations:
+    get:
+      summary: Returns a list of donations
+      responses:
+        '200':
+          description: A JSON array of donations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Donation'
+        '404':
+          description: not found. The path must have a typo
+        default:
+          description: Unexpected error
+
+    post:
+      summary: Create a new donation
+      requestBody:
+        description: JSON representation of a single donation
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Donation'
+      responses:
+        '201':
+          description: Created
+        '404':
+          description: donations must have been misspelled in path
+
+  /donations/{id}:
+    get:
+      summary: returns a single donation
+      parameters:
+        - name: id
+          in: path
+          description: Donation Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: JSON representation of a donation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Donation'
+        '404':
+          description: not found
+        default:
+          description: Unexpected error
+
+    patch:
+      summary: updates a single donation
+      parameters:
+        - name: id
+          in: path
+          description: Donation Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: JSON representation of a single donation
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Donation'
+      responses:
+        '201':
+          description: JSON representation of a donation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Donation'
+        '404':
+          description: not found
+        '409':
+          description: Conflict. If-Match header provided does not match current contents
+        default:
+          description: Unexpected error
+
+    delete:
+      summary: deletes a single donation
+      parameters:
+        - name: id
+          in: path
+          description: Donation Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: not found
+        '409':
+          description: Conflict. If-Match header provided does not match current contents
+        default:
+          description: Unexpected error
+
+  /donors:
+    get:
+      summary: Returns a list of donors
+      responses:
+        '200':
+          description: A JSON array of donors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Donor'
+        '404':
+          description: not found. The path must have a typo
+        default:
+          description: Unexpected error
+
+    post:
+      summary: Create a new donor
+      requestBody:
+        description: JSON representation of a single donor
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Donor'
+      responses:
+        '201':
+          description: Created
+        '404':
+          description: donors must have been misspelled in path
+
+  /donors/{id}:
+    get:
+      summary: returns a single donor
+      parameters:
+        - name: id
+          in: path
+          description: Donor Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: JSON representation of a donor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Donor'
+        '404':
+          description: not found
+        default:
+          description: Unexpected error
+
+    patch:
+      summary: updates a single donor
+      parameters:
+        - name: id
+          in: path
+          description: Donor Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: JSON representation of a single donor
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Donor'
+      responses:
+        '201':
+          description: JSON representation of a donor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Donor'
+        '404':
+          description: not found
+        '409':
+          description: Conflict. If-Match header provided does not match current contents
+        default:
+          description: Unexpected error
+
+    delete:
+      summary: deletes a single donor
+      parameters:
+        - name: id
+          in: path
+          description: Donor Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: not found
+        '409':
+          description: Conflict. If-Match header provided does not match current contents
+        default:
+          description: Unexpected error
+
+  /donors/{id}/donations:
+    get:
+      summary: lists all donations for the specified donor
+      parameters:
+        - name: id
+          in: path
+          description: Donor Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: JSON representation of an array of donations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Donation'
+        '404':
+          description: not found
+        default:
+          description: Unexpected error
+
 components:
   schemas:
+    Approver:
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: unique, system-assigned identifier
+        name:
+          type: string
+          description: the display name of this Approver
+        email:
+          type: string
+          description: the Approver's email address
+        active:
+          type: boolean
+          description: is this approver currently active?
+        timeCreated:
+          type: string
+          format: date-time
+          readOnly: true
+          description: system-assigned creation timestamp
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+          description: system-assigned update timestamp
+        selfLink:
+          type: string
+          format: uri
+          readOnly: true
+          description: full URI of the resource
+
     Campaign:
       properties:
         id:
@@ -145,6 +636,103 @@ components:
         active:
           type: boolean
           description: is this campaign accepting donations at this time?
+        timeCreated:
+          type: string
+          format: date-time
+          readOnly: true
+          description: system-assigned creation timestamp
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+          description: system-assigned update timestamp
+        selfLink:
+          type: string
+          format: uri
+          readOnly: true
+          description: full URI of the resource
+
+    Cause:
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: unique, system-assigned identifier
+        name:
+          type: string
+          description: the cause's display name
+        description:
+          type: string
+          description: the purpose of the cause
+        imageUrl:
+          type: string
+          format: uri
+          description: location of image to display for the cause
+        active:
+          type: boolean
+          description: is this cause accepting donations at this time?
+        timeCreated:
+          type: string
+          format: date-time
+          readOnly: true
+          description: system-assigned creation timestamp
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+          description: system-assigned update timestamp
+        selfLink:
+          type: string
+          format: uri
+          readOnly: true
+          description: full URI of the resource
+
+    Donation:
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: unique, system-assigned identifier
+        campaign:
+          type: string
+          description: the id of the campaign this donation is for
+        donor:
+          type: string
+          description: the id of the donor this donation is from
+        amount:
+          type: number
+          description: the amount donated, in USD
+        timeCreated:
+          type: string
+          format: date-time
+          readOnly: true
+          description: system-assigned creation timestamp
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+          description: system-assigned update timestamp
+        selfLink:
+          type: string
+          format: uri
+          readOnly: true
+          description: full URI of the resource
+
+    Donor:
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: unique, system-assigned identifier
+        name:
+          type: string
+          description: the display name of this donor
+        email:
+          type: string
+          description: the donor's email address
+        mailing_address:
+          type: string
+          description: the donor's physical address
         timeCreated:
           type: string
           format: date-time
