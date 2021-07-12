@@ -28,6 +28,12 @@ resource "google_project_service" "ops_cloudbuild_api" {
 resource "google_project_service" "ops_pubsub_api" {
   provider = google.ops
   service = "pubsub.googleapis.com"
+
+  # Cloud Build and many other services require Pub/Sub to be enabled. 
+  # If you try to disable Pub/Sub while these services are enabled, it will fail.
+  # Therefore, in order to run `terraform destroy`, we need to tell TF that we 
+  # want to disable all dependent services.
+
   disable_dependent_services = true
 }
 
