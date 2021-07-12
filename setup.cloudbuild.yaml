@@ -13,8 +13,14 @@
 # limitations under the License.
 
 
-# This is only run during the initial project setup
-# This is not part of CI/CD
+# This is only run during the initial project setup, in the setup.sh script.
+# This is not part of CI/CD.
+
+# To run this outside of setup.sh, ensure you have the correct projects 
+# and permissions created. Then run the Cloud Build command, eg:
+# `gcloud builds submit --config setup.cloudbuild.yaml \
+# --substitutions=_DIR=content-api,_SUFFIX=0029383
+
 steps:
   # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
