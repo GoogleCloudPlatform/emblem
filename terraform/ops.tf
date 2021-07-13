@@ -81,35 +81,32 @@ resource "google_artifact_registry_repository_iam_member" "stage_iam_api_ar" {
 
 resource "google_artifact_registry_repository_iam_member" "prod_iam_api_ar" {
   provider   = google-beta
-
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_api_docker.name
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:service-${google_project.prod_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
-  ## Using depends_on because the beta behavior is a little wonky
   depends_on = [google_artifact_registry_repository.ops_api_docker]
+  ## Using depends_on because the beta behavior is a little wonky
 }
 
 resource "google_artifact_registry_repository_iam_member" "stage_iam_website_ar" {
   provider   = google-beta
-
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_website_docker.name
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:service-${google_project.stage_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
-  ## Using depends_on because the beta behavior is a little wonky
   depends_on = [google_artifact_registry_repository.ops_website_docker]
+  ## Using depends_on because the beta behavior is a little wonky
 }
 
 resource "google_artifact_registry_repository_iam_member" "prod_iam_website_ar" {
   provider   = google-beta
-
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_website_docker.name
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:service-${google_project.prod_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
-  ## Using depends_on because the beta behavior is a little wonky
   depends_on = [google_artifact_registry_repository.ops_website_docker]
+  ## Using depends_on because the beta behavior is a little wonky
 }
 
 resource "google_project_iam_member" "ops_ar_admin_iam" {

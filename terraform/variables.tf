@@ -7,7 +7,7 @@ variable "billing_account" {
 }
 
 variable "google_region" {
-  type = string
+  type    = string
   default = "us-central1"
 }
 
