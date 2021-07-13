@@ -50,8 +50,6 @@ def webapp_view_campaign():
     campaign_instance = campaigns[0]
 
     # Add dummy data for donations
-    # TODO(ace-n --> you?): use real data from the API
-
     campaign_instance["donations"] = SAMPLE_DONATIONS;
 
     return render_template("view-campaign.html", campaign=campaign_instance)
