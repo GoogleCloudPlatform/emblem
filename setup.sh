@@ -13,6 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Run ./setup.sh from a project with a billing account enabled
+# This will create 3 projects, for ops, staging, and prod
+
 PARENT_PROJECT=$(gcloud config get-value project 2>/dev/null)
 BILLING_ACCOUNT=$(gcloud beta billing projects describe ${PARENT_PROJECT} --format="value(billingAccountName)" | sed 's/billingAccounts\///')
 EMBLEM_SUFFIX=$(printf "%06d"  $((RANDOM%999999)))
