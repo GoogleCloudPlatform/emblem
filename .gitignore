@@ -136,3 +136,12 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# Terraform stuff
+.terraform/
+.terraform.*
+terraform.tfstate*
+terraform.tfvars
+
+# Mac stuff
+.DS_Store
