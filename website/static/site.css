@@ -151,3 +151,43 @@ a {
   padding-top: 0.5em;
   text-align: center;
 }
+/****** End error page ******/
+
+/***** View Campaign Details page *****/
+.mdc-layout-grid .emblem-campaign-overview {
+  position: relative;
+}
+
+@media(min-width: 840px) {
+  .emblem-campaign-status {
+    bottom: 6em;
+    position: absolute;
+  }
+}
+
+.emblem-campaign-status {
+  font-weight: bold;
+}
+
+.emblem-campaign-details .mdc-list-item {
+  display: block;
+  cursor: auto;
+}
+.emblem-campaign-details .mdc-list-item__text {
+  font-weight: bold;
+}
+
+.emblem-campaign-details .mdc-list-item__meta {
+  display: inline-block;
+  float: right;
+}
+
+.emblem-donation-history .mdc-data-table {
+  width: 100%;
+}
+
+/* Donate button */
+.emblem-campaign-details .mdc-button {
+  margin-top: 1em;
+  float: right;
+}
