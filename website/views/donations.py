@@ -40,7 +40,6 @@ def record_donation():
     donation_id = campaign_instance["donations"][0]
 
     print("Amount: ", request.form["amount"])
-    print("Anonymous?: ", request.form.get("anonymous", False))
 
     return redirect("/viewDonation?donation_id=" + donation_id)
 
