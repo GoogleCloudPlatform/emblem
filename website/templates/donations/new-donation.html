@@ -13,27 +13,96 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!doctype html>
-<title>Donate | Cymbal Giving</title>
+{% extends "base.html" %}
 
-<a href="/viewCampaign?campaign_id={{ campaign.id }}">
-  Back to campaign
-</a>
+{% block title %}Make a Donation{% endblock %}
 
+{% block materialio_scripts %}
+<script type="text/javascript">
+  function initTextFields() {
+    const MDCTextField = mdc.textField.MDCTextField;
+    const elements = Array.from(document.querySelectorAll('.mdc-text-field'));
+
+    elements.map(elem => new MDCTextField(elem));
+  }
+
+  function initSwitches () {
+    const MDCSwitch = mdc.switchControl.MDCSwitch;
+    new MDCSwitch(document.querySelector('.mdc-switch'));
+  }
+
+  window.onload = function () {
+    initTextFields();
+    initSwitches();
+  };
+</script>
+{% endblock %}
+
+{% block content %}
 <form method="POST">
-    <p>
-        Donate to the <b>{{ campaign.name}}</b> campaign:
-    </p>
-    <p>
-        <label for="amount">Amount (in USD):</label>
-        <input type="text" id="amount" name="amount">
-    </p>
-    <p>
-        <label for="anonymous">Keep me anonymous</label>
-        <input type="checkbox" id="anonymous" name="anonymous" value="false">
-    </p>
+  <div class="mdc-layout-grid emblem-new-donation">
+    <div class="mdc-layout-grid__inner">
 
-    <input type="hidden" value="{{ campaign.id }}" id="campaignId" name="campaignId" />
-    <input type="submit" value="Submit">
+      <!-- Donation inputs -->
+      <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+
+        <!-- Campaign Name (not editable) -->
+        <label class="emblem-donation-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating mdc-text-field--disabled">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="campaign-name-label">Campaign Name</span>
+          <input disabled required type="text" id="campaign-name" name="campaign-name" class="mdc-text-field__input" aria-labelledby="campaign-name" value="{{campaign.name}}">
+          <span class="mdc-line-ripple"></span>
+        </label>
+
+        <!-- Amount (in USD) -->
+        <label class="emblem-donation-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="amount-label">Amount (in USD):</span>
+          <input required type="text" id="amount" name="amount" class="mdc-text-field__input" aria-labelledby="amount">
+          <span class="mdc-line-ripple"></span>
+        </label>
+
+        <!-- Campaign ID (hidden) -->
+        <input type="hidden" value="{{ campaign.id }}" id="campaignId" name="campaignId" />
+        
+      </div>
+
+      <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+        <div class="emblem-donation-buttons mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+
+          <!-- Make an anonymous donation -->
+          <p>
+            <div class="mdc-switch">
+              <div class="mdc-switch__track"></div>
+              <div class="mdc-switch__thumb-underlay">
+                <div class="mdc-switch__thumb"></div>
+                <input type="checkbox" id="anonymous" class="mdc-switch__native-control" role="switch" aria-checked="false">
+              </div>
+            </div>
+            <label for="basic-switch">Keep me anonymous</label>
+          </p>
+
+          <!-- Cancel button -->
+          <a href="/viewCampaign?campaign_id={{ campaign.id }}" class="mdc-button mdc-button--raised">
+            <span class="mdc-button__ripple"></span>
+            <i class="material-icons mdc-button__icon" aria-hidden="true"
+              >close</i
+            >
+            <span class="mdc-button__label">Cancel</span>
+          </a>
+
+          <!-- Donate button -->
+          <button class="mdc-button mdc-button--raised" type="submit">
+            <span class="mdc-button__ripple"></span>
+            <i class="material-icons mdc-button__icon" aria-hidden="true"
+              >favorite</i
+            >
+            <span class="mdc-button__label">Donate</span>
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
 </form>
-
+{% endblock %}
