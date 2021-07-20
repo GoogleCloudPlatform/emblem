@@ -14,30 +14,28 @@
 
 
 # TODO(ace-n): replace this with API call
-from sample_data import SAMPLE_CAMPAIGNS, SAMPLE_DONATIONS
+from sample_data import SAMPLE_DONATIONS
 
 from flask import Blueprint, redirect, request, render_template
 
+import requests
 
 donations_bp = Blueprint("donations", __name__, template_folder="templates")
 
+API_URL = "https://api-pwrmtjf4hq-uc.a.run.app"
 
 @donations_bp.route("/donate", methods=["GET"])
 def new_donation():
-    campaign_id = request.args["campaign_id"]
-    campaign_instance = [
-        campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
-    ][0]
+    campaigns = requests.get(API_URL + "/campaigns").json()
+    campaign_instance = campaigns[0]
     return render_template("donations/new-donation.html", campaign=campaign_instance)
 
 
 @donations_bp.route("/donate", methods=["POST"])
 def record_donation():
     # TODO: do something with the collected data
-    campaign_id = request.form["campaignId"]
-    campaign_instance = [
-        campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
-    ][0]
+    campaigns = requests.get(API_URL + "/campaigns").json()
+    campaign_instance = campaigns[0]
 
     donation_id = campaign_instance["donations"][0]
 
