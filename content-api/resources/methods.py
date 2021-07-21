@@ -16,7 +16,7 @@
 import json
 from google.cloud import firestore
 
-from main import request
+from main import g, request
 from data import cloud_firestore as db
 from resources import base
 
@@ -83,7 +83,16 @@ def insert(resource_kind, representation):
     if resource_kind not in resource_fields:
         return "Not found", 404
 
-    resource = db.insert(resource_kind, representation, resource_fields[resource_kind])
+    if resource_kind == 'approvers':
+        email = g.get("verified_email", None)
+        matching_approvers = db.list_matching(
+            "approvers",
+            resource_fields["approvers"],
+            "email", email)
+        if not matching_approvers:
+            return "Forbidden", 403
+
+    db.insert(resource_kind, representation, resource_fields[resource_kind])
 
     return (
         json.dumps(resource),

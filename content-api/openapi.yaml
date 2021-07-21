@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Emblem API
   description: REST API for any Emblem server
-  version: '2021-07-12'
+  version: '2021-07-20'
 
 servers:
 - url: https://api-pwrmtjf4hq-uc.a.run.app
@@ -371,6 +371,10 @@ paths:
       responses:
         '201':
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Donation'
         '404':
           description: donations must have been misspelled in path
 
