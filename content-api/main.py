@@ -12,10 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from flask import Flask, g, request
-
-from google.auth.transport import requests as reqs
-from google.oauth2 import id_token
+from flask import Flask, request
 
 from resources import methods
 
@@ -31,30 +28,7 @@ resource = [
 app = Flask(__name__)
 
 
-# Check authentication and remember result in global request context
-@app.before_request
-def check_user_authentication():
-    auth = request.headers.get("Authorization", None)
-    if auth is None:
-        return      # Nothing to remember
-
-    if not auth.startswith("Bearer "):
-        return "Forbidden", 403     # Invalid auth header
-
-    token = auth[7:]    # Skip Bearer
-
-    try:
-        info = id_token.verify_oauth2_token(token, reqs.Request())
-        if "email" not in info:
-            return "Forbidden", 403
-        g.verified_email = info["email"]
-    except Exception as e:
-        return "Forbidden", 403
-
-
-
 # Resource collection methods
-
 
 @app.route("/<resource_name>", methods=["GET"])
 def handle_list(resource_name):
