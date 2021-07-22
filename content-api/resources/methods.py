@@ -83,7 +83,7 @@ def insert(resource_kind, representation):
     if resource_kind not in resource_fields:
         return "Not found", 404
 
-    db.insert(resource_kind, representation, resource_fields[resource_kind])
+    resource = db.insert(resource_kind, representation, resource_fields[resource_kind])
 
     return (
         json.dumps(resource),
