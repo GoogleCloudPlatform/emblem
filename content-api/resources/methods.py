@@ -14,11 +14,10 @@
 
 
 import json
-from google.cloud import firestore
 
-from main import request
+from main import g, request
 from data import cloud_firestore as db
-from resources import base
+from resources import auth, base
 
 
 resource_fields = {
@@ -82,6 +81,9 @@ def get(resource_kind, id):
 def insert(resource_kind, representation):
     if resource_kind not in resource_fields:
         return "Not found", 404
+
+    if not auth.allowed('POST', resource_kind, representation):
+        return "Forbidden", 403
 
     resource = db.insert(resource_kind, representation, resource_fields[resource_kind])
 
