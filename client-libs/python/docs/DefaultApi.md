@@ -938,7 +938,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **donations_post**
-> donations_post(body)
+> Donation donations_post(body)
 
 Create a new donation
 
@@ -956,7 +956,8 @@ body = swagger_client.Donation() # Donation | JSON representation of a single do
 
 try:
     # Create a new donation
-    api_instance.donations_post(body)
+    api_response = api_instance.donations_post(body)
+    pprint(api_response)
 except ApiException as e:
     print("Exception when calling DefaultApi->donations_post: %s\n" % e)
 ```
@@ -969,7 +970,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+[**Donation**](Donation.md)
 
 ### Authorization
 
@@ -978,7 +979,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
