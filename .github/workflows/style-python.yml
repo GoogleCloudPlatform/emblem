@@ -14,19 +14,34 @@
 
 # Adapted from https://github.com/cclauss/autoblack
 
-name: Lint (website)
-on: [pull_request]
-working-directory: ./website
+name: Python Style
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+    branches:
+      - main
+    paths:
+      - '**.py'
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
       - name: Set up Python 3.9
         uses: actions/setup-python@v1
         with:
           python-version: 3.9
       - name: Install Black
         run: pip install black
-      - name: Run black --check .
-        run: black --check .
+      - name: Run black
+        run: 'black .'
+      - uses: googleapis/code-suggester@v1 # takes the changes from git directory
+        with:
+          command: review
+          pull_number: ${{ github.event.pull_request.number }}
+          git_dir: '.'
