@@ -16,7 +16,7 @@
 import json
 from google.cloud import firestore
 
-from main import g, request
+from main import request
 from data import cloud_firestore as db
 from resources import base
 

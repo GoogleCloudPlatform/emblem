@@ -1,4 +1,4 @@
 Flask==1.1.2
 gunicorn==19.9.0
 requests==2.25.1
-swagger_client=git+https://github.com/GoogleCloudPlatform/emblem.git#subdirectory=client-libs/python
+../client-libs/python
