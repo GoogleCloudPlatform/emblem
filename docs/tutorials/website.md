@@ -8,7 +8,7 @@ For the best experience, launch this tutorial as an interactive walkthrough on C
 Let's get started!
 
 ## Set up Cloud Shell workspace
-First, let's open the Emblem Giving website as the Cloud Shell [Workspace](https://cloud.google.com/shell/docs/workspaces).
+First, let's open the Emblem Giving website as a [Cloud Shell Workspace](https://cloud.google.com/shell/docs/workspaces).
 
 1. Launch [Cloud Shell](https://shell.cloud.google.com) and clone the Emblem Giving repo:
 ```
