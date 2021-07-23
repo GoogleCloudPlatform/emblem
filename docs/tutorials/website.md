@@ -4,7 +4,7 @@ This tutorial shows you how to deploy the Emblem Giving website to Cloud Run usi
 
 The Cloud Run Emulator comes built in to Cloud Shell. It allows you to configure an environment that is representative of your service running on Cloud Run, without incurring charges on your GCP billing account.
 
-For the best experience, launch this tutorial as an interactive walkthrough on Cloud Shell: [Open in Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fkelsk%2Femblem-dev&cloudshell_git_branch=main&cloudshell_tutorial=docs%2Ftutorials%2Fwebsite.md)
+For the best experience, launch this tutorial as an interactive walkthrough on Cloud Shell: [Open in Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/emblemv&cloudshell_git_branch=main&cloudshell_tutorial=docs/tutorials/website.md)
 Let's get started!
 
 ## Set up Cloud Shell workspace
@@ -65,4 +65,4 @@ Congratulations! You've successfully deployed the Emblem Giving website using Cl
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
 
 Next steps: 
-- Check out instructions on running the [Emblem Giving API on Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fkelsk%2Femblem-dev&cloudshell_git_branch=main&cloudshell_tutorial=docs%2Ftutorials%2Fapi-tutorial.md) 
+- Check out instructions on running the [Emblem Giving API on Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/emblem&cloudshell_git_branch=main&cloudshell_tutorial=docs/tutorials/api.md) 
