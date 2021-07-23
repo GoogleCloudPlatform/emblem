@@ -128,7 +128,7 @@ If you run the GET request again, you should see your newly created campaign in 
 
 ## Conclusion
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
-Congratulations! You've successfully deployed the Emblem Giving website using Cloud Run.
+Congratulations! You've successfully deployed the Emblem Giving API using Cloud Run.
 
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
 
