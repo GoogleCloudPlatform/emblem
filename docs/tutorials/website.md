@@ -10,7 +10,7 @@ Let's get started!
 ## Set up Cloud Shell workspace
 First, let's open the Emblem Giving website as the Cloud Shell [Workspace](https://cloud.google.com/shell/docs/workspaces).
 
-1. Launch [Cloud Shell](shell.cloud.google.com) and clone the Emblem Giving repo:
+1. Launch [Cloud Shell](https://shell.cloud.google.com) and clone the Emblem Giving repo:
 ```
 git clone https://github.com/GoogleCloudPlatform/emblem.git && cd emblem
 ``` 
