@@ -30,7 +30,6 @@ app = Flask(__name__)
 
 # Resource collection methods
 
-
 @app.route("/<resource_name>", methods=["GET"])
 def handle_list(resource_name):
     if resource_name not in resource:

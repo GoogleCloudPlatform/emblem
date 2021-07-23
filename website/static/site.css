@@ -206,3 +206,14 @@ img.emblem-avatar {
   margin-top: 1em;
   float: right;
 }
+
+/***** Donate to Campaign page *****/
+.emblem-new-donation .emblem-donation-input {
+  margin-bottom: 1em;
+  width: 100%;
+}
+
+.emblem-new-donation .emblem-donation-buttons {
+  display: inline-block;
+  float: right;
+}

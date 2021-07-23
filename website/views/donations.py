@@ -13,51 +13,46 @@
 # limitations under the License.
 
 
-# TODO(ace-n): replace this with API call
-from sample_data import SAMPLE_CAMPAIGNS, SAMPLE_DONATIONS
-
 from flask import Blueprint, redirect, request, render_template
+
+import swagger_client
+from swagger_client.rest import ApiException
+import requests
 
 
 donations_bp = Blueprint("donations", __name__, template_folder="templates")
+api_client = swagger_client.DefaultApi()
 
 
 @donations_bp.route("/donate", methods=["GET"])
 def new_donation():
-    campaign_id = request.args["campaign_id"]
-    campaign_instance = [
-        campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
-    ][0]
+    campaigns = api_client.campaigns_get()
+    campaign_instance = campaigns[0]
     return render_template("donations/new-donation.html", campaign=campaign_instance)
 
 
 @donations_bp.route("/donate", methods=["POST"])
 def record_donation():
-    # TODO: do something with the collected data
-    campaign_id = request.form["campaignId"]
-    campaign_instance = [
-        campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
-    ][0]
+    campaign_id = request.form.get("campaignId", "Missing Campaign ID")
+    donor_id = request.form.get("donor", "Missing Donor ID")
+    amount = request.form.get("amount")
 
-    donation_id = campaign_instance["donations"][0]
+    new_donation = {
+        "campaign": campaign_id,
+        "donor": donor_id,
+        "amount": amount
+    }
 
-    print("Amount: ", request.form["amount"])
-    print("Anonymous?: ", request.form.get("anonymous", False))
-
-    return redirect("/viewDonation?donation_id=" + donation_id)
+    donation = api_client.donations_post(new_donation)
+    return redirect("/viewDonation?donation_id=" + donation.id)
 
 
 @donations_bp.route("/viewDonation", methods=["GET"])
 def webapp_view_donation():
-    donation_id = "cccc-oooo-oooo-llll"  # TODO: fetch value from API
-    donation_instance = [
-        donation for donation in SAMPLE_DONATIONS if donation["id"] == donation_id
-    ][0]
+    donation_id = request.args.get("donation_id")
+    donation_instance = api_client.donations_id_get(donation_id)
 
-    campaign_id = donation_instance["campaign"]
-    campaign_instance = [
-        campaign for campaign in SAMPLE_CAMPAIGNS if campaign["id"] == campaign_id
-    ][0]
+    campaign_instance = api_client.campaigns_id_get(donation_instance.campaign)
 
     return render_template(
         "donations/view-donation.html",
