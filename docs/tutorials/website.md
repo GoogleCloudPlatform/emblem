@@ -56,7 +56,7 @@ def list_campaigns():
 
 ```
 
-You'll be able to see the automatic rebuild and re-deploy of the application in the Output window. Once the deploy has finished, click the url to see the sample data populated in your website. 
+You'll be able to see the automatic rebuild and re-deploy of the application in the Output window. Once the deploy has finished, click the URL to see the sample data populated in your website. 
 
 ## Conclusion
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
