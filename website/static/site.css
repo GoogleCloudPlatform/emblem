@@ -129,6 +129,21 @@ a {
 }  
 /**** End campaign cards ****/
 
+/******** Auth pages *********/
+.emblem-auth-center {
+  text-align: center;
+}
+
+.emblem-auth-center .emblem-auth-hint {
+  font-weight: bold;
+}
+
+/* App-bar log-in status indicator */
+img.emblem-avatar {
+  border-radius: 50%;
+}
+/****** End auth pages *******/
+
 /******** Error page ********/
 .error-root {
   padding: 0.75em;
