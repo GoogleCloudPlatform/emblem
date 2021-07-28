@@ -15,33 +15,68 @@
 
 import json
 
-from main import g
+from main import g, request
 from resources import methods
 from data import cloud_firestore as db
 
 
-def allowed(operation, resource_kind, representation):
-    email = g.get("verified_email", None)
+def user_is_approver(email):
     if email is None:
         return False
+    matching_approvers = db.list_matching(
+        "approvers", methods.resource_fields["approvers"], "email",  email
+    )
+    return len(matching_approvers) > 0
 
-    if operation == 'POST':
-        if resource_kind in ["approvers", "campaigns", "causes"]:
-            matching_approvers = db.list_matching(
-                resource_kind, methods.resource_fields[resource_kind], "email",  email
-            )
-            return len(matching_approvers) > 0
 
-        elif resource_kind in ["donations"]:
-            matching_donors = db.list_matching(
-                "donors", methods.resource_fields[resource_kind], "email",  email
-            )
-            if len(matching_donors) > 0:
-                donor_id = matching_donors[0]["id"]
-                return donor_id == representation["donor"]
-            else:
+def user_is_manager(email, campaign_id):
+    if email is None:
+        return False
+    campaign = db.fetch("campaigns", campaign_id, methods.resource_fields["campaigns"])
+    if campaign is None or campaign.fetch("managers") is None:
+        return False
+    return email in campaign["managers"]
+
+
+def allowed(operation, resource_kind, representation=None):
+    email = g.get("verified_email", None)
+
+    # Check for everything requiring auth and handle
+
+    if user_is_approver(email):
+        return True
+        
+    if resource_kind in ["campaigns", "causes"]:
+        if operation == "POST":
+            return user_is_approver(email)
+        if operation in ["PATCH","DELETE"]:
+            path_parts = request.path.split("/")
+            id = path_parts[1]
+            return user_is_approver(email) or user_is_manager(email, id)
+        return True
+
+    if resource_kind == "donors":
+        if operation == "POST":
+            donor_email = representation.get("email")
+            return donor_email == email
+        if operation in ["PATCH", "DELETE"]:
+            return user_is_approver(email)
+        return True
+
+    if resource_kind == "donations":
+        campaign_id = representation.get("campaign")
+        donor_id = representation.get("donor")
+
+        if donor_email is None or campaign_id is None:
+            return False
+        if operation == "GET":
+            return user_is_manager(email, campaign_id)
+        if operation == "POST":
+            donor = db.fetch("donors", donor_id, methods.resource_fields["donors"])
+            if donor is None or donor.get("email") is None:
                 return False
+            return donor["email"] == email
 
-    else:
-        return True    # TODO: other operations
+    # No other case requires authorization
+    return True
 

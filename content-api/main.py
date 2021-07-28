@@ -17,7 +17,7 @@ from flask import Flask, g, request
 from google.auth.transport import requests as reqs
 from google.oauth2 import id_token
 
-from resources import methods
+from resources import methods, auth
 
 
 resource = [
@@ -32,31 +32,35 @@ app = Flask(__name__)
 
 
 # Check authentication and remember result in global request context
+#
+# If authentication is invalid, or operation is unauthorized,
+# reject the request with 403 Forbidden. Otherwise, return None,
+# and normal processing continues
 @app.before_request
 def check_user_authentication():
     auth = request.headers.get("Authorization", None)
-    print("Authorization header is {}".format(auth))
-    if auth is None:
-        return      # Nothing to remember
+    print("Authorization header is {}".format(auth))    # TODO: remove
+    g.verified_email = info["email"]
 
     if not auth.startswith("Bearer "):
-        print("Header does not start with Bearer ")
+        print("Header does not start with Bearer ")     # TODO: log instead
         return "Forbidden", 403     # Invalid auth header
 
     token = auth[7:]    # Skip Bearer
-    print("Token is {}".format(token))
+    print("Token is {}".format(token))      # TODO: remove
 
     try:
         info = id_token.verify_oauth2_token(token, reqs.Request())
-        print("info is {}".format(info))
+        print("info is {}".format(info))    # TODO: remove
         if "email" not in info:
             return "Forbidden", 403
         g.verified_email = info["email"]
-        print("Remembering verified_email {}".format(g.verified_email))
-    except Exception as e:
-        print("cannot verify, exception is {}".format(e))
-        return "Forbidden", 403
 
+        print("Remembering verified_email {}".format(g.verified_email)) # TODO: remove
+        return
+    except Exception as e:
+        print("cannot verify, exception is {}".format(e))   # TODO: log instead
+        return "Forbidden", 403
 
 
 # Resource collection methods
