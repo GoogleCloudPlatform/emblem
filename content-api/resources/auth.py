@@ -45,6 +45,8 @@ def allowed(operation, resource_kind, representation=None):
 
     if user_is_approver(email):
         return True
+    elif resource_kind == "approvers":
+        return False
         
     if resource_kind in ["campaigns", "causes"]:
         if operation == "POST":
@@ -64,18 +66,36 @@ def allowed(operation, resource_kind, representation=None):
         return True
 
     if resource_kind == "donations":
-        campaign_id = representation.get("campaign")
-        donor_id = representation.get("donor")
+        # Approvers can do all operations on donations, for cleanup purposes.
+        #
+        # Donors can GET their donations, Campaign managers can GET their
+        # donations. Note that both of these GETs are subdomain ones.
+        #
+        # Donors can POST new donations.
 
-        if donor_email is None or campaign_id is None:
+        if email is None:       # Must be authenticated
             return False
-        if operation == "GET":
-            return user_is_manager(email, campaign_id)
-        if operation == "POST":
-            donor = db.fetch("donors", donor_id, methods.resource_fields["donors"])
+
+        if user_is_approver(email):
+            return True
+
+        path_parts = request.path.split("/")
+        id = path_parts[1]
+
+        if resource_kind == "campaigns" and operation == "GET":
+            return user_is_manager(email, parent_id)
+
+        if resource_kind == "donors":
+            donor = db.fetch("donors", id, methods.resource_fields["donors"])
             if donor is None or donor.get("email") is None:
                 return False
-            return donor["email"] == email
+
+            if operation == "POST":
+                if donor["email"] != email:
+                    return False
+                if representation.get("donor", None) != email:
+                    return False
+
 
     # No other case requires authorization
     return True

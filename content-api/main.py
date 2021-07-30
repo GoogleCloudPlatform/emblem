@@ -39,27 +39,22 @@ app = Flask(__name__)
 @app.before_request
 def check_user_authentication():
     auth = request.headers.get("Authorization", None)
-    print("Authorization header is {}".format(auth))    # TODO: remove
-    g.verified_email = info["email"]
+    if auth is None:
+        return
 
     if not auth.startswith("Bearer "):
-        print("Header does not start with Bearer ")     # TODO: log instead
         return "Forbidden", 403     # Invalid auth header
 
     token = auth[7:]    # Skip Bearer
-    print("Token is {}".format(token))      # TODO: remove
 
     try:
         info = id_token.verify_oauth2_token(token, reqs.Request())
-        print("info is {}".format(info))    # TODO: remove
         if "email" not in info:
             return "Forbidden", 403
         g.verified_email = info["email"]
 
-        print("Remembering verified_email {}".format(g.verified_email)) # TODO: remove
         return
     except Exception as e:
-        print("cannot verify, exception is {}".format(e))   # TODO: log instead
         return "Forbidden", 403
 
 

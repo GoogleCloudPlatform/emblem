@@ -41,6 +41,9 @@ def list(resource_kind):
     if resource_kind not in resource_fields:
         return "Not found", 404
 
+    if not auth.allowed('GET', resource_kind):
+        return "Forbidden", 403
+
     results = db.list(resource_kind, resource_fields[resource_kind])
     return json.dumps(results), 200, {"Content-Type": "application/json"}
 
