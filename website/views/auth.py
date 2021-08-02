@@ -61,8 +61,8 @@ def login_get():
 
 @auth_bp.route("/logout", methods=["GET"])
 def logout():
-    response = make_response(redirect('/'))
-
+    response = make_response(redirect("/"))
+    response.set_cookie("session", "", expires=0)
     # Clear session token
     response.set_cookie('session', '', expires=0)
 
