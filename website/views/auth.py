@@ -28,30 +28,25 @@ default_app = firebase_admin.initialize_app()
 
 @auth_bp.route("/login", methods=["POST"])
 def login_post():
-    oauth_client_id = os.getenv('OAUTH_CLIENT_ID');
+    oauth_client_id = os.getenv("OAUTH_CLIENT_ID")
 
-    id_token = request.form['idToken']
+    id_token = request.form["idToken"]
     expires_in = datetime.timedelta(days=5)
 
     try:
         # Validate ID token + create session cookie
-        session_cookie = auth.create_session_cookie(
-            id_token, expires_in=expires_in)
+        session_cookie = auth.create_session_cookie(id_token, expires_in=expires_in)
 
         # Configure response to store session cookie
         expires = datetime.datetime.now() + expires_in
-        response = make_response(redirect('/'))
+        response = make_response(redirect("/"))
         response.set_cookie(
-            'session',
-            session_cookie,
-            expires=expires,
-            httponly=True,
-            secure=True
+            "session", session_cookie, expires=expires, httponly=True, secure=True
         )
 
         return response
     except exceptions.FirebaseError:
-        return flask.abort(401, 'Failed to create a session cookie')
+        return flask.abort(401, "Failed to create a session cookie")
 
 
 @auth_bp.route("/login", methods=["GET"])
@@ -64,6 +59,6 @@ def logout():
     response = make_response(redirect("/"))
     response.set_cookie("session", "", expires=0)
     # Clear session token
-    response.set_cookie('session', '', expires=0)
+    response.set_cookie("session", "", expires=0)
 
     return response
