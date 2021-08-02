@@ -50,6 +50,6 @@ def webapp_view_campaign():
     campaign_instance = campaigns[0]
 
     # Add dummy data for donations
-    campaign_instance["donations"] = SAMPLE_DONATIONS;
+    campaign_instance["donations"] = SAMPLE_DONATIONS
 
     return render_template("view-campaign.html", campaign=campaign_instance)
