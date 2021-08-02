@@ -20,22 +20,24 @@
 <script type="text/javascript">
   const loadLoginPage = async function () {
     // Authenticate user
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE)
     const authProvider = new firebase.auth.GoogleAuthProvider();
-    const authResult = await firebase.auth().signInWithPopup(authProvider);
+    const {user} = await firebase.auth().signInWithPopup(authProvider);
 
-    // Get user details
-    const token = authResult.credential.accessToken;
-    const email = authResult.user.email;
-    const avatar = authResult.user.photoURL;
+    // Set token + send to server
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (user) {
+        const token = await user.getIdToken();
 
-    // Forward {token, email} to the backend somehow 
-    Cookies.set('emblem-user-token', token);
-    Cookies.set('emblem-user-email', email);
-    Cookies.set('emblem-user-avatar', avatar)
+        // Find login form elements
+        const idToken = document.getElementById('idToken');
+        const form = document.getElementById('loginForm');
 
-    // Redirect to main page
-    document.location = '/';
+        idToken.value = token;
+
+        form.submit(); // Send to server (via an HTML form element)
+      }
+    });
   };
 
   loadLoginPage();
@@ -52,4 +54,9 @@
 
   <div id="my-signin2" data-onsuccess="onSignIn"></div>
 </div>
+
+<!-- Hidden form used to store login details -->
+<form method="POST" id="loginForm">
+  <input type="hidden" id="idToken" name="idToken" />
+</form>
 {% endblock %}

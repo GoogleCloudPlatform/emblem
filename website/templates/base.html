@@ -59,16 +59,22 @@
         <span class="mdc-top-app-bar__title">{{ self.title() }}</span>
       </section>
       <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Help">help_outline</button>
-        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Search Campaigns">search</button>
+        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Help" title="Help">help_outline</button>
 
-        <!-- Avatar -->
-        {% if 'emblem-user-avatar' in request.cookies %}
-          <button class="mdc-top-app-bar__action-item mdc-icon-button" aria-label="Profile">
-            <img class="emblem-avatar" src="{{ request.cookies['emblem-user-avatar'] }}">
-          </button>
+        <a href="/">
+          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Search Campaigns" title="Search Campaigns">search</button>
+        </a>
+
+        <!-- Logged-in indicator -->
+        {% if 'session' in request.cookies %}
+          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Profile" title="Profile">account_circle</button>
+          <a href="/logout">
+            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log Out" title="Log Out">exit_to_app</button>
+          </a>
         {% else %}
-          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Profile">account_circle</button>
+          <a href="/login">
+            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log In" title="Log In">pin_invoke</button>
+          </a>
         {% endif %}
       </section>
     </div>
