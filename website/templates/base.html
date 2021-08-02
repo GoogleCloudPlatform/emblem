@@ -16,10 +16,23 @@
 <!doctype html>
 
 <head>
+  <!-- Include Firebase + Cloud Identity Platform components -->
+  <script src="https://www.gstatic.com/firebasejs/7.18/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.18/firebase-auth.js"></script>
+  <script type="text/javascript">
+    firebase.initializeApp({
+      apiKey: "...",
+      authDomain: "...",
+    });
+  </script>
+
   <!-- Include Material Design components -->
   <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
   <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <!-- Include cross-browser cookie API -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2.2.1/src/js.cookie.min.js"></script>
 
   <!--
     Site-wide CSS
@@ -32,6 +45,9 @@
 
   <!-- Material.io scripts -->
   {% block materialio_scripts %}{% endblock %}
+
+  <!-- Google Auth scripts -->
+  {% block google_auth_scripts %}{% endblock %}
 </head>
 
 <body>
@@ -43,9 +59,23 @@
         <span class="mdc-top-app-bar__title">{{ self.title() }}</span>
       </section>
       <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Help">help_outline</button>
-        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Search Campaigns">search</button>
-        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Profile">account_circle</button>
+        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Help" title="Help">help_outline</button>
+
+        <a href="/">
+          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Search Campaigns" title="Search Campaigns">search</button>
+        </a>
+
+        <!-- Logged-in indicator -->
+        {% if 'session' in request.cookies %}
+          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Profile" title="Profile">account_circle</button>
+          <a href="/logout">
+            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log Out" title="Log Out">exit_to_app</button>
+          </a>
+        {% else %}
+          <a href="/login">
+            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log In" title="Log In">pin_invoke</button>
+          </a>
+        {% endif %}
       </section>
     </div>
   </header>
