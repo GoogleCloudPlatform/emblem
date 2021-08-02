@@ -37,11 +37,7 @@ def record_donation():
     donor_id = request.form.get("donor", "Missing Donor ID")
     amount = request.form.get("amount")
 
-    new_donation = {
-        "campaign": campaign_id,
-        "donor": donor_id,
-        "amount": amount
-    }
+    new_donation = {"campaign": campaign_id, "donor": donor_id, "amount": amount}
 
     donation = api_client.donations_post(new_donation)
     return redirect("/viewDonation?donation_id=" + donation.id)
