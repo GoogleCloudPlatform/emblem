@@ -55,5 +55,5 @@ SAMPLE_DONATIONS = [
         "donor": "John Doe",
         "amount": 50,
         "timeCreated": datetime.date(2021, 6, 20),
-    }
+    },
 ]
