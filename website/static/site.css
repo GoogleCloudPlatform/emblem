@@ -142,6 +142,10 @@ a {
 img.emblem-avatar {
   border-radius: 50%;
 }
+
+.error {
+  color: red;
+}
 /****** End auth pages *******/
 
 /******** Error page ********/
