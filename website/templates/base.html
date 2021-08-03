@@ -21,8 +21,8 @@
   <script src="https://www.gstatic.com/firebasejs/7.18/firebase-auth.js"></script>
   <script type="text/javascript">
     firebase.initializeApp({
-      apiKey: "...",
-      authDomain: "...",
+      apiKey: "{{ config.FIREBASE_API_KEY }}",
+      authDomain: "{{ config.FIREBASE_AUTH_DOMAIN }}",
     });
   </script>
 

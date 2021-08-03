@@ -23,6 +23,7 @@ from views.errors import errors_bp
 from views.auth import auth_bp
 
 app = Flask(__name__)
+app.config.from_object('config')
 app.register_blueprint(errors_bp)
 app.register_blueprint(donations_bp)
 app.register_blueprint(campaigns_bp)
