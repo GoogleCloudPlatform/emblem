@@ -39,6 +39,9 @@ Then, specify the following values in `config.py`:
  - Your Firebase API key
  - Your Firebase Auth domain
 
+You can determine these values by vising the
+[Identity Providers page](https://console.cloud.google.com/customer-identity/providers) and clicking on the `Application Setup Details` button.
+
 Congratulations! You are now ready to run the Emblem web app.
 
 ## Running
