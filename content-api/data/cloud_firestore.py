@@ -13,7 +13,6 @@
 # limitations under the License.
 
 
-import json
 from google.cloud import firestore
 from resources.base import canonical_resource, etag, snapshot_to_resource
 

@@ -27,6 +27,7 @@ kinds = [key for key in methods.resource_fields]
 request = google.auth.transport.requests.Request()
 audience = "https://api-pwrmtjf4hq-uc.a.run.app"
 id_token = google.oauth2.id_token.fetch_id_token(request, audience)
+print("Got my ID token")
 if id_token is not None:
     headers = {"Authorization": "Bearer {}".format(id_token)}
 else:
