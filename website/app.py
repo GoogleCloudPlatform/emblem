@@ -28,10 +28,10 @@ app.register_blueprint(donations_bp)
 app.register_blueprint(campaigns_bp)
 app.register_blueprint(auth_bp)
 
-if os.path.exists('config.py'):
-    app.config.from_object('config')
+if os.path.exists("config.py"):
+    app.config.from_object("config")
 else:
-    print('WARNING: config.py file not found! Some features may be broken.')
+    print("WARNING: config.py file not found! Some features may be broken.")
 
 
 # TODO(anassri, engelke): use API call instead of this
