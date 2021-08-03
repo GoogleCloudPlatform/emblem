@@ -20,7 +20,7 @@
 
 # The (public!) API key used by Firebase.
 # This should be of the format "AIza..."
-FIREBASE_API_KEY = 'YOUR_FIREBASE_API_KEY'
+FIREBASE_API_KEY = "YOUR_FIREBASE_API_KEY"
 
 # The domain name used by Firebase Auth
-FIREBASE_AUTH_DOMAIN = 'YOUR_APP.firebaseapp.com'
+FIREBASE_AUTH_DOMAIN = "YOUR_APP.firebaseapp.com"
