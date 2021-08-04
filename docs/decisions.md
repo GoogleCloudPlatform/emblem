@@ -150,3 +150,30 @@ Note that this means that some requests use two authentication methods, one for 
 API, and one for the user requesting a sensitive operation.
 
 * **Date:** 2021/07
+
+## Decision: use Cloud Identity Platform for user authorization
+
+[Cloud Identity Platform](https://cloud.google.com/identity-platform) is a Google Cloud-specific
+layer on top of [Firebase Auth](https://firebase.google.com/docs/auth) that provides
+several useful capabilities within GCP itself:
+
+ - _Built-in user account management tools_ available in the [Cloud Console](https://console.cloud.google.com/customer-identity/users).
+ - _Identity federation_, which combines sign-ons from multiple identity providers (such as Google, Apple, and GitHub) into a single user account
+
+ It also supports a [wide variety]() of identity providers, should our app need to support any additional such providers in the future.
+
+
+* **Date:** 2021/07
+
+## Decision: use cookies to store tokens minted by Cloud Identity Platform
+
+Some calls to the API itself require a token that authenticates the current user. Since these calls
+are performed _server-side_, we have to forward tokens (generated _client-side_) to the server.
+Crucially, any method we use must work with `GET` requests made by links (HTML `<a>` elements).
+This largely disqualifies things like `POST` requests or custom HTTP headers, as both would
+require additional Javascript to inject the token into these link elements.
+
+In our view, storing the token in a cookie was both the cleanest and most idiomatic solution
+to this problem.
+
+* **Date:** 2021/08
