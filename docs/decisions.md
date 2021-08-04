@@ -160,8 +160,7 @@ several useful capabilities within GCP itself:
  - _Built-in user account management tools_ available in the [Cloud Console](https://console.cloud.google.com/customer-identity/users).
  - _Identity federation_, which combines sign-ons from multiple identity providers (such as Google, Apple, and GitHub) into a single user account
 
- It also supports a [wide variety]() of identity providers, should our app need to support any additional such providers in the future.
-
+ It also supports a [wide variety](https://cloud.google.com/identity-platform/docs/concepts-authentication#key_capabilities) of identity providers, should our app need to support any additional such providers in the future.
 
 * **Date:** 2021/07
 
