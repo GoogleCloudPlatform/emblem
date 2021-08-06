@@ -93,14 +93,19 @@ def test_lifecycle(client):
         r = client.patch(
             "/{}/{}".format(kind, id),
             json=representation,
-            headers={"If-Match": "wrong data", "Authorization": "Bearer {}".format(id_token)},
+            headers={
+                "If-Match": "wrong data",
+                "Authorization": "Bearer {}".format(id_token),
+            },
         )
         assert r.status_code == 409
 
         # Update only if same etag, given right etag
         representation = {"name": "changed name"}
         r = client.patch(
-            "/{}/{}".format(kind, id), json=representation, headers={"If-Match": etag, "Authorization": "Bearer {}".format(id_token)}
+            "/{}/{}".format(kind, id),
+            json=representation,
+            headers={"If-Match": etag, "Authorization": "Bearer {}".format(id_token)},
         )
         assert r.status_code == 201
         resource = r.get_json(r.data)
@@ -116,11 +121,23 @@ def test_lifecycle(client):
         new_etag, _ = r.get_etag()
 
         # Try to delete, given wrong etag
-        r = client.delete("/{}/{}".format(kind, id), headers={"If-Match": "wrong", "Authorization": "Bearer {}".format(id_token)})
+        r = client.delete(
+            "/{}/{}".format(kind, id),
+            headers={
+                "If-Match": "wrong",
+                "Authorization": "Bearer {}".format(id_token),
+            },
+        )
         assert r.status_code == 409
 
         # Try to delete, given correct etag
-        r = client.delete("/{}/{}".format(kind, id), headers={"If-Match": new_etag, "Authorization": "Bearer {}".format(id_token)})
+        r = client.delete(
+            "/{}/{}".format(kind, id),
+            headers={
+                "If-Match": new_etag,
+                "Authorization": "Bearer {}".format(id_token),
+            },
+        )
         assert r.status_code == 204
 
         # Try to fetch deleted resource
@@ -132,7 +149,9 @@ def test_lifecycle(client):
 def test_donation(client):
     # Create a campaign
     campaign_representation = {"name": "test campaign"}
-    r = client.post("/{}".format("campaigns"), json=campaign_representation, headers=headers)
+    r = client.post(
+        "/{}".format("campaigns"), json=campaign_representation, headers=headers
+    )
     assert r.status_code == 201
     campaign = r.get_json(r.data)
     assert type(campaign) == dict
@@ -152,7 +171,9 @@ def test_donation(client):
         "donor": donor["id"],
         "amount": 50,
     }
-    r = client.post("/{}".format("donations"), json=donation_representation, headers=headers)
+    r = client.post(
+        "/{}".format("donations"), json=donation_representation, headers=headers
+    )
     assert r.status_code == 201
     donation = r.get_json(r.data)
     assert type(donation) == dict

@@ -24,7 +24,7 @@ def user_is_approver(email):
     if email is None:
         return False
     matching_approvers = db.list_matching(
-        "approvers", methods.resource_fields["approvers"], "email",  email
+        "approvers", methods.resource_fields["approvers"], "email", email
     )
     return len(matching_approvers) > 0
 
@@ -47,11 +47,11 @@ def allowed(operation, resource_kind, representation=None):
         return True
     elif resource_kind == "approvers":
         return False
-        
+
     if resource_kind in ["campaigns", "causes"]:
         if operation == "POST":
             return user_is_approver(email)
-        if operation in ["PATCH","DELETE"]:
+        if operation in ["PATCH", "DELETE"]:
             path_parts = request.path.split("/")
             id = path_parts[1]
             return user_is_approver(email) or user_is_manager(email, id)
@@ -73,7 +73,7 @@ def allowed(operation, resource_kind, representation=None):
         #
         # Donors can POST new donations.
 
-        if email is None:       # Must be authenticated
+        if email is None:  # Must be authenticated
             return False
 
         if user_is_approver(email):
@@ -96,7 +96,5 @@ def allowed(operation, resource_kind, representation=None):
                 if representation.get("donor", None) != email:
                     return False
 
-
     # No other case requires authorization
     return True
-

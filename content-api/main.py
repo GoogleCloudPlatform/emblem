@@ -43,9 +43,9 @@ def check_user_authentication():
         return
 
     if not auth.startswith("Bearer "):
-        return "Forbidden", 403     # Invalid auth header
+        return "Forbidden", 403  # Invalid auth header
 
-    token = auth[7:]    # Skip Bearer
+    token = auth[7:]  # Skip Bearer
 
     try:
         info = id_token.verify_oauth2_token(token, reqs.Request())
@@ -59,6 +59,7 @@ def check_user_authentication():
 
 
 # Resource collection methods
+
 
 @app.route("/<resource_name>", methods=["GET"])
 def handle_list(resource_name):

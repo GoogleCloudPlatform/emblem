@@ -41,7 +41,7 @@ def list(resource_kind):
     if resource_kind not in resource_fields:
         return "Not found", 404
 
-    if not auth.allowed('GET', resource_kind):
+    if not auth.allowed("GET", resource_kind):
         return "Forbidden", 403
 
     results = db.list(resource_kind, resource_fields[resource_kind])
@@ -85,7 +85,7 @@ def insert(resource_kind, representation):
     if resource_kind not in resource_fields:
         return "Not found", 404
 
-    if not auth.allowed('POST', resource_kind, representation):
+    if not auth.allowed("POST", resource_kind, representation):
         return "Forbidden", 403
 
     resource = db.insert(resource_kind, representation, resource_fields[resource_kind])
