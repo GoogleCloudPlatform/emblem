@@ -12,16 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Terraform Style
+# Adapted from https://github.com/cclauss/autoblack
+
+name: Python Style
 on:
   pull_request_target:
     types: [opened, synchronize]
     branches:
       - main
     paths:
-      - '**.tf'
+      - '**.py'
 jobs:
-  terraform-fmt:
+  build:
     runs-on: ubuntu-latest
     env:
       ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -30,10 +32,14 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
-      - uses: hashicorp/setup-terraform@v1
-      - run: terraform init
-      - name: Terraform Fmt
-        run: terraform fmt --recursive
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9
+      - name: Install Black
+        run: pip install black
+      - name: Run black
+        run: 'black .'
       - uses: googleapis/code-suggester@v1 # takes the changes from git directory
         with:
           command: review
