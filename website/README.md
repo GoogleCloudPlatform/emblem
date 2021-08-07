@@ -26,7 +26,6 @@ To enable end-user authentication within the application, you'll need to set up
 
 To do this, you must complete two steps:
 1. [Configure Google as an identity platform](https://cloud.google.com/identity-platform/docs/web/google#configuring_as_a_provider) to enable G Suite-based authentication
-1. [Set up a Firebase project](https://firebase.google.com/docs/admin/setup#set-up-project-and-service-account) to use with Identity Platform
 1. [Initialize the Firebase Admin SDK](https://firebase.google.com/docs/admin/setup#initialize-sdk) using a private key file
 
 **Note:** end-user authentication is required to access
