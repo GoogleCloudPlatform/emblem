@@ -65,18 +65,20 @@
           <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Search Campaigns" title="Search Campaigns">search</button>
         </a>
 
-        <!-- Login controls -->
-        {% if 'session' in request.cookies %}
-          <!-- Logged in -->
-          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Profile" title="Profile">account_circle</button>
-          <a href="/logout">
-            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log Out" title="Log Out">exit_to_app</button>
-          </a>
-        {% elif not config.AUTH_HIDDEN_FAILURE %}
-          <!-- No hidden auth failures; login enabled -->
-          <a href="/login">
-            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log In" title="Log In">pin_invoke</button>
-          </a>
+        {% if config.SHOW_AUTH %}
+          <!-- Login controls -->
+          {% if 'session' in request.cookies %}
+            <!-- Logged in -->
+            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Profile" title="Profile">account_circle</button>
+            <a href="/logout">
+              <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log Out" title="Log Out">exit_to_app</button>
+            </a>
+          {% else %}
+            <!-- No hidden auth failures; login enabled -->
+            <a href="/login">
+              <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log In" title="Log In">pin_invoke</button>
+            </a>
+          {% endif %}
         {% endif %}
       </section>
     </div>

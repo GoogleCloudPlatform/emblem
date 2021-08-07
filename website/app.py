@@ -34,19 +34,14 @@ else:
     print("WARNING: config.py file not found! Some features may be broken.")
 
 
-# Determine whether or not a hidden auth failure occurred
-auth_hidden_failure = False
-if not app.config['DEBUG']:
-    api_key = app.config.get('FIREBASE_API_KEY', '')
-    domain = app.config.get('FIREBASE_AUTH_DOMAIN')
+# Determine whether (Firebase) auth config is valid
+api_key = app.config.get("FIREBASE_API_KEY", "")
+domain = app.config.get("FIREBASE_AUTH_DOMAIN")
+valid_auth_config = (
+    "AIza" in api_key and domain and domain != "YOUR_APP.firebaseapp.com"
+)
 
-    if 'AIza' not in api_key:
-        # Invalid API key
-        auth_hidden_failure = True
-    if not domain or domain == 'YOUR_APP.firebaseapp.com':
-        # Invalid auth domain
-        auth_hidden_failure = True
-app.config['AUTH_HIDDEN_FAILURE'] = auth_hidden_failure
+app.config["SHOW_AUTH"] = valid_auth_config or (not os.getenv("HIDE_AUTH_WARNINGS"))
 
 
 # TODO(anassri, engelke): use API call instead of this

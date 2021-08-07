@@ -20,7 +20,15 @@ import time
 import firebase_admin
 
 from firebase_admin import auth, exceptions
-from flask import abort, Blueprint, current_app, make_response, redirect, request, render_template
+from flask import (
+    abort,
+    Blueprint,
+    current_app,
+    make_response,
+    redirect,
+    request,
+    render_template,
+)
 
 
 auth_bp = Blueprint("auth", __name__, template_folder="templates")
@@ -60,7 +68,7 @@ def login_post():
 
 @auth_bp.route("/login", methods=["GET"])
 def login_get():
-    if current_app.config['AUTH_HIDDEN_FAILURE']:
+    if not current_app.config["SHOW_AUTH"]:
         return abort(404, "Login disabled")
 
     return render_template("auth/login.html")

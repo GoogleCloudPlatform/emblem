@@ -19,6 +19,9 @@ FROM python:3.9-slim
 # Allow statements and log messages to immediately appear in the Cloud Run logs
 ENV PYTHONUNBUFFERED True
 
+# Hide auth warnings on Cloud Run
+ENV HIDE_AUTH_WARNINGS True
+
 # Copy application dependency manifests to the container image.
 # Copying this separately prevents re-running pip install on every code change.
 COPY requirements.txt ./
