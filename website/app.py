@@ -34,6 +34,21 @@ else:
     print("WARNING: config.py file not found! Some features may be broken.")
 
 
+# Determine whether or not a hidden auth failure occurred
+auth_hidden_failure = False
+if not app.config['DEBUG']:
+    api_key = app.config.get('FIREBASE_API_KEY', '')
+    domain = app.config.get('FIREBASE_AUTH_DOMAIN')
+
+    if 'AIza' not in api_key:
+        # Invalid API key
+        auth_hidden_failure = True
+    if not domain or domain == 'YOUR_APP.firebaseapp.com':
+        # Invalid auth domain
+        auth_hidden_failure = True
+app.config['AUTH_HIDDEN_FAILURE'] = auth_hidden_failure
+
+
 # TODO(anassri, engelke): use API call instead of this
 # (This is based on the API design doc for now.)
 
@@ -78,4 +93,4 @@ if __name__ == "__main__":
 
     # This is used when running locally. Gunicorn is used to run the
     # application on Cloud Run; see "entrypoint" parameter in the Dockerfile.
-    app.run(host="127.0.0.1", port=PORT)
+    app.run(host="127.0.0.1", port=PORT, debug=True)

@@ -20,7 +20,7 @@ import time
 import firebase_admin
 
 from firebase_admin import auth, exceptions
-from flask import abort, Blueprint, make_response, redirect, request, render_template
+from flask import abort, Blueprint, current_app, make_response, redirect, request, render_template
 
 
 auth_bp = Blueprint("auth", __name__, template_folder="templates")
@@ -50,14 +50,19 @@ def login_post():
         )
 
         return response
-    except auth.InvalidIdTokenError:
-        return flask.abort(401, "Invalid ID token.")
-    except exceptions.FirebaseError:
-        return flask.abort(401, "Failed to create a session cookie.")
+    except auth.InvalidIdTokenError as err:
+        print("Invalid ID token", err)
+        return abort(401, "Invalid ID token.")
+    except exceptions.FirebaseError as err:
+        print("Failed to create a session cookie", err)
+        return abort(401, "Failed to create a session cookie.")
 
 
 @auth_bp.route("/login", methods=["GET"])
 def login_get():
+    if current_app.config['AUTH_HIDDEN_FAILURE']:
+        return abort(404, "Login disabled")
+
     return render_template("auth/login.html")
 
 

@@ -54,7 +54,7 @@
       <p class="emblem-auth-hint">If nothing happens, make sure you enable pop-ups.</p>
 
       <div id="my-signin2" data-onsuccess="onSignIn"></div>
-    {% else %}
+    {% elif config.AUTH_HIDE_FAILURES %}
       <p class="emblem-auth-hint error">Firebase auth has not been configured!</p>
 
       <p>This is probably due to an improper or nonexistent <code>config.py</code> file.</p>
