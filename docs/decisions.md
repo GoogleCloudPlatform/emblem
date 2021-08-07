@@ -182,7 +182,7 @@ are performed _server-side_, we have to forward tokens (generated _client-side_)
 ### Rationale
 Because our app is rendered serverside using an HTML-based templating language (`jinja2`),
 any token-forwarding method we use must work with `GET` requests made by links (HTML `<a>` elements).
-This disqualifies things like `POST` requests or custom HTTP headers to some extent, as both 
+This disqualifies things like `POST` requests or [custom HTTP headers](https://stackoverflow.com/questions/3047711/custom-http-request-headers-in-html) to some extent, as both 
 do **not** work with standard HTML `<a>` elements and would require additional (and arguably non-idiomatic/hacky) frontend Javascript
 to forward the token to the server.
 
