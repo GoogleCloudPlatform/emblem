@@ -153,14 +153,24 @@ API, and one for the user requesting a sensitive operation.
 
 ## Decision: use Cloud Identity Platform for user authorization
 
+### Rationale
 [Cloud Identity Platform](https://cloud.google.com/identity-platform) is a Google Cloud-specific
 layer on top of [Firebase Auth](https://firebase.google.com/docs/auth) that provides
 several useful capabilities within GCP itself:
 
  - _Built-in user account management tools_ available in the [Cloud Console](https://console.cloud.google.com/customer-identity/users).
- - _Identity federation_, which combines sign-ons from multiple identity providers (such as Google, Apple, and GitHub) into a single user account
+ - _Identity federation_, which combines sign-ons from a [wide variety](https://cloud.google.com/identity-platform/docs/concepts-authentication#key_capabilities) of identity providers (such as Google, Apple, and GitHub) into a single user identity.
 
- It also supports a [wide variety](https://cloud.google.com/identity-platform/docs/concepts-authentication#key_capabilities) of identity providers, should our app need to support any additional such providers in the future.
+The other option we reviewed, [Google Sign-in](https://developers.google.com/identity/sign-in/web/build-button), did not have either of these capabilities that we might want
+to use later on. Thus, we decided to go with Cloud Identity Platform to "future-proof" our design.
+
+Finally, we did not want to deal with the hassle of managing user credentials (such as passwords) ourselves.
+Though this option gives the most _customizability_, we thought that the greater simplicity of Cloud Identity Platform was worth trading some flexibility for.
+
+### Revision Criteria
+In the unlikely event that we need to do something _not_ supported by Cloud Identity Platform,
+then we may want to consider implementing a **username/password-based** authentication 
+system for additional flexibility.
 
 * **Date:** 2021/07
 
@@ -168,11 +178,28 @@ several useful capabilities within GCP itself:
 
 Some calls to the API itself require a token that authenticates the current user. Since these calls
 are performed _server-side_, we have to forward tokens (generated _client-side_) to the server.
-Crucially, any method we use must work with `GET` requests made by links (HTML `<a>` elements).
-This largely disqualifies things like `POST` requests or custom HTTP headers, as both would
-require additional Javascript to inject the token into these link elements.
 
-In our view, storing the token in a cookie was both the cleanest and most idiomatic solution
-to this problem.
+### Rationale
+Because our app is rendered serverside using an HTML-based templating language (`jinja2`),
+any token-forwarding method we use must work with `GET` requests made by links (HTML `<a>` elements).
+This disqualifies things like `POST` requests or custom HTTP headers to some extent, as both 
+do **not** work with standard HTML `<a>` elements and would require additional (and arguably non-idiomatic/hacky) frontend Javascript
+to forward the token to the server.
+
+Another alternative would have been to switch to a single-page app that calls backend APIs directly,
+but that would have required a labor-intensive migration of all of our (`Jinja2`-based) views to frontend Javascript.
+
+Finally, the Firebase documentation [explains how to create](https://firebase.google.com/docs/auth/admin/manage-cookies#create_session_cookie)
+session cookies. The fact that this example is present in the official documentation implies
+that this is a conceptually valid way of storing user authentication materials.
+
+In our view, storing the token in a cookie was the cleanest solution
+available for this problem - which is why we chose it.
+
+### Revision Criteria
+If a more straightforward and/or more secure method of storing these tokens becomes available
+(either at the Firebase level, or the HTTP-specification level), we may consider migrating to that option.
+
+(For example, we could do away with the `session` cookie if the Firebase client SDK somehow automatically forwarded a generated ID token to the backend with every request.)
 
 * **Date:** 2021/08
