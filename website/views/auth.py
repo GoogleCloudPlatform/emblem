@@ -42,12 +42,14 @@ def login_post():
 
     try:
         # Validate ID token
+        # See https://firebase.google.com/docs/auth/admin/verify-id-tokens#verify_id_tokens_using_the_firebase_admin_sdk
         decoded_claims = auth.verify_id_token(id_token)
         if time.time() - decoded_claims["auth_time"] > 5 * 60:
             # Only allow sign-ins with tokens generated in the past 5 minutes
             return flask.abort(401, "Token has expired.")
 
         # Create session cookie
+        # See https://firebase.google.com/docs/auth/admin/manage-cookies#python
         session_cookie = auth.create_session_cookie(id_token, expires_in=expires_in)
 
         # Configure response to store session cookie
