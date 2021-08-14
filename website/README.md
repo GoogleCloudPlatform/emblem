@@ -24,9 +24,7 @@ run `pip install -r requirements.txt`.
 To enable end-user authentication within the application, you'll need to set up
 [Cloud Identity Platform](https://cloud.google.com/identity-platform).
 
-To do this, you must complete two steps:
-1. [Configure Google as an identity platform](https://cloud.google.com/identity-platform/docs/web/google#configuring_as_a_provider) to enable G Suite-based authentication
-1. [Initialize the Firebase Admin SDK](https://firebase.google.com/docs/admin/setup#initialize-sdk) using a private key file
+To do this, you must [configure Google as an identity platform](https://cloud.google.com/identity-platform/docs/web/google#configuring_as_a_provider) to enable G Suite-based authentication.
 
 **Note:** end-user authentication is required to access
 some - _but not all_ - application pages.
