@@ -37,12 +37,10 @@ default_app = firebase_admin.initialize_app()
 
 @auth_bp.route("/login", methods=["POST"])
 def login_post():
-    id_token = request.form["idToken"]
-    expires_in = datetime.timedelta(days=5)
-
     try:
         # Validate ID token
         # See https://firebase.google.com/docs/auth/admin/verify-id-tokens#verify_id_tokens_using_the_firebase_admin_sdk
+        id_token = request.form["idToken"]
         decoded_claims = auth.verify_id_token(id_token)
         if time.time() - decoded_claims["auth_time"] > 5 * 60:
             # Only allow sign-ins with tokens generated in the past 5 minutes
@@ -50,6 +48,7 @@ def login_post():
 
         # Create session cookie
         # See https://firebase.google.com/docs/auth/admin/manage-cookies#python
+        expires_in = datetime.timedelta(days=5)
         session_cookie = auth.create_session_cookie(id_token, expires_in=expires_in)
 
         # Configure response to store session cookie
@@ -79,7 +78,7 @@ def login_get():
 @auth_bp.route("/logout", methods=["GET"])
 def logout():
     response = make_response(redirect("/"))
-    response.set_cookie("session", "", expires=0)
+
     # Clear session token
     response.set_cookie("session", "", expires=0)
 

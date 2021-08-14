@@ -17,31 +17,7 @@
 {% extends "base.html" %}
 
 {% block google_auth_scripts %}
-<script type="text/javascript">
-  const loadLoginPage = async function () {
-    // Authenticate user
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE)
-    const authProvider = new firebase.auth.GoogleAuthProvider();
-    const {user} = await firebase.auth().signInWithPopup(authProvider);
-
-    // Set token + send to server
-    firebase.auth().onAuthStateChanged(async (user) => {
-      if (user) {
-        const token = await user.getIdToken();
-
-        // Find login form elements
-        const idToken = document.getElementById('idToken');
-        const form = document.getElementById('loginForm');
-
-        idToken.value = token;
-
-        form.submit(); // Send to server (via an HTML form element)
-      }
-    });
-  };
-
-  loadLoginPage();
-</script>
+<script src="/static/login.js"></script>
 {% endblock %}
 
 {% block title %}Log In{% endblock %}
