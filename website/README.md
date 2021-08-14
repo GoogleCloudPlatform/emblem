@@ -24,7 +24,7 @@ run `pip install -r requirements.txt`.
 To enable end-user authentication within the application, you'll need to set up
 [Cloud Identity Platform](https://cloud.google.com/identity-platform).
 
-To do this, you must [configure Google as an identity platform](https://cloud.google.com/identity-platform/docs/web/google#configuring_as_a_provider) to enable G Suite-based authentication.
+To do this, you must [configure Google as an Identity Platform](https://cloud.google.com/identity-platform/docs/web/google#configuring_as_a_provider) to enable G Suite-based authentication.
 
 **Note:** end-user authentication is required to access
 some - _but not all_ - application pages.
