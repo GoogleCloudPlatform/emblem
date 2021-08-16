@@ -44,7 +44,7 @@ def login_post():
         decoded_claims = auth.verify_id_token(id_token)
         if time.time() - decoded_claims["auth_time"] > 5 * 60:
             # Only allow sign-ins with tokens generated in the past 5 minutes
-            return flask.abort(401, "Token has expired.")
+            return flask.abort(403, "Token deadline exceeded.")
 
         # Create session cookie
         # See https://firebase.google.com/docs/auth/admin/manage-cookies#python
