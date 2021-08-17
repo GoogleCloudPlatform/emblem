@@ -45,7 +45,7 @@ def check_user_authentication():
     if not auth.startswith("Bearer "):
         return "Forbidden", 403  # Invalid auth header
 
-    token = auth[7:]  # Skip Bearer
+    token = auth[7:]  # Remove "Bearer: " prefix
 
     try:
         info = id_token.verify_oauth2_token(token, reqs.Request())
