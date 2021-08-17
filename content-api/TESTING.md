@@ -62,7 +62,7 @@ if you wish. All that matters for testing is that the account has
 a verifiable identity. Note the email address of the
 service account shown in the console.
 2. [Create and download a JSON service account key](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#iam-service-account-keys-create-console).
-Even though this service account has very little power, you should still guard
+Guard
 the downloaded key carefully. Note the full path to the key file.
 
 ### Seed the local test database
