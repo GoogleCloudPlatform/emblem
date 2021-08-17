@@ -63,4 +63,4 @@ the Emblem website when it is installed.
 
 # Finish
 
-The server is live and available to an Emblem website.
+The server is live and available for use with a running Emblem website instance.
