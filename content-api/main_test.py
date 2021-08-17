@@ -53,7 +53,7 @@ def test_list_without_authentication(client):
     for kind in kinds:
         r = client.get("/{}".format(kind))
         if kind in ["approvers", "donations"]:
-            assert r.status_code == 403
+            assert r.status_code == 403  # Resource requires authentication
         else:
             assert r.status_code == 200
             assert r.headers.get("Content-Type") == "application/json"
