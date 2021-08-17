@@ -72,7 +72,7 @@ email address as the test service account. Approvers can perform all
 API operations, including designating campaign managers. This step
 will create that Approver resource.
 
-1. Set the environment variable `GOOGLE_APPLICATION_CREDENTIALS` to the
+1. Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the
 full path you noted in the previous step.
 1. "Seed" the local Emblem API test Cloud Firestore database with this service
 account as an approver. This must be done first so that test API
