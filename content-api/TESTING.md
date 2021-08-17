@@ -28,7 +28,7 @@ number.
 
 Run software that will use Cloud Firestore (such as the test suite
 or an the API server) with the environment variable
-FIRESTORE_EMULATOR_HOST set to the value shown when you ran the emulator.
+`FIRESTORE_EMULATOR_HOST` set to the value shown when you ran the emulator.
 
 ## Testing Locally
 
