@@ -9,8 +9,8 @@ to prepare the test environment and run the API server.
 Open the [Google Cloud console](https://console.cloud.google.com/)
 in your browser.
 
-1. [Navigate to Cloud Firestore](https://console.cloud.google.com/firestore/data) and select *Native* mode. This
-can only be done once, before the database is used.
+1. [Navigate to Cloud Firestore](https://console.cloud.google.com/firestore/data)
+and select *Native* mode. This can only be done once, before the database is used.
 1. "Seed" the Emblem API Cloud Firestore database with the
 the first _approver_. Click *Data* from the options at
 the left side of the Cloud Firestore screen, then enter
