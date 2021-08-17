@@ -1,7 +1,7 @@
 # Testing the REST Api Server
 
-Create a folder on your PC to work in, and copy this source code
-Emblem content_api files to that folder.
+Create a folder on your PC to work in, and copy this
+Emblem `content_api` directory to that folder.
 
 Open a command shell and navigate to that folder. You will
 run the tests locally on this machine.
@@ -55,22 +55,20 @@ for it. You only need to do this once to run one or more local
 tests.
 
 1. Create a test service account for a project using the
-[Google Cloud console](https://console.cloud.google.com/). It does
-not matter which project is used. Do not grant this service account
-any additional access when asked, and you may remove any default permissions
-if you wish. All that matters for testing is that the account has
-a verifiable identity. Note the email address of the
-service account shown in the console.
+[Google Cloud console](https://console.cloud.google.com/). Do not
+grant this service account any additional access, and (optionally)
+remove any default permissions. Note the service account's
+email address shown in the console.
 2. [Create and download a JSON service account key](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#iam-service-account-keys-create-console).
 Guard
 the downloaded key carefully. Note the full path to the key file.
 
 ### Seed the local test database
 
-The test database will need to have an _Approver_ resource with the same
+The test database will need to have an `Approver` resource with the same
 email address as the test service account. Approvers can perform all
 API operations, including designating campaign managers. This step
-will create that Approver resource.
+will create that `Approver` resource.
 
 1. Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the
 full path you noted in the previous step.
@@ -103,4 +101,4 @@ and report any failures.
 ## Shut down the Cloud Firestore emulator
 
 Once the tests pass, return the command shell running the Cloud Firestore
-emulator and enter _CTRL-C_ or _CMD-C_ until the emulator exits.
+emulator and enter _CTRL-C_ until the emulator exits.
