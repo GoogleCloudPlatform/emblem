@@ -35,7 +35,7 @@ or an the API server) with the environment variable
 You will need to open another command shell to run the tests
 while the emulator is still running in the first shell.
 
-*Set the environment variable FIRESTORE_EMULATOR_HOST to the
+*Set the environment variable `FIRESTORE_EMULATOR_HOST` to the
 value shown when you started the emulator.*
 
 The test suite uses *application default credentials* to get an
