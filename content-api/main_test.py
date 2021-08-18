@@ -16,18 +16,13 @@ import json
 import os
 import pytest
 
-import google.oauth2.id_token
-import google.auth.transport.requests
-
 import main
 from resources import methods
 
 
 kinds = [key for key in methods.resource_fields]
 
-request = google.auth.transport.requests.Request()
-audience = os.environ.get("TEST_API_SERVER_URL", "https://example.com")
-id_token = google.oauth2.id_token.fetch_id_token(request, audience)
+id_token = os.environ.get("ID_TOKEN")
 if id_token is not None:
     headers = {"Authorization": "Bearer {}".format(id_token)}
 else:
@@ -40,6 +35,7 @@ def client():
 
 
 # Can we list every kind of resource?
+@pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
 def test_list_with_authentication(client):
     for kind in kinds:
         r = client.get("/{}".format(kind), headers=headers)
@@ -62,6 +58,7 @@ def test_list_without_authentication(client):
 
 
 # Create, fetch, modify, and delete resources
+@pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
 def test_lifecycle(client):
     for kind in kinds:
         if kind == "donations":  # Special case for later
@@ -146,6 +143,7 @@ def test_lifecycle(client):
 
 
 # Create a campaign and donor, and then a donation for them
+@pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
 def test_donation(client):
     # Create a campaign
     campaign_representation = {"name": "test campaign"}
