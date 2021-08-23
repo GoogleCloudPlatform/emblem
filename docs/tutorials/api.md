@@ -64,13 +64,13 @@ Using your new or existing service account, create a key and add it to `GOOGLE_A
 1. Create and download a key, where `$SERVICE_ACCOUNT` is the name of your service account:
 ```bash
 gcloud iam service-accounts keys \
-    create key.json --iam-account \
+    create $SERVICE_ACCOUNT-key.json --iam-account \
     $SERVICE_ACCOUNT@$PROJECT_ID.iam.gserviceaccount.com
 ```
 
 2. Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of the key:
 ```bash
-export GOOGLE_APPLICATION_CREDENTIALS=key.json
+export GOOGLE_APPLICATION_CREDENTIALS=$SERVICE_ACCOUNT-key.json
 ```
 
 
