@@ -46,25 +46,16 @@ def login_post():
             # Only allow sign-ins with tokens generated in the past 5 minutes
             return flask.abort(403, "Token deadline exceeded.")
 
-        # Create session cookie
-        # See https://firebase.google.com/docs/auth/admin/manage-cookies#python
-        expires_in = datetime.timedelta(days=5)
-        session_cookie = auth.create_session_cookie(id_token, expires_in=expires_in)
-
-        # Configure response to store session cookie
-        expires = datetime.datetime.now() + expires_in
+        # Configure response to store ID token as a session cookie
+        expires = datetime.datetime.now() + datetime.timedelta(days=5)
         response = make_response(redirect("/"))
         response.set_cookie(
-            "session", session_cookie, expires=expires, httponly=True, secure=True
+            "session", id_token, expires=expires, httponly=True, secure=True
         )
 
         return response
     except auth.InvalidIdTokenError as err:
-        print("Invalid ID token", err)
         return abort(401, "Invalid ID token.")
-    except exceptions.FirebaseError as err:
-        print("Failed to create a session cookie", err)
-        return abort(401, "Failed to create a session cookie.")
 
 
 @auth_bp.route("/login", methods=["GET"])
