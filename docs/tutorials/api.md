@@ -26,7 +26,7 @@ cloudshell open-workspace .
 
 ## Set GCP project
 
-In order to run the API, you'll need to use a new or existing [Google Cloud Platform project](https://cloud.google.com/resource-manager/docs/creating-managing-projects). If you use an existing project, make sure it's configured to use Firestore as a database. Even though the server code will run locally, the data will be in a project's Firestore database.
+In order to run the API, you'll need to use a new or existing [Google Cloud Platform project](https://cloud.google.com/resource-manager/docs/creating-managing-projects). If you use an existing project, make sure if Cloud Firestore is enabled it's in [Native Mode](https://cloud.google.com/datastore/docs/firestore-or-datastore). Even though the server code will run locally, the data will be in a project's Firestore database.
 
 1. You can quickly create a project by running the command below, where `$PROJECT_ID` is the name of your new project:
 
