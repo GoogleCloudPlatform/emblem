@@ -46,7 +46,7 @@ def login_post():
             # Only allow sign-ins with tokens generated in the past 5 minutes
             return flask.abort(403, "Token deadline exceeded.")
 
-        # Configure response to store session cookie
+        # Configure response to store ID token as a session cookie
         expires = datetime.datetime.now() + datetime.timedelta(days=5)
         response = make_response(redirect("/"))
         response.set_cookie(
