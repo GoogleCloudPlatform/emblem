@@ -37,6 +37,7 @@ def __get_rec_id(item):
 
     return rec_id
 
+
 project_id = os.getenv('GOOGLE_CLOUD_PROJECT')
 
 stdin = "".join(fileinput.input())
