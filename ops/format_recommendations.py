@@ -23,9 +23,9 @@ import sys
 # Helper function to get a principal email from a recommendation
 def __get_email(item):
     overview = item["content"]["overview"]
-    
+
     email = overview["member"]
-    email = email[email.index(':') + 1:]
+    email = email[email.index(":") + 1 :]
 
     return email
 
@@ -33,12 +33,12 @@ def __get_email(item):
 # Helper function to get a recommendation ID from a recommendation
 def __get_rec_id(item):
     rec_id = item["name"]
-    rec_id = rec_id[rec_id.rindex('/') + 1:]
+    rec_id = rec_id[rec_id.rindex("/") + 1 :]
 
     return rec_id
 
 
-project_id = os.getenv('GOOGLE_CLOUD_PROJECT')
+project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
 
 stdin = "".join(fileinput.input())
 suggestions = json.loads(stdin)
@@ -52,26 +52,19 @@ for item in suggestions:
 
     # Ignore non-ACTIVE recommendations
     state = item["stateInfo"]["state"]
-    if state != 'ACTIVE':
+    if state != "ACTIVE":
         continue
 
     # Get details
     suggestion_count += 1
     email = __get_email(item)
     rec_id = __get_rec_id(item)
-    
+
     removed_role = item["content"]["overview"]["removedRole"]
-    etag = item["etag"].strip("\"")
+    etag = item["etag"].strip('"')
 
-
-    last_updated = datetime.strptime(
-        item["lastRefreshTime"],
-        '%Y-%m-%dT%H:%M:%SZ'
-    )
-    last_updated_str = datetime.strftime(
-        last_updated,
-        '%b %d %Y, %I %M %p'
-    )
+    last_updated = datetime.strptime(item["lastRefreshTime"], "%Y-%m-%dT%H:%M:%SZ")
+    last_updated_str = datetime.strftime(last_updated, "%b %d %Y, %I %M %p")
 
     # Print details
     print("---------------------------------------------")
@@ -86,7 +79,7 @@ for item in suggestions:
     print(f"\t--project {project_id} \\")
     print(f"\t--location global \\")
     print(f"\t--recommender google.iam.policy.Recommender \\")
-    print(f"\t--etag \"\\\"{etag}\\\"\"")
+    print(f'\t--etag "\\"{etag}\\""')
 
 
 # Return a non-zero exit code if any suggestions were yielded
