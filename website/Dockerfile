@@ -25,6 +25,7 @@ ENV HIDE_AUTH_WARNINGS True
 # Copy application dependency manifests to the container image.
 # Copying this separately prevents re-running pip install on every code change.
 COPY requirements.txt ./
+COPY client-libs client-libs/
 
 # Install production dependencies.
 RUN pip install -r requirements.txt
