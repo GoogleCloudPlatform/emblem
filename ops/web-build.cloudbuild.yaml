@@ -32,7 +32,6 @@ steps:
       - '-c'
       - |
         cp -R client-libs/ website/client-libs
-        ls -R
         docker build -t \
         ${_REGION}-docker.pkg.dev/${PROJECT_ID}/website/website:${SHORT_SHA} \
         website/. 
