@@ -26,7 +26,9 @@ steps:
       - '-c'
       - |
         echo "$${CONFIG}" >> website/config.py
-        
+
+# ...     
+
 availableSecrets:
   secretManager: 
     - versionName: projects/${PROJECT_ID}/secrets/auth-config/versions/${_SECRET_VERSION}
