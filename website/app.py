@@ -20,11 +20,29 @@ from flask import Flask, redirect, request, render_template
 from views.campaigns import campaigns_bp
 from views.donations import donations_bp
 from views.errors import errors_bp
+from views.auth import auth_bp
 
 app = Flask(__name__)
 app.register_blueprint(errors_bp)
 app.register_blueprint(donations_bp)
 app.register_blueprint(campaigns_bp)
+app.register_blueprint(auth_bp)
+
+if os.path.exists("config.py"):
+    app.config.from_object("config")
+else:
+    print("WARNING: config.py file not found! Some features may be broken.")
+
+
+# Determine whether (Firebase) auth config is valid
+api_key = app.config.get("FIREBASE_API_KEY", "")
+domain = app.config.get("FIREBASE_AUTH_DOMAIN")
+valid_auth_config = (
+    "AIza" in api_key and domain and domain != "YOUR_APP.firebaseapp.com"
+)
+
+app.config["SHOW_AUTH"] = valid_auth_config or (not os.getenv("HIDE_AUTH_WARNINGS"))
+
 
 # TODO(anassri, engelke): use API call instead of this
 # (This is based on the API design doc for now.)
@@ -70,4 +88,4 @@ if __name__ == "__main__":
 
     # This is used when running locally. Gunicorn is used to run the
     # application on Cloud Run; see "entrypoint" parameter in the Dockerfile.
-    app.run(host="127.0.0.1", port=PORT)
+    app.run(host="127.0.0.1", port=PORT, debug=True)

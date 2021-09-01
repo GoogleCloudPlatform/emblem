@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import json
+import os
 import pytest
 
 import main
@@ -21,24 +22,43 @@ from resources import methods
 
 kinds = [key for key in methods.resource_fields]
 
+id_token = os.environ.get("ID_TOKEN")
+if id_token is not None:
+    headers = {"Authorization": "Bearer {}".format(id_token)}
+else:
+    headers = {}
+
 
 @pytest.fixture
 def client():
-    main.app.testing = True
     return main.app.test_client()
 
 
 # Can we list every kind of resource?
-def test_list(client):
+@pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
+def test_list_with_authentication(client):
     for kind in kinds:
-        r = client.get("/{}".format(kind))
+        r = client.get("/{}".format(kind), headers=headers)
         assert r.status_code == 200
         assert r.headers.get("Content-Type") == "application/json"
         payload = json.loads(r.data)
         assert type(payload) == list
 
 
+def test_list_without_authentication(client):
+    for kind in kinds:
+        r = client.get("/{}".format(kind))
+        if kind in ["approvers", "donations"]:
+            assert r.status_code == 403  # Resource requires authentication
+        else:
+            assert r.status_code == 200
+            assert r.headers.get("Content-Type") == "application/json"
+            payload = json.loads(r.data)
+            assert type(payload) == list
+
+
 # Create, fetch, modify, and delete resources
+@pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
 def test_lifecycle(client):
     for kind in kinds:
         if kind == "donations":  # Special case for later
@@ -46,7 +66,7 @@ def test_lifecycle(client):
 
         # Create a resource. Note that only the name field is mandatory
         representation = {"name": "test name"}
-        r = client.post("/{}".format(kind), json=representation)
+        r = client.post("/{}".format(kind), json=representation, headers=headers)
         assert r.status_code == 201
         resource = r.get_json(r.data)
         assert type(resource) == dict
@@ -55,7 +75,7 @@ def test_lifecycle(client):
         # Check that the id is in the list response
         etag, _ = r.get_etag()
         id = resource["id"]
-        r = client.get("/{}".format(kind))
+        r = client.get("/{}".format(kind), headers=headers)
         assert r.status_code == 200
         payload = r.get_json(r.data)
         found = False
@@ -70,14 +90,19 @@ def test_lifecycle(client):
         r = client.patch(
             "/{}/{}".format(kind, id),
             json=representation,
-            headers={"If-Match": "wrong data"},
+            headers={
+                "If-Match": "wrong data",
+                "Authorization": "Bearer {}".format(id_token),
+            },
         )
         assert r.status_code == 409
 
         # Update only if same etag, given right etag
         representation = {"name": "changed name"}
         r = client.patch(
-            "/{}/{}".format(kind, id), json=representation, headers={"If-Match": etag}
+            "/{}/{}".format(kind, id),
+            json=representation,
+            headers={"If-Match": etag, "Authorization": "Bearer {}".format(id_token)},
         )
         assert r.status_code == 201
         resource = r.get_json(r.data)
@@ -85,7 +110,7 @@ def test_lifecycle(client):
         assert resource["name"] == representation["name"]
 
         # Fetch updated resource
-        r = client.get("/{}/{}".format(kind, id))
+        r = client.get("/{}/{}".format(kind, id), headers=headers)
         assert r.status_code == 200
         resource = r.get_json(r.data)
         assert type(resource) == dict
@@ -93,23 +118,38 @@ def test_lifecycle(client):
         new_etag, _ = r.get_etag()
 
         # Try to delete, given wrong etag
-        r = client.delete("/{}/{}".format(kind, id), headers={"If-Match": "wrong"})
+        r = client.delete(
+            "/{}/{}".format(kind, id),
+            headers={
+                "If-Match": "wrong",
+                "Authorization": "Bearer {}".format(id_token),
+            },
+        )
         assert r.status_code == 409
 
         # Try to delete, given correct etag
-        r = client.delete("/{}/{}".format(kind, id), headers={"If-Match": new_etag})
+        r = client.delete(
+            "/{}/{}".format(kind, id),
+            headers={
+                "If-Match": new_etag,
+                "Authorization": "Bearer {}".format(id_token),
+            },
+        )
         assert r.status_code == 204
 
         # Try to fetch deleted resource
-        r = client.get("/{}/{}".format(kind, id))
+        r = client.get("/{}/{}".format(kind, id), headers=headers)
         assert r.status_code == 404
 
 
 # Create a campaign and donor, and then a donation for them
+@pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
 def test_donation(client):
     # Create a campaign
     campaign_representation = {"name": "test campaign"}
-    r = client.post("/{}".format("campaigns"), json=campaign_representation)
+    r = client.post(
+        "/{}".format("campaigns"), json=campaign_representation, headers=headers
+    )
     assert r.status_code == 201
     campaign = r.get_json(r.data)
     assert type(campaign) == dict
@@ -117,7 +157,7 @@ def test_donation(client):
 
     # Create a donor
     donor_representation = {"name": "test donor"}
-    r = client.post("/{}".format("donors"), json=donor_representation)
+    r = client.post("/{}".format("donors"), json=donor_representation, headers=headers)
     assert r.status_code == 201
     donor = r.get_json(r.data)
     assert type(donor) == dict
@@ -129,7 +169,9 @@ def test_donation(client):
         "donor": donor["id"],
         "amount": 50,
     }
-    r = client.post("/{}".format("donations"), json=donation_representation)
+    r = client.post(
+        "/{}".format("donations"), json=donation_representation, headers=headers
+    )
     assert r.status_code == 201
     donation = r.get_json(r.data)
     assert type(donation) == dict
@@ -137,7 +179,7 @@ def test_donation(client):
     assert donation["donor"] == donation_representation["donor"]
 
     # List of donations to campaign should have exactly one element
-    r = client.get("/campaigns/{}/donations".format(campaign["id"]))
+    r = client.get("/campaigns/{}/donations".format(campaign["id"]), headers=headers)
     assert r.status_code == 200
     assert r.headers.get("Content-Type") == "application/json"
     payload = json.loads(r.data)
@@ -149,7 +191,7 @@ def test_donation(client):
     assert resource["donor"] == donor["id"]
 
     # List of donations from donor should have exactly one element
-    r = client.get("/donors/{}/donations".format(donor["id"]))
+    r = client.get("/donors/{}/donations".format(donor["id"]), headers=headers)
     assert r.status_code == 200
     assert r.headers.get("Content-Type") == "application/json"
     payload = json.loads(r.data)
@@ -161,9 +203,9 @@ def test_donation(client):
     assert resource["donor"] == donor["id"]
 
     # Clean up the three new resource
-    r = client.delete("/donations/{}".format(donation["id"]))
+    r = client.delete("/donations/{}".format(donation["id"]), headers=headers)
     assert r.status_code == 204
-    r = client.delete("/campaigns/{}".format(campaign["id"]))
+    r = client.delete("/campaigns/{}".format(campaign["id"]), headers=headers)
     assert r.status_code == 204
-    r = client.delete("/donors/{}".format(donor["id"]))
+    r = client.delete("/donors/{}".format(donor["id"]), headers=headers)
     assert r.status_code == 204
