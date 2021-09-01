@@ -16,6 +16,7 @@
 steps:
   # Generate config file from secret manager
   # Contains API Key and Firebase Auth URL
+  # See docs/config-secret.md 
   - name: gcr.io/cloud-builders/gcloud
     entrypoint: /bin/bash
     secretEnv: CONFIG
