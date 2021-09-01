@@ -42,6 +42,7 @@ substitutions:
   _REGION: us-central1
   _SECRET_VERSION: '1'
 
+# See docs/config-secret.md 
 availableSecrets:
   secretManager: 
     - versionName: projects/${PROJECT_ID}/secrets/auth-config/versions/${_SECRET_VERSION}
