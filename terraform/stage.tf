@@ -33,6 +33,7 @@ resource "google_project_service" "stage_cloudbuild_api" {
 }
 
 resource "google_project_service" "stage_firestore_api" {
+  provider = google.stage
   service = "firestore.googleapis.com"
 }
 
@@ -62,11 +63,12 @@ resource "google_project_iam_member" "stage_cloudbuild_run_admin_iam" {
 # Set up Firestore in Native Mode
 # https://firebase.google.com/docs/firestore/solutions/automate-database-create#create_a_database_with_terraform
 resource "google_project_service" "stage_appengine_api" {
+  provider = google.stage
   service = "appengine.googleapis.com"
 }
 
 resource "google_app_engine_application" "stage_app" {
-  project = google.prod
+  project = "emblem-stage-${var.suffix}"
   # us-central1 not recognized by App Engine resource.
   location_id   = "us-central"
   database_type = "CLOUD_FIRESTORE"
