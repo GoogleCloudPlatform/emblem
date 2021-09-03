@@ -34,7 +34,7 @@ resource "google_project_service" "prod_cloudbuild_api" {
 
 resource "google_project_service" "prod_firestore_api" {
   provider = google.prod
-  service = "firestore.googleapis.com"
+  service  = "firestore.googleapis.com"
 }
 
 resource "google_project_service" "prod_run_api" {
@@ -64,7 +64,7 @@ resource "google_project_iam_member" "prod_cloudbuild_run_admin_iam" {
 # https://firebase.google.com/docs/firestore/solutions/automate-database-create#create_a_database_with_terraform
 resource "google_project_service" "prod_appengine_api" {
   provider = google.prod
-  service = "appengine.googleapis.com"
+  service  = "appengine.googleapis.com"
 }
 
 resource "google_app_engine_application" "prod_app" {
