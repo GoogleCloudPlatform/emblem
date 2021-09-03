@@ -32,6 +32,10 @@ resource "google_project_service" "prod_cloudbuild_api" {
   service  = "cloudbuild.googleapis.com"
 }
 
+resource "google_project_service" "prod_firestore_api" {
+  service = "firestore.googleapis.com"
+}
+
 resource "google_project_service" "prod_run_api" {
   provider = google.prod
   service  = "run.googleapis.com"
@@ -55,3 +59,18 @@ resource "google_project_iam_member" "prod_cloudbuild_run_admin_iam" {
   member   = "serviceAccount:${google_project.prod_project.number}@cloudbuild.gserviceaccount.com"
 }
 
+# Set up Firestore in Native Mode
+# https://firebase.google.com/docs/firestore/solutions/automate-database-create#create_a_database_with_terraform
+resource "google_project_service" "prod_appengine_api" {
+  service = "appengine.googleapis.com"
+}
+
+resource "google_app_engine_application" "prod_app" {
+  project = google.prod
+  # us-central1 not recognized by App Engine resource.
+  location_id   = "us-central"
+  database_type = "CLOUD_FIRESTORE"
+  depends_on = [
+    google_project_service.prod_appengine_api,
+  ]
+}
