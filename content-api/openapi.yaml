@@ -1,8 +1,9 @@
 openapi: 3.0.0
+
 info:
   title: Emblem API
   description: REST API for any Emblem server
-  version: '2021-07-28'
+  version: '2021-09-01'
 
 servers:
 - url: https://api-pwrmtjf4hq-uc.a.run.app
@@ -151,6 +152,8 @@ paths:
 
     post:
       summary: Create a new campaign
+      security:
+        - bearerAuth: []
       requestBody:
         description: JSON representation of a single campaign
         required: true
@@ -195,6 +198,8 @@ paths:
           required: true
           schema:
             type: string
+      security:
+        - bearerAuth: []
       requestBody:
         description: JSON representation of a single campaign
         required: true
@@ -225,6 +230,8 @@ paths:
           required: true
           schema:
             type: string
+      security:
+        - bearerAuth: []
       responses:
         '204':
           description: No content
@@ -245,6 +252,8 @@ paths:
           required: true
           schema:
             type: string
+      security:
+        - bearerAuth: []
       responses:
         '201':
           description: JSON representation of an array of donations
@@ -278,6 +287,8 @@ paths:
 
     post:
       summary: Create a new cause
+      security:
+        - bearerAuth: []
       requestBody:
         description: JSON representation of a single cause
         required: true
@@ -322,6 +333,8 @@ paths:
           required: true
           schema:
             type: string
+      security:
+        - bearerAuth: []
       requestBody:
         description: JSON representation of a single cause
         required: true
@@ -352,6 +365,8 @@ paths:
           required: true
           schema:
             type: string
+      security:
+        - bearerAuth: []
       responses:
         '204':
           description: No content
@@ -365,6 +380,8 @@ paths:
   /donations:
     get:
       summary: Returns a list of donations
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: A JSON array of donations
@@ -381,6 +398,8 @@ paths:
 
     post:
       summary: Create a new donation
+      security:
+        - bearerAuth: []
       requestBody:
         description: JSON representation of a single donation
         required: true
@@ -408,6 +427,8 @@ paths:
           required: true
           schema:
             type: string
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: JSON representation of a donation
@@ -429,6 +450,8 @@ paths:
           required: true
           schema:
             type: string
+      security:
+        - bearerAuth: []
       requestBody:
         description: JSON representation of a single donation
         required: true
@@ -459,6 +482,8 @@ paths:
           required: true
           schema:
             type: string
+      security:
+        - bearerAuth: []
       responses:
         '204':
           description: No content
@@ -472,6 +497,8 @@ paths:
   /donors:
     get:
       summary: Returns a list of donors
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: A JSON array of donors
@@ -488,6 +515,8 @@ paths:
 
     post:
       summary: Create a new donor
+      security:
+        - bearerAuth: []
       requestBody:
         description: JSON representation of a single donor
         required: true
@@ -511,6 +540,8 @@ paths:
           required: true
           schema:
             type: string
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: JSON representation of a donor
@@ -532,6 +563,8 @@ paths:
           required: true
           schema:
             type: string
+      security:
+        - bearerAuth: []
       requestBody:
         description: JSON representation of a single donor
         required: true
@@ -562,6 +595,8 @@ paths:
           required: true
           schema:
             type: string
+      security:
+        - bearerAuth: []
       responses:
         '204':
           description: No content
@@ -582,6 +617,8 @@ paths:
           required: true
           schema:
             type: string
+      security:
+        - bearerAuth: []
       responses:
         '201':
           description: JSON representation of an array of donations
