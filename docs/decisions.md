@@ -232,4 +232,17 @@ The website depends on a `config.py` file to read in the Firebase API key and au
 We've decided to go with the 2nd option - generating the `config.py` from Secret Manager in the Cloud Build pipeline.  The values are still configurable and can be updated in the Secret Manager, but the service would not pick them up without a deployment.  It offers the best compromise of flexibility and stability. 
 
 
+## Decision: Create a service account for testing
+
+The service account should have as few privileges as possible (ideally, none). It will be used to create ID tokens during test runs. The only thing that will matter for those test runs is the identity provided in the token, not any privileges it has.
+
+Test runs will add the service account's email address as an approver or a campaign manager as needed for the tests to determine that the API is enforcing authorization property.
+
+The service account should not be used in a production deployment, even though the tokens generated for it expire in no more than an hour.
+
+### Rationale
+
+The API handler uses standard Google authentication libraries to decode and validate the provided ID token. Those libraries require an ID token created by Google, and check their expiration times. Any IAM account can have an ID token provided to it, and we would not want to create a dummy user account for this purpose. Hence, the decision to use a service account.
+
+
 * **Date:** 2021/09
