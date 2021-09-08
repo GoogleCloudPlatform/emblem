@@ -70,7 +70,9 @@ resource "google_project_service" "stage_appengine_api" {
 resource "google_app_engine_application" "stage_app" {
   project = "emblem-stage-${var.suffix}"
   # us-central1 not recognized by App Engine resource.
-  location_id   = "us-central"
+  # https://cloud.google.com/appengine/docs/locations
+  # https://www.terraform.io/docs/language/functions/regex.html
+  location_id   = replace(trimspace(var.google_region), "/\\d+$/", "")
   database_type = "CLOUD_FIRESTORE"
   depends_on = [
     google_project_service.prod_appengine_api,
