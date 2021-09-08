@@ -14,17 +14,6 @@
 
 
 steps:
-  # Generate config file from secret manager
-  # Contains API Key and Firebase Auth URL
-  # See docs/config-secret.md 
-  - name: gcr.io/cloud-builders/gcloud
-    entrypoint: /bin/bash
-    secretEnv: CONFIG
-    args: 
-      - '-c'
-      - |
-        echo "$${CONFIG}" >> website/config.py
-
   # Docker Build 
   # Copying the client-libs for Docker context
   - name: gcr.io/cloud-builders/docker
@@ -40,13 +29,6 @@ steps:
 # Default to us-central1 
 substitutions:
   _REGION: us-central1
-  _SECRET_VERSION: '1'
-
-# See docs/config-secret.md 
-availableSecrets:
-  secretManager: 
-    - versionName: projects/${PROJECT_ID}/secrets/auth-config/versions/${_SECRET_VERSION}
-      env: CONFIG
 
 # Store in Artifact Registry
 images:

@@ -26,6 +26,7 @@ steps:
       - --project=${_TARGET_PROJECT}
       - --allow-unauthenticated
       - --no-traffic
+      - --set-env-vars ${_ENV_VARS}
 
   # Send message to pub/sub to start canary rollout process
   - name: 'gcr.io/cloud-builders/gcloud'
