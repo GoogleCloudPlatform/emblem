@@ -218,19 +218,6 @@ If a more straightforward and/or more secure method of storing these tokens beco
 
 * **Date:** 2021/08
 
-## Decision: store the contents of the website `config.py` in Secret Manager
-
-The website depends on a `config.py` file to read in the Firebase API key and auth URL.  These values should not be stored in the repo, because every new instance will have distinct values.  Our options are: 
-
-1. Hardcode the values into the Cloud Build trigger as substitution variables, and use that to generate the `config.py`.  The API key is set on project creation and doesn’t change during CI/CD, so creating a stable trigger with the value is a good option.
-
-1. When building the image in the Cloud Build pipeline, read from Secret Manager to generate the `config.py`.  The benefit here is showing the value of Secret Manager.  Additionally the config is meant to be "public" so it works to have it exposed in the container image.   It is also flexible, allowing us to update the configuration at later dates.  However, changing the `config.py` would require a new deployment, which is traceable and reversible. The downside is that Secret Manager is a billed resource.
-
-1. Update the website code to read from environment variables instead of from `config.py`. We could store the variables in Secret Manager and expose them to Clodu Run as Environment Variables.  This would require changing some of the code in the website.  The other downside is that the values could be updated and potentially break the service without a new deployment, creating more stability risk. 
-
-### Rationale
-We've decided to go with the 2nd option - generating the `config.py` from Secret Manager in the Cloud Build pipeline.  The values are still configurable and can be updated in the Secret Manager, but the service would not pick them up without a deployment.  It offers the best compromise of flexibility and stability. 
-
 
 ## Decision: Create a service account for testing
 
