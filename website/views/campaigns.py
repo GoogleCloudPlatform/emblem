@@ -35,11 +35,13 @@ def new_campaign():
 @campaigns_bp.route("/createCampaign", methods=["POST"])
 def save_campaign():
     # TODO: do something with the collected data
-    g.api.campaigns_post({
-        "name": request.form["name"],
-        "goal": float(request.form["goal"]),
-        "managers": request.form["managers"]
-    })
+    g.api.campaigns_post(
+        {
+            "name": request.form["name"],
+            "goal": float(request.form["goal"]),
+            "managers": request.form["managers"],
+        }
+    )
 
     return redirect("/")
 
@@ -50,6 +52,8 @@ def webapp_view_campaign():
     campaign_instance = campaigns[0]
 
     campaign_instance["donations"] = []
-    campaign_instance["donations"] = g.api.campaigns_id_donations_get(campaign_instance["id"])
+    campaign_instance["donations"] = g.api.campaigns_id_donations_get(
+        campaign_instance["id"]
+    )
 
     return render_template("view-campaign.html", campaign=campaign_instance)

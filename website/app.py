@@ -45,6 +45,7 @@ valid_auth_config = (
 
 app.config["SHOW_AUTH"] = valid_auth_config or (not os.getenv("HIDE_AUTH_WARNINGS"))
 
+
 @app.before_request
 def check_user_authentication():
     id_token = None
@@ -53,7 +54,9 @@ def check_user_authentication():
     if auth is not None:
         id_token = auth[7:]  # Remove "Bearer: " prefix
 
-    g.api = emblem_client.EmblemClient(os.environ.get("API_URL", None), access_token=id_token)
+    g.api = emblem_client.EmblemClient(
+        os.environ.get("API_URL", None), access_token=id_token
+    )
 
 
 # TODO(anassri, engelke): use API call instead of this
