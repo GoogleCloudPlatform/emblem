@@ -42,7 +42,7 @@ steps:
            "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${_SERVICE_ACCOUNT}:generateIdToken" | \
            python3 -c "import sys, json; print(json.load(sys.stdin)['token'])"
         }
-        echo $(get_id_token) > _id_token
+        echo $(get_id_token) | tee _id_token
 
   # Run unit tests
   - id: "Unit Tests"
