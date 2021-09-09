@@ -14,13 +14,13 @@
 
 from sample_data import SAMPLE_DONATIONS
 
+from config import API_URL
+
 from flask import Blueprint, redirect, request, render_template
 
 import requests
 
 campaigns_bp = Blueprint("campaigns", __name__, template_folder="templates")
-
-API_URL = "https://api-pwrmtjf4hq-uc.a.run.app"
 
 
 @campaigns_bp.route("/")
