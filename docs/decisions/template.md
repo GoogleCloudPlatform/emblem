@@ -2,6 +2,7 @@
 
 * **Status:** [proposed | rejected | approved | deprecated | superceded by [003](003-example.md)]
 * **Last Updated:** YYYY-MM-DD
+* **Builds on:** [042](042-example.md)
 * **Objective:** [description or link to contextual issue]
 
 ## Context & Problem Statement

@@ -10,8 +10,7 @@ Get started created a new decision record with the template:
 cp template.md NN-title-with-dashes.md
 ```
 
-
-
+## Parking Lot
 
 Each decision might have a **history** note, indicating where changes to earlier decisions might cause revisiting the current decision.
 
@@ -71,12 +70,6 @@ If views start becoming longer, or each file starts to accrue more views than we
 We do not expect the total number of views to become smaller and/or less complex, however - and thus, we do not expect to opt for a lesser degree of splitting.
 
 * **Date:** 2021/06
-
-## Decision: Frontend Avoids JS Frameworks
-
-
-
-
 
 ## Decision: Monorepo for Code Management
 
