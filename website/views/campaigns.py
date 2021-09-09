@@ -20,7 +20,6 @@ import requests
 
 campaigns_bp = Blueprint("campaigns", __name__, template_folder="templates")
 
-
 @campaigns_bp.route("/")
 def list_campaigns():
     campaigns = g.api.campaigns_get()
