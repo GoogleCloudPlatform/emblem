@@ -16,7 +16,11 @@ import json
 import os
 import pytest
 
+from google.auth.transport import requests as reqs
+from google.oauth2 import id_token as token_ops
+
 import main
+from data import cloud_firestore as db
 from resources import methods
 
 
@@ -25,6 +29,16 @@ kinds = [key for key in methods.resource_fields]
 id_token = os.environ.get("ID_TOKEN")
 if id_token is not None:
     headers = {"Authorization": "Bearer {}".format(id_token)}
+
+    # Seed the approvers collection with this user
+    info = token_ops.verify_oauth2_token(id_token, reqs.Request())
+    if "email" in info:
+        db.insert(
+            "approvers",
+            {"name": "Test approver", "email": info["email"], "active": True},
+            ["name", "email", "active"],
+            host_url="https://example.com",
+        )
 else:
     headers = {}
 
