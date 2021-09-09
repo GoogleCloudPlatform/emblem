@@ -44,14 +44,16 @@ resource "google_project_service" "stage_pubsub_api" {
 }
 
 resource "google_project_iam_member" "stage_cloudbuild_service_account_user_iam" {
-  provider = google.stage
-  role     = "roles/iam.serviceAccountUser"
-  member   = "serviceAccount:${google_project.stage_project.number}@cloudbuild.gserviceaccount.com"
+  provider   = google.stage
+  role       = "roles/iam.serviceAccountUser"
+  member     = "serviceAccount:${google_project.stage_project.number}@cloudbuild.gserviceaccount.com"
+  depends_on = [google_project_service.stage_cloudbuild_api]
 }
 
 resource "google_project_iam_member" "stage_cloudbuild_run_admin_iam" {
-  provider = google.stage
-  role     = "roles/run.admin"
-  member   = "serviceAccount:${google_project.stage_project.number}@cloudbuild.gserviceaccount.com"
+  provider   = google.stage
+  role       = "roles/run.admin"
+  member     = "serviceAccount:${google_project.stage_project.number}@cloudbuild.gserviceaccount.com"
+  depends_on = [google_project_service.stage_cloudbuild_api]
 }
 
