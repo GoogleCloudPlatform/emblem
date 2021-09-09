@@ -12,20 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sample_data import SAMPLE_DONATIONS
+from flask import Blueprint, g, redirect, request, render_template
 
-from config import API_URL
-
-from flask import Blueprint, redirect, request, render_template
-
+import os
 import requests
+
 
 campaigns_bp = Blueprint("campaigns", __name__, template_folder="templates")
 
 
 @campaigns_bp.route("/")
 def list_campaigns():
-    campaigns = requests.get(API_URL + "/campaigns").json()
+    campaigns = g.api.campaigns_get()
     return render_template("home.html", campaigns=campaigns)
 
 
@@ -37,19 +35,21 @@ def new_campaign():
 @campaigns_bp.route("/createCampaign", methods=["POST"])
 def save_campaign():
     # TODO: do something with the collected data
-    print("Name: ", request.form["name"])
-    print("Goal: ", request.form["goal"])
-    print("Managers: ", request.form["managers"])
+    g.api.campaigns_post({
+        "name": request.form["name"],
+        "goal": float(request.form["goal"]),
+        "managers": request.form["managers"]
+    })
 
     return redirect("/")
 
 
 @campaigns_bp.route("/viewCampaign")
 def webapp_view_campaign():
-    campaigns = requests.get(API_URL + "/campaigns").json()
+    campaigns = g.api.campaigns_get()
     campaign_instance = campaigns[0]
 
-    # Add dummy data for donations
-    campaign_instance["donations"] = SAMPLE_DONATIONS
+    campaign_instance["donations"] = []
+    campaign_instance["donations"] = g.api.campaigns_id_donations_get(campaign_instance["id"])
 
     return render_template("view-campaign.html", campaign=campaign_instance)
