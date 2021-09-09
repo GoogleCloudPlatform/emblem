@@ -13,20 +13,16 @@
 # limitations under the License.
 
 
-from flask import Blueprint, redirect, request, render_template
-
-import swagger_client
-from swagger_client.rest import ApiException
-import requests
+import os
+from flask import Blueprint, g, redirect, request, render_template
 
 
 donations_bp = Blueprint("donations", __name__, template_folder="templates")
-api_client = swagger_client.DefaultApi()
 
 
 @donations_bp.route("/donate", methods=["GET"])
 def new_donation():
-    campaigns = api_client.campaigns_get()
+    campaigns = g.api.campaigns_get()
     campaign_instance = campaigns[0]
     return render_template("donations/new-donation.html", campaign=campaign_instance)
 
@@ -39,16 +35,16 @@ def record_donation():
 
     new_donation = {"campaign": campaign_id, "donor": donor_id, "amount": amount}
 
-    donation = api_client.donations_post(new_donation)
+    donation = g.api.donations_post(new_donation)
     return redirect("/viewDonation?donation_id=" + donation.id)
 
 
 @donations_bp.route("/viewDonation", methods=["GET"])
 def webapp_view_donation():
     donation_id = request.args.get("donation_id")
-    donation_instance = api_client.donations_id_get(donation_id)
+    donation_instance = g.api.donations_id_get(donation_id)
 
-    campaign_instance = api_client.campaigns_id_get(donation_instance.campaign)
+    campaign_instance = g.api.campaigns_id_get(donation_instance.campaign)
 
     return render_template(
         "donations/view-donation.html",
