@@ -10,7 +10,7 @@ We could either set the environment variables in the Dockerfile or we could set 
 
 For more secret values like the API key, we will store it in Secret Manager and expose it as an environment variable in the Cloud Run service.  
 
-To do this, please create a secret in Secret Manager called `content-api-key`.
+To configure an API key with Secret Manager, please create a secret called `content-api-key`.
 
 Next, add the cloudbuild service account to *only this* secret with the Secret Manager Secret Accessor role. Cloud Build will use this secret when deploying a new instance of the website. 
 
