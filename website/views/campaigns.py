@@ -34,11 +34,13 @@ def new_campaign():
 @campaigns_bp.route("/createCampaign", methods=["POST"])
 def save_campaign():
     # TODO: do something with the collected data
-    g.api.campaigns_post({
-        "name": request.form["name"],
-        "goal": float(request.form["goal"]),
-        "managers": request.form["managers"]
-    })
+    g.api.campaigns_post(
+        {
+            "name": request.form["name"],
+            "goal": float(request.form["goal"]),
+            "managers": request.form["managers"],
+        }
+    )
 
     return redirect("/")
 
