@@ -38,3 +38,6 @@ steps:
       - --message="Start ${_SERVICE}-${_ENV}-${_REVISION} rollout"
       - --attribute=_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION},_REGION=${_REGION},_TRAFFIC=5
       - --project=${_TARGET_PROJECT}
+
+options:
+    substitution_option: 'ALLOW_LOOSE'
