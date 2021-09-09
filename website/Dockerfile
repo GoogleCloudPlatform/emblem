@@ -27,7 +27,7 @@ ENV HIDE_AUTH_WARNINGS True
 COPY requirements.txt ./
 
 # See ops/web-build.cloudbuild.yaml.  client-libs/ is copied into the website directory.
-# Here we copy it into the Docker context. 
+# Here we copy it from the Docker context into the container.
 COPY client-libs client-libs/
 
 # Install production dependencies.
