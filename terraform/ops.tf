@@ -13,6 +13,7 @@ provider "google" {
 resource "google_pubsub_topic" "ops_gcr_pubsub" {
   provider = google.ops
   name     = "gcr"
+
 }
 
 resource "google_pubsub_topic" "ops_cloudbuilds_pubsub" {
@@ -107,43 +108,50 @@ resource "google_artifact_registry_repository_iam_member" "prod_iam_website_ar" 
 }
 
 resource "google_project_iam_member" "ops_ar_admin_iam" {
-  provider = google.ops
-  role     = "roles/artifactregistry.writer"
-  member   = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  provider   = google.ops
+  role       = "roles/artifactregistry.writer"
+  member     = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  depends_on = [google_project_service.ops_cloudbuild_api]
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_service_account_user_iam_stage" {
-  provider = google.stage
-  role     = "roles/iam.serviceAccountUser"
-  member   = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  provider   = google.stage
+  role       = "roles/iam.serviceAccountUser"
+  member     = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  depends_on = [google_project_service.ops_cloudbuild_api]
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_run_admin_iam_stage" {
-  provider = google.stage
-  role     = "roles/run.admin"
-  member   = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  provider   = google.stage
+  role       = "roles/run.admin"
+  member     = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  depends_on = [google_project_service.ops_cloudbuild_api]
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_pubsub_iam_stage" {
-  provider = google.stage
-  role     = "roles/pubsub.publisher"
-  member   = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  provider   = google.stage
+  role       = "roles/pubsub.publisher"
+  member     = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  depends_on = [google_project_service.ops_cloudbuild_api]
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_service_account_user_iam_prod" {
-  provider = google.prod
-  role     = "roles/iam.serviceAccountUser"
-  member   = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  provider   = google.prod
+  role       = "roles/iam.serviceAccountUser"
+  member     = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  depends_on = [google_project_service.ops_cloudbuild_api]
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_run_admin_iam_prod" {
-  provider = google.prod
-  role     = "roles/run.admin"
-  member   = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  provider   = google.prod
+  role       = "roles/run.admin"
+  member     = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  depends_on = [google_project_service.ops_cloudbuild_api]
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_pubsub_iam_prod" {
-  provider = google.prod
-  role     = "roles/pubsub.publisher"
-  member   = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  provider   = google.prod
+  role       = "roles/pubsub.publisher"
+  member     = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  depends_on = [google_project_service.ops_cloudbuild_api]
 }
