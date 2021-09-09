@@ -43,6 +43,8 @@ steps:
            python3 -c "import sys, json; print(json.load(sys.stdin)['token'])"
         }
         echo $(get_id_token) | tee _id_token
+        gcloud auth print-access-token
+        
 
   # Run unit tests
   - id: "Unit Tests"
