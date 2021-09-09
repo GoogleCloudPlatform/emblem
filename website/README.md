@@ -30,14 +30,18 @@ To do this, you must [configure Google as an Identity Platform](https://cloud.go
 some - _but not all_ - application pages.
 
 ### Configuration
-To configure the app, first rename `config.default.py` to `config.py`.
+To configure the app, set the following environment variables:
 
-Then, specify the following values in `config.py`:
- - Your Firebase API key
- - Your Firebase Auth domain
+---------------------------------------------------------------------------------------------
+| **Variable name**             | **Description**                                           |
+| `EMBLEM_FIREBASE_API_KEY`     | The Firebase API key provided by Cloud Identity Platform. |
+| `EMBLEM_FIREBASE_AUTH_DOMAIN` | The auth domain (usually of the form `*.firebaseapp.com`) |
+| `EMBLEM_API_URL`              | A URL pointing to your instance of the Emblem Content API |
+---------------------------------------------------------------------------------------------
 
-You can determine these values by vising the
-[Identity Providers page](https://console.cloud.google.com/customer-identity/providers) and clicking on the `Application Setup Details` button.
+You can determine the `EMBLEM_FIREBASE_*` values by vising the
+[Identity Providers page](https://console.cloud.google.com/customer-identity/providers) and clicking on the `Application Setup Details` button. The `EMBLEM_API_URL` value will be determined
+by where you host the Content API. (If you're using Cloud Run, it will look something like `https://<SERVICE_NAME>-<HASH>.run.app`)
 
 Congratulations! You are now ready to run the Emblem web app.
 
