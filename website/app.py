@@ -45,6 +45,7 @@ valid_auth_config = (
 
 app.config["SHOW_AUTH"] = valid_auth_config or (not os.getenv("HIDE_AUTH_WARNINGS"))
 
+
 @app.before_request
 def check_user_authentication():
     id_token = None
