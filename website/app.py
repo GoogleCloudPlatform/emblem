@@ -70,29 +70,24 @@ def set_csp_nonce():
 
 @app.after_request
 def set_csp_policy(response):
-    image_origins = " ".join([
-        "'self'",
-        'images.pexels.com',
-        'github.githubassets.com'
-    ])
+    image_origins = " ".join(["'self'", "images.pexels.com", "github.githubassets.com"])
 
-    font_origins = " ".join([
-        'fonts.gstatic.com',
-        'fonts.googleapis.com'
-    ])
+    font_origins = " ".join(["fonts.gstatic.com", "fonts.googleapis.com"])
 
-    policy = "; ".join([
-        f"img-src {image_origins}",
-        f"font-src {font_origins}",
-        f"script-src 'nonce-{g.csp_nonce}'",
+    policy = "; ".join(
+        [
+            f"img-src {image_origins}",
+            f"font-src {font_origins}",
+            f"script-src 'nonce-{g.csp_nonce}'",
+            # Static fields requested by Lighthouse CI
+            "object-src 'none'",
+            "base-uri 'self'",
+        ]
+    )
 
-        # Static fields requested by Lighthouse CI
-        "object-src 'none'",
-        "base-uri 'self'"
-    ])
-    
     response.headers["Content-Security-Policy"] = policy
     return response
+
 
 # TODO(anassri, engelke): use API call instead of this
 # (This is based on the API design doc for now.)

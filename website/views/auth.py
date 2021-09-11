@@ -55,7 +55,7 @@ def login_post():
             expires=expires,
             httponly=True,
             secure=True,
-            samesite='Strict'
+            samesite="Strict",
         )
 
         return response

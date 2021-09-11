@@ -19,6 +19,6 @@ from flask import Blueprint, current_app, send_from_directory
 robots_txt_bp = Blueprint("robots_txt", __name__)
 
 
-@robots_txt_bp.route('/robots.txt')
+@robots_txt_bp.route("/robots.txt")
 def robots_txt():
-    return send_from_directory(current_app.static_folder, 'robots.txt')
+    return send_from_directory(current_app.static_folder, "robots.txt")
