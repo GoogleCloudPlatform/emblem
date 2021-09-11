@@ -1,0 +1,3 @@
+# Disallow all crawlers on "donate" pages
+User-agent: *
+Allow: /donate

@@ -23,7 +23,7 @@
   <div class="emblem-unpadded-grid mdc-layout-grid">
     <div class="mdc-layout-grid__inner">
       <div class="emblem-hero-image mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-        <img src="https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" />
+        <img src="https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" alt="Hero Image" />
       </div>
       </div>
   </div>
@@ -61,7 +61,7 @@
 
                 <!-- Campaign image -->
                 <li class="emblem-campaign-image mdc-list-item">
-                  <img src="{{ campaign.image_url }}" />
+                  <img src="{{ campaign.image_url }}" alt="Campaign Logo" />
                 </li>
                 <li role="separator" class="mdc-list-divider"></li>
 
@@ -83,13 +83,13 @@
                 </li>
                 <li role="separator" class="mdc-list-divider"></li>
 
-                <!-- Learn more button -->
+                <!-- View Campaign button -->
                 <li class="emblem-campaign-learn-more mdc-list-item">
                   <span class="mdc-list-item__ripple"></span>
                   <span class="mdc-list-item__text">
                     <span class="material-icons">chevron_right</span>
                     <a href="/viewCampaign?campaign_id={{ campaign.id }}">
-                        Learn more
+                        View Campaign
                     </a>
                   </span>
                 </li>

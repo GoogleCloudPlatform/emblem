@@ -50,7 +50,12 @@ def login_post():
         expires = datetime.datetime.now() + datetime.timedelta(days=5)
         response = make_response(redirect("/"))
         response.set_cookie(
-            "session", id_token, expires=expires, httponly=True, secure=True
+            "session",
+            id_token,
+            expires=expires,
+            httponly=True,
+            secure=True,
+            samesite='Strict'
         )
 
         return response

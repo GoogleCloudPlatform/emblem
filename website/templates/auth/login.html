@@ -17,7 +17,7 @@
 {% extends "base.html" %}
 
 {% block google_auth_scripts %}
-<script src="/static/login.js"></script>
+<script src="/static/login.js" nonce={{ g.csp_nonce }}></script>
 {% endblock %}
 
 {% block title %}Log In{% endblock %}

@@ -18,6 +18,7 @@ body {
   margin: 0;
   color: #505050;
   font-family: Roboto, sans-serif;
+  font-display: swap;
 }
 
 a {
@@ -33,10 +34,6 @@ a {
   padding: 0.75em;
   font-size: 14px;
   text-align: center;
-}
-
-.material-icons {
-
 }
 
 .emblem-message .material-icons {

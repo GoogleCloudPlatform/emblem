@@ -13,22 +13,12 @@
 # limitations under the License.
 
 
-import base64
-import hashlib
-import os
+from flask import Blueprint, current_app, send_from_directory
 
 
-####################################################
-# TODO(developer): set these environment variables #
-####################################################
+robots_txt_bp = Blueprint("robots_txt", __name__)
 
 
-# The (public!) API key used by Firebase.
-# This should be of the format "AIza..."
-FIREBASE_API_KEY = os.getenv("EMBLEM_FIREBASE_API_KEY")
-
-# The domain name used by Firebase Auth
-FIREBASE_AUTH_DOMAIN = os.getenv("EMBLEM_FIREBASE_AUTH_DOMAIN")
-
-# The URL the Emblem Content API is hosted at
-API_URL = os.getenv("EMBLEM_API_URL")
+@robots_txt_bp.route('/robots.txt')
+def robots_txt():
+    return send_from_directory(current_app.static_folder, 'robots.txt')
