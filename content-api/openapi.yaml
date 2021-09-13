@@ -255,7 +255,7 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '201':
+        '200':
           description: JSON representation of an array of donations
           content:
             application/json:

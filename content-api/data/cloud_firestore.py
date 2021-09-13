@@ -59,7 +59,7 @@ def fetch(resource_kind, id, resource_fields):
     return resource
 
 
-def insert(resource_kind, representation, resource_fields):
+def insert(resource_kind, representation, resource_fields, host_url=None):
     resource = {"kind": resource_kind}
     for field in resource_fields:
         resource[field] = representation.get(field, None)
@@ -67,9 +67,17 @@ def insert(resource_kind, representation, resource_fields):
     doc_ref = client.collection(resource_kind).document()
     doc_ref.set(resource)
 
-    resource = canonical_resource(
-        snapshot_to_resource(doc_ref.get()), resource_kind, resource_fields
-    )
+    if host_url is not None:
+        resource = canonical_resource(
+            snapshot_to_resource(doc_ref.get()),
+            resource_kind,
+            resource_fields,
+            host_url=host_url,
+        )
+    else:
+        resource = canonical_resource(
+            snapshot_to_resource(doc_ref.get()), resource_kind, resource_fields
+        )
 
     return resource
 

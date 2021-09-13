@@ -32,9 +32,6 @@ EOF
 cd terraform/
 terraform init
 terraform apply --auto-approve
- # Run it twice b/c of race condition in Artifact Registry creation
- # Probably there is a way to make it work better in the tf but this works for now
-terraform apply --auto-approve 
 cd ..
 
 
