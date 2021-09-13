@@ -15,13 +15,13 @@
 
 steps:
   # Docker Build 
-  # Update the _DIR variable to build the website or the content-api directory
   - name: 'gcr.io/cloud-builders/docker'
+    dir: content-api
     args: 
       - 'build'
       - '-t'
-      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_DIR}/${_DIR}:${SHORT_SHA}'
-      - '${_DIR}/.'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/content-api/content-api:${SHORT_SHA}'
+      - '.'
 
 # Default to us-central1
 substitutions:
@@ -29,4 +29,4 @@ substitutions:
 
 # Store in Artifact Registry
 images:
-  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_DIR}/${_DIR}:${SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/content-api/content-api:${SHORT_SHA}'

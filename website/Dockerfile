@@ -26,6 +26,10 @@ ENV HIDE_AUTH_WARNINGS True
 # Copying this separately prevents re-running pip install on every code change.
 COPY requirements.txt ./
 
+# See ops/web-build.cloudbuild.yaml.  client-libs/ is copied into the website directory.
+# Here we copy it from the Docker context into the container.
+COPY client-libs client-libs/
+
 # Install production dependencies.
 RUN pip install -r requirements.txt
 
