@@ -25,9 +25,7 @@ from views.errors import errors_bp
 from views.auth import auth_bp
 
 app = Flask(__name__)
-app.register_blueprint(
-    errors_bp
-)
+app.register_blueprint(errors_bp, "aaaa-bbbb-cccc-dddd", "aaaa-bbbb-cccc-dddd", "aaaa-bbbb-cccc-dddd")
 app.register_blueprint(donations_bp)
 app.register_blueprint(campaigns_bp)
 app.register_blueprint(auth_bp)
