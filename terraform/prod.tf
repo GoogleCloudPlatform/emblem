@@ -70,7 +70,7 @@ resource "google_project_service" "prod_appengine_api" {
 }
 
 resource "google_app_engine_application" "prod_app" {
-  project = "emblem-prod-${var.suffix}"
+  project = google_project.prod_project.project_id
   # us-central1 not recognized by App Engine resource.
   # https://cloud.google.com/appengine/docs/locations
   # https://www.terraform.io/docs/language/functions/regex.html
