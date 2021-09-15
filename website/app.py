@@ -48,11 +48,7 @@ app.config["SHOW_AUTH"] = valid_auth_config or (not os.getenv("HIDE_AUTH_WARNING
 
 @app.before_request
 def check_user_authentication():
-    id_token = None
-
-    auth = request.headers.get("Authorization", None)
-    if auth is not None:
-        id_token = auth[7:]  # Remove "Bearer: " prefix
+    id_token = request.cookies.get("session", None)
 
     g.api = emblem_client.EmblemClient(
         os.environ.get("API_URL", None), access_token=id_token
