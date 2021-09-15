@@ -71,7 +71,9 @@ resource "google_project_service" "stage_appengine_api" {
 
 resource "google_app_engine_application" "stage_app" {
   project = google_project.stage_project.project_id
-  # us-central1 not recognized by App Engine resource.
+  # Standard region names (e.g., for Cloud Run) are not valid for App Engine.
+  # App Engine locations do not use the numeric suffix. Strip that to colocate
+  # the Firestore instance with Cloud Run. (us-central1 => us-central)
   # https://cloud.google.com/appengine/docs/locations
   # https://www.terraform.io/docs/language/functions/regex.html
   location_id   = replace(trimspace(var.google_region), "/\\d+$/", "")
