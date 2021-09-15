@@ -33,7 +33,7 @@ def user_is_manager(email, campaign_id):
     if email is None:
         return False
     campaign = db.fetch("campaigns", campaign_id, methods.resource_fields["campaigns"])
-    if campaign is None or campaign.fetch("managers") is None:
+    if campaign is None or campaign.get("managers") is None:
         return False
     return email in campaign["managers"]
 

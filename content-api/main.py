@@ -38,6 +38,8 @@ app = Flask(__name__)
 # and normal processing continues
 @app.before_request
 def check_user_authentication():
+    g.verified_email = None
+
     auth = request.headers.get("Authorization", None)
     if auth is None:
         return

@@ -75,15 +75,32 @@ def list_subresource(resource_kind, id, subresource_kind):
         return "Not found", 404
 
     # Only match subresources that match the resource
-    match_field = f"{resource_kind}_id"
+    match_field = resource_kind[:-1]    # Chop off the "s" to get the field name
 
-    # e.g, fetch donations whose campaign_id/donor_id matches the campaign's/donor's id
-    results = db.list_matching(
+    # e.g, fetch donations whose campaign/donor field matches the campaign's/donor's id
+    matching_children = db.list_matching(
         subresource_kind,
         resource_fields[subresource_kind],
         match_field,
         id,  # Value must match parent id
     )
+
+    email = g.verified_email
+
+    if auth.user_is_approver(email):
+        return json.dumps(matching_children), 200, {"Content-Type": "application/json"}
+
+    if resource_kind == "campaigns" and auth.user_is_manager(email, id):
+        return json.dumps(matching_children), 200, {"Content-Type": "application/json"}
+
+    matching_donors = db.list_matching(
+        "donors",
+        resource_fields["donors"],
+        "email",
+        email
+    )
+    matching_donor_ids = set([donor["id"] for donor in matching_donors])
+    results = [item for item in matching_children if item["donor"] in matching_donor_ids]
 
     return json.dumps(results), 200, {"Content-Type": "application/json"}
 
