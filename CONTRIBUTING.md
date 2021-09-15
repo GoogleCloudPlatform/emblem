@@ -63,3 +63,30 @@ The following automated checks are run against every Pull Request:
 If no Google Cloud resources are needed, use [GitHub Actions](https://docs.github.com/en/actions) to drive automation.
 
 Based on the philosophy [Positive & Helpful Feedback](#positive-helpful-feedback), where it's possible to [make suggestions to a Pull Request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/reviewing-changes-in-pull-requests/incorporating-feedback-in-your-pull-request) to help it conform with a check, do that in addition to any required failures. [googleapis/code-suggester](https://github.com/googleapis/code-suggester) is a good example of a tool that minimizes contributor toil.
+
+## Running Tests
+
+### Terraform
+
+Run terraform and manually verify the intended configuration change.
+
+1. Retrieve a billing account. To use gcloud to retrieve the billing account for another project:
+
+    ```sh
+    basename $(gcloud alpha billing projects describe [PROJECT] \
+      --format 'value(billingAccountName)')
+    ```
+
+1. Authenticate Terraform with credentials that can create projects. This approach assumes your user account can create projects. **Warning: This grants terraform your user access to manage all Cloud resources. Use for learning purposes only.**
+
+   ```sh
+   gcloud auth application-default login
+   ```
+
+1. Run terraform apply:
+
+   ```sh
+   terraform apply \
+     -var billing_account=[BILLING ACCOUNT] \
+     -var suffix=[USER NAME]
+   ```
