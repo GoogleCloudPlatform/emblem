@@ -16,11 +16,9 @@
 """ Test that approvers can perform any API operation. """
 
 import json
+import jwt
 import os
 import pytest
-
-from google.auth.transport import requests as reqs
-from google.oauth2 import id_token as token_ops
 
 import main
 from data import cloud_firestore as db
@@ -34,10 +32,14 @@ EMAIL = ""  # Updated if id_token available
 # Create the authorization header for a test user
 id_token = os.environ.get("ID_TOKEN")
 if id_token is not None:
-    headers = {"Authorization": "Bearer {}".format(id_token)}
+    headers = {"Authorization": f"Bearer {id_token}"}
 
     # Seed the approvers collection with this user
-    info = token_ops.verify_oauth2_token(id_token, reqs.Request())
+    token_alg = jwt.get_unverified_header(id_token).get("alg", "RS256")
+    info = jwt.decode(
+        id_token, algorithms=[token_alg], options={"verify_signature": False}
+    )
+
     if "email" in info:
         EMAIL = info["email"]
         db.insert(
@@ -55,11 +57,11 @@ def client():
     return main.app.test_client()
 
 
-# List every kind of resource?
+# List every kind of resource
 @pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
 def test_list_with_authentication(client):
     for kind in KINDS:
-        r = client.get("/{}".format(kind), headers=headers)
+        r = client.get(f"/{kind}", headers=headers)
         assert r.status_code == 200
         assert r.headers.get("Content-Type") == "application/json"
         payload = json.loads(r.data)

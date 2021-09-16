@@ -48,19 +48,36 @@ def list(resource_kind):
     if not auth.allowed("GET", resource_kind):
         return "Forbidden", 403
 
-    if resource_kind != "donations" or auth.user_is_approver(g.verified_email):
+    # Listing donations or donors are allowed for all,
+    # but for non-approvers only a subset should return
+    if resource_kind not in ["donations", "donors"]:
+        # Already checked that this is allowed, so return all items
         results = db.list(resource_kind, resource_fields[resource_kind])
+
+    elif auth.user_is_approver(g.verified_email):
+        # Approvers get all donors or donations, no matter what
+        results = db.list(resource_kind, resource_fields[resource_kind])
+
     else:
-        # Ideally, one email address should match at most one donor, but more is possible
+        # The verified user should see only their own records
         matching_donors = db.list_matching(
             "donors", resource_fields["donors"], "email", g.verified_email
         )
-        matching_donor_ids = set([donor["id"] for donor in matching_donors])
 
-        all_donations = db.list("donations", resource_fields["donations"])
-        results = [
-            item for item in all_donations if item["donor"] in matching_donor_ids
-        ]
+        if resource_kind == "donors":
+            results = matching_donors
+        else:
+            # Find the donations matching the donors just found. Ideally,
+            # one email address should match at most one donor, but more
+            # are possible
+            matching_donor_ids = set([donor["id"] for donor in matching_donors])
+
+            # If we knew there was only one donor_id, then we could use
+            # list_matching here instead of getting all then filtering.
+            all_donations = db.list("donations", resource_fields["donations"])
+            results = [
+                item for item in all_donations if item["donor"] in matching_donor_ids
+            ]
 
     return json.dumps(results), 200, {"Content-Type": "application/json"}
 

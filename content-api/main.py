@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from os import set_inheritable
 from flask import Flask, g, request
 
 from google.auth.transport import requests as reqs
@@ -41,30 +42,40 @@ def check_user_authentication():
     g.verified_email = None
 
     auth = request.headers.get("Authorization", None)
+
+    # TODO: Remove the following DEBUG log entry when authn is stable
     print(f"Authorization header value: {auth}")
+
     if auth is None:
         return
 
     if not auth.startswith("Bearer "):
-        return "Forbidden", 403  # Invalid auth header
+        return
 
     token = auth[7:]  # Remove "Bearer: " prefix
 
+    # Extract the email address from the token. Since there may be
+    # two types of token provided (Firebase or Google OAuth2) and
+    # failed verification raises an exception, need multiple
+    # try/except blocks.
+
+    info = None
     try:
-        info = id_token.verify_oauth2_token(token, reqs.Request())
+        info = id_token.verify_firebase_token(token, reqs.Request())
     except ValueError:
         pass
 
     try:
-        info = id_token.verify_oauth2_token(token, reqs.Request())
+        if info is None:
+            info = id_token.verify_oauth2_token(token, reqs.Request())
+    except ValueError:
+        pass
 
-        if "email" not in info:
-            return "Forbidden", 403
-        g.verified_email = info["email"]
+    if info is not None:  # Remember the email address throughout this request
+        if "email" in info:
+            g.verified_email = info["email"]
 
-        return
-    except Exception as e:
-        return "Forbidden", 403
+    return
 
 
 # Resource collection methods
