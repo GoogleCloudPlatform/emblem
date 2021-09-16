@@ -53,8 +53,11 @@ def check_user_authentication():
     try:
         info = id_token.verify_oauth2_token(token, reqs.Request())
     except ValueError:
+        pass
+
+    try:
         info = id_token.verify_oauth2_token(token, reqs.Request())
-        
+
         if "email" not in info:
             return "Forbidden", 403
         g.verified_email = info["email"]
