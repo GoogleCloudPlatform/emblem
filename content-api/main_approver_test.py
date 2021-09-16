@@ -29,7 +29,7 @@ from resources import methods
 
 # Types of resources to test
 KINDS = [key for key in methods.resource_fields]
-EMAIL = ""      # Updated if id_token available
+EMAIL = ""  # Updated if id_token available
 
 # Create the authorization header for a test user
 id_token = os.environ.get("ID_TOKEN")
@@ -153,9 +153,7 @@ def test_lifecycle(client):
 def test_donation(client):
     # Create a campaign
     campaign_representation = {"name": "test campaign"}
-    r = client.post(
-        "/campaigns", json=campaign_representation, headers=headers
-    )
+    r = client.post("/campaigns", json=campaign_representation, headers=headers)
     assert r.status_code == 201
     campaign = r.get_json(r.data)
     assert type(campaign) == dict
@@ -176,9 +174,7 @@ def test_donation(client):
         "donor": donor["id"],
         "amount": 50,
     }
-    r = client.post(
-        "/donations", json=donation_representation, headers=headers
-    )
+    r = client.post("/donations", json=donation_representation, headers=headers)
     assert r.status_code == 201
     donation = r.get_json(r.data)
     assert type(donation) == dict
