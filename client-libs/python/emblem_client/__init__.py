@@ -27,12 +27,20 @@ class EmblemClient(object):
     """
 
     def __init__(self, host, access_token=None):
+        if host is None:
+            raise ValueError
+            
         conf = Configuration()
 
         if access_token is not None:
             conf.access_token = access_token
 
-        client = DefaultApi(api_client=ApiClient(configuration=conf))
+        client = DefaultApi(api_client=ApiClient(
+            configuration=conf,
+            header_name="Authorization",
+            header_value=access_token,
+        ))
+
         for method in client.__dict__:
             self.__dict__[method] = client.__dict__[method]
 

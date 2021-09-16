@@ -41,6 +41,7 @@ def check_user_authentication():
     g.verified_email = None
 
     auth = request.headers.get("Authorization", None)
+    print(f"Authorization header value: {auth}")
     if auth is None:
         return
 
@@ -51,6 +52,9 @@ def check_user_authentication():
 
     try:
         info = id_token.verify_oauth2_token(token, reqs.Request())
+    except ValueError:
+        info = id_token.verify_oauth2_token(token, reqs.Request())
+        
         if "email" not in info:
             return "Forbidden", 403
         g.verified_email = info["email"]
