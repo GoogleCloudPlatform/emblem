@@ -35,7 +35,7 @@ class EmblemClient(object):
             client = DefaultApi(api_client=ApiClient(
                 configuration=conf,
                 header_name="Authorization",
-                header_value=access_token,
+                header_value="Bearer " + access_token,
             ))
         else:
             client = DefaultApi(api_client=ApiClient(
