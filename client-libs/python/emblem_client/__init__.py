@@ -32,12 +32,16 @@ class EmblemClient(object):
         # TODO: figure out why the generated code isn't using the value below
         if access_token is not None:
             conf.access_token = access_token
-
-        client = DefaultApi(api_client=ApiClient(
-            configuration=conf,
-            header_name="Authorization",
-            header_value=access_token,
-        ))
+            client = DefaultApi(api_client=ApiClient(
+                configuration=conf,
+                header_name="Authorization",
+                header_value=access_token,
+            ))
+        else:
+            client = DefaultApi(api_client=ApiClient(
+                configuration=conf,
+            ))
+            
         for method in client.__dict__:
             self.__dict__[method] = client.__dict__[method]
 
