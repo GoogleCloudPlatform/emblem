@@ -31,7 +31,7 @@ def new_donation():
 def record_donation():
     campaign_id = request.form.get("campaignId", "Missing Campaign ID")
     donor_id = request.form.get("donor", "Missing Donor ID")
-    amount = request.form.get("amount")
+    amount = float(request.form.get("amount"))
 
     new_donation = {"campaign": campaign_id, "donor": donor_id, "amount": amount}
 
