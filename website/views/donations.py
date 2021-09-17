@@ -29,14 +29,26 @@ def new_donation():
 
 @donations_bp.route("/donate", methods=["POST"])
 def record_donation():
-    campaign_id = request.form.get("campaignId", "Missing Campaign ID")
-    donor_id = request.form.get("donor", "Missing Donor ID")
+    campaign_id = request.form.get("campaignId")
+    if campaign_id is None:
+        return 400  # Bad request, should have been filled in when form created
+
     amount = float(request.form.get("amount"))
 
-    new_donation = {"campaign": campaign_id, "donor": donor_id, "amount": amount}
+    # Look up or create donor record for logged in user
+    donors = g.api.donors_get()  # Gets logged in user donor record(s).
+    if len(donors) > 0:
+        # TODO: address approver case, where all donors are returned
+        donor = donors[0]
+    else:
+        # TODO: get email from id token (or maybe client), ask user for rest
+        new_donor = {"email": "TODO", "name": "TODO", "mailing_address": "TODO"}
+        donor = g.api.campaigns_post(new_donor)
 
+    # The easy part: add the donation
+    new_donation = {"campaign": campaign_id, "donor": donor["id"], "amount": amount}
     donation = g.api.donations_post(new_donation)
-    return redirect("/viewDonation?donation_id=" + donation.id)
+    return redirect("/viewDonation?donation_id=" + donation["id"])
 
 
 @donations_bp.route("/viewDonation", methods=["GET"])

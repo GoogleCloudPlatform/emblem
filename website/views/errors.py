@@ -19,6 +19,11 @@ from flask import Blueprint, render_template
 errors_bp = Blueprint("errors", __name__, template_folder="templates")
 
 
+@errors_bp.app_errorhandler(400)
+def error_no_auth_credential(err):
+    return render_template("errors/400.html")
+
+
 @errors_bp.app_errorhandler(401)
 def error_no_auth_credential(err):
     return render_template("errors/401.html")

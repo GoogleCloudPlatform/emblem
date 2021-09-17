@@ -34,7 +34,6 @@ class EmblemClient(object):
 
         # TODO: figure out why the generated code isn't using the value below
         if access_token is not None:
-            conf.access_token = access_token
             client = DefaultApi(api_client=ApiClient(
                 configuration=conf,
                 header_name="Authorization",
