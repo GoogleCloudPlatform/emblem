@@ -25,5 +25,5 @@ def init(app):
         id_token = request.cookies.get("session", None)
 
         g.api = emblem_client.EmblemClient(
-            os.environ.get("API_URL", None), access_token=id_token
+            app.config.get("API_URL", None), access_token=id_token
         )
