@@ -18,7 +18,7 @@ steps:
     args:
       - run
       - deploy
-      - ${_SERVICE}
+      - ${_SERVICE}-${_ENV}
       - --image=${_IMAGE_NAME}
       - --region=${_REGION}
       - --platform=managed
@@ -26,6 +26,7 @@ steps:
       - --project=${_TARGET_PROJECT}
       - --allow-unauthenticated
       - --no-traffic
+      - --set-env-vars=${_ENV_VARS}
 
   # Send message to pub/sub to start canary rollout process
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -33,7 +34,10 @@ steps:
       - pubsub
       - topics
       - publish
-      - canary
-      - --message="Start ${_SERVICE}-${_REVISION} rollout"
-      - --attribute=_SERVICE=${_SERVICE},_REVISION=${_REVISION},_REGION=${_REGION},_TRAFFIC=5
+      - canary-${_ENV}
+      - --message="Start ${_SERVICE}-${_ENV}-${_REVISION} rollout"
+      - --attribute=_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION},_REGION=${_REGION},_TRAFFIC=5
       - --project=${_TARGET_PROJECT}
+
+options:
+    substitution_option: 'ALLOW_LOOSE'

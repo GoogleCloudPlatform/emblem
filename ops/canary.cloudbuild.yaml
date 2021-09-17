@@ -30,22 +30,26 @@ steps:
     - 'run'
     - 'services'
     - 'update-traffic'
-    - '${_SERVICE}'
+    - '${_SERVICE}-${_ENV}'
     - '--to-revisions'
-    - '${_SERVICE}-${_REVISION}=${_TRAFFIC}'
+    - '${_SERVICE}-${_ENV}-${_REVISION}=${_TRAFFIC}'
     - '--region=${_REGION}'
     - '--platform=managed'
 
   # This build uses Pub/Sub to trigger *subsequent* builds that 
   # increase traffic until it reaches 100%.
-  # Once this is complete, this build will (TODO) start the canary rollout to prod.
+  # Once this is complete, this build will start the canary rollout to prod.
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: /bin/bash
     args:
       - -c
       - |
         if [ ${_TRAFFIC} -lt 100 ]
-        then gcloud pubsub topics publish canary \
-        --message="Increase ${_SERVICE}-${_REVISION} traffic to $((${_TRAFFIC}+5))" \
-        --attribute=_SERVICE=${_SERVICE},_REVISION=${_REVISION},_REGION=${_REGION},_TRAFFIC=$((${_TRAFFIC}+5))
+        then gcloud pubsub topics publish canary-${_ENV} \
+        --message="Increase ${_SERVICE}-${_ENV}-${_REVISION} traffic to $((${_TRAFFIC}+5))" \
+        --attribute=_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION},_REGION=${_REGION},_TRAFFIC=$((${_TRAFFIC}+5))
+        elif [ ${_ENV} = "staging" ]
+        then gcloud pubsub topics publish deploy-prod \
+        --message="Deploying ${_SERVICE}-prod-${_REVISION}" \
+        --attribute=_IMAGE_NAME=${_IMAGE_NAME},_ENV=prod,_SERVICE=${_SERVICE},_REVISION=${_REVISION},_REGION=${_REGION},_TRAFFIC=$((${_TRAFFIC}+5))
         fi
