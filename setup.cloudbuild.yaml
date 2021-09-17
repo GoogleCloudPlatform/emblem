@@ -48,26 +48,26 @@ steps:
     args:
       - run
       - deploy
-      - ${_DIR}
+      - ${_DIR}-staging
       - --image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_DIR}/${_DIR}
       - --region=${_REGION}
       - --platform=managed
-      - --project=emblem-stage-${_SUFFIX}
+      - --project=${_STAGING_PROJECT}
       - --allow-unauthenticated
-      - --service-account=cloud-run-manager@emblem-stage-${_SUFFIX}.iam.gserviceaccount.com
+      - --service-account=cloud-run-manager@${_STAGING_PROJECT}.iam.gserviceaccount.com
 
   # Cloud Run Deploy Prod
   - name: gcr.io/cloud-builders/gcloud
     args:
       - run
       - deploy
-      - ${_DIR}
+      - ${_DIR}-prod
       - --image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_DIR}/${_DIR}
       - --region=${_REGION}
       - --platform=managed
-      - --project=emblem-prod-${_SUFFIX}
+      - --project=${_PROD_PROJECT}
       - --allow-unauthenticated
-      - --service-account=cloud-run-manager@emblem-prod-${_SUFFIX}.iam.gserviceaccount.com
+      - --service-account=cloud-run-manager@${_PROD_PROJECT}.iam.gserviceaccount.com
 
 
 # Default to us-central1

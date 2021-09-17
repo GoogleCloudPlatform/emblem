@@ -20,12 +20,12 @@ steps:
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
 
-  # Install pytest
+  # Install test requirements
   - id: "Install Pytest"
     name: python:3.9-slim
     dir: ${_DIR}
     entrypoint: pip
-    args: ["install", "pytest", "--user"]
+    args: ["install", "-r", "requirements-test.txt", "--user"]
 
   # Get identity token
   - id: "Get identity token"

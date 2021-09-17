@@ -6,7 +6,7 @@ info:
   version: '2021-09-01'
 
 servers:
-- url: https://api-pwrmtjf4hq-uc.a.run.app
+- url: https://example.com
   description: Development server
 
 paths:
@@ -255,7 +255,7 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '201':
+        '200':
           description: JSON representation of an array of donations
           content:
             application/json:
