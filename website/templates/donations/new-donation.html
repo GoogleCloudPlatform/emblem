@@ -18,7 +18,7 @@
 {% block title %}Make a Donation{% endblock %}
 
 {% block materialio_scripts %}
-<script type="text/javascript">
+<script type="text/javascript" nonce="{{ g.csp_nonce }}">
   function initTextFields() {
     const MDCTextField = mdc.textField.MDCTextField;
     const elements = Array.from(document.querySelectorAll('.mdc-text-field'));
@@ -26,14 +26,8 @@
     elements.map(elem => new MDCTextField(elem));
   }
 
-  function initSwitches () {
-    const MDCSwitch = mdc.switchControl.MDCSwitch;
-    new MDCSwitch(document.querySelector('.mdc-switch'));
-  }
-
   window.onload = function () {
     initTextFields();
-    initSwitches();
   };
 </script>
 {% endblock %}
