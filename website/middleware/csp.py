@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from flask import current_app, g, request
+from flask import g, request
 import secrets
 
 import emblem_client
