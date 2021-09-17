@@ -33,7 +33,7 @@ def user_is_manager(email, campaign_id):
     if email is None:
         return False
     campaign = db.fetch("campaigns", campaign_id, methods.resource_fields["campaigns"])
-    if campaign is None or campaign.fetch("managers") is None:
+    if campaign is None or campaign.get("managers") is None:
         return False
     return email in campaign["managers"]
 
@@ -43,32 +43,35 @@ def allowed(operation, resource_kind, representation=None):
 
     # Check for everything requiring auth and handle
 
-    if user_is_approver(email):
+    is_approver = user_is_approver(email)
+
+    if is_approver:
         return True
     elif resource_kind == "approvers":
         return False
 
     if resource_kind in ["campaigns", "causes"]:
         if operation == "POST":
-            return user_is_approver(email)
+            return is_approver
         if operation in ["PATCH", "DELETE"]:
             path_parts = request.path.split("/")
             id = path_parts[1]
-            return user_is_approver(email) or user_is_manager(email, id)
+            return is_approver or user_is_manager(email, id)
         return True
 
     if resource_kind == "donors":
         if operation == "POST":
+            # Any authenticated user can create a donor record for themself
             donor_email = representation.get("email")
             return donor_email == email
         if operation in ["PATCH", "DELETE"]:
-            return user_is_approver(email)
+            return is_approver
         return True
 
     if resource_kind == "donations":
         # Approvers can do all operations on donations, for cleanup purposes.
         #
-        # Donors can GET their donations, Campaign managers can GET their
+        # Donors can GET their own donations, Campaign managers can GET their
         # donations. Note that both of these GETs are subdomain ones.
         #
         # Donors can POST new donations.
@@ -76,14 +79,14 @@ def allowed(operation, resource_kind, representation=None):
         if email is None:  # Must be authenticated
             return False
 
-        if user_is_approver(email):
+        if is_approver:
             return True
 
         path_parts = request.path.split("/")
-        id = path_parts[1]
+        parent_id = path_parts[1]
 
         if resource_kind == "campaigns" and operation == "GET":
-            return user_is_manager(email, parent_id)
+            return user_is_manager(email, id)
 
         if resource_kind == "donors":
             donor = db.fetch("donors", id, methods.resource_fields["donors"])

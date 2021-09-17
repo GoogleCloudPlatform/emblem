@@ -37,6 +37,10 @@ resource_fields = {
 }
 
 
+# List all entities of the given resource_kind, if allowed,
+# UNLESS the resource_kind is "donations". In that case, either
+# list all donations (if the user is an approver) or only the
+# authenticated user's donations
 def list(resource_kind):
     if resource_kind not in resource_fields:
         return "Not found", 404
@@ -44,7 +48,37 @@ def list(resource_kind):
     if not auth.allowed("GET", resource_kind):
         return "Forbidden", 403
 
-    results = db.list(resource_kind, resource_fields[resource_kind])
+    # Listing donations or donors are allowed for all,
+    # but for non-approvers only a subset should return
+    if resource_kind not in ["donations", "donors"]:
+        # Already checked that this is allowed, so return all items
+        results = db.list(resource_kind, resource_fields[resource_kind])
+
+    elif auth.user_is_approver(g.verified_email):
+        # Approvers get all donors or donations, no matter what
+        results = db.list(resource_kind, resource_fields[resource_kind])
+
+    else:
+        # The verified user should see only their own records
+        matching_donors = db.list_matching(
+            "donors", resource_fields["donors"], "email", g.verified_email
+        )
+
+        if resource_kind == "donors":
+            results = matching_donors
+        else:
+            # Find the donations matching the donors just found. Ideally,
+            # one email address should match at most one donor, but more
+            # are possible
+            matching_donor_ids = set([donor["id"] for donor in matching_donors])
+
+            # If we knew there was only one donor_id, then we could use
+            # list_matching here instead of getting all then filtering.
+            all_donations = db.list("donations", resource_fields["donations"])
+            results = [
+                item for item in all_donations if item["donor"] in matching_donor_ids
+            ]
+
     return json.dumps(results), 200, {"Content-Type": "application/json"}
 
 
@@ -56,12 +90,32 @@ def list_subresource(resource_kind, id, subresource_kind):
     if resource is None:
         return "Not found", 404
 
-    results = db.list_matching(
+    # Only match subresources that match the resource
+    match_field = resource_kind[:-1]  # Chop off the "s" to get the field name
+
+    # e.g, fetch donations whose campaign/donor field matches the campaign's/donor's id
+    matching_children = db.list_matching(
         subresource_kind,
         resource_fields[subresource_kind],
-        resource_kind[:-1],  # Subresource field for singular resource_kind
+        match_field,
         id,  # Value must match parent id
     )
+
+    email = g.verified_email
+
+    if auth.user_is_approver(email):
+        return json.dumps(matching_children), 200, {"Content-Type": "application/json"}
+
+    if resource_kind == "campaigns" and auth.user_is_manager(email, id):
+        return json.dumps(matching_children), 200, {"Content-Type": "application/json"}
+
+    matching_donors = db.list_matching(
+        "donors", resource_fields["donors"], "email", email
+    )
+    matching_donor_ids = set([donor["id"] for donor in matching_donors])
+    results = [
+        item for item in matching_children if item["donor"] in matching_donor_ids
+    ]
 
     return json.dumps(results), 200, {"Content-Type": "application/json"}
 

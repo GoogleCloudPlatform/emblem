@@ -27,6 +27,9 @@ class EmblemClient(object):
     """
 
     def __init__(self, host, access_token=None):
+        if host is None:
+            raise ValueError
+            
         conf = Configuration()
 
         # TODO: figure out why the generated code isn't using the value below
