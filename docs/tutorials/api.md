@@ -44,7 +44,7 @@ gcloud config set project $PROJECT_ID
 
 ## Create service account key
 
-You can use an existing service account to authenticate the Emblem Giving API or create a new one. 
+The Emblem Giving API uses a [service account](https://cloud.google.com/iam/docs/creating-managing-service-accounts) to authenticate requests to the Firestore database. In this section, you'll create a new service account or configure an existing one, then download a [service account key](https://cloud.google.com/iam/docs/creating-managing-service-account-keys) to authenticate the API. 
 
 1. To create a new service account, run the command below:
 ```bash
