@@ -43,12 +43,14 @@ Let's make a simple change to see this in action. Since our website isn't connec
 
 1. Open the file <walkthrough-editor-open-file filePath='./views/campaigns.py'>`views/campaigns.py`</walkthrough-editor-open-file>.
 
-2. Import the sample data on <walkthrough-editor-select-line filePath='./views/campaigns.py' startLine=15 startCharacterOffset=0 endLine=16 endCharacterOffset=0>line 16</walkthrough-editor-select-line> by adding the line of code below:
+<!-- Regex places the cursor after the `import requests` statement. -->
+2. Import the sample data by adding the following line of code to `campaigns.py` below <walkthrough-editor-select-regex filePath='./views/campaigns.py' regex='(?<=import\srequests)(?=\W)*'> import requests </walkthrough-editor-select-regex>:
 ```
 from sample_data import SAMPLE_CAMPAIGNS
 ```
 
-3. Replace the API request on <walkthrough-editor-select-line filePath='./views/campaigns.py' startLine=28 startCharacterOffset=16 endLine=28 endCharacterOffset=59>line 29</walkthrough-editor-select-line> with the variable `SAMPLE_CAMPAIGNS`. The resulting method should look like this:
+<!-- Regex selects the code that calls the API: `requests.get(API_URL + "/campaigns.py").json()`.   -->
+3.  Replace the <walkthrough-editor-select-regex filePath='./views/campaigns.py' regex='requests.get\(API_URL\s\+\s "\/campaigns"\)\.json\(\)'>API request</walkthrough-editor-select-regex> in the `list_campaigns` method with the variable `SAMPLE_CAMPAIGNS`. The resulting method should look like this:
 ```
 def list_campaigns():
   campaigns = SAMPLE_CAMPAIGNS
