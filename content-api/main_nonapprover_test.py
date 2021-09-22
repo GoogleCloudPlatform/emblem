@@ -176,7 +176,7 @@ def test_list_with_authentication(client):
                 assert item["id"] == TEST_DONATIONS[EMAIL]["id"]
 
 
-# List every subresources (donations for donors and campaigns)
+# List every subresource (donations for donors and campaigns)
 @pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
 def test_list_subresources_with_authentication(client):
 
