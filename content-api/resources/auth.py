@@ -82,22 +82,21 @@ def allowed(operation, resource_kind, representation=None):
         if is_approver:
             return True
 
-        path_parts = request.path.split("/")
-        parent_id = path_parts[1]
+        if operation == "POST":
+            # Do the referenced campaign and donor exist?
+            campaign = db.fetch(
+                "campaigns",
+                representation["campaign"],
+                methods.resource_fields["campaigns"],
+            )
+            donor = db.fetch(
+                "donors", representation["donor"], methods.resource_fields["donors"]
+            )
 
-        if resource_kind == "campaigns" and operation == "GET":
-            return user_is_manager(email, id)
-
-        if resource_kind == "donors":
-            donor = db.fetch("donors", id, methods.resource_fields["donors"])
-            if donor is None or donor.get("email") is None:
+            if campaign is None or donor is None:
                 return False
 
-            if operation == "POST":
-                if donor["email"] != email:
-                    return False
-                if representation.get("donor", None) != email:
-                    return False
+            return donor["email"] == email
 
     # No other case requires authorization
     return True

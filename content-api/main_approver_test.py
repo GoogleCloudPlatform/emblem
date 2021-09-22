@@ -20,6 +20,9 @@ import jwt
 import os
 import pytest
 
+# Use unique testing prefixes with collection names
+os.environ["EMBLEM_DB_ENVIRONMENT"] = "TEST"
+
 import main
 from data import cloud_firestore as db
 from resources import methods
@@ -28,6 +31,8 @@ from resources import methods
 # Types of resources to test
 KINDS = [key for key in methods.resource_fields]
 EMAIL = ""  # Updated if id_token available
+
+TEST_APPROVER = None
 
 # Create the authorization header for a test user
 id_token = os.environ.get("ID_TOKEN")
@@ -42,14 +47,27 @@ if id_token is not None:
 
     if "email" in info:
         EMAIL = info["email"]
-        db.insert(
-            "approvers",
-            {"name": "Test approver", "email": EMAIL, "active": True},
-            ["name", "email", "active"],
-            host_url="https://example.com",
-        )
 else:
     headers = {}
+
+
+# Set up and tear down test DB entries
+@pytest.fixture(scope="module", autouse=True)
+def data():
+    global TEST_APPROVER
+
+    # We need the current ID_TOKEN to be an approver
+    TEST_APPROVER = db.insert(
+        "approvers",
+        {"name": "Testing approver", "email": EMAIL, "active": True},
+        ["name", "email", "active"],
+        host_url="https://example.com",
+    )
+
+    yield None
+
+    # Tear down test data
+    db.delete("approvers", TEST_APPROVER["id"], ["id"], None)
 
 
 @pytest.fixture
