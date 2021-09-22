@@ -64,7 +64,10 @@ def data():
         host_url="https://example.com",
     )
 
-    yield None
+    try:
+        yield None
+    except:
+        pass
 
     # Tear down test data
     db.delete("approvers", TEST_APPROVER["id"], ["id"], None)
