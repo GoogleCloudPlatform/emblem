@@ -250,6 +250,7 @@ def test_insert_with_authentication(client):
     # Clean up new donor
     r = client.delete(f"/donors/{payload['id']}")
 
+    # Fail to create a donor without the logged in user's email address
     r = client.post(f"/donors", headers=headers, json=TEST_DONORS["nobody@example.com"])
     assert r.status_code == 403
 
