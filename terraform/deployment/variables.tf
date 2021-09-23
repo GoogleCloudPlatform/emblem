@@ -1,4 +1,8 @@
-variable "google_project_id" {
+variable "google_app_project_id" {
+  type    = string
+}
+
+variable "google_ops_project_id" {
   type    = string
 }
 
@@ -8,7 +12,7 @@ variable "google_region" {
 }
 
 variable "release_type" {
-  type = string
+  type    = string
   default = "stage"
 
   validation {

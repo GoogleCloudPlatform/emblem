@@ -20,34 +20,54 @@
 pushd $(dirname "$0") > /dev/null
 
 
-PARENT_PROJECT=$(gcloud config get-value project 2>/dev/null)
-BILLING_ACCOUNT=$(gcloud beta billing projects describe ${PARENT_PROJECT} --format="value(billingAccountName)" | sed 's/billingAccounts\///')
-
-
-function execute_terraform () {
+function prompt_project_id () {
     PROJECT_ID_DEFAULT="${USER}-emblem-${1}"
 
     read -p $"Please enter the $(tput setaf 1)$(tput bold)$1$(tput sgr0) project ID: [${PROJECT_ID_DEFAULT}]   " PROJECT_ID
     PROJECT_ID="${PROJECT_ID:-${PROJECT_ID_DEFAULT}}"
 
     PROJECT_NAME=$(gcloud projects describe ${PROJECT_ID} | grep name | cut -d' ' -f 2-)
-
-    # Specify project ID for Terraform to use
-    export TF_VAR_google_project_id="$PROJECT_NAME"
-
-    #terraform init
-    #terraform apply --auto-approve
 }
+
+function execute_terraform () {
+    # Specify project IDs for Terraform to use
+    export TF_VAR_google_app_project_id="$1"
+    export TF_VAR_google_ops_project_id="$2"
+
+    # Create terraform workspace, if it doesn't yet exist
+    if [ -n "$3" ]; then
+        terraform workspace new "$3" || terraform workspace select "$3"
+    fi
+
+    # Perform terraform steps
+    terraform init
+    terraform apply --auto-approve
+}
+
+
+# Copy /client-libs folder into /website/client-libs
+cp -r client-libs/ website/client-libs/
+
+
+########################
+# Record project names #
+########################
+prompt_project_id "ops"
+OPS_PROJECT="${PROJECT_NAME}"
+
+prompt_project_id "prod"
+PROD_PROJECT="${PROJECT_NAME}"
+
+prompt_project_id "stage"
+STAGE_PROJECT="${PROJECT_NAME}"
+
 
 ###########################
 # Terraform - ops project #
 ###########################
 pushd terraform/ops > /dev/null
-execute_terraform "ops"
+execute_terraform $STAGE_PROJECT $OPS_PROJECT
 popd > /dev/null
-
-# Record project name
-OPS_PROJECT="$PROJECT_NAME"
 
 
 ##################################
@@ -56,11 +76,8 @@ OPS_PROJECT="$PROJECT_NAME"
 export TF_VAR_release_type="prod"
 
 pushd terraform/deployment > /dev/null
-execute_terraform "prod"
+execute_terraform $PROD_PROJECT $OPS_PROJECT "prod"
 popd > /dev/null
-
-# Record project name
-PROD_PROJECT="$PROJECT_NAME"
 
 
 ###############################
@@ -69,11 +86,8 @@ PROD_PROJECT="$PROJECT_NAME"
 export TF_VAR_release_type="stage"
 
 pushd terraform/deployment > /dev/null
-execute_terraform "stage"
+execute_terraform $STAGE_PROJECT $OPS_PROJECT "stage"
 popd > /dev/null
-
-# Record project name
-STAGE_PROJECT="$PROJECT_NAME"
 
 
 ###################
@@ -128,20 +142,6 @@ done
 # Create Triggers #
 ###################
 
-gcloud alpha builds triggers create github \
---name=web-push-to-main \
---repo-owner=${repo_owner} --repo-name=${repo_name} \
---branch-pattern="^main$" --build-config=ops/build.cloudbuild.yaml \
---included-files="website/*" --substitutions="_DIR"="website" \
---project="${OPS_PROJECT}"
-
-gcloud alpha builds triggers create pubsub \
---name=web-deploy-staging --topic="projects/${OPS_PROJECT}/topics/gcr" \
---repo=https://www.github.com/${repo_owner}/${repo_name} \
---branch=main --build-config=ops/deploy.cloudbuild.yaml \
---substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
-_REGION=us-central1,_REVISION='$(body.message.messageId)',\
-_SERVICE=website,_TARGET_PROJECT='${STAGE_PROJECT}' \
---project="${OPS_PROJECT}"
-
-
+pushd terraform/build_triggers > /dev/null
+execute_terraform $STAGE_PROJECT $OPS_PROJECT
+popd > /dev/null
