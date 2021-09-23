@@ -12,30 +12,39 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+""" Test that approvers can perform any API operation. """
+
 import json
+import jwt
 import os
 import pytest
-
-from google.auth.transport import requests as reqs
-from google.oauth2 import id_token as token_ops
 
 import main
 from data import cloud_firestore as db
 from resources import methods
 
 
-kinds = [key for key in methods.resource_fields]
+# Types of resources to test
+KINDS = [key for key in methods.resource_fields]
+EMAIL = ""  # Updated if id_token available
 
+# Create the authorization header for a test user
 id_token = os.environ.get("ID_TOKEN")
 if id_token is not None:
-    headers = {"Authorization": "Bearer {}".format(id_token)}
+    headers = {"Authorization": f"Bearer {id_token}"}
 
     # Seed the approvers collection with this user
-    info = token_ops.verify_oauth2_token(id_token, reqs.Request())
+    token_alg = jwt.get_unverified_header(id_token).get("alg", "RS256")
+    info = jwt.decode(
+        id_token, algorithms=[token_alg], options={"verify_signature": False}
+    )
+
     if "email" in info:
+        EMAIL = info["email"]
         db.insert(
             "approvers",
-            {"name": "Test approver", "email": info["email"], "active": True},
+            {"name": "Test approver", "email": EMAIL, "active": True},
             ["name", "email", "active"],
             host_url="https://example.com",
         )
@@ -48,75 +57,61 @@ def client():
     return main.app.test_client()
 
 
-# Can we list every kind of resource?
+# List every kind of resource
 @pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
 def test_list_with_authentication(client):
-    for kind in kinds:
-        r = client.get("/{}".format(kind), headers=headers)
+    for kind in KINDS:
+        r = client.get(f"/{kind}", headers=headers)
         assert r.status_code == 200
         assert r.headers.get("Content-Type") == "application/json"
         payload = json.loads(r.data)
         assert type(payload) == list
 
 
-def test_list_without_authentication(client):
-    for kind in kinds:
-        r = client.get("/{}".format(kind))
-        if kind in ["approvers", "donations"]:
-            assert r.status_code == 403  # Resource requires authentication
-        else:
-            assert r.status_code == 200
-            assert r.headers.get("Content-Type") == "application/json"
-            payload = json.loads(r.data)
-            assert type(payload) == list
-
-
 # Create, fetch, modify, and delete resources
 @pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
 def test_lifecycle(client):
-    for kind in kinds:
+    for kind in KINDS:
         if kind == "donations":  # Special case for later
             continue
 
         # Create a resource. Note that only the name field is mandatory
         representation = {"name": "test name"}
-        r = client.post("/{}".format(kind), json=representation, headers=headers)
+        r = client.post(f"/{kind}", json=representation, headers=headers)
         assert r.status_code == 201
         resource = r.get_json(r.data)
         assert type(resource) == dict
         assert resource["name"] == representation["name"]
 
-        # Check that the id is in the list response
         etag, _ = r.get_etag()
         id = resource["id"]
-        r = client.get("/{}".format(kind), headers=headers)
+
+        # Check that the id is in the list response for that resource kind
+        r = client.get(f"/{kind}", headers=headers)
         assert r.status_code == 200
         payload = r.get_json(r.data)
-        found = False
-        for item in payload:
-            if item["id"] == id:
-                found = True
-                break
-        assert found
+        assert id in [item["id"] for item in payload]
 
         # Update only if same etag, given wrong etag
         representation = {"name": "changed name"}
+        patch_headers = headers.copy()
+        patch_headers["If-Match"] = "wrong etag"
         r = client.patch(
-            "/{}/{}".format(kind, id),
+            f"/{kind}/{id}",
             json=representation,
-            headers={
-                "If-Match": "wrong data",
-                "Authorization": "Bearer {}".format(id_token),
-            },
+            headers=patch_headers,
         )
         assert r.status_code == 409
 
         # Update only if same etag, given right etag
         representation = {"name": "changed name"}
+        patch_headers = headers.copy()
+        patch_headers["If-Match"] = etag
+
         r = client.patch(
-            "/{}/{}".format(kind, id),
+            f"/{kind}/{id}",
             json=representation,
-            headers={"If-Match": etag, "Authorization": "Bearer {}".format(id_token)},
+            headers=patch_headers,
         )
         assert r.status_code == 201
         resource = r.get_json(r.data)
@@ -124,35 +119,34 @@ def test_lifecycle(client):
         assert resource["name"] == representation["name"]
 
         # Fetch updated resource
-        r = client.get("/{}/{}".format(kind, id), headers=headers)
+        r = client.get(f"/{kind}/{id}", headers=headers)
         assert r.status_code == 200
         resource = r.get_json(r.data)
         assert type(resource) == dict
         assert resource["name"] == representation["name"]
+
         new_etag, _ = r.get_etag()
 
-        # Try to delete, given wrong etag
+        # Try to delete, given old etag
+        delete_headers = headers.copy()
+        delete_headers["If-Match"] = etag
         r = client.delete(
-            "/{}/{}".format(kind, id),
-            headers={
-                "If-Match": "wrong",
-                "Authorization": "Bearer {}".format(id_token),
-            },
+            f"/{kind}/{id}",
+            headers=delete_headers,
         )
         assert r.status_code == 409
 
         # Try to delete, given correct etag
+        delete_headers = headers.copy()
+        delete_headers["If-Match"] = new_etag
         r = client.delete(
-            "/{}/{}".format(kind, id),
-            headers={
-                "If-Match": new_etag,
-                "Authorization": "Bearer {}".format(id_token),
-            },
+            f"/{kind}/{id}",
+            headers=delete_headers,
         )
         assert r.status_code == 204
 
         # Try to fetch deleted resource
-        r = client.get("/{}/{}".format(kind, id), headers=headers)
+        r = client.get(f"/{kind}/{id}", headers=headers)
         assert r.status_code == 404
 
 
@@ -161,21 +155,20 @@ def test_lifecycle(client):
 def test_donation(client):
     # Create a campaign
     campaign_representation = {"name": "test campaign"}
-    r = client.post(
-        "/{}".format("campaigns"), json=campaign_representation, headers=headers
-    )
+    r = client.post("/campaigns", json=campaign_representation, headers=headers)
     assert r.status_code == 201
     campaign = r.get_json(r.data)
     assert type(campaign) == dict
     assert campaign["name"] == campaign_representation["name"]
 
     # Create a donor
-    donor_representation = {"name": "test donor"}
-    r = client.post("/{}".format("donors"), json=donor_representation, headers=headers)
+    donor_representation = {"name": "test donor", "email": EMAIL}
+    r = client.post("/donors", json=donor_representation, headers=headers)
     assert r.status_code == 201
     donor = r.get_json(r.data)
     assert type(donor) == dict
     assert donor["name"] == donor_representation["name"]
+    assert donor["email"] == EMAIL
 
     # Create the only donation for that campaign or donor
     donation_representation = {
@@ -183,9 +176,7 @@ def test_donation(client):
         "donor": donor["id"],
         "amount": 50,
     }
-    r = client.post(
-        "/{}".format("donations"), json=donation_representation, headers=headers
-    )
+    r = client.post("/donations", json=donation_representation, headers=headers)
     assert r.status_code == 201
     donation = r.get_json(r.data)
     assert type(donation) == dict

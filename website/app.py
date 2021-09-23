@@ -23,12 +23,20 @@ from views.campaigns import campaigns_bp
 from views.donations import donations_bp
 from views.errors import errors_bp
 from views.auth import auth_bp
+from views.robots_txt import robots_txt_bp
+
+from middleware import auth, csp
 
 app = Flask(__name__)
 app.register_blueprint(errors_bp)
 app.register_blueprint(donations_bp)
 app.register_blueprint(campaigns_bp)
 app.register_blueprint(auth_bp)
+app.register_blueprint(robots_txt_bp)
+
+# Initialize middleware
+auth.init(app)
+csp.init(app)
 
 if os.path.exists("config.py"):
     app.config.from_object("config")
@@ -44,16 +52,6 @@ valid_auth_config = (
 )
 
 app.config["SHOW_AUTH"] = valid_auth_config or (not os.getenv("HIDE_AUTH_WARNINGS"))
-
-
-@app.before_request
-def check_user_authentication():
-    id_token = request.cookies.get("session", None)
-
-    g.api = emblem_client.EmblemClient(
-        os.environ.get("API_URL", None), access_token=id_token
-    )
-
 
 # TODO(anassri, engelke): use API call instead of this
 # (This is based on the API design doc for now.)

@@ -12,23 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from flask import g, request
 
-import base64
-import hashlib
+import emblem_client
+
 import os
 
 
-####################################################
-# TODO(developer): set these environment variables #
-####################################################
+def init(app):
+    @app.before_request
+    def check_user_authentication():
+        id_token = request.cookies.get("session", None)
 
-
-# The (public!) API key used by Firebase.
-# This should be of the format "AIza..."
-FIREBASE_API_KEY = os.getenv("EMBLEM_FIREBASE_API_KEY")
-
-# The domain name used by Firebase Auth
-FIREBASE_AUTH_DOMAIN = os.getenv("EMBLEM_FIREBASE_AUTH_DOMAIN")
-
-# The URL the Emblem Content API is hosted at
-API_URL = os.getenv("EMBLEM_API_URL")
+        g.api = emblem_client.EmblemClient(
+            app.config.get("API_URL", None), access_token=id_token
+        )
