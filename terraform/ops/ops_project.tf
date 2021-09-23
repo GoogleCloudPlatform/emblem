@@ -21,14 +21,14 @@ resource "google_service_account" "cloud_run_manager" {
 }
 
 resource "google_pubsub_topic" "ops_gcr_pubsub" {
-  project = data.google_project.ops_project.project_id
+  project    = data.google_project.ops_project.project_id
   provider   = google.ops
   name       = "gcr"
   depends_on = [google_project_service.ops_pubsub_api]
 }
 
 resource "google_pubsub_topic" "ops_cloudbuilds_pubsub" {
-  project = data.google_project.ops_project.project_id
+  project    = data.google_project.ops_project.project_id
   provider   = google.ops
   name       = "cloud-builds"
   depends_on = [google_project_service.ops_pubsub_api]
@@ -95,7 +95,7 @@ resource "google_artifact_registry_repository" "ops_api_docker" {
 }
 
 resource "google_artifact_registry_repository_iam_member" "iam_website_ar" {
-  project = data.google_project.ops_project.project_id
+  project    = data.google_project.ops_project.project_id
   provider   = google-beta
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_website_docker.name

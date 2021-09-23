@@ -1,9 +1,9 @@
 variable "google_app_project_id" {
-  type    = string
+  type = string
 }
 
 variable "google_ops_project_id" {
-  type    = string
+  type = string
 }
 
 variable "google_region" {
@@ -18,5 +18,5 @@ variable "release_type" {
   validation {
     condition     = contains(["prod", "stage"], var.release_type)
     error_message = "Valid values for release_type are: (prod, stage)."
-  } 
+  }
 }

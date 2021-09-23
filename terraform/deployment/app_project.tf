@@ -76,17 +76,17 @@ resource "google_project_iam_member" "cloudbuild_run_admin_iam" {
 }
 
 resource "google_project_iam_member" "ar_reader_iam" {
-  provider   = google
-  project    = data.google_project.ops_project.project_id
-  role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:${data.google_project.app_project.number}@cloudbuild.gserviceaccount.com"
+  provider = google
+  project  = data.google_project.ops_project.project_id
+  role     = "roles/artifactregistry.reader"
+  member   = "serviceAccount:${data.google_project.app_project.number}@cloudbuild.gserviceaccount.com"
 }
 
 resource "google_project_iam_member" "cloudrun_ops_service_agent_iam" {
-  provider   = google
-  project    = data.google_project.ops_project.project_id
-  role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:service-${data.google_project.app_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+  provider = google
+  project  = data.google_project.ops_project.project_id
+  role     = "roles/artifactregistry.reader"
+  member   = "serviceAccount:service-${data.google_project.app_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
 }
 
 # Set up Firestore in Native Mode
