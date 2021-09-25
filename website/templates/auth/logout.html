@@ -16,14 +16,12 @@
 
 {% extends "base.html" %}
 
-{% block title %}Log In{% endblock %}
+{% block title %}Log Out{% endblock %}
 
 {% block content %}
   <div class="emblem-auth-center">
     {% if config.FIREBASE_API_KEY and config.FIREBASE_AUTH_DOMAIN %}
-      <p>Logging in via Google...</p>
-
-      <p class="emblem-auth-hint">If nothing happens, make sure you enable pop-ups.</p>
+      <p>Logging out...</p>
     {% else %}
       <p class="emblem-auth-hint error">Firebase auth has not been configured!</p>
 

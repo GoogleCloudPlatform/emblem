@@ -17,9 +17,6 @@ import datetime
 import os
 import time
 
-import firebase_admin
-
-from firebase_admin import auth, exceptions
 from flask import (
     abort,
     Blueprint,
@@ -32,41 +29,6 @@ from flask import (
 
 
 auth_bp = Blueprint("auth", __name__, template_folder="templates")
-default_app = firebase_admin.initialize_app()
-
-
-@auth_bp.route("/login", methods=["POST"])
-def login_post():
-    try:
-        # Validate ID token
-        # See https://firebase.google.com/docs/auth/admin/verify-id-tokens#verify_id_tokens_using_the_firebase_admin_sdk
-        id_token = request.form["idToken"]
-        decoded_claims = auth.verify_id_token(id_token)
-        if time.time() - decoded_claims["auth_time"] > 5 * 60:
-            # Only allow sign-ins with tokens generated in the past 5 minutes
-            return flask.abort(403, "Token deadline exceeded.")
-
-        # Create session cookie
-        # See https://firebase.google.com/docs/auth/admin/manage-cookies#create_session_cookie
-        expires = datetime.datetime.now() + datetime.timedelta(days=5)
-        session_cookie = auth.create_session_cookie(id_token, expires_in=expires)
-
-        # Configure response to store the session cookie.
-        response = make_response(redirect("/"))
-        response.set_cookie(
-            "session",
-            session_cookie,
-            expires=expires,
-            httponly=True,
-            secure=True,
-            samesite="Strict",
-        )
-
-        return response
-    except auth.InvalidIdTokenError as err:
-        return abort(401, "Invalid ID token.")
-    except exceptions.FirebaseError as err:
-        return flask.abort(401, "Session cookie creation failed.")
 
 
 @auth_bp.route("/login", methods=["GET"])
@@ -79,9 +41,4 @@ def login_get():
 
 @auth_bp.route("/logout", methods=["GET"])
 def logout():
-    response = make_response(redirect("/"))
-
-    # Clear session token
-    response.set_cookie("session", "", expires=0)
-
-    return response
+    return render_template("auth/logout.html")
