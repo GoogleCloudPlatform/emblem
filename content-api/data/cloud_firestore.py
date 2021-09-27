@@ -106,7 +106,7 @@ def update(resource_kind, id, representation, resource_fields, match_etag):
             if key in resource:
                 resource[key] = representation[key]
 
-        return resource, 201
+        return resource
 
     return update_in_transaction(transaction, resource_reference, representation)
 

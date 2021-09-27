@@ -1,6 +1,6 @@
 # generated.DefaultApi
 
-All URIs are relative to *https://api-pwrmtjf4hq-uc.a.run.app*
+All URIs are relative to *https://example.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -47,10 +47,10 @@ import generated
 from generated.api import default_api
 from generated.model.approver import Approver
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -118,10 +118,10 @@ import time
 import generated
 from generated.api import default_api
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -194,10 +194,10 @@ import generated
 from generated.api import default_api
 from generated.model.approver import Approver
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -270,10 +270,10 @@ import generated
 from generated.api import default_api
 from generated.model.approver import Approver
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -294,7 +294,7 @@ with generated.ApiClient(configuration) as api_client:
     approver = Approver(
         name="name_example",
         email="email_example",
-        active=True,
+        active=False,
     ) # Approver | JSON representation of a single approver
 
     # example passing only required values which don't have defaults set
@@ -340,7 +340,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **approvers_post**
-> approvers_post(approver)
+> Approver approvers_post(approver)
 
 Create a new approver
 
@@ -353,10 +353,10 @@ import generated
 from generated.api import default_api
 from generated.model.approver import Approver
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -376,13 +376,14 @@ with generated.ApiClient(configuration) as api_client:
     approver = Approver(
         name="name_example",
         email="email_example",
-        active=True,
+        active=False,
     ) # Approver | JSON representation of a single approver
 
     # example passing only required values which don't have defaults set
     try:
         # Create a new approver
-        api_instance.approvers_post(approver)
+        api_response = api_instance.approvers_post(approver)
+        pprint(api_response)
     except generated.ApiException as e:
         print("Exception when calling DefaultApi->approvers_post: %s\n" % e)
 ```
@@ -396,7 +397,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+[**Approver**](Approver.md)
 
 ### Authorization
 
@@ -405,7 +406,7 @@ void (empty response body)
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 
 ### HTTP response details
@@ -430,10 +431,10 @@ import generated
 from generated.api import default_api
 from generated.model.campaign import Campaign
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
 
@@ -485,20 +486,30 @@ deletes a single campaign
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     id = "id_example" # str | Campaign Id
@@ -524,7 +535,7 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -549,21 +560,31 @@ lists all donations for the specified campaign
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from generated.model.donation import Donation
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     id = "id_example" # str | Campaign Id
@@ -590,7 +611,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -601,7 +622,7 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**201** | JSON representation of an array of donations |  -  |
+**200** | JSON representation of an array of donations |  -  |
 **404** | not found |  -  |
 **0** | Unexpected error |  -  |
 
@@ -620,10 +641,10 @@ import generated
 from generated.api import default_api
 from generated.model.campaign import Campaign
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
 
@@ -679,34 +700,42 @@ updates a single campaign
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from generated.model.campaign import Campaign
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     id = "id_example" # str | Campaign Id
     campaign = Campaign(
         name="name_example",
-        description="description_example",
+        description="no description",
         cause="cause_example",
-        managers=[
-            "managers_example",
-        ],
-        goal=3.14,
+        managers=[],
+        goal=0,
         image_url="image_url_example",
-        active=True,
+        active=False,
     ) # Campaign | JSON representation of a single campaign
 
     # example passing only required values which don't have defaults set
@@ -732,7 +761,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -751,45 +780,54 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **campaigns_post**
-> campaigns_post(campaign)
+> Campaign campaigns_post(campaign)
 
 Create a new campaign
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from generated.model.campaign import Campaign
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     campaign = Campaign(
         name="name_example",
-        description="description_example",
+        description="no description",
         cause="cause_example",
-        managers=[
-            "managers_example",
-        ],
-        goal=3.14,
+        managers=[],
+        goal=0,
         image_url="image_url_example",
-        active=True,
+        active=False,
     ) # Campaign | JSON representation of a single campaign
 
     # example passing only required values which don't have defaults set
     try:
         # Create a new campaign
-        api_instance.campaigns_post(campaign)
+        api_response = api_instance.campaigns_post(campaign)
+        pprint(api_response)
     except generated.ApiException as e:
         print("Exception when calling DefaultApi->campaigns_post: %s\n" % e)
 ```
@@ -803,16 +841,16 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+[**Campaign**](Campaign.md)
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 
 ### HTTP response details
@@ -836,10 +874,10 @@ import generated
 from generated.api import default_api
 from generated.model.cause import Cause
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
 
@@ -891,20 +929,30 @@ deletes a single cause
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     id = "id_example" # str | Cause Id
@@ -930,7 +978,7 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -961,10 +1009,10 @@ import generated
 from generated.api import default_api
 from generated.model.cause import Cause
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
 
@@ -1020,29 +1068,39 @@ updates a single cause
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from generated.model.cause import Cause
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     id = "id_example" # str | Cause Id
     cause = Cause(
         name="name_example",
-        description="description_example",
+        description="no description",
         image_url="image_url_example",
-        active=True,
+        active=False,
     ) # Cause | JSON representation of a single cause
 
     # example passing only required values which don't have defaults set
@@ -1068,7 +1126,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1087,40 +1145,51 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **causes_post**
-> causes_post(cause)
+> Cause causes_post(cause)
 
 Create a new cause
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from generated.model.cause import Cause
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     cause = Cause(
         name="name_example",
-        description="description_example",
+        description="no description",
         image_url="image_url_example",
-        active=True,
+        active=False,
     ) # Cause | JSON representation of a single cause
 
     # example passing only required values which don't have defaults set
     try:
         # Create a new cause
-        api_instance.causes_post(cause)
+        api_response = api_instance.causes_post(cause)
+        pprint(api_response)
     except generated.ApiException as e:
         print("Exception when calling DefaultApi->causes_post: %s\n" % e)
 ```
@@ -1134,16 +1203,16 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+[**Cause**](Cause.md)
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 
 ### HTTP response details
@@ -1161,21 +1230,31 @@ Returns a list of donations
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from generated.model.donation import Donation
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
 
@@ -1198,7 +1277,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1222,20 +1301,30 @@ deletes a single donation
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     id = "id_example" # str | Donation Id
@@ -1261,7 +1350,7 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1286,21 +1375,31 @@ returns a single donation
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from generated.model.donation import Donation
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     id = "id_example" # str | Donation Id
@@ -1327,7 +1426,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1351,21 +1450,31 @@ updates a single donation
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from generated.model.donation import Donation
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     id = "id_example" # str | Donation Id
@@ -1398,7 +1507,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1423,21 +1532,31 @@ Create a new donation
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from generated.model.donation import Donation
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     donation = Donation(
@@ -1468,7 +1587,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1491,21 +1610,31 @@ Returns a list of donors
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from generated.model.donor import Donor
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
 
@@ -1528,7 +1657,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1552,20 +1681,30 @@ deletes a single donor
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     id = "id_example" # str | Donor Id
@@ -1591,7 +1730,7 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1616,21 +1755,31 @@ lists all donations for the specified donor
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from generated.model.donation import Donation
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     id = "id_example" # str | Donor Id
@@ -1657,7 +1806,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1681,21 +1830,31 @@ returns a single donor
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from generated.model.donor import Donor
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     id = "id_example" # str | Donor Id
@@ -1722,7 +1881,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1746,21 +1905,31 @@ updates a single donor
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from generated.model.donor import Donor
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     id = "id_example" # str | Donor Id
@@ -1793,7 +1962,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1812,27 +1981,37 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **donors_post**
-> donors_post(donor)
+> Donor donors_post(donor)
 
 Create a new donor
 
 ### Example
 
+* Bearer (JWT) Authentication (bearerAuth):
 ```python
 import time
 import generated
 from generated.api import default_api
 from generated.model.donor import Donor
 from pprint import pprint
-# Defining the host is optional and defaults to https://api-pwrmtjf4hq-uc.a.run.app
+# Defining the host is optional and defaults to https://example.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = generated.Configuration(
-    host = "https://api-pwrmtjf4hq-uc.a.run.app"
+    host = "https://example.com"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = generated.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with generated.ApiClient() as api_client:
+with generated.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = default_api.DefaultApi(api_client)
     donor = Donor(
@@ -1844,7 +2023,8 @@ with generated.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # Create a new donor
-        api_instance.donors_post(donor)
+        api_response = api_instance.donors_post(donor)
+        pprint(api_response)
     except generated.ApiException as e:
         print("Exception when calling DefaultApi->donors_post: %s\n" % e)
 ```
@@ -1858,16 +2038,16 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+[**Donor**](Donor.md)
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 
 ### HTTP response details

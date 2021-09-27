@@ -142,7 +142,18 @@ def insert(resource_kind, representation):
     if not auth.allowed("POST", resource_kind, representation):
         return "Forbidden", 403
 
-    resource = db.insert(resource_kind, representation, resource_fields[resource_kind])
+    if resource_kind == "donors":  # Special case: enforce unique email
+        print(f"I have to insert a donor: {representation}")
+        matches = db.list_matching("donors", resource_fields["donors"], "email", representation["email"])
+        if len(matches) == 0:
+            print(f"There are no matching existing donors.")
+            resource = db.insert(resource_kind, representation, resource_fields[resource_kind])
+        else:  # Should be exactly one. If more, just take the first
+            donor_id = matches[0]["id"]
+            print(f"There are {len(matches)} matches. The first one has id {donor_id}")
+            resource = db.update("donors", donor_id, representation, resource_fields["donors"], None)
+    else:
+        resource = db.insert(resource_kind, representation, resource_fields[resource_kind])
 
     return (
         json.dumps(resource),

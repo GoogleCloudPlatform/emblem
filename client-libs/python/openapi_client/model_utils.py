@@ -18,7 +18,7 @@ import tempfile
 
 from dateutil.parser import parse
 
-from generated.exceptions import (
+from openapi_client.exceptions import (
     ApiKeyError,
     ApiAttributeError,
     ApiTypeError,

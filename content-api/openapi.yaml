@@ -45,6 +45,10 @@ paths:
       responses:
         '201':
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Approver'
         '403':
           description: Forbidden
         '404':
@@ -164,6 +168,10 @@ paths:
       responses:
         '201':
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
         '404':
           description: campaigns must have been misspelled in path
 
@@ -299,6 +307,10 @@ paths:
       responses:
         '201':
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cause'
         '404':
           description: causes must have been misspelled in path
 
@@ -514,7 +526,8 @@ paths:
           description: Unexpected error
 
     post:
-      summary: Create a new donor
+      summary: Create a new donor or update existing donor with matching
+        email address. Email address should uniquely specify a donor.
       security:
         - bearerAuth: []
       requestBody:
@@ -527,6 +540,10 @@ paths:
       responses:
         '201':
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Donor'
         '404':
           description: donors must have been misspelled in path
 
@@ -636,6 +653,8 @@ paths:
 components:
   schemas:
     Approver:
+      required:
+      - email
       properties:
         id:
           type: string
@@ -643,12 +662,14 @@ components:
           description: unique, system-assigned identifier
         name:
           type: string
+          nullable: true
           description: the display name of this Approver
         email:
           type: string
           description: the Approver's email address
         active:
           type: boolean
+          default: false
           description: is this approver currently active?
         timeCreated:
           type: string
@@ -667,6 +688,9 @@ components:
           description: full URI of the resource
 
     Campaign:
+      required:
+      - name
+      - cause
       properties:
         id:
           type: string
@@ -677,25 +701,30 @@ components:
           description: the campaign's display name
         description:
           type: string
+          default: "no description"
           description: the purpose of the campaign
         cause:
           type: string
           description: the id of the Cause this campaign is for
         managers:
           type: array
+          default: []
           items:
             type: string
             format: email
             description: a manager's email address
         goal:
           type: number
+          default: 0
           description: the fundraising goal, in USD
         imageUrl:
           type: string
           format: uri
+          nullable: true
           description: location of image to display for the campaign
         active:
           type: boolean
+          default: false
           description: is this campaign accepting donations at this time?
         timeCreated:
           type: string
@@ -714,6 +743,8 @@ components:
           description: full URI of the resource
 
     Cause:
+      required:
+      - name
       properties:
         id:
           type: string
@@ -724,13 +755,16 @@ components:
           description: the cause's display name
         description:
           type: string
+          default: "no description"
           description: the purpose of the cause
         imageUrl:
           type: string
           format: uri
+          nullable: true
           description: location of image to display for the cause
         active:
           type: boolean
+          default: false
           description: is this cause accepting donations at this time?
         timeCreated:
           type: string
@@ -749,6 +783,10 @@ components:
           description: full URI of the resource
 
     Donation:
+      required:
+      - campaign
+      - donor
+      - amount
       properties:
         id:
           type: string
@@ -780,6 +818,9 @@ components:
           description: full URI of the resource
 
     Donor:
+      required:
+      - name
+      - email
       properties:
         id:
           type: string
@@ -793,6 +834,7 @@ components:
           description: the donor's email address
         mailing_address:
           type: string
+          nullable: true
           description: the donor's physical address
         timeCreated:
           type: string
