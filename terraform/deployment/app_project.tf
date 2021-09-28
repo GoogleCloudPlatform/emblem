@@ -91,10 +91,10 @@ resource "google_project_iam_member" "ar_reader" {
 }
 
 resource "google_project_iam_member" "cloudrun_ops_service_agent" {
-  provider = google
-  project  = data.google_project.ops_project.project_id
-  role     = "roles/artifactregistry.reader"
-  member   = "serviceAccount:service-${data.google_project.app_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+  provider   = google
+  project    = data.google_project.ops_project.project_id
+  role       = "roles/artifactregistry.reader"
+  member     = "serviceAccount:service-${data.google_project.app_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
   depends_on = [google_project_service.run_api]
 }
 
