@@ -32,12 +32,11 @@ some - _but not all_ - application pages.
 ### Configuration
 To configure the app, set the following environment variables:
 
----------------------------------------------------------------------------------------------
 | **Variable name**             | **Description**                                           |
+| ----------------------------- | --------------------------------------------------------- |
 | `EMBLEM_FIREBASE_API_KEY`     | The Firebase API key provided by Cloud Identity Platform. |
 | `EMBLEM_FIREBASE_AUTH_DOMAIN` | The auth domain (usually of the form `*.firebaseapp.com`) |
 | `EMBLEM_API_URL`              | A URL pointing to your instance of the Emblem Content API |
----------------------------------------------------------------------------------------------
 
 You can determine the `EMBLEM_FIREBASE_*` values by vising the
 [Identity Providers page](https://console.cloud.google.com/customer-identity/providers) and clicking on the `Application Setup Details` button. The `EMBLEM_API_URL` value will be determined
