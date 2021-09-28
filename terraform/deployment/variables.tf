@@ -11,12 +11,12 @@ variable "google_region" {
   default = "us-central1"
 }
 
-variable "release_type" {
+variable "deployment_type" {
   type    = string
   default = "stage"
 
   validation {
-    condition     = contains(["prod", "stage"], var.release_type)
-    error_message = "Valid values for release_type are: (prod, stage)."
+    condition     = contains(["prod", "stage"], var.deployment_type)
+    error_message = "Valid values for deployment_type are: (prod, stage)."
   }
 }

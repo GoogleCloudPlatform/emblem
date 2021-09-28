@@ -20,7 +20,15 @@ resource "google_service_account" "cloud_run_manager" {
   provider     = google
 }
 
-resource "google_pubsub_topic" "canary_pubsub" {
+resource "google_service_account" "cloud_run_robot" {
+  project      = data.google_project.app_project.project_id
+  account_id   = "serverless-robot-prod"
+  description  = "Auto-generated account created by Terraform, and used by Cloud Run"
+  display_name = "serverless-robot-prod"
+  provider     = google
+}
+
+resource "google_pubsub_topic" "canary" {
   project    = data.google_project.app_project.project_id
   name       = "canary"
   provider   = google
@@ -59,7 +67,7 @@ resource "google_project_service" "pubsub_api" {
   disable_dependent_services = true
 }
 
-resource "google_project_iam_member" "cloudbuild_service_account_user_iam" {
+resource "google_project_iam_member" "cloudbuild_service_account_user" {
   provider   = google
   project    = data.google_project.app_project.project_id
   role       = "roles/iam.serviceAccountUser"
@@ -67,7 +75,7 @@ resource "google_project_iam_member" "cloudbuild_service_account_user_iam" {
   depends_on = [google_project_service.cloudbuild_api]
 }
 
-resource "google_project_iam_member" "cloudbuild_run_admin_iam" {
+resource "google_project_iam_member" "cloudbuild_run_admin" {
   provider   = google
   project    = data.google_project.app_project.project_id
   role       = "roles/run.admin"
@@ -75,18 +83,19 @@ resource "google_project_iam_member" "cloudbuild_run_admin_iam" {
   depends_on = [google_project_service.cloudbuild_api]
 }
 
-resource "google_project_iam_member" "ar_reader_iam" {
+resource "google_project_iam_member" "ar_reader" {
   provider = google
   project  = data.google_project.ops_project.project_id
   role     = "roles/artifactregistry.reader"
   member   = "serviceAccount:${data.google_project.app_project.number}@cloudbuild.gserviceaccount.com"
 }
 
-resource "google_project_iam_member" "cloudrun_ops_service_agent_iam" {
+resource "google_project_iam_member" "cloudrun_ops_service_agent" {
   provider = google
   project  = data.google_project.ops_project.project_id
   role     = "roles/artifactregistry.reader"
   member   = "serviceAccount:service-${data.google_project.app_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+  depends_on = [google_project_service.run_api]
 }
 
 # Set up Firestore in Native Mode

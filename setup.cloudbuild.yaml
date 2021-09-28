@@ -55,6 +55,9 @@ steps:
       - --project=${_STAGING_PROJECT}
       - --allow-unauthenticated
       - --service-account=cloud-run-manager@${_STAGING_PROJECT}.iam.gserviceaccount.com
+      - --set-env-vars=EMBLEM_API_URL=${_EMBLEM_API_URL}
+      - --set-env-vars=EMBLEM_FIREBASE_API_KEY=${_EMBLEM_FIREBASE_API_KEY}
+      - --set-env-vars=EMBLEM_FIREBASE_AUTH_DOMAIN=${_EMBLEM_FIREBASE_AUTH_DOMAIN}
 
   # Cloud Run Deploy Prod
   - name: gcr.io/cloud-builders/gcloud
@@ -68,6 +71,9 @@ steps:
       - --project=${_PROD_PROJECT}
       - --allow-unauthenticated
       - --service-account=cloud-run-manager@${_PROD_PROJECT}.iam.gserviceaccount.com
+      - --set-env-vars="EMBLEM_API_URL=${_EMBLEM_API_URL}
+      - --set-env-vars="EMBLEM_FIREBASE_API_KEY=${_EMBLEM_FIREBASE_API_KEY}
+      - --set-env-vars="EMBLEM_FIREBASE_AUTH_DOMAIN=${_EMBLEM_FIREBASE_AUTH_DOMAIN}
 
 
 # Default to us-central1

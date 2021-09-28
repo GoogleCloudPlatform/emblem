@@ -14,11 +14,19 @@
 # limitations under the License.
 
 # Run ./setup.sh from a project with a billing account enabled
-# This will create a single project.
+# This will set up three projects:
+#  - an "ops" project, for deploying the application
+#  - a "stage" project, used as a staging application environment
+#  - a "prod" project, used as a production application environment
 
 
 pushd $(dirname "$0") > /dev/null
 
+
+function prompt_env_var () {
+    read -p $"Please enter value for $(tput setaf 1)$(tput bold)$1$(tput sgr0): [${!1}]   " VALUE
+    export $1="${VALUE:-${!1}}"
+}
 
 function prompt_project_id () {
     PROJECT_ID_DEFAULT="${USER}-emblem-${1}"
@@ -26,7 +34,7 @@ function prompt_project_id () {
     read -p $"Please enter the $(tput setaf 1)$(tput bold)$1$(tput sgr0) project ID: [${PROJECT_ID_DEFAULT}]   " PROJECT_ID
     PROJECT_ID="${PROJECT_ID:-${PROJECT_ID_DEFAULT}}"
 
-    PROJECT_NAME=$(gcloud projects describe ${PROJECT_ID} | grep name | cut -d' ' -f 2-)
+    PROJECT_NAME=$(gcloud projects describe ${PROJECT_ID} --format 'value(name)')
 }
 
 function execute_terraform () {
@@ -35,6 +43,10 @@ function execute_terraform () {
     export TF_VAR_google_ops_project_id="$2"
 
     # Create terraform workspace, if it doesn't yet exist
+    # This is the recommended workflow for multi-project configurations:
+    #   https://www.terraform.io/docs/cloud/guides/recommended-practices/part1.html
+    # See this page for more information on workspaces
+    #   https://www.terraform.io/docs/language/state/workspaces.html
     if [ -n "$3" ]; then
         terraform workspace new "$3" || terraform workspace select "$3"
     fi
@@ -47,6 +59,13 @@ function execute_terraform () {
 
 # Copy /client-libs folder into /website/client-libs
 cp -r client-libs/ website/client-libs/
+
+#########################
+# Record env var values #
+#########################
+prompt_env_var "EMBLEM_API_URL"
+prompt_env_var "EMBLEM_FIREBASE_API_KEY"
+prompt_env_var "EMBLEM_FIREBASE_AUTH_DOMAIN"
 
 
 ########################
@@ -65,6 +84,9 @@ STAGE_PROJECT="${PROJECT_NAME}"
 ###########################
 # Terraform - ops project #
 ###########################
+export TF_VAR_google_stage_project_id="${STAGE_PROJECT}"
+export TF_VAR_google_prod_project_id="${PROD_PROJECT}"
+
 pushd terraform/ops > /dev/null
 execute_terraform $STAGE_PROJECT $OPS_PROJECT
 popd > /dev/null
@@ -73,7 +95,7 @@ popd > /dev/null
 ##################################
 # Terraform - production project #
 ##################################
-export TF_VAR_release_type="prod"
+export TF_VAR_deployment_type="prod"
 
 pushd terraform/deployment > /dev/null
 execute_terraform $PROD_PROJECT $OPS_PROJECT "prod"
@@ -83,7 +105,7 @@ popd > /dev/null
 ###############################
 # Terraform - staging project #
 ###############################
-export TF_VAR_release_type="stage"
+export TF_VAR_deployment_type="stage"
 
 pushd terraform/deployment > /dev/null
 execute_terraform $STAGE_PROJECT $OPS_PROJECT "stage"
@@ -100,13 +122,17 @@ pushd website > /dev/null
 pip install -r requirements.txt
 popd > /dev/null
 
+# Compute trigger substitution values
+PROJECT_IDS=_STAGING_PROJECT=${STAGE_PROJECT},_PROD_PROJECT=${PROD_PROJECT}
+ENV_VARS="_EMBLEM_API_URL=${EMBLEM_API_URL},_EMBLEM_FIREBASE_API_KEY=${EMBLEM_FIREBASE_API_KEY},_EMBLEM_FIREBASE_AUTH_DOMAIN=${EMBLEM_FIREBASE_AUTH_DOMAIN}"
+
 # Submit remote builds
 gcloud builds submit --config=setup.cloudbuild.yaml \
---substitutions="_DIR=website,_STAGING_PROJECT=${STAGE_PROJECT},_PROD_PROJECT=${PROD_PROJECT}" \
+--substitutions="_DIR=website,${PROJECT_IDS},${ENV_VARS}" \
 --project="${OPS_PROJECT}"
 
 gcloud builds submit --config=setup.cloudbuild.yaml \
---substitutions="_DIR=content-api,_STAGING_PROJECT=${STAGE_PROJECT},_PROD_PROJECT=${PROD_PROJECT}" \
+--substitutions="_DIR=content-api,${PROJECT_IDS},${ENV_VARS}" \
 --project="${OPS_PROJECT}"
 
 

@@ -2,7 +2,11 @@ variable "google_ops_project_id" {
   type = string
 }
 
-variable "google_app_project_id" {
+variable "google_stage_project_id" {
+  type = string
+}
+
+variable "google_prod_project_id" {
   type = string
 }
 

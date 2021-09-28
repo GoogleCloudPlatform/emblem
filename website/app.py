@@ -38,9 +38,9 @@ app.register_blueprint(robots_txt_bp)
 auth.init(app)
 csp.init(app)
 
-if os.path.exists("config.py"):
+try:
     app.config.from_object("config")
-else:
+except:
     print("WARNING: config.py file not found! Some features may be broken.")
 
 
