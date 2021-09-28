@@ -16,9 +16,14 @@
 """ Test that approvers can perform any API operation. """
 
 import json
-import jwt
 import os
 import pytest
+
+from google.auth.transport import requests as reqs
+from google.oauth2 import id_token
+
+# Use unique testing prefixes with collection names
+os.environ["EMBLEM_DB_ENVIRONMENT"] = "TEST"
 
 import main
 from data import cloud_firestore as db
@@ -29,27 +34,55 @@ from resources import methods
 KINDS = [key for key in methods.resource_fields]
 EMAIL = ""  # Updated if id_token available
 
+TEST_APPROVER = None
+
 # Create the authorization header for a test user
-id_token = os.environ.get("ID_TOKEN")
-if id_token is not None:
-    headers = {"Authorization": f"Bearer {id_token}"}
+token = os.environ.get("ID_TOKEN")
+if token is not None:
+    headers = {"Authorization": f"Bearer {token}"}
+
+    info = None
+    try:
+        info = id_token.verify_firebase_token(token, reqs.Request())
+    except ValueError:
+        pass
+
+    try:
+        if info is None:
+            info = id_token.verify_oauth2_token(token, reqs.Request())
+    except ValueError:
+        pass
 
     # Seed the approvers collection with this user
-    token_alg = jwt.get_unverified_header(id_token).get("alg", "RS256")
-    info = jwt.decode(
-        id_token, algorithms=[token_alg], options={"verify_signature": False}
-    )
 
-    if "email" in info:
+    if info is not None and "email" in info:
         EMAIL = info["email"]
-        db.insert(
-            "approvers",
-            {"name": "Test approver", "email": EMAIL, "active": True},
-            ["name", "email", "active"],
-            host_url="https://example.com",
-        )
 else:
     headers = {}
+
+
+# Set up and tear down test DB entries
+@pytest.fixture(scope="module", autouse=True)
+def data():
+    global TEST_APPROVER
+
+    # We need the current ID_TOKEN to be an approver
+    TEST_APPROVER = db.insert(
+        "approvers",
+        {"name": "Testing approver", "email": EMAIL, "active": True},
+        ["name", "email", "active"],
+        host_url="https://example.com/",
+    )
+
+    try:
+        yield None
+    except:
+        pass
+
+    # Tear down test data
+    db.delete(
+        "approvers", TEST_APPROVER["id"], ["id"], None, host_url="https://example.com/"
+    )
 
 
 @pytest.fixture
@@ -75,8 +108,10 @@ def test_lifecycle(client):
         if kind == "donations":  # Special case for later
             continue
 
-        # Create a resource. Note that only the name field is mandatory
+        # Create a resource. Note that only the name field is usually mandatory
         representation = {"name": "test name"}
+        if kind == "donors":
+            representation["email"] = "nobody@example.com"
         r = client.post(f"/{kind}", json=representation, headers=headers)
         assert r.status_code == 201
         resource = r.get_json(r.data)
@@ -162,7 +197,7 @@ def test_donation(client):
     assert campaign["name"] == campaign_representation["name"]
 
     # Create a donor
-    donor_representation = {"name": "test donor", "email": EMAIL}
+    donor_representation = {"name": "a repeat donor", "email": EMAIL}
     r = client.post("/donors", json=donor_representation, headers=headers)
     assert r.status_code == 201
     donor = r.get_json(r.data)
