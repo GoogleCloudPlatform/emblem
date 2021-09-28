@@ -13,26 +13,63 @@
 // limitations under the License.
 
 
-const loadLoginPage = async function () {
-    // Authenticate user
+// Emblem uses GCP's Cloud Identity Platform product to handle end-user
+// authentication. This product is built atop Firebase Authentication, which
+// itself is designed primarily for client-side applications (such as mobile
+// or "single-page" [SPA] apps). Thus, we manage authentication on the *client*
+// even though Emblem itself is a *server-side* (Python + Flask) app.
+
+
+// Save Firebase Auth ID token in a cookie on every page refresh
+// (This is necessary in case the ID token expires)
+const refreshToken = async function () {
+    firebase.auth().onAuthStateChanged(async (user) => {
+        if (user) {
+            const token = await user.getIdToken();
+            Cookies.set("session", token, { secure: true });
+        }
+    });
+}
+
+
+// Authenticate user
+const loginUser = async function () {
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE)
     const authProvider = new firebase.auth.GoogleAuthProvider();
     const {user} = await firebase.auth().signInWithPopup(authProvider);
 
-    // Set token + send to server
-    firebase.auth().onAuthStateChanged(async (user) => {
-      if (user) {
-        const token = await user.getIdToken();
-
-        // Find login form elements
-        const idToken = document.getElementById('idToken');
-        const form = document.getElementById('loginForm');
-
-        idToken.value = token;
-
-        form.submit(); // Send to server (via an HTML form element)
-      }
-    });
+    // Redirect to homepage
+    window.location.href = '/';
 };
 
-loadLoginPage();
+
+// Log out user
+const logoutUser = async function () {
+    firebase.auth().signOut();
+
+    // Remove session cookie
+    Cookies.remove("session");
+
+    // Redirect to homepage
+    window.location.href = '/';
+}
+
+
+window.onload = function () {
+    const path = window.location.pathname;
+
+    // If on login page, authenticate the current user
+    if (path == '/login') {
+        loginUser();
+    }
+
+    // If on logout page, sign current user out
+    if (path == '/logout') {
+        logoutUser();
+    }
+
+    refreshToken();
+}
+
+
+
