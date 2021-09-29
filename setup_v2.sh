@@ -47,9 +47,9 @@ function execute_terraform () {
     #   https://www.terraform.io/docs/cloud/guides/recommended-practices/part1.html
     # See this page for more information on workspaces
     #   https://www.terraform.io/docs/language/state/workspaces.html
-    if [ -n "$3" ]; then
-        terraform workspace new "$3" || terraform workspace select "$3"
-    fi
+    WORKSPACE_ID="${3}__${2}"
+
+    terraform workspace new "$WORKSPACE_ID" || terraform workspace select "$WORKSPACE_ID"
 
     # Perform terraform steps
     terraform init
@@ -63,10 +63,8 @@ cp -r client-libs/ website/client-libs/
 #########################
 # Record env var values #
 #########################
-prompt_env_var "EMBLEM_API_URL"
 prompt_env_var "EMBLEM_FIREBASE_API_KEY"
 prompt_env_var "EMBLEM_FIREBASE_AUTH_DOMAIN"
-
 
 ########################
 # Record project names #
@@ -88,7 +86,7 @@ export TF_VAR_google_stage_project_id="${STAGE_PROJECT}"
 export TF_VAR_google_prod_project_id="${PROD_PROJECT}"
 
 pushd terraform/ops > /dev/null
-execute_terraform $STAGE_PROJECT $OPS_PROJECT
+execute_terraform $STAGE_PROJECT $OPS_PROJECT "ops"
 popd > /dev/null
 
 
@@ -124,17 +122,25 @@ popd > /dev/null
 
 # Compute trigger substitution values
 PROJECT_IDS=_STAGING_PROJECT=${STAGE_PROJECT},_PROD_PROJECT=${PROD_PROJECT}
-ENV_VARS="_EMBLEM_API_URL=${EMBLEM_API_URL},_EMBLEM_FIREBASE_API_KEY=${EMBLEM_FIREBASE_API_KEY},_EMBLEM_FIREBASE_AUTH_DOMAIN=${EMBLEM_FIREBASE_AUTH_DOMAIN}"
 
-# Submit remote builds
-gcloud builds submit --config=setup.cloudbuild.yaml \
---substitutions="_DIR=website,${PROJECT_IDS},${ENV_VARS}" \
---project="${OPS_PROJECT}"
-
+# Submit remote build (Content API)
+ENV_VARS="_EMBLEM_API_URL='',_EMBLEM_FIREBASE_API_KEY=${EMBLEM_FIREBASE_API_KEY},_EMBLEM_FIREBASE_AUTH_DOMAIN=${EMBLEM_FIREBASE_AUTH_DOMAIN}"
 gcloud builds submit --config=setup.cloudbuild.yaml \
 --substitutions="_DIR=content-api,${PROJECT_IDS},${ENV_VARS}" \
 --project="${OPS_PROJECT}"
 
+# Submit remote build (Website)
+STAGING_API_URL=$(gcloud run services list --project ${STAGE_PROJECT} --format 'value(URL)' | grep api)
+
+ENV_VARS="_EMBLEM_API_URL=${STAGING_API_URL},_EMBLEM_FIREBASE_API_KEY=${EMBLEM_FIREBASE_API_KEY},_EMBLEM_FIREBASE_AUTH_DOMAIN=${EMBLEM_FIREBASE_AUTH_DOMAIN}"
+gcloud builds submit --config=setup.cloudbuild.yaml \
+--substitutions="_DIR=website,${PROJECT_IDS},${ENV_VARS}" \
+--project="${OPS_PROJECT}"
+
+# Exit here if CI/CD is disabled
+if [ -n "$EMBLEM_SKIP_CICD" ]; then
+    exit 0
+fi
 
 ################
 # Set up CI/CD #

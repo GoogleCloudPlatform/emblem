@@ -54,12 +54,6 @@ resource "google_project_service" "firestore_api" {
   service  = "firestore.googleapis.com"
 }
 
-resource "google_project_service" "run_api" {
-  provider = google
-  project  = data.google_project.app_project.project_id
-  service  = "run.googleapis.com"
-}
-
 resource "google_project_service" "pubsub_api" {
   provider                   = google
   project                    = data.google_project.app_project.project_id
@@ -88,14 +82,6 @@ resource "google_project_iam_member" "ar_reader" {
   project  = data.google_project.ops_project.project_id
   role     = "roles/artifactregistry.reader"
   member   = "serviceAccount:${data.google_project.app_project.number}@cloudbuild.gserviceaccount.com"
-}
-
-resource "google_project_iam_member" "cloudrun_ops_service_agent" {
-  provider   = google
-  project    = data.google_project.ops_project.project_id
-  role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:service-${data.google_project.app_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
-  depends_on = [google_project_service.run_api]
 }
 
 # Set up Firestore in Native Mode
