@@ -15,6 +15,7 @@
 from flask import Blueprint, g, redirect, request, render_template
 
 import os
+import re
 import requests
 
 
@@ -39,7 +40,7 @@ def save_campaign():
         {
             "name": request.form["name"],
             "goal": float(request.form["goal"]),
-            "managers": request.form["managers"],
+            "managers": re.split(r"[ ,]+", request.form["managers"]),
         }
     )
 
