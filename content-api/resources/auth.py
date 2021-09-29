@@ -38,6 +38,15 @@ def user_is_manager(email, campaign_id):
     return email in campaign["managers"]
 
 
+def user_is_donor(email, donor_id):
+    if email is None:
+        return False
+    donor = db.fetch("donors", donor_id, methods.resource_fields["donors"])
+    if donor is not None and email == donor.get("email"):
+        return True
+    return False
+
+
 def allowed(operation, resource_kind, representation=None):
     email = g.get("verified_email", None)
 
@@ -76,28 +85,15 @@ def allowed(operation, resource_kind, representation=None):
         #
         # Donors can POST new donations.
 
-        if email is None:  # Must be authenticated
-            return False
-
         if is_approver:
             return True
 
-        path_parts = request.path.split("/")
-        parent_id = path_parts[1]
+        if operation == "POST":
+            return user_is_manager(
+                email, representation.get("campaign")
+            ) or user_is_donor(email, representation.get("donor"))
 
-        if resource_kind == "campaigns" and operation == "GET":
-            return user_is_manager(email, id)
-
-        if resource_kind == "donors":
-            donor = db.fetch("donors", id, methods.resource_fields["donors"])
-            if donor is None or donor.get("email") is None:
-                return False
-
-            if operation == "POST":
-                if donor["email"] != email:
-                    return False
-                if representation.get("donor", None) != email:
-                    return False
+        return True
 
     # No other case requires authorization
     return True

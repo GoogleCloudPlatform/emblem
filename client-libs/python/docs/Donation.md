@@ -4,10 +4,10 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**campaign** | **str** | the id of the campaign this donation is for | 
+**donor** | **str** | the id of the donor this donation is from | 
+**amount** | **float** | the amount donated, in USD | 
 **id** | **str** | unique, system-assigned identifier | [optional] [readonly] 
-**campaign** | **str** | the id of the campaign this donation is for | [optional] 
-**donor** | **str** | the id of the donor this donation is from | [optional] 
-**amount** | **float** | the amount donated, in USD | [optional] 
 **time_created** | **datetime** | system-assigned creation timestamp | [optional] [readonly] 
 **updated** | **datetime** | system-assigned update timestamp | [optional] [readonly] 
 **self_link** | **str** | full URI of the resource | [optional] [readonly] 

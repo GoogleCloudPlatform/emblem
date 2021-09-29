@@ -122,11 +122,11 @@ def list_subresource(resource_kind, id, subresource_kind):
 
 def get(resource_kind, id):
     if resource_kind not in resource_fields:
-        return "Not found", 404
+        return "Not found", 404, {}
 
     result = db.fetch(resource_kind, id, resource_fields[resource_kind])
     if result is None:
-        return "Not found", 404
+        return "Not found", 404, {}
 
     return (
         json.dumps(result),
@@ -142,14 +142,63 @@ def insert(resource_kind, representation):
     if not auth.allowed("POST", resource_kind, representation):
         return "Forbidden", 403
 
-    resource = db.insert(resource_kind, representation, resource_fields[resource_kind])
+    if resource_kind == "donors":  # Special case: enforce unique email
+        if "email" not in representation:
+            return "Bad request", 400
+
+        matches = db.list_matching(
+            "donors", resource_fields["donors"], "email", representation["email"]
+        )
+        if len(matches) == 0:
+            resource = db.insert(
+                resource_kind, representation, resource_fields[resource_kind]
+            )
+        else:  # Should be exactly one. If more, just take the first
+            donor_id = matches[0]["id"]
+            resource, status = db.update(
+                "donors", donor_id, representation, resource_fields["donors"], None
+            )
+            if status != 200:
+                return resource, status
+
+        return (
+            json.dumps(resource),
+            201,
+            {
+                "Content-Type": "application/json",
+                "ETag": base.etag(resource),
+            },
+        )
+
+    if resource_kind == "donations":  # Special case: enforce referential integrity
+        if (
+            representation.get("campaign") is None
+            or representation.get("donor") is None
+        ):
+            return "Bad request", 400
+
+        _, status, _ = get("donors", representation["donor"])
+        if status != 200:
+            return "Not found", 404
+
+        _, status, _ = get("campaigns", representation["campaign"])
+        if status != 200:
+            return "Not found", 404
+
+        resource = db.insert(
+            resource_kind, representation, resource_fields[resource_kind]
+        )
+
+    else:
+        resource = db.insert(
+            resource_kind, representation, resource_fields[resource_kind]
+        )
 
     return (
         json.dumps(resource),
         201,
         {
             "Content-Type": "application/json",
-            "Location": resource["selfLink"],
             "ETag": base.etag(resource),
         },
     )

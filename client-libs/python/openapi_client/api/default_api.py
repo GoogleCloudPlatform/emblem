@@ -11,8 +11,8 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from generated.api_client import ApiClient, Endpoint as _Endpoint
-from generated.model_utils import (  # noqa: F401
+from openapi_client.api_client import ApiClient, Endpoint as _Endpoint
+from openapi_client.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
     date,
@@ -21,11 +21,11 @@ from generated.model_utils import (  # noqa: F401
     none_type,
     validate_and_convert_types
 )
-from generated.model.approver import Approver
-from generated.model.campaign import Campaign
-from generated.model.cause import Cause
-from generated.model.donation import Donation
-from generated.model.donor import Donor
+from openapi_client.model.approver import Approver
+from openapi_client.model.campaign import Campaign
+from openapi_client.model.cause import Cause
+from openapi_client.model.donation import Donation
+from openapi_client.model.donor import Donor
 
 
 class DefaultApi(object):
