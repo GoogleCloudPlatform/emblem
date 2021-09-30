@@ -24,9 +24,9 @@ resource "google_pubsub_topic" "gcr" {
 }
 
 resource "google_pubsub_topic" "cloudbuilds" {
-  project    = data.google_project.ops_project.project_id
-  provider   = google.ops
-  name       = "cloud-builds"
+  project  = data.google_project.ops_project.project_id
+  provider = google.ops
+  name     = "cloud-builds"
   depends_on = [
     google_project_service.pubsub_api,
     google_project_service.cloudbuild_api
@@ -34,9 +34,9 @@ resource "google_pubsub_topic" "cloudbuilds" {
 }
 
 resource "google_project_service" "cloudbuild_api" {
-  project  = data.google_project.ops_project.project_id
-  provider = google.ops
-  service  = "cloudbuild.googleapis.com"
+  project    = data.google_project.ops_project.project_id
+  provider   = google.ops
+  service    = "cloudbuild.googleapis.com"
   depends_on = [google_project_service.pubsub_api]
 }
 
@@ -80,7 +80,7 @@ resource "google_artifact_registry_repository" "website_docker" {
   location      = var.google_region
   format        = "DOCKER"
   repository_id = "website"
-  depends_on    = [
+  depends_on = [
     google_project_service.artifact_registry_api,
     google_project_iam_member.ar_admin
   ]
@@ -93,7 +93,7 @@ resource "google_artifact_registry_repository" "api_docker" {
   location      = var.google_region
   format        = "DOCKER"
   repository_id = "content-api"
-  depends_on    = [
+  depends_on = [
     google_project_service.artifact_registry_api,
     google_project_iam_member.ar_admin
   ]
@@ -101,10 +101,10 @@ resource "google_artifact_registry_repository" "api_docker" {
 }
 
 resource "google_project_iam_member" "ar_admin" {
-  provider   = google.ops
-  project    = data.google_project.ops_project.project_id
-  role       = "roles/artifactregistry.writer"
-  member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  provider = google.ops
+  project  = data.google_project.ops_project.project_id
+  role     = "roles/artifactregistry.writer"
+  member   = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
   depends_on = [
     google_project_service.artifact_registry_api,
     google_project_service.cloudbuild_api
