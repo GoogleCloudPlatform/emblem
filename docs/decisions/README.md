@@ -10,7 +10,9 @@ Get started created a new decision record with the template:
 cp template.md NN-title-with-dashes.md
 ```
 
-## Parking Lot
+## Previous Decision Records
+
+TODO: Migrate decision records in this file to the new record-per-file format.
 
 Each decision might have a **history** note, indicating where changes to earlier decisions might cause revisiting the current decision.
 
@@ -25,6 +27,7 @@ In the context of **<use case/user story u>**, facing **<concern c>** we decided
 In order to organize our Jinja HTML templates, we decided to **use a two-level folder level split**. This will be combined with Jinja inheritance (i.e. the `extends` clause) for common components where possible.
 
 Concretely, our _templates_ file architecture might look like this:
+
 ```
 website/
   templates/
@@ -42,6 +45,7 @@ See [this GitHub issue](https://github.com/GoogleCloudPlatform/emblem/issues/37)
 Templates often mirror API actions (`create`, `read`, `update`, `delete`, etc). Since the API itself is organized by data types (e.g. `users`, `donations`, `causes`, etc), we saw it fit to mirror that information hierarchy here.
 
 ### Revision Criteria
+
 We will review this decision if the number of templates per file becomes difficult to manage and/or keep track of.
 
 We may also review this decision if large changes to the API occur. However, we are not expecting any such changes.
@@ -65,6 +69,7 @@ See [this GitHub issue](https://github.com/GoogleCloudPlatform/emblem/issues/37)
 Flask views themselves are (usually) no more than 5-10 lines of code. A one-folder-level split is not too high-level (which makes finding _individual views_ difficult) and not too low-level (which would make finding _the file associated with a view_ more difficult).
 
 ### Revision Criteria
+
 If views start becoming longer, or each file starts to accrue more views than we can reason about at a time, we may opt for a greater degree of splitting between views.
 
 We do not expect the total number of views to become smaller and/or less complex, however - and thus, we do not expect to opt for a lesser degree of splitting.

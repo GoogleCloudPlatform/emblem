@@ -1,8 +1,8 @@
 # Short title of solved problem and solution
 
-* **Status:** [proposed | rejected | approved | deprecated | superceded by [003](003-example.md)]
+* **Status:** [proposed | rejected | approved | deprecated | superceded by [2021-01-01 Example](2021-01-01-example.md)]
 * **Last Updated:** YYYY-MM-DD
-* **Builds on:** [042](042-example.md)
+* **Builds on:** [Short Title](2021-05-15-short-title.md)
 * **Objective:** [description or link to contextual issue]
 
 ## Context & Problem Statement
