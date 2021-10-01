@@ -1,6 +1,18 @@
 # Decision Log
 
-This project captures important decisions in the evolution of the project with [architectural decision records](https://adr.github.io/). These records provide a sense of context, trade-offs, and direction taken at various project cross-roads. The goals are to preserve an understanding of how the project has grown, and the conditions under which previous decisions might be revisted.
+In this project we capture important decisions with [architectural decision records](https://adr.github.io/).
+
+These records provide context, trade-offs, and reasoning taken at our community & technical cross-roads. Our goal is to preserve the understanding of how the project has grown, and capture enough insight to effectively revisit prevision decisions.
+
+Get started created a new decision record with the template:
+
+```sh
+cp template.md NN-title-with-dashes.md
+```
+
+## Previous Decision Records
+
+TODO: Migrate decision records in this file to the new record-per-file format.
 
 Each decision might have a **history** note, indicating where changes to earlier decisions might cause revisiting the current decision.
 
@@ -15,6 +27,7 @@ In the context of **<use case/user story u>**, facing **<concern c>** we decided
 In order to organize our Jinja HTML templates, we decided to **use a two-level folder level split**. This will be combined with Jinja inheritance (i.e. the `extends` clause) for common components where possible.
 
 Concretely, our _templates_ file architecture might look like this:
+
 ```
 website/
   templates/
@@ -32,6 +45,7 @@ See [this GitHub issue](https://github.com/GoogleCloudPlatform/emblem/issues/37)
 Templates often mirror API actions (`create`, `read`, `update`, `delete`, etc). Since the API itself is organized by data types (e.g. `users`, `donations`, `causes`, etc), we saw it fit to mirror that information hierarchy here.
 
 ### Revision Criteria
+
 We will review this decision if the number of templates per file becomes difficult to manage and/or keep track of.
 
 We may also review this decision if large changes to the API occur. However, we are not expecting any such changes.
@@ -55,24 +69,12 @@ See [this GitHub issue](https://github.com/GoogleCloudPlatform/emblem/issues/37)
 Flask views themselves are (usually) no more than 5-10 lines of code. A one-folder-level split is not too high-level (which makes finding _individual views_ difficult) and not too low-level (which would make finding _the file associated with a view_ more difficult).
 
 ### Revision Criteria
+
 If views start becoming longer, or each file starts to accrue more views than we can reason about at a time, we may opt for a greater degree of splitting between views.
 
 We do not expect the total number of views to become smaller and/or less complex, however - and thus, we do not expect to opt for a lesser degree of splitting.
 
 * **Date:** 2021/06
-
-## Decision: Frontend Avoids JS Frameworks
-
-In the context of the **frontend tech stack**, deciding to use plain JavaScript + libraries or use a rich framework such as Angular, React, or Vue, we decided to **use plain JavaScript to keep the frontend implementation approachable to backend developers**, accepting we will be less effective engaging with frontend engineers attempting to use serverless and may eventually outgrow a plain JavaScript code architecture.
-
-* **Date:** 2021/03
-
-## Decision: Backend Default Language is Python
-
-In the context of the **backend tech stack**, deciding which languages to use for a web backend and API we decided to **default to Python** to maximize our use of language skills on the team that are also common across the industry, accepting many enterprise organizations use other languages for application implementation and may learn less from the application codebase.
-
-* **Date:** 2021/03
-* **Note:** The application code is not the focus for learning in this app.
 
 ## Decision: Monorepo for Code Management
 
@@ -119,17 +121,17 @@ Deciding **which Serverless platform to use for the Website _and_ Content API**,
 
 ## Decision: Using Cloud Build Alpha for Pub/Sub Triggers
 
-In order to handle cross-project triggers and canary rollouts, we are using the **alpha Cloud Build Pub/Sub triggers**.  
+In order to handle cross-project triggers and canary rollouts, we are using the **alpha Cloud Build Pub/Sub triggers**.
 
-For the canary rollouts, this decision was reached mainly because it is the only Cloud Build trigger type that can gracefully handle gradually increasing traffic on a deployment.  Alternatively, we could manage rollouts via: 
+For the canary rollouts, this decision was reached mainly because it is the only Cloud Build trigger type that can gracefully handle gradually increasing traffic on a deployment.  Alternatively, we could manage rollouts via:
 
  - A **Cloud Function**
- - A shell script 
+ - A shell script
  - One very long explicit Cloud Build config
 
-The Pub/Sub triggers are simpler, do not require any extra code to manage, and are DRY-er than having one long `cloudbuild.yaml` which repeats each step with slightly higher traffic percentages.  Ultimately, we will migrate to **Cloud Deploy**, which should manage rollouts for us.  As it is not yet available for Cloud Run, Pub/Sub triggers are our best option. 
+The Pub/Sub triggers are simpler, do not require any extra code to manage, and are DRY-er than having one long `cloudbuild.yaml` which repeats each step with slightly higher traffic percentages.  Ultimately, we will migrate to **Cloud Deploy**, which should manage rollouts for us.  As it is not yet available for Cloud Run, Pub/Sub triggers are our best option.
 
-For cross-project triggers, Pub/Sub triggers allow us to limit the permissions granted to the Cloud Build service account in the source project.  If we handled all cross-project deployments this way, the service account would only need to have the Pub/Sub Publisher role in the 2nd project.   
+For cross-project triggers, Pub/Sub triggers allow us to limit the permissions granted to the Cloud Build service account in the source project.  If we handled all cross-project deployments this way, the service account would only need to have the Pub/Sub Publisher role in the 2nd project.
 
 * **Date:** 2021/07
 
@@ -183,7 +185,7 @@ Though this option gives the most _customizability_, we thought that the greater
 
 ### Revision Criteria
 In the unlikely event that we need to do something _not_ supported by Cloud Identity Platform,
-then we may want to consider implementing a **username/password-based** authentication 
+then we may want to consider implementing a **username/password-based** authentication
 system for additional flexibility.
 
 * **Date:** 2021/07
@@ -196,7 +198,7 @@ are performed _server-side_, we have to forward tokens (generated _client-side_)
 ### Rationale
 Because our app is rendered serverside using an HTML-based templating language (`jinja2`),
 any token-forwarding method we use must work with `GET` requests made by links (HTML `<a>` elements).
-This disqualifies things like `POST` requests or [custom HTTP headers](https://stackoverflow.com/questions/3047711/custom-http-request-headers-in-html) to some extent, as both 
+This disqualifies things like `POST` requests or [custom HTTP headers](https://stackoverflow.com/questions/3047711/custom-http-request-headers-in-html) to some extent, as both
 do **not** work with standard HTML `<a>` elements and would require additional (and arguably non-idiomatic/hacky) frontend Javascript
 to forward the token to the server.
 
@@ -216,9 +218,6 @@ If a more straightforward and/or more secure method of storing these tokens beco
 
 (For example, we could do away with the `session` cookie if the Firebase client SDK somehow automatically forwarded a generated ID token to the backend with every request.)
 
-* **Date:** 2021/08
-
-
 ## Decision: Create a service account for testing
 
 The service account should have as few privileges as possible (ideally, none). It will be used to create ID tokens during test runs. The only thing that will matter for those test runs is the identity provided in the token, not any privileges it has.
@@ -230,6 +229,5 @@ The service account should not be used in a production deployment, even though t
 ### Rationale
 
 The API handler uses standard Google authentication libraries to decode and validate the provided ID token. Those libraries require an ID token created by Google, and check their expiration times. Any IAM account can have an ID token provided to it, and we would not want to create a dummy user account for this purpose. Hence, the decision to use a service account.
-
 
 * **Date:** 2021/09
