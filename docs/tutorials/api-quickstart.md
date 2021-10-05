@@ -1,6 +1,6 @@
 # Deploy the Emblem Giving API using a Cloud Run Emulator
 ##
-This tutorial shows you how to deploy the Emblem Giving API to Cloud Run using a local Cloud Run Emulator.
+This tutorial shows you how to quickly deploy the Emblem Giving API to Cloud Run using a Cloud Run Emulator. You'll use Cloud Shell, a free browser-based IDE.
 
 The Cloud Run Emulator comes built in to Cloud Shell. It allows you to configure an environment that is representative of your service running on Cloud Run, without incurring charges on your GCP billing account.
 
