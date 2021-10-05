@@ -22,8 +22,6 @@ Decision records should attempt to follow the Y-statement format for consistency
 In the context of **<use case/user story u>**, facing **<concern c>** we decided for **<option o>** and neglected <other options>, to achieve <system qualities/desired consequences>, accepting <downside d/undesired consequences>, because <additional rationale>.
 ```
 
-## Decision: Monorepo for Code Management
-
 In choosing how to **host code for development**, deciding between a monorepo and 3+ repositories, we decided to use a **monorepo pattern** to keep discovery & maintainability manageable, accepting additional complexity in pipeline configuration, needing extra caution to avoid creating an unintentional "decoupled monolith", and leaving use cases of multi-repo management outside our scope.
 
 * **Date:** 2021/03
