@@ -30,6 +30,7 @@ In order to run the API, you'll need to use a new or existing [Google Cloud Plat
 1. You can quickly create a project by running the command below, where `$PROJECT_ID` is the name of your new project:
 
 ```bash
+export PROJECT_ID=emblem
 gcloud projects create $PROJECT_ID
 ```
 
