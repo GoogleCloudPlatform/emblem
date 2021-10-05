@@ -47,7 +47,7 @@ The Emblem Giving API uses a [service account](https://cloud.google.com/iam/docs
 
 1. To create a new service account, run the command below:
 ```bash
-export SERVICE_ACCOUNT=my-emblem-service-account
+export SERVICE_ACCOUNT=emblem-shell-account
 gcloud iam service-accounts create \
     $SERVICE_ACCOUNT --project \
     $PROJECT_ID
