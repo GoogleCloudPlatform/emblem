@@ -130,6 +130,3 @@ If you run the GET request again, you should see your newly created campaign in 
 Congratulations! You've successfully deployed the Emblem Giving API using Cloud Run.
 
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
-
-Next steps: 
-- Check out instructions on running the [Emblem Giving website on Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/emblem&cloudshell_git_branch=main&cloudshell_tutorial=docs/tutorials/website-quickstart.md)
