@@ -97,7 +97,7 @@ The <walkthrough-editor-spotlight spotlightId="output">Output</walkthrough-edito
 ### GET request
 Run the curl command below to test your API:
 ```bash
-curl -X GET http://localhost:8080/campaigns
+curl -X GET http://localhost:8080/campaigns -H "Authorization: Bearer $(gcloud auth print-identity-token)"
 ```
 
 It should return an empty response, since there aren't any campaigns in your database yet.
@@ -120,7 +120,7 @@ Add a new campaign to your database using the API.
 
 2. Run the following curl request in the terminal:
 ```bash
-curl -X POST http://localhost:8080/campaigns -H "Content-type: application/json" -d @resource.json
+curl -X POST http://localhost:8080/campaigns -H "Authorization: Bearer $(gcloud auth print-identity-token)" -H "Content-type: application/json" -d @resource.json
 ```
 You should see success response that displays the created campaign data.
 
