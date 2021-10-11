@@ -1,6 +1,6 @@
 # Authentication and Authorization for Emblem
 
-The Emblem application permits and prohibits operations on data based
+The Emblem application authorizes operations on data based
 on the user's identity, represented as an email address. Unauthenticated users
 (those who have not logged in to the application) have the ability to view
 public information such as current campaigns, but cannot view data linked to
@@ -60,7 +60,7 @@ more easily isolated and examined in detail for debugging.
 
 The current authentication flow, in a nutshell:
 
-1. User clicks a link or presses a button in the Emblem website to log in.
+1. User clicks a link in the Emblem website to log in.
 
 1. The website responds with with an HTTP redirect to a Google authentication
 server. The request includes several query parameters providing information
@@ -84,7 +84,7 @@ server responds with a JSON object that includes an active *id token*.
 
 1. The Emblem website server sends an HTTP redirect to the user's browser to
 return to the website page they started this login flow from. The redirect
-also includes a session cookie that references the *id token*.
+also sets a session cookie that references the *id token*.
 
 1. Further requests from the user to the Emblem website include that cookie,
 which the website uses to get the *id token*, and then provides that *id token*
