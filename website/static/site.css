@@ -218,3 +218,19 @@ img.emblem-avatar {
   display: inline-block;
   float: right;
 }
+
+/****** Create campaign page *****/
+.emblem-new-campaign .emblem-back-button button {
+  font-size: 48px;
+  padding-top: 5px;
+}
+
+.emblem-new-campaign-input {
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+.emblem-new-campaign form .mdc-button {
+  margin-top: 1em;
+  float: right;
+}

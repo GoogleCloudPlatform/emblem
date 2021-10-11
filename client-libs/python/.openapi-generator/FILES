@@ -1,6 +1,5 @@
 .gitignore
 .gitlab-ci.yml
-.openapi-generator-ignore
 .travis.yml
 README.md
 docs/Approver.md
@@ -31,10 +30,4 @@ setup.cfg
 setup.py
 test-requirements.txt
 test/__init__.py
-test/test_approver.py
-test/test_campaign.py
-test/test_cause.py
-test/test_default_api.py
-test/test_donation.py
-test/test_donor.py
 tox.ini
