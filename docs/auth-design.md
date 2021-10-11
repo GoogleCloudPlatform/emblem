@@ -79,7 +79,7 @@ URL, including a *code* in a query parameter.
 
 1. The Emblem server receives the request, and makes a server-side request
 (*not* involving the browser) to the authentication server providing the *code*
-and a *client secret* registered with the Emblem project website. The authentication
+and a *client secret* registered with the Emblem website's GCP project. The authentication
 server responds with a JSON object that includes an active *id token*.
 
 1. The Emblem website server sends an HTTP redirect to the user's browser to
