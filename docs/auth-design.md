@@ -1,9 +1,9 @@
 # Authentication and Authorization for Emblem
 
-The Emblem application permits and prohibits operations on giving data based
+The Emblem application permits and prohibits operations on data based
 on the user's identity, represented as an email address. Unauthenticated users
 (those who have not logged in to the application) have the ability to view
-public information, such as current campaigns, but cannot view data linked to
+public information such as current campaigns, but cannot view data linked to
 a specific user (such as donations), and cannot enter or change any data in
 the application.
 
@@ -22,10 +22,10 @@ and prohibit.
 
 All operations on application data are performed by the API, and the API
 is where decisions on whether or not to perform requested operations, or how
-to perform them, are made. For this to happen, the API needs to know who the
+to perform them, are made. For this to happen the API needs to know who the
 actual user requesting operations is. Our design has chosen for the API to *not* accept
 the website's assertion of the user's identity. This creates a smaller secure
-zone, and also allows other applications, or helper applications, to use the
+zone and also allows other applications, or helper applications, to use the
 API as well.
 
 API requests are made via secure HTTP requests, and are authenticated, if they
@@ -35,17 +35,17 @@ period, and a digital signature from a trusted identity verification agent.
 
 We have chosen to use [Google Identity Oauth2](https://developers.google.com/identity/protocols/oauth2/web-server)
 as Emblem's identity provider. It is the responsibility of the Emblem website
-to take user's through that authentication flow to get a valid _id token_,
-and then provide it to the API whenever access to data is needed.
+to take users through that authentication flow to get a valid _id token_,
+and then provide it to the API whenever operations on data are needed.
 
 ## First decision: how to authenticate with Google
 
-There are many way to authenticate with Google, or with other identity providers
+There are many way to authenticate with Google or with other identity providers
 that may be federated with a Google identity service. We initially decided to
 use [Firebase authentication using Google Sign-in with
 JavaScript](https://firebase.google.com/docs/auth/web/google-signin).
 
-After using Firebase authentication for a short while, we decided it was not
+After using Firebase authentication for a short while we decided it was not
 a good fit for our needs. It required setting up a Firebase project as well
 as a Google Cloud project, and required three Emblem codebases to be involved
 (website browser-based code, website server-side code, and API server-side code).
@@ -54,16 +54,17 @@ more prone to failures when done manually.
 
 The project then pivoted to using [OAuth2 with Google
 Identity](https://developers.google.com/identity/protocols/oauth2/web-server),
-which is the current solution. This approach involved only the two server-side
-codebases (website and API) and allows parts of the authentication flow to be
-more easily isolated and examined in detail, for debugging.
+which is the current solution. This approach involves only the two server-side
+codebases (website and API) and allows the steps in the authentication flow to be
+more easily isolated and examined in detail for debugging.
 
 The current authentication flow, in a nutshell:
 
 1. User clicks a link or presses a button in the Emblem website to log in.
 
 1. The website responds with with an HTTP redirect to a Google authentication
-server, which includes several values included as query parameters.
+server. The request includes several query parameters providing information
+about the application making the request.
 
 1. The user's browser makes the indicated request to the authentication server.
 
@@ -96,12 +97,12 @@ the same project.
 
 ## Second decision: how to associate the *id token* with a user session
 
-A session is established when a user logs in by having the website creating a
+A session is established when a user logs in by having the website create a
 cookie in the user's browser. The cookie has no *Expires* value, which causes
-it to be deleted only when the browser is closed. It is marked as *Secure* (must
+it to be deleted when the browser is closed. It is marked as *Secure* (must
 only be sent over the network via HTTPS), *HttpOnly* (inaccessible to
 JavaScript), and *SameSite=Strict* (which prevents sending it to other sites,
-such as when loading images, and only mitigates cross-site request forgery
+such as when loading images, and mitigates cross-site request forgery
 risk).
 
 This cookie must be associated with the *id token*. We considered alternatives:
@@ -131,8 +132,8 @@ storage options become available.
 
 ## Problem: *id token* expires in no more than 1 hour
 
-The approaches described above meet Emblem authentication needs, but require
-the user to be forced to log in again every hour, even they have been continually
+The approaches described above meet Emblem authentication needs but require
+the user to be forced to log in again every hour, even if they have been continually
 interacting with the website over that time. This is behavior that could be
 tolerable for an application of Emblem's kind, but we found it undersirable.
 
@@ -147,32 +148,34 @@ the application to extend a user session without logging in again.
 
 ### Where is that *refresh token*?
 
-Despite what we understood from the documentation, we were not receiving one
+Despite what we understood from the documentation, we were not receiving a refresh token
 upon user login when setting *access_type=offline*. The documentation seemed
 to be incorrect, with no way to get the *refresh token* we need. A search of
 [Stackoverflow](https://stackoverflow.com/) revealed this to be a common
 problem, and [one answer](https://stackoverflow.com/questions/10827920/not-receiving-google-oauth-refresh-token)
-explained what was happening. The server will only return a refresh token the
+explained what was happening. The server will *only* return a refresh token the
 first time it authenticates a user for a specific application. The user could
-revoke the token in their Google account, but that would not work for Emblem.
+revoke the token in their Google account forcing a new refresh token to be
+returned on the next login, but that required user intervention would not work for Emblem.
 
-Going back to the original documentation, this behavior is stated, but we
+Going back to the original documentation we see this behavior is stated, but we
 misunderstood "the initial request to Google's authorization server" to mean
-the first request in a user session, when it means the first request ever for
+the first request in a user session, when it actually means the first request ever for
 that application.
 
 StackOverflow answers indicated that a new refresh token could be forced by
-setting *prompt=consent* in step 2. The [documentation](https://developers.google.com/identity/protocols/oauth2/web-server#httprest_3)
+setting *prompt=consent* in step 2. The
+[documentation](https://developers.google.com/identity/protocols/oauth2/web-server#httprest_3)
 appears to allude to that, though not explicitly. In any case, experimentation
-showed that this worked, and has been adopted for Emblem.
+shows that this works, and has been adopted for Emblem.
 
 ### How to remember the *refresh token*?
 
-Since the *refresh token* does not (or at least may not) expire, it should
+Since the *refresh token* does not (or at least may not) expire it should
 not be put in a browser cookie, not matter how protected, even if it is
-encrypted. However, server-side storage for the website, as opposed to the API,
+encrypted. However server-side storage for the website, as opposed to the API,
 is still an open question. We will go with the encrypted cookie option for now,
-during early development and demonstration, but we must change that before
+during early development and demonstrations, but we must change that before
 any outside use.
 
 Since the *refresh token* being used to get an *id token* requires providing
