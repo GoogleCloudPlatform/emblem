@@ -87,7 +87,7 @@ return to the website page they started this login flow from. The redirect
 also includes a session cookie that references the *id token*.
 
 1. Further requests from the user to the Emblem website include that cookie,
-which the website uses to get the *id token*, and then provides that *id token*
+which the website uses to get the *id token*. The website then provides that *id token*
 with each API request.
 
 This flow is perhaps as simple as third-party authentication can be, and is
