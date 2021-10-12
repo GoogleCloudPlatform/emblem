@@ -16,16 +16,20 @@
 
 ## Considered Options
 
-* option 1
-* option 2
+* Option 1: Thing
+* Option 2: Another
 
 ## Decision
 
-Chosen option: "[option 1]", because [justification].
+Chosen option [Option 1: Thing]
+
+[justification]
 
 ### Expected Consequences <!-- optional -->
 
 * List of unrelated outcomes this decision creates
+
+### Revisiting this Decision <!-- optional -->
 
 ### Research <!-- optional -->
 
