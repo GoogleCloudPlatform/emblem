@@ -20,7 +20,7 @@ Chosen option [Option 2: GitHub Actions]
 
 For automated work such as static analysis and unit testing, the trade-offs are different: we're not concerned with Cloud security in the same way.
 
-GitHub Actions has simpler syntax, deeper GitHub integration, and thriving ecosystem of examples.
+GitHub Actions has simpler syntax, deeper GitHub integration, and a thriving ecosystem of examples.
 
 ### Expected Consequences <!-- optional -->
 
