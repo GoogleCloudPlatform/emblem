@@ -42,7 +42,7 @@ else:
     raise Exception("Missing configuration file.")
 
 # Configure session encryption
-app.secret_key = os.environ['SESSION_SECRET'].encode()  # Must be bytes
+app.secret_key = os.environ["SESSION_SECRET"].encode()  # Must be bytes
 
 
 if __name__ == "__main__":

@@ -32,15 +32,15 @@ auth_bp = Blueprint("auth", __name__, template_folder="templates")
 
 @auth_bp.route("/login", methods=["GET"])
 def login_get():
-    sign_in_url = 'https://accounts.google.com/o/oauth2/v2/auth?'
-    sign_in_url += 'scope=openid%20email&'
-    sign_in_url += 'access_type=offline&'
-    sign_in_url += 'include_granted_scopes=true&'
-    sign_in_url += 'response_type=code&'
-    sign_in_url += 'prompt=consent&'
-    sign_in_url += 'state={}&'.format('/')  # After sign-in, redirect user to root URL
-    sign_in_url += 'redirect_uri={}&'.format(current_app.config['REDIRECT_URI'])
-    sign_in_url += 'client_id={}&'.format(current_app.config['CLIENT_ID'])
+    sign_in_url = "https://accounts.google.com/o/oauth2/v2/auth?"
+    sign_in_url += "scope=openid%20email&"
+    sign_in_url += "access_type=offline&"
+    sign_in_url += "include_granted_scopes=true&"
+    sign_in_url += "response_type=code&"
+    sign_in_url += "prompt=consent&"
+    sign_in_url += "state={}&".format("/")  # After sign-in, redirect user to root URL
+    sign_in_url += "redirect_uri={}&".format(current_app.config["REDIRECT_URI"])
+    sign_in_url += "client_id={}&".format(current_app.config["CLIENT_ID"])
 
     return redirect(sign_in_url)
 
@@ -48,30 +48,33 @@ def login_get():
 @auth_bp.route("/callback", methods=["GET"])
 def handle_callback():
     args = request.args.to_dict()
-    redirect_path = args['state']
-    code = args['code']
+    redirect_path = args["state"]
+    code = args["code"]
 
     # Exchange the code for tokens
-    r = requests.post('https://oauth2.googleapis.com/token', data={
-        'code': code,
-        'client_id': current_app.config['CLIENT_ID'],
-        'client_secret': current_app.config['CLIENT_SECRET'],
-        'redirect_uri': current_app.config['REDIRECT_URI'],
-        'grant_type': 'authorization_code'
-    })
+    r = requests.post(
+        "https://oauth2.googleapis.com/token",
+        data={
+            "code": code,
+            "client_id": current_app.config["CLIENT_ID"],
+            "client_secret": current_app.config["CLIENT_SECRET"],
+            "redirect_uri": current_app.config["REDIRECT_URI"],
+            "grant_type": "authorization_code",
+        },
+    )
 
     resp = r.json()
-    token = resp.get('id_token')
-    refresh_token = resp.get('refresh_token')
+    token = resp.get("id_token")
+    refresh_token = resp.get("refresh_token")
 
     try:
         info = id_token.verify_oauth2_token(token, reqs.Request())
-        if 'email' not in info:
-            return render_template('error.html'), 403
-        session['email'] = info.get('email')
+        if "email" not in info:
+            return render_template("error.html"), 403
+        session["email"] = info.get("email")
     except Exception as e:
-        logging.warning('Request has bad OAuth2 id token: {}'.format(e))
-        return render_template('error.html'), 403
+        logging.warning("Request has bad OAuth2 id token: {}".format(e))
+        return render_template("error.html"), 403
 
     session["id_token"] = token
     session["refresh_token"] = refresh_token
