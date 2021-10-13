@@ -19,16 +19,16 @@
 
 # Firebase API key used by the "emblem-dev" project
 # (These API keys are NOT secrets, and can be made public)
-TEST_FIREBASE_API_KEY="${TEST_FIREBASE_API_KEY:-<YOUR_API_KEY>}"
+TEST_FIREBASE_API_KEY="${TEST_FIREBASE_API_KEY:-AIzaSyA1QwB8B0CqCu4kjaFx0Z2CPr3XUtXMfoo}"
 
 # Firebase auth domain used by the "emblem-dev" project.
-TEST_FIREBASE_DOMAIN="${TEST_FIREBASE_AUTH_DOMAIN:-<YOUR_DOMAIN>.firebaseapp.com}"
+TEST_FIREBASE_DOMAIN="${TEST_FIREBASE_AUTH_DOMAIN:-emblem-dev.firebaseapp.com}"
 
 # The organization to run the tests in
-TEST_ORGANIZATION="${TEST_ORGANIZATION:-<YOUR_ORGANIZATION_ID_NUMBER>}"
+TEST_ORGANIZATION="${TEST_ORGANIZATION:-497965320689}"
 
 # The account to bill charges against
-TEST_BILLING_ACCOUNT=${TEST_BILLING_ACCOUNT:-<YOUR_BILLING_ACCOUNT_ID>}
+TEST_BILLING_ACCOUNT=${TEST_BILLING_ACCOUNT:-01EA9E-528725-FACCCF}
 
 ###########################
 # New GCP project IDs #
