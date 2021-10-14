@@ -10,11 +10,6 @@ resource "google_pubsub_topic" "ops_gcr_pubsub" {
 
 }
 
-resource "google_pubsub_topic" "ops_cloudbuilds_pubsub" {
-  provider = google.ops
-  name     = "cloud-builds"
-}
-
 resource "google_project_service" "ops_cloudbuild_api" {
   provider = google.ops
   service  = "cloudbuild.googleapis.com"

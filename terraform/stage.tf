@@ -16,11 +16,6 @@ resource "google_pubsub_topic" "stage_canary_pubsub" {
   provider = google.stage
 }
 
-resource "google_pubsub_topic" "stage_cloudbuilds_pubsub" {
-  name     = "cloud-builds"
-  provider = google.stage
-}
-
 resource "google_project_service" "stage_cloudbuild_api" {
   provider = google.stage
   service  = "cloudbuild.googleapis.com"

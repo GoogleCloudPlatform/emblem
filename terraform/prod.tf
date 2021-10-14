@@ -16,11 +16,6 @@ resource "google_pubsub_topic" "prod_canary_pubsub" {
   provider = google.prod
 }
 
-resource "google_pubsub_topic" "prod_cloudbuilds_pubsub" {
-  name     = "cloud-builds"
-  provider = google.prod
-}
-
 resource "google_project_service" "prod_cloudbuild_api" {
   provider = google.prod
   service  = "cloudbuild.googleapis.com"
