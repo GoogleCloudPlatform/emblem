@@ -50,8 +50,12 @@ resource "google_artifact_registry_repository_iam_member" "stage_iam_api_ar" {
   repository = google_artifact_registry_repository.ops_api_docker.name
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:service-${data.google_project.stage_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
-  depends_on = [google_artifact_registry_repository.ops_api_docker]
+
   ## Using depends_on because the beta behavior is a little wonky
+  depends_on = [
+    google_artifact_registry_repository.ops_api_docker,
+    google_project_service.stage_run_api
+  ]
 }
 
 resource "google_artifact_registry_repository_iam_member" "prod_iam_api_ar" {
@@ -60,8 +64,12 @@ resource "google_artifact_registry_repository_iam_member" "prod_iam_api_ar" {
   repository = google_artifact_registry_repository.ops_api_docker.name
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:service-${data.google_project.prod_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
-  depends_on = [google_artifact_registry_repository.ops_api_docker]
+
   ## Using depends_on because the beta behavior is a little wonky
+  depends_on = [
+    google_artifact_registry_repository.ops_api_docker,
+    google_project_service.prod_run_api
+  ]
 }
 
 resource "google_artifact_registry_repository_iam_member" "stage_iam_website_ar" {
@@ -70,8 +78,12 @@ resource "google_artifact_registry_repository_iam_member" "stage_iam_website_ar"
   repository = google_artifact_registry_repository.ops_website_docker.name
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:service-${data.google_project.stage_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
-  depends_on = [google_artifact_registry_repository.ops_website_docker]
+
   ## Using depends_on because the beta behavior is a little wonky
+  depends_on = [
+    google_artifact_registry_repository.ops_website_docker,
+    google_project_service.stage_run_api
+  ]
 }
 
 resource "google_artifact_registry_repository_iam_member" "prod_iam_website_ar" {
@@ -80,8 +92,12 @@ resource "google_artifact_registry_repository_iam_member" "prod_iam_website_ar" 
   repository = google_artifact_registry_repository.ops_website_docker.name
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:service-${data.google_project.prod_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
-  depends_on = [google_artifact_registry_repository.ops_website_docker]
+
   ## Using depends_on because the beta behavior is a little wonky
+  depends_on = [
+    google_artifact_registry_repository.ops_website_docker,
+    google_project_service.prod_run_api
+  ]
 }
 
 resource "google_project_iam_member" "ops_ar_admin_iam" {
