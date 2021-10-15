@@ -25,21 +25,25 @@ cloudshell open-workspace .
 
 ## Set GCP project
 
-In order to run the API, you'll need to use a new or existing [Google Cloud Platform project](https://cloud.google.com/resource-manager/docs/creating-managing-projects). If you use an existing project, make sure that Cloud Firestore is enabled and configured to use [Native Mode](https://cloud.google.com/datastore/docs/firestore-or-datastore). Even though the server code will run locally, the data will be in a project's Firestore database.
+In order to run the API, you'll need to use a new or existing [Google Cloud Platform project](https://cloud.google.com/resource-manager/docs/creating-managing-projects).
 
-1. You can quickly create a project by running the command below, where `$PROJECT_ID` is the name of your new project:
+---
 
+### Using an existing project
+If you use an existing project, make sure that Cloud Firestore is enabled and configured to use [Native Mode](https://cloud.google.com/datastore/docs/firestore-or-datastore). Even though the server code will run locally, the data will be in a project's Firestore database.
+
+### Creating a new project
+If you need to create a new project for this tutorial, run the command below where `$PROJECT_ID` is the name of your new project:
 ```bash
 export PROJECT_ID=emblem
 gcloud projects create $PROJECT_ID
 ```
-
-2. Set your new or existing project in Cloud Shell:
+---
+Set your new or existing project in Cloud Shell:
 ```bash
 gcloud config set project $PROJECT_ID
 ```
-
-3. To configure your project to use Firestore, navigate to [console.cloud.google.com/firestore](https://console.cloud.google.com/firestore) and select **Native Mode**.
+To configure your project to use Firestore, navigate to [console.cloud.google.com/firestore](https://console.cloud.google.com/firestore) and select **Native Mode**.
 
 
 ## Create service account key
