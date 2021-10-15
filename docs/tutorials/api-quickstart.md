@@ -39,7 +39,7 @@ gcloud projects create $PROJECT_ID
 gcloud config set project $PROJECT_ID
 ```
 
-3. To configure your project to use Firestore, navigate to [console.cloud.google.com/firestore](console.cloud.google.com/firestore) and select **Native Mode**.
+3. To configure your project to use Firestore, navigate to [console.cloud.google.com/firestore](https://console.cloud.google.com/firestore) and select **Native Mode**.
 
 
 ## Create service account key
