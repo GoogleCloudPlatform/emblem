@@ -22,12 +22,6 @@ Decision records should attempt to follow the Y-statement format for consistency
 In the context of **<use case/user story u>**, facing **<concern c>** we decided for **<option o>** and neglected <other options>, to achieve <system qualities/desired consequences>, accepting <downside d/undesired consequences>, because <additional rationale>.
 ```
 
-## Decision: Use GitHub Actions for Static Analysis
-
-In choosing how to **run static analysis and workflow automations**, deciding between Cloud Build and GitHub Actions, we decided to **use GitHub Actions because of it's simpler syntax, deeper GitHub integration, and thriving ecosystem of examples**, accepting this will create fewer opportunities to provide feedback to the Cloud Build product team.
-
-* **Date:** 2021/03
-
 ## Decision: Rollbacks for Cloud Run use Traffic Splitting
 
 In choosing how to **handle rollbacks for Cloud Run services**, deciding between
