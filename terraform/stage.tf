@@ -1,13 +1,7 @@
 provider "google" {
   alias   = "stage"
-  project = google_project.stage_project.project_id
+  project = data.google_project.stage_project.project_id
   region  = var.google_region
-}
-
-resource "google_project" "stage_project" {
-  name            = "Emblem Stage"
-  project_id      = "emblem-stage-${var.suffix}"
-  billing_account = var.billing_account
 }
 
 resource "google_service_account" "stage_cloud_run_manager" {
@@ -51,14 +45,14 @@ resource "google_project_service" "stage_pubsub_api" {
 resource "google_project_iam_member" "stage_cloudbuild_service_account_user_iam" {
   provider   = google.stage
   role       = "roles/iam.serviceAccountUser"
-  member     = "serviceAccount:${google_project.stage_project.number}@cloudbuild.gserviceaccount.com"
+  member     = "serviceAccount:${data.google_project.stage_project.number}@cloudbuild.gserviceaccount.com"
   depends_on = [google_project_service.stage_cloudbuild_api]
 }
 
 resource "google_project_iam_member" "stage_cloudbuild_run_admin_iam" {
   provider   = google.stage
   role       = "roles/run.admin"
-  member     = "serviceAccount:${google_project.stage_project.number}@cloudbuild.gserviceaccount.com"
+  member     = "serviceAccount:${data.google_project.stage_project.number}@cloudbuild.gserviceaccount.com"
   depends_on = [google_project_service.stage_cloudbuild_api]
 }
 
@@ -70,7 +64,7 @@ resource "google_project_service" "stage_appengine_api" {
 }
 
 resource "google_app_engine_application" "stage_app" {
-  project = google_project.stage_project.project_id
+  project = data.google_project.stage_project.project_id
   # Standard region names (e.g., for Cloud Run) are not valid for App Engine.
   # App Engine locations do not use the numeric suffix. Strip that to colocate
   # the Firestore instance with Cloud Run. (us-central1 => us-central)

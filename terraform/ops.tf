@@ -1,12 +1,6 @@
-resource "google_project" "ops_project" {
-  name            = "Emblem Ops"
-  project_id      = "emblem-ops-${var.suffix}"
-  billing_account = var.billing_account
-}
-
 provider "google" {
   alias   = "ops"
-  project = google_project.ops_project.project_id
+  project = data.google_project.ops_project.project_id
   region  = var.google_region
 }
 
@@ -39,7 +33,7 @@ resource "google_project_service" "ops_pubsub_api" {
 }
 
 provider "google-beta" {
-  project = google_project.ops_project.project_id
+  project = data.google_project.ops_project.project_id
   region  = var.google_region
 }
 
@@ -72,7 +66,7 @@ resource "google_artifact_registry_repository_iam_member" "stage_iam_api_ar" {
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_api_docker.name
   role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:service-${google_project.stage_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+  member     = "serviceAccount:service-${data.google_project.stage_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
   depends_on = [google_artifact_registry_repository.ops_api_docker]
   ## Using depends_on because the beta behavior is a little wonky
 }
@@ -82,7 +76,7 @@ resource "google_artifact_registry_repository_iam_member" "prod_iam_api_ar" {
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_api_docker.name
   role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:service-${google_project.prod_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+  member     = "serviceAccount:service-${data.google_project.prod_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
   depends_on = [google_artifact_registry_repository.ops_api_docker]
   ## Using depends_on because the beta behavior is a little wonky
 }
@@ -92,7 +86,7 @@ resource "google_artifact_registry_repository_iam_member" "stage_iam_website_ar"
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_website_docker.name
   role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:service-${google_project.stage_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+  member     = "serviceAccount:service-${data.google_project.stage_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
   depends_on = [google_artifact_registry_repository.ops_website_docker]
   ## Using depends_on because the beta behavior is a little wonky
 }
@@ -102,7 +96,7 @@ resource "google_artifact_registry_repository_iam_member" "prod_iam_website_ar" 
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_website_docker.name
   role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:service-${google_project.prod_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+  member     = "serviceAccount:service-${data.google_project.prod_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
   depends_on = [google_artifact_registry_repository.ops_website_docker]
   ## Using depends_on because the beta behavior is a little wonky
 }
@@ -110,48 +104,48 @@ resource "google_artifact_registry_repository_iam_member" "prod_iam_website_ar" 
 resource "google_project_iam_member" "ops_ar_admin_iam" {
   provider   = google.ops
   role       = "roles/artifactregistry.writer"
-  member     = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
   depends_on = [google_project_service.ops_cloudbuild_api]
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_service_account_user_iam_stage" {
   provider   = google.stage
   role       = "roles/iam.serviceAccountUser"
-  member     = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
   depends_on = [google_project_service.ops_cloudbuild_api]
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_run_admin_iam_stage" {
   provider   = google.stage
   role       = "roles/run.admin"
-  member     = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
   depends_on = [google_project_service.ops_cloudbuild_api]
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_pubsub_iam_stage" {
   provider   = google.stage
   role       = "roles/pubsub.publisher"
-  member     = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
   depends_on = [google_project_service.ops_cloudbuild_api]
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_service_account_user_iam_prod" {
   provider   = google.prod
   role       = "roles/iam.serviceAccountUser"
-  member     = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
   depends_on = [google_project_service.ops_cloudbuild_api]
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_run_admin_iam_prod" {
   provider   = google.prod
   role       = "roles/run.admin"
-  member     = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
   depends_on = [google_project_service.ops_cloudbuild_api]
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_pubsub_iam_prod" {
   provider   = google.prod
   role       = "roles/pubsub.publisher"
-  member     = "serviceAccount:${google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
+  member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
   depends_on = [google_project_service.ops_cloudbuild_api]
 }
