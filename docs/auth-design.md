@@ -105,7 +105,7 @@ JavaScript), and *SameSite=Strict* (which prevents sending it to other sites,
 such as when loading images, and mitigates cross-site request forgery
 risk).
 
-This cookie must be associated with the *id token*. We considered alternatives:
+This cookie must be associated with the *id token*. We considered these alternatives:
 
 1. Create a random value for the cookie, save the *id token* and any other
 session information server-side, keyed by that random value.
