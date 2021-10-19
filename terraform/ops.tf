@@ -1,18 +1,6 @@
-provider "google" {
-  alias   = "ops"
-  project = data.google_project.ops_project.project_id
-  region  = var.google_region
-}
-
 resource "google_pubsub_topic" "ops_gcr_pubsub" {
   provider = google.ops
   name     = "gcr"
-
-}
-
-resource "google_pubsub_topic" "ops_cloudbuilds_pubsub" {
-  provider = google.ops
-  name     = "cloud-builds"
 }
 
 resource "google_project_service" "ops_cloudbuild_api" {
@@ -32,18 +20,13 @@ resource "google_project_service" "ops_pubsub_api" {
   disable_dependent_services = true
 }
 
-provider "google-beta" {
-  project = data.google_project.ops_project.project_id
-  region  = var.google_region
-}
-
 resource "google_project_service" "ops_artifact_registry_api" {
-  provider = google-beta
+  provider = google-beta.ops
   service  = "artifactregistry.googleapis.com"
 }
 
 resource "google_artifact_registry_repository" "ops_website_docker" {
-  provider      = google-beta
+  provider      = google-beta.ops
   location      = var.google_region
   format        = "DOCKER"
   repository_id = "website"
@@ -52,7 +35,7 @@ resource "google_artifact_registry_repository" "ops_website_docker" {
 }
 
 resource "google_artifact_registry_repository" "ops_api_docker" {
-  provider      = google-beta
+  provider      = google-beta.ops
   location      = var.google_region
   format        = "DOCKER"
   repository_id = "content-api"
@@ -62,43 +45,59 @@ resource "google_artifact_registry_repository" "ops_api_docker" {
 
 ## Give the Staging Cloud Run service account access to AR repos
 resource "google_artifact_registry_repository_iam_member" "stage_iam_api_ar" {
-  provider   = google-beta
+  provider   = google-beta.ops
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_api_docker.name
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:service-${data.google_project.stage_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
-  depends_on = [google_artifact_registry_repository.ops_api_docker]
+
   ## Using depends_on because the beta behavior is a little wonky
+  depends_on = [
+    google_artifact_registry_repository.ops_api_docker,
+    google_project_service.stage_run_api
+  ]
 }
 
 resource "google_artifact_registry_repository_iam_member" "prod_iam_api_ar" {
-  provider   = google-beta
+  provider   = google-beta.ops
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_api_docker.name
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:service-${data.google_project.prod_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
-  depends_on = [google_artifact_registry_repository.ops_api_docker]
+
   ## Using depends_on because the beta behavior is a little wonky
+  depends_on = [
+    google_artifact_registry_repository.ops_api_docker,
+    google_project_service.prod_run_api
+  ]
 }
 
 resource "google_artifact_registry_repository_iam_member" "stage_iam_website_ar" {
-  provider   = google-beta
+  provider   = google-beta.ops
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_website_docker.name
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:service-${data.google_project.stage_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
-  depends_on = [google_artifact_registry_repository.ops_website_docker]
+
   ## Using depends_on because the beta behavior is a little wonky
+  depends_on = [
+    google_artifact_registry_repository.ops_website_docker,
+    google_project_service.stage_run_api
+  ]
 }
 
 resource "google_artifact_registry_repository_iam_member" "prod_iam_website_ar" {
-  provider   = google-beta
+  provider   = google-beta.ops
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_website_docker.name
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:service-${data.google_project.prod_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
-  depends_on = [google_artifact_registry_repository.ops_website_docker]
+
   ## Using depends_on because the beta behavior is a little wonky
+  depends_on = [
+    google_artifact_registry_repository.ops_website_docker,
+    google_project_service.prod_run_api
+  ]
 }
 
 resource "google_project_iam_member" "ops_ar_admin_iam" {
