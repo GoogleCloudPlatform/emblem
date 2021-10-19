@@ -1,9 +1,3 @@
-provider "google" {
-  alias   = "stage"
-  project = data.google_project.stage_project.project_id
-  region  = var.google_region
-}
-
 resource "google_service_account" "stage_cloud_run_manager" {
   account_id   = "cloud-run-manager"
   description  = "Account for deploying new revisions and controlling traffic to Cloud Run"
@@ -13,11 +7,6 @@ resource "google_service_account" "stage_cloud_run_manager" {
 
 resource "google_pubsub_topic" "stage_canary_pubsub" {
   name     = "canary"
-  provider = google.stage
-}
-
-resource "google_pubsub_topic" "stage_cloudbuilds_pubsub" {
-  name     = "cloud-builds"
   provider = google.stage
 }
 
