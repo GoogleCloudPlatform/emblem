@@ -142,7 +142,7 @@ resource "google_project_iam_member" "ops_cloudbuild_pubsub_iam_stage" {
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_service_account_user_iam_prod" {
-  project    = data.google_project.ops_project.project_id
+  project    = data.google_project.prod_project.project_id
   provider   = google.prod
   role       = "roles/iam.serviceAccountUser"
   member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
@@ -150,7 +150,7 @@ resource "google_project_iam_member" "ops_cloudbuild_service_account_user_iam_pr
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_run_admin_iam_prod" {
-  project    = data.google_project.ops_project.project_id
+  project    = data.google_project.prod_project.project_id
   provider   = google.prod
   role       = "roles/run.admin"
   member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
@@ -158,7 +158,7 @@ resource "google_project_iam_member" "ops_cloudbuild_run_admin_iam_prod" {
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_pubsub_iam_prod" {
-  project    = data.google_project.ops_project.project_id
+  project    = data.google_project.prod_project.project_id
   provider   = google.prod
   role       = "roles/pubsub.publisher"
   member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
