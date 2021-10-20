@@ -4,11 +4,13 @@ resource "google_pubsub_topic" "ops_gcr_pubsub" {
 }
 
 resource "google_project_service" "ops_cloudbuild_api" {
+  project  = data.google_project.ops_project.project_id
   provider = google.ops
   service  = "cloudbuild.googleapis.com"
 }
 
 resource "google_project_service" "ops_pubsub_api" {
+  project  = data.google_project.ops_project.project_id
   provider = google.ops
   service  = "pubsub.googleapis.com"
 
@@ -21,11 +23,13 @@ resource "google_project_service" "ops_pubsub_api" {
 }
 
 resource "google_project_service" "ops_artifact_registry_api" {
+  project  = data.google_project.ops_project.project_id
   provider = google-beta.ops
   service  = "artifactregistry.googleapis.com"
 }
 
 resource "google_artifact_registry_repository" "ops_website_docker" {
+  project       = data.google_project.ops_project.project_id
   provider      = google-beta.ops
   location      = var.google_region
   format        = "DOCKER"
@@ -35,6 +39,7 @@ resource "google_artifact_registry_repository" "ops_website_docker" {
 }
 
 resource "google_artifact_registry_repository" "ops_api_docker" {
+  project       = data.google_project.ops_project.project_id
   provider      = google-beta.ops
   location      = var.google_region
   format        = "DOCKER"
@@ -45,6 +50,7 @@ resource "google_artifact_registry_repository" "ops_api_docker" {
 
 ## Give the Staging Cloud Run service account access to AR repos
 resource "google_artifact_registry_repository_iam_member" "stage_iam_api_ar" {
+  project    = data.google_project.ops_project.project_id
   provider   = google-beta.ops
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_api_docker.name
@@ -59,6 +65,7 @@ resource "google_artifact_registry_repository_iam_member" "stage_iam_api_ar" {
 }
 
 resource "google_artifact_registry_repository_iam_member" "prod_iam_api_ar" {
+  project    = data.google_project.ops_project.project_id
   provider   = google-beta.ops
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_api_docker.name
@@ -73,6 +80,7 @@ resource "google_artifact_registry_repository_iam_member" "prod_iam_api_ar" {
 }
 
 resource "google_artifact_registry_repository_iam_member" "stage_iam_website_ar" {
+  project    = data.google_project.ops_project.project_id
   provider   = google-beta.ops
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_website_docker.name
@@ -87,6 +95,7 @@ resource "google_artifact_registry_repository_iam_member" "stage_iam_website_ar"
 }
 
 resource "google_artifact_registry_repository_iam_member" "prod_iam_website_ar" {
+  project    = data.google_project.ops_project.project_id
   provider   = google-beta.ops
   location   = var.google_region
   repository = google_artifact_registry_repository.ops_website_docker.name
@@ -101,6 +110,7 @@ resource "google_artifact_registry_repository_iam_member" "prod_iam_website_ar" 
 }
 
 resource "google_project_iam_member" "ops_ar_admin_iam" {
+  project    = data.google_project.ops_project.project_id
   provider   = google.ops
   role       = "roles/artifactregistry.writer"
   member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
@@ -108,6 +118,7 @@ resource "google_project_iam_member" "ops_ar_admin_iam" {
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_service_account_user_iam_stage" {
+  project    = data.google_project.stage_project.project_id
   provider   = google.stage
   role       = "roles/iam.serviceAccountUser"
   member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
@@ -115,6 +126,7 @@ resource "google_project_iam_member" "ops_cloudbuild_service_account_user_iam_st
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_run_admin_iam_stage" {
+  project    = data.google_project.stage_project.project_id
   provider   = google.stage
   role       = "roles/run.admin"
   member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
@@ -122,6 +134,7 @@ resource "google_project_iam_member" "ops_cloudbuild_run_admin_iam_stage" {
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_pubsub_iam_stage" {
+  project    = data.google_project.stage_project.project_id
   provider   = google.stage
   role       = "roles/pubsub.publisher"
   member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
@@ -129,6 +142,7 @@ resource "google_project_iam_member" "ops_cloudbuild_pubsub_iam_stage" {
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_service_account_user_iam_prod" {
+  project    = data.google_project.prod_project.project_id
   provider   = google.prod
   role       = "roles/iam.serviceAccountUser"
   member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
@@ -136,6 +150,7 @@ resource "google_project_iam_member" "ops_cloudbuild_service_account_user_iam_pr
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_run_admin_iam_prod" {
+  project    = data.google_project.prod_project.project_id
   provider   = google.prod
   role       = "roles/run.admin"
   member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
@@ -143,6 +158,7 @@ resource "google_project_iam_member" "ops_cloudbuild_run_admin_iam_prod" {
 }
 
 resource "google_project_iam_member" "ops_cloudbuild_pubsub_iam_prod" {
+  project    = data.google_project.prod_project.project_id
   provider   = google.prod
   role       = "roles/pubsub.publisher"
   member     = "serviceAccount:${data.google_project.ops_project.number}@cloudbuild.gserviceaccount.com"
