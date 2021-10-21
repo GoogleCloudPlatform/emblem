@@ -19,9 +19,10 @@ resource "google_project_service" "stage_cloudbuild_api" {
 }
 
 resource "google_project_service" "stage_firestore_api" {
-  project  = data.google_project.stage_project.project_id
-  provider = google.stage
-  service  = "firestore.googleapis.com"
+  project    = data.google_project.stage_project.project_id
+  provider   = google.stage
+  service    = "firestore.googleapis.com"
+  depends_on = [google_project_service.stage_firestore_api]
 }
 
 resource "google_project_service" "stage_run_api" {
@@ -59,18 +60,4 @@ resource "google_project_service" "stage_appengine_api" {
   project  = data.google_project.stage_project.project_id
   provider = google.stage
   service  = "appengine.googleapis.com"
-}
-
-resource "google_app_engine_application" "stage_app" {
-  project = data.google_project.stage_project.project_id
-  # Standard region names (e.g., for Cloud Run) are not valid for App Engine.
-  # App Engine locations do not use the numeric suffix. Strip that to colocate
-  # the Firestore instance with Cloud Run. (us-central1 => us-central)
-  # https://cloud.google.com/appengine/docs/locations
-  # https://www.terraform.io/docs/language/functions/regex.html
-  location_id   = replace(trimspace(var.google_region), "/\\d+$/", "")
-  database_type = "CLOUD_FIRESTORE"
-  depends_on = [
-    google_project_service.prod_appengine_api,
-  ]
 }
