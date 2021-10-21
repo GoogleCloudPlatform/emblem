@@ -36,7 +36,7 @@ resource "google_artifact_registry_repository" "ops_website_docker" {
   repository_id = "website"
 
   ## Using depends_on because the beta behavior is a little wonky
-  depends_on    = [
+  depends_on = [
     google_project_service.ops_artifact_registry_api,
     google_project_iam_member.ops_ar_admin_iam
   ]
@@ -50,7 +50,7 @@ resource "google_artifact_registry_repository" "ops_api_docker" {
   repository_id = "content-api"
 
   ## Using depends_on because the beta behavior is a little wonky
-  depends_on    = [
+  depends_on = [
     google_project_service.ops_artifact_registry_api,
     google_project_iam_member.ops_ar_admin_iam
   ]
