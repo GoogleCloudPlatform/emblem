@@ -13,25 +13,73 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!doctype html>
-<title>Create Campaign | Cymbal Giving</title>
+{% extends "base.html" %}
 
-<a href="/">Back to campaign list</a>
+{% block title %}Create Campaign{% endblock %}
 
-<form method="POST">
-    <p>
-        <label for="name">Campaign name:</label>
-        <input type="text" id="name" name="name">
-    </p>
-    <p>
-        <label for="campaignName">Goal Amount (in USD):</label>
-        <input type="text" id="goal" name="goal">
-    </p>
-    <p>
-        <label for="managers">Manager names:</label>
-        <input type="text" id="managers" name="managers">
-    </p>
+{% block materialio_scripts %}
+<script type="text/javascript" nonce="{{ g.csp_nonce }}">
+  function initTextFields() {
+    const MDCTextField = mdc.textField.MDCTextField;
+    const elements = Array.from(document.querySelectorAll('.mdc-text-field'));
 
-    <input type="submit" value="Submit">
-</form>
+    elements.map(elem => new MDCTextField(elem));
+  }
 
+  window.addEventListener('load', () => {
+    initTextFields();
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="emblem-new-campaign mdc-layout-grid">
+  <div class="mdc-layout-grid__inner">
+
+    <!-- Back button -->
+    <div class="emblem-back-button mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+      <a href="/">
+        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Back to campaign list" title="Back to campaign list">highlight_off</button>
+      </a>
+    </div>
+
+    <!-- Campaign form -->
+    <div class="emblem-new-campaign-form mdc-layout-grid__cell mdc-layout-grid__cell--span-10">
+      <form method="POST">
+        <!-- Campaign Name -->
+        <label class="emblem-new-campaign-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="campaign-name-label">Campaign Name</span>
+          <input required type="text" id="name" name="name" class="mdc-text-field__input" aria-labelledby="name">
+          <span class="mdc-line-ripple"></span>
+        </label>
+
+        <!-- Amount (in USD) -->
+        <label class="emblem-new-campaign-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="goal-label">Goal Amount (in USD):</span>
+          <input required type="text" id="goal" name="goal" class="mdc-text-field__input" aria-labelledby="goal">
+          <span class="mdc-line-ripple"></span>
+        </label>
+
+        <!-- Manager Names -->
+        <label class="emblem-new-campaign-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="goal-label">Managers (comma separated):</span>
+          <input required type="text" id="managers" name="managers" class="mdc-text-field__input" aria-labelledby="managers">
+          <span class="mdc-line-ripple"></span>
+        </label>
+
+        <!-- Submit button -->
+        <button class="mdc-button mdc-button--raised" type="submit">
+          <span class="mdc-button__ripple"></span>
+          <i class="material-icons mdc-button__icon" aria-hidden="true"
+            >check_circle</i
+          >
+          <span class="mdc-button__label">Create</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 
 import generated
 from generated.api_client import ApiClient
@@ -27,14 +28,13 @@ class EmblemClient(object):
     """
 
     def __init__(self, host, access_token=None):
+        print(f"Creating client for host={host}")
         if host is None:
             raise ValueError
             
-        conf = Configuration()
+        conf = Configuration(host=host)
 
-        # TODO: figure out why the generated code isn't using the value below
         if access_token is not None:
-            conf.access_token = access_token
             client = DefaultApi(api_client=ApiClient(
                 configuration=conf,
                 header_name="Authorization",

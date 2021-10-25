@@ -44,7 +44,7 @@ def check_user_authentication():
     auth = request.headers.get("Authorization", None)
 
     # TODO: Remove the following DEBUG log entry when authn is stable
-    print(f"Authorization header value: {auth}")
+    # print(f"Authorization header value: {auth}")
 
     if auth is None:
         return

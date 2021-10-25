@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+import uuid
 
 from google.cloud import firestore
 from resources.base import canonical_resource, etag, snapshot_to_resource
@@ -19,9 +21,14 @@ from resources.base import canonical_resource, etag, snapshot_to_resource
 
 client = firestore.Client()
 
+collection_name_prefix = ""
+db_environment = os.environ.get("EMBLEM_DB_ENVIRONMENT", None)
+if db_environment == "TEST":
+    collection_name_prefix = str(uuid.uuid4())
+
 
 def list(resource_kind, resource_fields):
-    resource_collection = client.collection(resource_kind)
+    resource_collection = client.collection(collection_name_prefix + resource_kind)
     representations_list = []
     for resource_ref in resource_collection.stream():
         resource = snapshot_to_resource(resource_ref)
@@ -33,7 +40,7 @@ def list(resource_kind, resource_fields):
 
 
 def list_matching(resource_kind, resource_fields, field_name, value):
-    resource_collection = client.collection(resource_kind)
+    resource_collection = client.collection(collection_name_prefix + resource_kind)
     query = resource_collection.where(field_name, "==", value)
 
     representations_list = []
@@ -47,7 +54,9 @@ def list_matching(resource_kind, resource_fields, field_name, value):
 
 
 def fetch(resource_kind, id, resource_fields):
-    resource_reference = client.document("{}/{}".format(resource_kind, id))
+    resource_reference = client.document(
+        "{}/{}".format(collection_name_prefix + resource_kind, id)
+    )
     snapshot = resource_reference.get()
     if not snapshot.exists:
         return None
@@ -64,7 +73,7 @@ def insert(resource_kind, representation, resource_fields, host_url=None):
     for field in resource_fields:
         resource[field] = representation.get(field, None)
 
-    doc_ref = client.collection(resource_kind).document()
+    doc_ref = client.collection(collection_name_prefix + resource_kind).document()
     doc_ref.set(resource)
 
     if host_url is not None:
@@ -84,7 +93,9 @@ def insert(resource_kind, representation, resource_fields, host_url=None):
 
 def update(resource_kind, id, representation, resource_fields, match_etag):
     transaction = client.transaction()
-    resource_reference = client.document("{}/{}".format(resource_kind, id))
+    resource_reference = client.document(
+        "{}/{}".format(collection_name_prefix + resource_kind, id)
+    )
 
     @firestore.transactional
     def update_in_transaction(transaction, resource_reference, representation):
@@ -106,19 +117,24 @@ def update(resource_kind, id, representation, resource_fields, match_etag):
             if key in resource:
                 resource[key] = representation[key]
 
-        return resource, 201
+        return resource, 200
 
     return update_in_transaction(transaction, resource_reference, representation)
 
 
-def delete(resource_kind, id, resource_fields, match_etag):
-    resource_reference = client.document("{}/{}".format(resource_kind, id))
+def delete(resource_kind, id, resource_fields, match_etag, host_url=None):
+    resource_reference = client.document(
+        "{}/{}".format(collection_name_prefix + resource_kind, id)
+    )
     resource_snapshot = resource_reference.get()
     if not resource_snapshot.exists:
         return 404
 
     resource = canonical_resource(
-        snapshot_to_resource(resource_snapshot), resource_kind, resource_fields
+        snapshot_to_resource(resource_snapshot),
+        resource_kind,
+        resource_fields,
+        host_url,
     )
 
     if match_etag is not None:  # Only apply if resource has not changed
