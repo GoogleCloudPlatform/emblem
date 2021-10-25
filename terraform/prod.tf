@@ -18,9 +18,10 @@ resource "google_project_service" "prod_cloudbuild_api" {
 }
 
 resource "google_project_service" "prod_firestore_api" {
-  project  = data.google_project.prod_project.project_id
-  provider = google.prod
-  service  = "firestore.googleapis.com"
+  project    = data.google_project.prod_project.project_id
+  provider   = google.prod
+  service    = "firestore.googleapis.com"
+  depends_on = [google_project_service.prod_appengine_api]
 }
 
 resource "google_project_service" "prod_run_api" {

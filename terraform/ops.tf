@@ -34,8 +34,12 @@ resource "google_artifact_registry_repository" "ops_website_docker" {
   location      = var.google_region
   format        = "DOCKER"
   repository_id = "website"
-  depends_on    = [google_project_service.ops_artifact_registry_api]
+
   ## Using depends_on because the beta behavior is a little wonky
+  depends_on = [
+    google_project_service.ops_artifact_registry_api,
+    google_project_iam_member.ops_ar_admin_iam
+  ]
 }
 
 resource "google_artifact_registry_repository" "ops_api_docker" {
@@ -44,8 +48,12 @@ resource "google_artifact_registry_repository" "ops_api_docker" {
   location      = var.google_region
   format        = "DOCKER"
   repository_id = "content-api"
-  depends_on    = [google_project_service.ops_artifact_registry_api]
+
   ## Using depends_on because the beta behavior is a little wonky
+  depends_on = [
+    google_project_service.ops_artifact_registry_api,
+    google_project_iam_member.ops_ar_admin_iam
+  ]
 }
 
 ## Give the Staging Cloud Run service account access to AR repos
@@ -60,6 +68,7 @@ resource "google_artifact_registry_repository_iam_member" "stage_iam_api_ar" {
   ## Using depends_on because the beta behavior is a little wonky
   depends_on = [
     google_artifact_registry_repository.ops_api_docker,
+    google_project_service.ops_artifact_registry_api,
     google_project_service.stage_run_api
   ]
 }
@@ -75,6 +84,7 @@ resource "google_artifact_registry_repository_iam_member" "prod_iam_api_ar" {
   ## Using depends_on because the beta behavior is a little wonky
   depends_on = [
     google_artifact_registry_repository.ops_api_docker,
+    google_project_service.ops_artifact_registry_api,
     google_project_service.prod_run_api
   ]
 }
@@ -90,6 +100,7 @@ resource "google_artifact_registry_repository_iam_member" "stage_iam_website_ar"
   ## Using depends_on because the beta behavior is a little wonky
   depends_on = [
     google_artifact_registry_repository.ops_website_docker,
+    google_project_service.ops_artifact_registry_api,
     google_project_service.stage_run_api
   ]
 }
@@ -105,6 +116,7 @@ resource "google_artifact_registry_repository_iam_member" "prod_iam_website_ar" 
   ## Using depends_on because the beta behavior is a little wonky
   depends_on = [
     google_artifact_registry_repository.ops_website_docker,
+    google_project_service.ops_artifact_registry_api,
     google_project_service.prod_run_api
   ]
 }

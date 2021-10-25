@@ -19,9 +19,10 @@ resource "google_project_service" "stage_cloudbuild_api" {
 }
 
 resource "google_project_service" "stage_firestore_api" {
-  project  = data.google_project.stage_project.project_id
-  provider = google.stage
-  service  = "firestore.googleapis.com"
+  project    = data.google_project.stage_project.project_id
+  provider   = google.stage
+  service    = "firestore.googleapis.com"
+  depends_on = [google_project_service.stage_appengine_api]
 }
 
 resource "google_project_service" "stage_run_api" {
