@@ -14,9 +14,7 @@
 
 from flask import Blueprint, g, redirect, request, render_template
 
-import os
 import re
-import requests
 
 
 campaigns_bp = Blueprint("campaigns", __name__, template_folder="templates")
