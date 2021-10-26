@@ -94,7 +94,8 @@ gcloud alpha builds triggers create github \
 --name=web-push-to-main \
 --repo-owner=${repo_owner} --repo-name=${repo_name} \
 --branch-pattern="^main$" --build-config=ops/build.cloudbuild.yaml \
---included-files="website/*" --substitutions="_DIR"="website" \
+--included-files="website/*" --substitutions=_DIR="website",\
+_STAGING_PROJECT='$STAGE_PROJECT',_PROD_PROJECT='$PROD_PROJECT' \
 --project="${OPS_PROJECT}"
 
 gcloud alpha builds triggers create pubsub \
@@ -103,7 +104,8 @@ gcloud alpha builds triggers create pubsub \
 --branch=main --build-config=ops/deploy.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
 _REGION=us-central1,_REVISION='$(body.message.messageId)',\
-_SERVICE=website,_TARGET_PROJECT='$STAGE_PROJECT' \
+_SERVICE=website,_TARGET_PROJECT='$STAGE_PROJECT',\
+_STAGING_PROJECT='$STAGE_PROJECT',_PROD_PROJECT='$PROD_PROJECT' \
 --project="${OPS_PROJECT}"
 
 
