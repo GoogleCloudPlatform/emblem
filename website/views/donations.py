@@ -14,7 +14,7 @@
 
 
 import os
-from flask import Blueprint, g, redirect, request, render_template
+from flask import Blueprint, g, redirect, request, render_template, session
 
 
 donations_bp = Blueprint("donations", __name__, template_folder="templates")
@@ -29,8 +29,10 @@ def new_donation():
 
 @donations_bp.route("/donate", methods=["POST"])
 def record_donation():
+    donor = g.api.donors_post({"email": session["email"], "name": "Unknown"})
+
     campaign_id = request.form.get("campaignId", "Missing Campaign ID")
-    donor_id = request.form.get("donor", "Missing Donor ID")
+    donor_id = donor["id"]
     amount = float(request.form.get("amount"))
 
     new_donation = {"campaign": campaign_id, "donor": donor_id, "amount": amount}
