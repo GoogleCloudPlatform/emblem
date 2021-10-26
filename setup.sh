@@ -17,8 +17,6 @@
 # This will create 3 projects, for ops, staging, and prod
 
 PARENT_PROJECT=$(gcloud config get-value project 2>/dev/null)
-BILLING_ACCOUNT=$(gcloud beta billing projects describe ${PARENT_PROJECT} --format="value(billingAccountName)" | sed 's/billingAccounts\///')
-EMBLEM_SUFFIX=$(printf "%06d"  $((RANDOM%999999)))
 
 # Check env variables
 if [[ -z "${PROD_PROJECT}" ]]; then
@@ -33,7 +31,6 @@ elif [[ -z "${OPS_PROJECT}" ]]; then
 fi
 
 cat > terraform/terraform.tfvars <<EOF
-billing_account = "${BILLING_ACCOUNT}"
 google_prod_project_id = "${PROD_PROJECT}"
 google_stage_project_id = "${STAGE_PROJECT}"
 google_ops_project_id = "${OPS_PROJECT}"
@@ -53,11 +50,11 @@ cd ..
 ###################
 
 gcloud builds submit --config=setup.cloudbuild.yaml \
---substitutions=_DIR=website,_SUFFIX=${EMBLEM_SUFFIX} \
+--substitutions=_DIR=website \
 --project="$OPS_PROJECT"
 
 gcloud builds submit --config=setup.cloudbuild.yaml \
---substitutions=_DIR=content-api,_SUFFIX=${EMBLEM_SUFFIX} \
+--substitutions=_DIR=content-api \
 --project="$OPS_PROJECT"
 
 
