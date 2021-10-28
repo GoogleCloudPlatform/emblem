@@ -12,21 +12,63 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+""" Determine the already logged-in user, refresh tokens if appropriate.
+
+    This module handles checking that a request comes from an authenticated
+    user by checking a stored session for a cryptographically signed,
+    unexpired id token. It also handles getting a refreshed id token if
+    the stored one has expired, and updating the session with it.
+
+    This module does not deal with acquiring an id token and matching refresh
+    token and creating a stored session including them. Nor does it address
+    revoking tokens when the user logs out. Those are dealt with by the
+    website/views/auth.py module.
+
+    See https://developers.google.com/identity/protocols/oauth2/web-server and
+    related pages for background information on this process.
+
+    Current limitations:
+    - No matter how long it has been since the id_token expired, this module
+      will refresh it if the id_token issuer allows it. Rules to limit this
+      idle duration and forcing a user to log in again are likely to be added
+      in the future.
+"""
+
 from datetime import datetime
-from os import curdir
 from flask import g, current_app, session
 import requests
 
+from middleware.logging import log
 import emblem_client
+
+
+EXPIRATION_MARGIN = 30  # Treat tokens within this many seconds of expiration as already expired
 
 
 def init(app):
     @app.before_request
     def check_user_authentication():
-        print(f"DEBUG - getting session info: {session}")
+        """ check_user_authentication
+
+            Runs before a request is passed to a handler.
+
+            Check whether the current request includes a session cookie containing
+            an unexpired id_token that will be usable for the expected length
+            of the request (EXPIRATION_MARGIN).
+
+            If the cookie exists, but is expired or about to expire, use the
+            refresh_token in the cookie to get a new id_token. Set the stored
+            session's id_token and expiration values to match the newly fetched
+            id_token.
+
+            Create a new EmblemClient object to be used for the duration of
+            this request, for accessing the client library. If no active
+            id_token was found, use None as the value for it when establishing
+            this session.
+        """
         id_token = session.get("id_token")
         expiration = session.get("expiration")
-        print(f"DEBUG - id_token is {id_token} and expiration is {expiration}")
 
         if (
             expiration is not None
@@ -42,9 +84,21 @@ def init(app):
 
 
 def get_refreshed_token(refresh_token):
-    print(f"DEBUG - refresh token is {refresh_token}")
-    if refresh_token is not None:
-        print("DEBUG - asking for a refreshed ID token")
+    """ get_refreshed_token(refresh_token)
+
+    Args:
+        refresh_token (str): the refresh token provided by Google sign-in when
+            the user most recently logged in.
+
+    Returns:
+        A current ID token and its expiration (as a Unix timestamp).
+        Returns None, None if refreshing fails.
+    """
+    if refresh_token is None:
+        log("Refresh token request is missing the token")
+        return None, None
+
+    try:
         response = requests.post(
             "https://oauth2.googleapis.com/token",
             {
@@ -54,19 +108,17 @@ def get_refreshed_token(refresh_token):
                 "grant_type": "refresh_token",
             },
         )
-
-        print(f"DEBUG - the response to that is {response.text}")
-        try:
-            updates = response.json()
-        except Exception as e:
-            print(f"ERROR: exception {e} when parsing refresh response.")
-            print(f"response text is {response.text}")
-            return None, None
-
-        id_token = updates.get("id_token")
-        expiration = datetime.timestamp(datetime.now()) + updates.get("expires_in")
-        return id_token, expiration
-
-    else:
-        print(f"WARNING: request for refreshed token returned None")
+    except Exception as e:
+        log(f"Request to token server failed: {e}", severity="ERROR")
         return None, None
+
+    try:
+        updates = response.json()
+    except Exception as e:
+        log(f"ERROR: exception {e} when parsing refresh token response {response.text}.", severity="ERROR")
+        return None, None
+
+    id_token = updates.get("id_token")
+    expiration = datetime.timestamp(datetime.now()) + updates.get("expires_in")
+
+    return id_token, expiration
