@@ -59,7 +59,7 @@ BUCKET = storage.Client().bucket(session_bucket_name)
 
 
 def create(session_data):
-    """ Create a stored session containing the provided data.
+    """Create a stored session containing the provided data.
 
     Args:
         session_data: the data to be saved for this session. It can be any data
@@ -89,7 +89,7 @@ def create(session_data):
 
 
 def read(session_id):
-    """ Return the data previously saved for the specified session id.
+    """Return the data previously saved for the specified session id.
 
     Args:
         session_id (str): the unique identifier of the session store.
@@ -116,7 +116,7 @@ def read(session_id):
 
 
 def update(session_id, session_data):
-    """ Update an existing stored session to the newly provided session_data. The
+    """Update an existing stored session to the newly provided session_data. The
         previous stored data will be overwritten.
 
     Args:
@@ -146,7 +146,7 @@ def update(session_id, session_data):
 
 
 def delete(session_id):
-    """ Permanently deletes the data previously saved for the specified session id.
+    """Permanently deletes the data previously saved for the specified session id.
 
     Args:
         session_id (str): the unique identifier of the session store.
@@ -159,7 +159,9 @@ def delete(session_id):
         blob = storage.blob.Blob(session_id, BUCKET)
         blob.delete()
     except Exception as e:
-        log(f"Failed to delete stored session from cloud storage: {e}", severity="ERROR")
+        log(
+            f"Failed to delete stored session from cloud storage: {e}", severity="ERROR"
+        )
         return False
 
     return True

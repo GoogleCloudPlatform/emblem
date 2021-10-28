@@ -43,36 +43,38 @@ from middleware.logging import log
 import emblem_client
 
 
-EXPIRATION_MARGIN = 30  # Treat tokens within this many seconds of expiration as already expired
+EXPIRATION_MARGIN = (
+    30  # Treat tokens within this many seconds of expiration as already expired
+)
 
 
 def init(app):
     @app.before_request
     def check_user_authentication():
-        """ check_user_authentication
+        """check_user_authentication
 
-            Runs before a request is passed to a handler.
+        Runs before a request is passed to a handler.
 
-            Check whether the current request includes a session cookie containing
-            an unexpired id_token that will be usable for the expected length
-            of the request (EXPIRATION_MARGIN).
+        Check whether the current request includes a session cookie containing
+        an unexpired id_token that will be usable for the expected length
+        of the request (EXPIRATION_MARGIN).
 
-            If the cookie exists, but is expired or about to expire, use the
-            refresh_token in the cookie to get a new id_token. Set the stored
-            session's id_token and expiration values to match the newly fetched
-            id_token.
+        If the cookie exists, but is expired or about to expire, use the
+        refresh_token in the cookie to get a new id_token. Set the stored
+        session's id_token and expiration values to match the newly fetched
+        id_token.
 
-            Create a new EmblemClient object to be used for the duration of
-            this request, for accessing the client library. If no active
-            id_token was found, use None as the value for it when establishing
-            this session.
+        Create a new EmblemClient object to be used for the duration of
+        this request, for accessing the client library. If no active
+        id_token was found, use None as the value for it when establishing
+        this session.
         """
         id_token = session.get("id_token")
         expiration = session.get("expiration")
 
         if (
             expiration is not None
-            and expiration - datetime.timestamp(datetime.now()) < 30   # seconds
+            and expiration - datetime.timestamp(datetime.now()) < 30  # seconds
         ):
             id_token, expiration = get_refreshed_token(session.get("refresh_token"))
             session["id_token"] = id_token
@@ -84,7 +86,7 @@ def init(app):
 
 
 def get_refreshed_token(refresh_token):
-    """ get_refreshed_token(refresh_token)
+    """get_refreshed_token(refresh_token)
 
     Args:
         refresh_token (str): the refresh token provided by Google sign-in when
@@ -115,7 +117,10 @@ def get_refreshed_token(refresh_token):
     try:
         updates = response.json()
     except Exception as e:
-        log(f"ERROR: exception {e} when parsing refresh token response {response.text}.", severity="ERROR")
+        log(
+            f"ERROR: exception {e} when parsing refresh token response {response.text}.",
+            severity="ERROR",
+        )
         return None, None
 
     id_token = updates.get("id_token")

@@ -47,7 +47,7 @@ def log(message, severity="DEFAULT", **kwargs):
         severity (str): the severity of the log entry. The underlying Google
             logging API will recognize the standard values documented at
             https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#LogSeverity
-    
+
     Keyword Args:
         Almost any additional labeled information desired in the log. Some keywords
         are reserved, and will be ignored if provided, including the following:
@@ -59,11 +59,13 @@ def log(message, severity="DEFAULT", **kwargs):
 
     logStruct = {"message": message, "severity": severity}
 
-    if request:     # Usually will be in a request context, but not always
+    if request:  # Usually will be in a request context, but not always
         trace = request.headers.get("X-Cloud-Trace-Context")
         if trace is not None:
-            trace = re.split(r'\W+', trace)[0]
-            logStruct["logging.googleapis.com/trace"] = f"projects/{PROJECT_ID}/traces/{trace}"
+            trace = re.split(r"\W+", trace)[0]
+            logStruct[
+                "logging.googleapis.com/trace"
+            ] = f"projects/{PROJECT_ID}/traces/{trace}"
 
     for key in kwargs:
         if key not in logStruct:

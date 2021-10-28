@@ -98,9 +98,8 @@ def logout():
 
     # Best effort to revoke the token
     response = requests.post(
-        f"https://oauth2.googleapis.com/revoke?token={refresh_token}",
-        data = {}
-        )
+        f"https://oauth2.googleapis.com/revoke?token={refresh_token}", data={}
+    )
     print(f"DEBUG - revoke token response: {response.text}")
     if response.status_code >= 400:
         logging.warning(
