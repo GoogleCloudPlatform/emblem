@@ -14,62 +14,34 @@
 # limitations under the License.
 
 # Run ./setup.sh from a project with a billing account enabled
-# This will create 3 projects, for ops, staging, and prod
+# This will require 3 projects, for ops, staging, and prod
+# To auto-create the projects, run new_project_setup.sh
 
 PARENT_PROJECT=$(gcloud config get-value project 2>/dev/null)
-SUFFIX=$(openssl rand -hex 8)
-REGION="us-central"
 
 # Check env variables
-if [[ -z "${EMBLEM_ORGANIZATION}" ]]; then
-    echo "Please set the $(tput bold)EMBLEM_ORGANIZATION$(tput sgr0) variable"
+if [[ -z "${PROD_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
     exit 1
-elif [[ -z "${EMBLEM_BILLING_ACCOUNT}" ]]; then
-    echo "Please set the $(tput bold)EMBLEM_BILLING_ACCOUNT$(tput sgr0) variable"
+elif [[ -z "${STAGE_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)STAGE_PROJECT$(tput sgr0) variable"
+    exit 1
+elif [[ -z "${OPS_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)OPS_PROJECT$(tput sgr0) variable"
     exit 1
 fi
 
-####################
-# New GCP projects #
-####################
-
-# Generate project IDs
-PROD_PROJECT="emblem-prod-$SUFFIX"
-STAGE_PROJECT="emblem-stage-$SUFFIX"
-OPS_PROJECT="emblem-ops-$SUFFIX"
-
-# TEMPORARY: echo project deletion commands
-echo "------------------------------------------"
-echo "gcloud projects delete $PROD_PROJECT -q | \\"
-echo "gcloud projects delete $STAGE_PROJECT -q | \\"
-echo "gcloud projects delete $OPS_PROJECT -q"
-echo "------------------------------------------"
-
-# Create new gcloud projects
-echo 'y' | gcloud projects create $PROD_PROJECT --organization $EMBLEM_ORGANIZATION | \
-echo 'y' | gcloud projects create $STAGE_PROJECT --organization $EMBLEM_ORGANIZATION | \
-echo 'y' | gcloud projects create $OPS_PROJECT --organization $EMBLEM_ORGANIZATION
-
-# Link billing accounts
-gcloud alpha billing projects link $PROD_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
-gcloud alpha billing projects link $STAGE_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
-gcloud alpha billing projects link $OPS_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
-
-######################
-# Terraform Projects #
-######################
-
-# Apply terraform configs
 cat > terraform/terraform.tfvars <<EOF
-billing_account = "${BILLING_ACCOUNT}"
 google_prod_project_id = "${PROD_PROJECT}"
 google_stage_project_id = "${STAGE_PROJECT}"
 google_ops_project_id = "${OPS_PROJECT}"
 EOF
 
-# Perform terraform apply
+######################
+# Terraform Projects #
+######################
+
 cd terraform/
-rm *.tfstat* # Remove any earlier terraform state
 terraform init
 terraform apply --auto-approve
 cd ..
