@@ -29,12 +29,24 @@
 
         session.delete(session_id)
 
+    Implementation:
+
     The session data will be stored in Google Cloud Storage. A bucket must already
     exist for this use, and the name of the bucket provided in the environment
-    variable EMBLEM_SESSION_BUCKET. No other objects should be in this bucket
-    as they might conflict with the objects managed by this module.
+    variable EMBLEM_SESSION_BUCKET. The website should be using a service
+    account that has object read and write permission in the bucket. Access to
+    the bucket and its contents should be tightly controlled.
 
-    Note that the code that calls these methods is responsible for managing
+    No other objects should be in this bucket as they might conflict with
+    the objects managed by this module.
+
+    THIS IS A PROVISIONAL IMPLEMENTATION. The module interface will remain
+    constant or backwardly compatible, but the mechanism for storing the session
+    data may change.
+
+    Important note:
+
+    The code that calls these methods is responsible for managing
     a cookie with the session ID in the user's web browser.
 """
 
