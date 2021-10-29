@@ -72,7 +72,7 @@ def init(app):
         this request, for accessing the client library.
         """
 
-        API_URL=app.config.get('API_URL')
+        API_URL = app.config.get("API_URL")
         log(f"API_URL={API_URL}", severity="DEBUG")
 
         session_id = request.cookies.get("session_id")

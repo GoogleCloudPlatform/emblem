@@ -52,7 +52,7 @@ auth_bp = Blueprint("auth", __name__, template_folder="templates")
 
 @auth_bp.route("/login", methods=["GET"])
 def login_get():
-    """ login_get
+    """login_get
 
     Handles requests made to the path /login. This may occur due to a user
     following a link, or other website pages redirecting here.
@@ -95,7 +95,7 @@ def login_get():
 
 @auth_bp.route("/callback", methods=["GET"])
 def handle_callback():
-    """ handle_callback
+    """handle_callback
 
     A successful login using Google sign-in will end with the user's browser
     being redirected to this path, providing query parameters can can be used
@@ -141,12 +141,14 @@ def handle_callback():
         log(f"Request has bad OAuth2 id token: {e}", severity="ERROR")
         return render_template("error.html"), 403
 
-    session_id = session.create({
-        "id_token": token,
-        "refresh_token": refresh_token,
-        "email": info["email"],
-        "expiration": info["exp"],
-    })
+    session_id = session.create(
+        {
+            "id_token": token,
+            "refresh_token": refresh_token,
+            "email": info["email"],
+            "expiration": info["exp"],
+        }
+    )
 
     response = redirect(redirect_path)
     response.set_cookie("session_id", value=session_id, secure=True, httponly=True)
@@ -155,10 +157,10 @@ def handle_callback():
 
 @auth_bp.route("/logout", methods=["GET"])
 def logout():
-    """ logout
+    """logout
 
     User is logged out.
-    
+
     Three actions are taken:
         - refresh token is revoked
         - cookie "session_id" is deleted
