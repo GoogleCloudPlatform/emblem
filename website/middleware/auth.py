@@ -36,10 +36,11 @@
 """
 
 from datetime import datetime
-from flask import g, current_app, session
+from flask import g, current_app, request
 import requests
 
 from middleware.logging import log
+from middleware import session
 import emblem_client
 
 
@@ -55,6 +56,9 @@ def init(app):
 
         Runs before a request is passed to a handler.
 
+        If user is not logged in (no "session_id" cookie or no related session
+        data) just create a new EmblemClient with no user token and return.
+
         Check whether the current request includes a session cookie containing
         an unexpired id_token that will be usable for the expected length
         of the request (EXPIRATION_MARGIN).
@@ -65,24 +69,38 @@ def init(app):
         id_token.
 
         Create a new EmblemClient object to be used for the duration of
-        this request, for accessing the client library. If no active
-        id_token was found, use None as the value for it when establishing
-        this session.
+        this request, for accessing the client library.
         """
-        id_token = session.get("id_token")
-        expiration = session.get("expiration")
+
+        API_URL=app.config.get('API_URL')
+        log(f"API_URL={API_URL}", severity="DEBUG")
+
+        session_id = request.cookies.get("session_id")
+        if session_id is None:
+            g.api = emblem_client.EmblemClient(API_URL)
+            return
+
+        session_data = session.read(session_id)
+        if session_data is None:
+            g.api = emblem_client.EmblemClient(API_URL)
+            log(f"Missing session data for id {session_id}", severity="ERROR")
+            return
+
+        id_token = session_data.get("id_token")
+        expiration = session_data.get("expiration")
 
         if (
             expiration is not None
             and expiration - datetime.timestamp(datetime.now()) < 30  # seconds
         ):
             id_token, expiration = get_refreshed_token(session.get("refresh_token"))
-            session["id_token"] = id_token
-            session["expiration"] = expiration
 
-        g.api = emblem_client.EmblemClient(
-            app.config.get("API_URL", None), access_token=id_token
-        )
+            session_data["id_token"] = id_token
+            session_data["expiration"] = expiration
+
+            session.update(session_id, session_data)
+
+        g.api = emblem_client.EmblemClient(API_URL, access_token=id_token)
 
 
 def get_refreshed_token(refresh_token):

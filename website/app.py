@@ -41,9 +41,6 @@ if os.path.exists("config.py"):
 else:
     raise Exception("Missing configuration file.")
 
-# Configure session encryption
-app.secret_key = os.environ["SESSION_SECRET"].encode()  # Must be bytes
-
 
 if __name__ == "__main__":
     PORT = int(os.getenv("PORT")) if os.getenv("PORT") else 8080

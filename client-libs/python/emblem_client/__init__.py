@@ -14,6 +14,8 @@
 
 import os
 
+from middleware.logging import log
+
 import generated
 from generated.api_client import ApiClient
 from generated.api.default_api import DefaultApi
@@ -28,8 +30,8 @@ class EmblemClient(object):
     """
 
     def __init__(self, host, access_token=None):
-        print(f"Creating client for host={host}")
         if host is None:
+            log(f"Asked to create an EmblemClient for no host", severity="ERROR")
             raise ValueError
             
         conf = Configuration(host=host)
