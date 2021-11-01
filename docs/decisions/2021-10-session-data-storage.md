@@ -71,7 +71,7 @@ solutions include:
 Chosen option: Cookies with an opaque identifier, with the identifier a key
 to identifying information in Cloud Storage.
 
-We have eliminated server memory or storage as the web server platform is
+We can't use server-based memory or storage as the web server platform is
 Cloud Run, which is stateless. Cloud SQL and Filestore are all instance-based,
 unlike the rest of the Emblem application, as is Memorystore at present. We
 chose to eliminate instance-based options, leave Firestore, Firestore in
