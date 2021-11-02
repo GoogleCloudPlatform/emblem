@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Run ./setup.sh from a project with a billing account enabled
-# This will create 3 projects, for ops, staging, and prod
+# This file creates fresh projects for testing Terraform and `setup.sh` configs
+# This script creates 3 projects - one each for {ops, staging, prod}
+
+set -e
 
 SUFFIX=$(openssl rand -hex 8)
 REGION="us-central"
@@ -29,7 +31,7 @@ elif [[ -z "${EMBLEM_BILLING_ACCOUNT}" ]]; then
 fi
 
 # Clear Terraform state
-rm terraform/*.tfstat*
+rm ../terraform/*.tfstat*
 
 # Generate project IDs
 export PROD_PROJECT="emblem-prod-$SUFFIX"
@@ -44,9 +46,9 @@ echo "gcloud projects delete $OPS_PROJECT -q"
 echo "------------------------------------------"
 
 # Create new gcloud projects
-echo 'y' | gcloud projects create $PROD_PROJECT --organization $EMBLEM_ORGANIZATION | \
-echo 'y' | gcloud projects create $STAGE_PROJECT --organization $EMBLEM_ORGANIZATION | \
-echo 'y' | gcloud projects create $OPS_PROJECT --organization $EMBLEM_ORGANIZATION
+gcloud projects create $PROD_PROJECT --organization $EMBLEM_ORGANIZATION -q | \
+gcloud projects create $STAGE_PROJECT --organization $EMBLEM_ORGANIZATION -q | \
+gcloud projects create $OPS_PROJECT --organization $EMBLEM_ORGANIZATION -q
 
 # Link billing accounts
 gcloud alpha billing projects link $PROD_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
@@ -54,4 +56,4 @@ gcloud alpha billing projects link $STAGE_PROJECT --billing-account $EMBLEM_BILL
 gcloud alpha billing projects link $OPS_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
 
 # Run setup script
-sh setup.sh
+exec ../setup.sh
