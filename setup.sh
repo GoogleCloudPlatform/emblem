@@ -17,8 +17,6 @@
 # This will require 3 projects, for ops, staging, and prod
 # To auto-create the projects, run new_project_setup.sh
 
-PARENT_PROJECT=$(gcloud config get-value project 2>/dev/null)
-
 # Check env variables
 if [[ -z "${PROD_PROJECT}" ]]; then
     echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
