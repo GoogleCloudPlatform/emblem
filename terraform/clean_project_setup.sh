@@ -16,6 +16,8 @@
 # This file creates fresh projects for testing Terraform and `setup.sh` configs
 # This script creates 3 projects - one each for {ops, staging, prod}
 
+cd $(dirname "$0") # Make future relative paths consistent
+
 set -e
 
 SUFFIX=$(openssl rand -hex 8)
@@ -31,7 +33,7 @@ elif [[ -z "${EMBLEM_BILLING_ACCOUNT}" ]]; then
 fi
 
 # Clear Terraform state
-rm ../terraform/*.tfstat*
+rm ../terraform/*.tfstat* || true
 
 # Generate project IDs
 export PROD_PROJECT="emblem-prod-$SUFFIX"
@@ -56,4 +58,6 @@ gcloud alpha billing projects link $STAGE_PROJECT --billing-account $EMBLEM_BILL
 gcloud alpha billing projects link $OPS_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
 
 # Run setup script
-exec ../setup.sh
+pushd ..
+exec ./setup.sh
+popd
