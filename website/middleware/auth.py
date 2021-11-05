@@ -91,7 +91,7 @@ def init(app):
 
         if (
             expiration is not None
-            and expiration - datetime.timestamp(datetime.now()) < 30  # seconds
+            and expiration - datetime.timestamp(datetime.now()) < EXPIRATION_MARGIN  # seconds
         ):
             id_token, expiration = get_refreshed_token(session.get("refresh_token"))
 
