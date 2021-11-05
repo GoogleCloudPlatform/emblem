@@ -1,7 +1,3 @@
-variable "suffix" {
-  type = string
-}
-
 variable "google_region" {
   type    = string
   default = "us-central1"
