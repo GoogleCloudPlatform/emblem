@@ -44,9 +44,8 @@ from middleware import session
 import emblem_client
 
 
-EXPIRATION_MARGIN = (
-    30  # Treat tokens within this many seconds of expiration as already expired
-)
+# Treat tokens within this many seconds of expiration as already expired
+EXPIRATION_MARGIN = 30
 
 
 def init(app):
@@ -91,7 +90,7 @@ def init(app):
 
         if (
             expiration is not None
-            and expiration - datetime.timestamp(datetime.now()) < EXPIRATION_MARGIN  # seconds
+            and expiration - datetime.timestamp(datetime.now()) < EXPIRATION_MARGIN
         ):
             id_token, expiration = get_refreshed_token(session.get("refresh_token"))
 
