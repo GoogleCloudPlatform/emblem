@@ -33,9 +33,10 @@ from flask import request
 # to identify the trace identifier that helps group log entries by http request.
 metadata_url = "http://metadata.google.internal/computeMetadata/v1"
 try:
-    PROJECT_ID = requests.get(f"{metadata_url}/project/project-id").text
+    PROJECT_ID = requests.get(
+        f"{metadata_url}/project/project-id", headers={"Metadata-Flavor": "Google"}
+    ).text
 except Exception as e:
-    print(f"Failed to get project id from metadata server: {e}")
     PROJECT_ID = "-- MISSING PROJECT ID --"
 
 
