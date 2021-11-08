@@ -34,8 +34,7 @@ from flask import request
 metadata_url = "http://metadata.google.internal/computeMetadata/v1"
 try:
     PROJECT_ID = requests.get(
-        f"{metadata_url}/project/project-id",
-        headers={"Metadata-Flavor": "Google"}
+        f"{metadata_url}/project/project-id", headers={"Metadata-Flavor": "Google"}
     ).text
 except Exception as e:
     PROJECT_ID = "-- MISSING PROJECT ID --"
