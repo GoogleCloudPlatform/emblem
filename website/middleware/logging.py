@@ -58,7 +58,7 @@ def log(message, severity="DEFAULT", **kwargs):
         Nothing
     """
 
-    logStruct = {"message": message, "severity": severity}
+    logStruct = {"message": f"WEBSITE: {message}", "severity": severity}
 
     if request:  # Usually will be in a request context, but not always
         trace = request.headers.get("X-Cloud-Trace-Context")

@@ -46,7 +46,7 @@ class EmblemClient(object):
             api_client=ApiClient(configuration=conf)
 
         if trace is not None:
-            api_client.set_default_header("Forwarded-Trace-Context", trace)
+            api_client.default_header["Forwarded-Trace-Context"] = trace
 
         client = DefaultApi(api_client=api_client)
 

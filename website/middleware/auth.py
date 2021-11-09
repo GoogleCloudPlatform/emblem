@@ -76,7 +76,8 @@ def init(app):
 
         session_id = request.cookies.get("session_id")
         if session_id is None:
-            g.api = emblem_client.EmblemClient(API_URL)
+            trace = request.headers.get("X-Cloud-Trace-Context")
+            g.api = emblem_client.EmblemClient(API_URL, trace=trace)
             return
 
         session_data = session.read(session_id)
