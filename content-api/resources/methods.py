@@ -18,6 +18,7 @@ import json
 from main import g, request
 from data import cloud_firestore as db
 from resources import auth, base
+from utils.logging import log
 
 
 resource_fields = {
@@ -42,6 +43,7 @@ resource_fields = {
 # list all donations (if the user is an approver) or only the
 # authenticated user's donations
 def list(resource_kind):
+    log(f"Request to list {resource_kind}", severity="INFO")
     if resource_kind not in resource_fields:
         return "Not found", 404
 
@@ -121,6 +123,7 @@ def list_subresource(resource_kind, id, subresource_kind):
 
 
 def get(resource_kind, id):
+    log(f"Request to get {resource_kind}", severity="INFO")
     if resource_kind not in resource_fields:
         return "Not found", 404, {}
 

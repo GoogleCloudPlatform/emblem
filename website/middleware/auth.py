@@ -92,14 +92,16 @@ def init(app):
             expiration is not None
             and expiration - datetime.timestamp(datetime.now()) < EXPIRATION_MARGIN
         ):
-            id_token, expiration = get_refreshed_token(session.get("refresh_token"))
+            id_token, expiration = get_refreshed_token(session_data.get("refresh_token"))
 
             session_data["id_token"] = id_token
             session_data["expiration"] = expiration
 
             session.update(session_id, session_data)
 
-        g.api = emblem_client.EmblemClient(API_URL, access_token=id_token)
+        trace = request.headers.get("X-Cloud-Trace-Context")
+
+        g.api = emblem_client.EmblemClient(API_URL, access_token=id_token, trace=trace)
 
 
 def get_refreshed_token(refresh_token):
