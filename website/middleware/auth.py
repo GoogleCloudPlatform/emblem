@@ -93,7 +93,9 @@ def init(app):
             expiration is not None
             and expiration - datetime.timestamp(datetime.now()) < EXPIRATION_MARGIN
         ):
-            id_token, expiration = get_refreshed_token(session_data.get("refresh_token"))
+            id_token, expiration = get_refreshed_token(
+                session_data.get("refresh_token")
+            )
 
             session_data["id_token"] = id_token
             session_data["expiration"] = expiration
