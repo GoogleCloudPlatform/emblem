@@ -29,7 +29,7 @@ class EmblemClient(object):
     :param access_token: required when making authentication calls
     """
 
-    def __init__(self, host, access_token=None):
+    def __init__(self, host, access_token=None, trace=None):
         if host is None:
             log(f"Asked to create an EmblemClient for no host", severity="ERROR")
             raise ValueError
@@ -37,16 +37,19 @@ class EmblemClient(object):
         conf = Configuration(host=host)
 
         if access_token is not None:
-            client = DefaultApi(api_client=ApiClient(
+            api_client=ApiClient(
                 configuration=conf,
                 header_name="Authorization",
                 header_value="Bearer " + access_token,
-            ))
+            )
         else:
-            client = DefaultApi(api_client=ApiClient(
-                configuration=conf,
-            ))
-            
+            api_client=ApiClient(configuration=conf)
+
+        if trace is not None:
+            api_client.default_headers["X-Cloud-Trace-Context"] = trace
+
+        client = DefaultApi(api_client=api_client)
+
         for method in client.__dict__:
             self.__dict__[method] = client.__dict__[method]
 

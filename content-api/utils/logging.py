@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-"""The Emblem website-specific logging utility.
+"""The Emblem API-specific logging utility.
     
     Usage:
         from middleware.logging import log
@@ -58,10 +58,11 @@ def log(message, severity="DEFAULT", **kwargs):
         Nothing
     """
 
-    logStruct = {"message": f"WEBSITE: {message}", "severity": severity}
+    logStruct = {"message": f"API: {message}", "severity": severity}
 
     if request:  # Usually will be in a request context, but not always
         trace = request.headers.get("X-Cloud-Trace-Context")
+
         if trace is not None:
             trace = re.split(r"\W+", trace)[0]
             logStruct[
