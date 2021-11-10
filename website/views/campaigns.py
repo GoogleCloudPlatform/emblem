@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from flask import Blueprint, g, redirect, request, render_template
+from middleware.logging import log
 
 import re
 
@@ -22,25 +23,46 @@ campaigns_bp = Blueprint("campaigns", __name__, template_folder="templates")
 
 @campaigns_bp.route("/")
 def list_campaigns():
-    campaigns = g.api.campaigns_get()
+    try:
+        campaigns = g.api.campaigns_get()
+    except Exception as e:
+        log(f"Exception when listing campaigns: {e}", severity="ERROR")
+        campaigns = []
+
     return render_template("home.html", campaigns=campaigns)
 
 
 @campaigns_bp.route("/createCampaign", methods=["GET"])
 def new_campaign():
-    return render_template("create-campaign.html")
+    try:
+        causes = g.api.causes_get()
+        print(f"Got causes {causes}")
+    except Exception as e:
+        print(f"Got no causes")
+        log(f"Exception when listing causes: {e}", severity="ERROR")
+        causes = []
+
+    print(f"Invoking create causes template with {causes}")
+    return render_template("create-campaign.html", causes=causes)
 
 
 @campaigns_bp.route("/createCampaign", methods=["POST"])
 def save_campaign():
-    # TODO: do something with the collected data
-    g.api.campaigns_post(
-        {
-            "name": request.form["name"],
-            "goal": float(request.form["goal"]),
-            "managers": re.split(r"[ ,]+", request.form["managers"]),
-        }
-    )
+    try:
+        g.api.campaigns_post(
+            {
+                "name": request.form["name"],
+                "cause": request.form["cause"],
+                "imageUrl": request.form["imageUrl"],
+                "description": request.form["description"],
+                "goal": float(request.form["goal"]),
+                "managers": re.split(r"[ ,]+", request.form["managers"]),
+                "active": True
+            }
+        )
+    except Exception as e:
+        log(f"Exception when creating a campaign: {e}", severity="ERROR")
+        return render_template("errors/403.html"), 403
 
     return redirect("/")
 

@@ -108,8 +108,8 @@ def handle_callback():
 
     code = args.get("code")
     if code is None:
-        log("No authorization code provided to callback.", severity="ERROR")
-        return render_template("error.html"), 403
+        log("No authorization code provided to callback.", severity="CRITICAL")
+        return render_template("errors/403.html"), 403
 
     # Exchange the code for tokens
     r = requests.post(
@@ -126,8 +126,8 @@ def handle_callback():
     try:
         resp = r.json()
     except Exception as e:
-        log(f"Request has bad OAuth2 id token: {e}", severity="WARNING")
-        return render_template("error.html"), 403
+        log(f"Request has bad OAuth2 id token: {e}", severity="CRITICAL")
+        return render_template("errors/403.html"), 403
 
     token = resp.get("id_token")
     refresh_token = resp.get("refresh_token")
@@ -135,11 +135,11 @@ def handle_callback():
     try:
         info = id_token.verify_oauth2_token(token, reqs.Request())
         if "email" not in info:
-            log(f"Decoded OAuth2 id token is missing email: {info}", severity="ERROR")
-            return render_template("error.html"), 403
+            log(f"Decoded OAuth2 id token is missing email: {info}", severity="CRITICAL")
+            return render_template("errors/403.html"), 403
     except Exception as e:
-        log(f"Request has bad OAuth2 id token: {e}", severity="ERROR")
-        return render_template("error.html"), 403
+        log(f"Request has bad OAuth2 id token: {e}", severity="CRITICAL")
+        return render_template("errors/403.html"), 403
 
     session_id = session.create(
         {
@@ -150,9 +150,13 @@ def handle_callback():
         }
     )
 
-    response = redirect(redirect_path)
-    response.set_cookie("session_id", value=session_id, secure=True, httponly=True)
-    return response
+    if session_id is None:
+        log(f"Could not create session", severity="CRITICAL")
+        return render_template("errors/403.html"), 403
+    else:
+        response = redirect(redirect_path)
+        response.set_cookie("session_id", value=session_id, secure=True, httponly=True)
+        return response
 
 
 @auth_bp.route("/logout", methods=["GET"])
@@ -170,14 +174,14 @@ def logout():
     session_id = request.cookies.get("session_id")
     if session_id is None:
         # Nothing to do if the user doesn't have a session. Send them home.
-        log("Logout request from user with a session cookie", severity="INFO")
+        log("Logout request from user without a session cookie", severity="INFO")
         return redirect("/")
 
     session_data = session.read(session_id)
     if session_data is None:
         # This is bad. User has a session cookie, but there's no corresponding
         # session data. Log it and send the user back home.
-        log("Logout request but session data does not exist", severity="ERROR")
+        log("Logout request but session data does not exist", severity="CRITICAL")
         return redirect("/")
 
     refresh_token = session_data.get("refresh_token", "")
