@@ -61,10 +61,7 @@ def log(message, severity="DEFAULT", **kwargs):
     logStruct = {"message": f"API: {message}", "severity": severity}
 
     if request:  # Usually will be in a request context, but not always
-        trace = request.headers.get("Forwarded-Trace-Context")
-        
-        if trace is None:
-            trace = request.headers.get("X-Cloud-Trace-Context")
+        trace = request.headers.get("X-Cloud-Trace-Context")
 
         if trace is not None:
             trace = re.split(r"\W+", trace)[0]
