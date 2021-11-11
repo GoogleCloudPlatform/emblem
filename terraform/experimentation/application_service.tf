@@ -1,6 +1,6 @@
 module "application_service" {
   for_each = {
-    prod = var.google_prod_project_id
+    prod  = var.google_prod_project_id
     stage = var.google_stage_project_id
   }
   source                         = "./application"
