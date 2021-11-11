@@ -44,7 +44,7 @@ ops_project_number=$(terraform output -raw ops_project_number)
 stage_project_number=$(terraform output -raw stage_project_number)
 prod_project_number=$(terraform output -raw prod_project_number)
 
-# Should all be the same
+# Should all be different
 if [ "$ops_project_number" != "$stage_project_number" ] \
         && [ "$ops_project_number" != "$prod_project_number" ]
     then
