@@ -74,3 +74,20 @@ resource "google_app_engine_application" "prod_app" {
     google_project_service.prod_appengine_api,
   ]
 }
+
+resource "google_storage_bucket" "sessions_prod" {
+  project       = data.google_project.prod_project.project_id
+  name          = "${var.session_bucket_id}-prod"
+  force_destroy = true
+  location      = "US-CENTRAL1"
+
+  # Delete files after 30 days
+  lifecycle_rule {
+    condition {
+      age = 30
+    }
+    action {
+      type = "Delete"
+    }
+  }
+}

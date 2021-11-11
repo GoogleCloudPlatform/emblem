@@ -15,3 +15,8 @@ variable "google_prod_project_id" {
 variable "google_stage_project_id" {
   type = string
 }
+
+# Session bucket ID
+variable "session_bucket_id" {
+  type = string
+}
