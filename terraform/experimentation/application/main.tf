@@ -3,6 +3,6 @@ data "google_project" "application_project" {
 }
 
 resource "google_project_service" "run_api" {
-  project  = var.google_project_id
-  service  = "run.googleapis.com"
+  project = var.google_project_id
+  service = "run.googleapis.com"
 }
