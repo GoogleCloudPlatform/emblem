@@ -40,9 +40,6 @@ export PROD_PROJECT="emblem-prod-$SUFFIX"
 export STAGE_PROJECT="emblem-stage-$SUFFIX"
 export OPS_PROJECT="emblem-ops-$SUFFIX"
 
-# Generate session storage GCS bucket ID
-export SESSION_BUCKET_ID="emblem-$SUFFIX"
-
 # TEMPORARY: echo project deletion commands
 echo "------------------------------------------"
 echo "gcloud projects delete $PROD_PROJECT -q | \\"

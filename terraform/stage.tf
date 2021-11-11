@@ -78,14 +78,15 @@ resource "google_app_engine_application" "stage_app" {
 
 resource "google_storage_bucket" "sessions_stage" {
   project       = data.google_project.stage_project.project_id
-  name          = "${var.session_bucket_id}-stage"
+  name          = "${data.google_project.stage_project.project_id}-sessions"
   force_destroy = true
   location      = "US-CENTRAL1"
 
-  # Delete files after 30 days
+  # Delete files after a certain time
+  # (These buckets may contain end-user data, so periodic deletion is a best practice.)
   lifecycle_rule {
     condition {
-      age = 30
+      age = var.session_bucket_ttl
     }
     action {
       type = "Delete"

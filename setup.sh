@@ -27,16 +27,12 @@ elif [[ -z "${STAGE_PROJECT}" ]]; then
 elif [[ -z "${OPS_PROJECT}" ]]; then
     echo "Please set the $(tput bold)OPS_PROJECT$(tput sgr0) variable"
     exit 1
-elif [[ -z "${SESSION_BUCKET_ID}" ]]; then
-    echo "Please set the $(tput bold)SESSION_BUCKET_ID$(tput sgr0) variable"
-    exit 1
 fi
 
 cat > terraform/terraform.tfvars <<EOF
 google_prod_project_id = "${PROD_PROJECT}"
 google_stage_project_id = "${STAGE_PROJECT}"
 google_ops_project_id = "${OPS_PROJECT}"
-session_bucket_id = "${SESSION_BUCKET_ID}"
 EOF
 
 ######################
