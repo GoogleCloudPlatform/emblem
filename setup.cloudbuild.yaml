@@ -44,6 +44,7 @@ steps:
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_DIR}/${_DIR}'
   
   # Cloud Run Deploy Stage
+  # Note: EMBLEM_API_URL is *only* valid for the website; API builds don't use it
   - name: gcr.io/cloud-builders/gcloud
     args:
       - run
@@ -55,8 +56,10 @@ steps:
       - --project=${_STAGING_PROJECT}
       - --allow-unauthenticated
       - --service-account=cloud-run-manager@${_STAGING_PROJECT}.iam.gserviceaccount.com
+      - --update-env-vars=EMBLEM_API_URL=${_STAGING_API_URL},EMBLEM_SESSION_BUCKET=${_STAGING_SESSION_BUCKET}
 
   # Cloud Run Deploy Prod
+  # Note: EMBLEM_API_URL is *only* valid for the website; API builds don't use it
   - name: gcr.io/cloud-builders/gcloud
     args:
       - run
@@ -68,7 +71,7 @@ steps:
       - --project=${_PROD_PROJECT}
       - --allow-unauthenticated
       - --service-account=cloud-run-manager@${_PROD_PROJECT}.iam.gserviceaccount.com
-
+      - --update-env-vars=EMBLEM_API_URL=${_PROD_API_URL},EMBLEM_SESSION_BUCKET=${_PROD_SESSION_BUCKET}
 
 # Default to us-central1
 substitutions:

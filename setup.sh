@@ -48,18 +48,33 @@ cd ..
 # Deploy Services #
 ###################
 
-gcloud builds submit --config=setup.cloudbuild.yaml \
---substitutions=_DIR=website,\
-_STAGING_PROJECT="$STAGE_PROJECT",\
-_PROD_PROJECT="$PROD_PROJECT" \
---project="$OPS_PROJECT"
-
+# Build content API service
+# Note: we specify empty values to pass Cloud Build validation
 gcloud builds submit --config=setup.cloudbuild.yaml \
 --substitutions=_DIR=content-api,\
+_STAGING_API_URL="",\
+_PROD_API_URL="",\
+_STAGING_SESSION_BUCKET="",\
+_PROD_SESSION_BUCKET="",\
 _STAGING_PROJECT="$STAGE_PROJECT",\
 _PROD_PROJECT="$PROD_PROJECT" \
 --project="$OPS_PROJECT"
 
+# Get API URLs
+# (These are NOT known before the API service is built!)
+STAGE_API_URL=$(gcloud run services list --project ${STAGE_PROJECT} --format "value(URL)")
+PROD_API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
+
+# Build website service
+gcloud builds submit --config=setup.cloudbuild.yaml \
+--substitutions=_DIR=website,\
+_STAGING_API_URL="$STAGE_API_URL",\
+_PROD_API_URL="$PROD_API_URL",\
+_STAGING_SESSION_BUCKET="${SESSION_BUCKET_ID}-stage",\
+_PROD_SESSION_BUCKET="${SESSION_BUCKET_ID}-prod",\
+_STAGING_PROJECT="$STAGE_PROJECT",\
+_PROD_PROJECT="$PROD_PROJECT" \
+--project="$OPS_PROJECT"
 
 ################
 # Set up CI/CD #
