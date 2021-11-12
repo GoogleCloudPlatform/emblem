@@ -79,7 +79,7 @@ resource "google_storage_bucket" "sessions_prod" {
   project       = data.google_project.prod_project.project_id
   name          = "${data.google_project.prod_project.project_id}-sessions"
   force_destroy = true
-  location      = "US-CENTRAL1"
+  location      = var.google_region
 
   # Delete files after a certain time
   # (These buckets will contain end-user data, so periodic deletion is a best practice.)
