@@ -1,7 +1,8 @@
-SINGLE_PROJECT=emblem-single-test-12345
-PROD_PROJECT=emblem-prod-12345
-STAGE_PROJECT=emblem-stage-12345
-OPS_PROJECT=emblem-ops-12345
+# To run this test, you'll need to set the following environment variables:
+#    - SINGLE_PROJECT
+#    - PROD_PROJECT
+#    - STAGE_PROJECT
+#    - OPS_PROJECT
 
 test_single_project () {
 # Set Variables
