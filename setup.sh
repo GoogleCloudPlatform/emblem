@@ -70,8 +70,8 @@ gcloud builds submit --config=setup.cloudbuild.yaml \
 --substitutions=_DIR=website,\
 _STAGING_API_URL="$STAGE_API_URL",\
 _PROD_API_URL="$PROD_API_URL",\
-_STAGING_SESSION_BUCKET="${SESSION_BUCKET_ID}-stage",\
-_PROD_SESSION_BUCKET="${SESSION_BUCKET_ID}-prod",\
+_STAGING_SESSION_BUCKET="${STAGE_PROJECT}-sessions",\
+_PROD_SESSION_BUCKET="${PROD_PROJECT}-sessions",\
 _STAGING_PROJECT="$STAGE_PROJECT",\
 _PROD_PROJECT="$PROD_PROJECT" \
 --project="$OPS_PROJECT"
