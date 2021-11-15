@@ -70,5 +70,3 @@ terraform destroy --auto-approve
 test_single_project
 test_multi_project
 
-
-
