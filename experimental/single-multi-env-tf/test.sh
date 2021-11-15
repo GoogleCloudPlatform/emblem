@@ -1,3 +1,6 @@
+# This test is use for the development cycle, to ensure that additional resources do not /
+# break the setup.
+#
 # To run this test, you'll need to set the following environment variables:
 #    - SINGLE_PROJECT
 #    - PROD_PROJECT
