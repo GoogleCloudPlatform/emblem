@@ -1,4 +1,4 @@
-# Emblem REST Api Server
+# Emblem REST API Server
 
 This folder contains the software for the Emblem REST API.
 
