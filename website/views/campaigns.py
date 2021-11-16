@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from flask import Blueprint, g, redirect, request, render_template
+
 from middleware.logging import log
 
 import re
@@ -36,13 +37,10 @@ def list_campaigns():
 def new_campaign():
     try:
         causes = g.api.causes_get()
-        print(f"Got causes {causes}")
     except Exception as e:
-        print(f"Got no causes")
         log(f"Exception when listing causes: {e}", severity="ERROR")
         causes = []
 
-    print(f"Invoking create causes template with {causes}")
     return render_template("create-campaign.html", causes=causes)
 
 
@@ -69,12 +67,25 @@ def save_campaign():
 
 @campaigns_bp.route("/viewCampaign")
 def webapp_view_campaign():
-    campaigns = g.api.campaigns_get()
-    campaign_instance = campaigns[0]
+    campaign_id = request.args.get("campaign_id")
+    if campaign_id is None:
+        log(f"/viewCampaign is missing campaign_id", severity="ERROR")
+        return render_template("errors/500.html"), 500
+
+    try:
+        campaign_instance = g.api.campaigns_id_get(campaign_id)
+    except Exception as e:
+        log(f"Exception when fetching campaigns {campaign_id}: {e}", severity="ERROR")
+        return render_template("errors/403.html"), 403
 
     campaign_instance["donations"] = []
-    campaign_instance["donations"] = g.api.campaigns_id_donations_get(
-        campaign_instance["id"]
-    )
+
+    try:
+        campaign_instance["donations"] = g.api.campaigns_id_donations_get(
+            campaign_instance["id"]
+        )
+    except Exception as e:
+        log(f"Exception when listing campaign donations: {e}", severity="ERROR")
+        return render_template("errors/403.html"), 403
 
     return render_template("view-campaign.html", campaign=campaign_instance)

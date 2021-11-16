@@ -24,10 +24,6 @@
   <meta name="keywords" content="serverless, recoverability, best practices, ops, cloud, applications, hosting">
   <meta name="author" content="Google LLC">
 
-  <!-- Include Firebase + Cloud Identity Platform components -->
-  <script src="https://www.gstatic.com/firebasejs/7.18/firebase-app.js" nonce="{{ g.csp_nonce }}" async></script>
-  <script src="https://www.gstatic.com/firebasejs/7.18/firebase-auth.js" nonce="{{ g.csp_nonce }}" async></script>
-
   <!-- Include Material Design components -->
   <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
   <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js" nonce="{{ g.csp_nonce }}"></script>
@@ -94,19 +90,4 @@
     {% block content %}{% endblock %}
   </main>
 
-  <!--
-    Firebase Auth init script (MUST be near bottom of page)
-  -->
-  <script type="text/javascript" nonce='{{ g.csp_nonce }}'>
-    firebase.initializeApp({
-      apiKey: "{{ config.FIREBASE_API_KEY }}",
-      authDomain: "{{ config.FIREBASE_AUTH_DOMAIN }}",
-    });
-  </script>
-
-  <!--
-    Google Auth scripts (MUST be below Firebase Auth init script)
-  -->
-  <script src="/static/login.js" nonce={{ g.csp_nonce }}></script>
-  {% block google_auth_scripts %}{% endblock %}
 </body>
