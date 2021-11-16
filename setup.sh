@@ -35,50 +35,20 @@ google_stage_project_id = "${STAGE_PROJECT}"
 google_ops_project_id = "${OPS_PROJECT}"
 EOF
 
-######################
-# Terraform Projects #
-######################
-
-cd terraform/
-terraform init
-terraform apply --auto-approve
-cd ..
-
 ###################
-# Deploy Services #
+#  Build Images   #
 ###################
 
 # Build content API service
-# Note: we specify empty values to pass Cloud Build validation
-gcloud builds submit --config=setup.cloudbuild.yaml \
---substitutions=_DIR=content-api,\
-_STAGING_API_URL="",\
-_PROD_API_URL="",\
-_STAGING_SESSION_BUCKET="",\
-_PROD_SESSION_BUCKET="",\
-_STAGING_PROJECT="$STAGE_PROJECT",\
-_PROD_PROJECT="$PROD_PROJECT" \
---project="$OPS_PROJECT"
-
-# Get API URLs
-# (These are NOT known before the API service is built!)
-STAGE_API_URL=$(gcloud run services list --project ${STAGE_PROJECT} --format "value(URL)")
-PROD_API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
+gcloud builds submit --config=api-build.cloudbuild.yaml  
 
 # Build website service
-gcloud builds submit --config=setup.cloudbuild.yaml \
---substitutions=_DIR=website,\
-_STAGING_API_URL="$STAGE_API_URL",\
-_PROD_API_URL="$PROD_API_URL",\
-_STAGING_SESSION_BUCKET="${STAGE_PROJECT}-sessions",\
-_PROD_SESSION_BUCKET="${PROD_PROJECT}-sessions",\
-_STAGING_PROJECT="$STAGE_PROJECT",\
-_PROD_PROJECT="$PROD_PROJECT" \
---project="$OPS_PROJECT"
+gcloud builds submit --config=web-build.cloudbuild.yaml  
 
-################
-# Set up CI/CD #
-################
+
+#####################
+# Connect your Repo #
+#####################
 
 REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?\
 project=${OPS_PROJECT}"
@@ -104,26 +74,13 @@ fi
 
 done
 
-###################
-# Create Triggers #
-###################
 
-gcloud alpha builds triggers create github \
---name=web-push-to-main \
---repo-owner=${repo_owner} --repo-name=${repo_name} \
---branch-pattern="^main$" --build-config=ops/build.cloudbuild.yaml \
---included-files="website/*" --substitutions=_DIR="website",\
-_STAGING_PROJECT="$STAGE_PROJECT",_PROD_PROJECT="$PROD_PROJECT" \
---project="${OPS_PROJECT}"
+######################
+# Terraform Projects #
+######################
 
-gcloud alpha builds triggers create pubsub \
---name=web-deploy-staging --topic="projects/${OPS_PROJECT}/topics/gcr" \
---repo=https://www.github.com/${repo_owner}/${repo_name} \
---branch=main --build-config=ops/deploy.cloudbuild.yaml \
---substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
-_REGION=us-central1,_REVISION='$(body.message.messageId)',\
-_SERVICE=website,_TARGET_PROJECT="$STAGE_PROJECT",\
-_STAGING_PROJECT="$STAGE_PROJECT",_PROD_PROJECT="$PROD_PROJECT" \
---project="${OPS_PROJECT}"
-
+cd terraform/
+terraform init
+terraform apply --auto-approve
+cd ..
 
