@@ -135,7 +135,9 @@ def handle_callback():
     try:
         info = id_token.verify_oauth2_token(token, reqs.Request())
         if "email" not in info:
-            log(f"Decoded OAuth2 id token is missing email: {info}", severity="CRITICAL")
+            log(
+                f"Decoded OAuth2 id token is missing email: {info}", severity="CRITICAL"
+            )
             return render_template("errors/403.html"), 403
     except Exception as e:
         log(f"Request has bad OAuth2 id token: {e}", severity="CRITICAL")

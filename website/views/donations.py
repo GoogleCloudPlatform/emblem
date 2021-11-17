@@ -56,12 +56,14 @@ def record_donation():
         log(f"Exception when creating a donor: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403
 
-
     campaign_id = request.form.get("campaignId")
     try:
         campaign = g.api.campaigns_id_get(campaign_id)
     except Exception as e:
-        log(f"Exception: donation for a non-existent campaign: {campaign_id}: {e}", severity="ERROR")
+        log(
+            f"Exception: donation for a non-existent campaign: {campaign_id}: {e}",
+            severity="ERROR",
+        )
         return render_template("errors/500.html"), 500
 
     donor_id = donor["id"]
@@ -87,13 +89,11 @@ def webapp_view_donation():
         log(f"Exception when getting a donation: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403
 
-
     try:
         campaign_instance = g.api.campaigns_id_get(donation_instance.campaign)
     except Exception as e:
         log(f"Exception when getting a campaign for a donations: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403
-
 
     return render_template(
         "donations/view-donation.html",

@@ -55,7 +55,7 @@ def save_campaign():
                 "description": request.form["description"],
                 "goal": float(request.form["goal"]),
                 "managers": re.split(r"[ ,]+", request.form["managers"]),
-                "active": True
+                "active": True,
             }
         )
     except Exception as e:
