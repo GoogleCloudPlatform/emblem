@@ -28,11 +28,9 @@ steps:
       - '-c'
       - |
         URL=$(gcloud run services describe website-${_ENV} --format "value(status.url)")
-        status=$(curl -s -o /dev/null -I -w "%{http_code}" $URL)
-        if [ "$status" == "200" ]
-        then echo "Health Check Passed"
-        else echo "Health Check Failed" && exit 1
-        fi
+        latest=$(echo "${URL/https:\/\//latest---}")
+        set -e
+        curl -si --fail --show-error https://$latest
   
   # Failure will halt the pipeline progress 
   # and traffic percentage will remain same
