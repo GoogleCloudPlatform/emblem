@@ -20,8 +20,22 @@ steps:
       - '-c'
       - |
         echo ${_BODY}
-        
-  # TODO: Run tests, revert back to previous revision if failure
+
+  # Simple health check, index should return 200.
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: /bin/bash
+    args:
+      - '-c'
+      - |
+        URL=$(gcloud run services describe website-${_ENV} --format "value(status.url)")
+        latest=$(echo "${URL/https:\/\//latest---}")
+        set -e
+        curl -si --fail --show-error https://$latest
+  
+  # Failure will halt the pipeline progress 
+  # and traffic percentage will remain same
+
+  # TODO: In case of failure, revert back to previous revision
 
   # Cloud Run Canary
   - id: 'Update Traffic'
