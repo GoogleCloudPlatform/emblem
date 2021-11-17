@@ -27,7 +27,7 @@ steps:
     args:
       - '-c'
       - |
-        URL=$(gcloud run services describe ${_SERVICE}-${_ENV} --format "value(status.url)")
+        URL=$(gcloud run services describe website-${_ENV} --format "value(status.url)")
         status=$(curl -s -o /dev/null -I -w "%{http_code}" $URL)
         if [ "$status" == "200" ]
         then echo "Health Check Passed"
