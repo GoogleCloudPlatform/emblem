@@ -27,7 +27,7 @@ steps:
     args:
       - '-c'
       - |
-        URL=$(gcloud run services describe website-${_ENV} --format "value(status.url)")
+        URL=$(gcloud run services describe website-${_ENV} --format "value(status.url)" --region=${_REGION})
         latest=$(echo "${URL/https:\/\//latest---}")
         set -e
         curl -si --fail --show-error https://$latest
