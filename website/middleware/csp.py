@@ -25,9 +25,7 @@ def init(app):
 
     @app.after_request
     def set_csp_policy(response):
-        image_origins = " ".join(
-            ["'self'", "images.pexels.com", "github.githubassets.com"]
-        )
+        image_origins = "*"
 
         font_origins = " ".join(["fonts.gstatic.com", "fonts.googleapis.com"])
 
