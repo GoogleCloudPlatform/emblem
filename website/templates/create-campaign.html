@@ -54,6 +54,36 @@
           <span class="mdc-line-ripple"></span>
         </label>
 
+        <!-- Campaign Description -->
+        <label class="emblem-new-campaign-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="campaign-description-label">Campaign Description</span>
+          <textarea id="description" name="description" rows=8></textarea>
+          <span class="mdc-line-ripple"></span>
+        </label>
+
+        <!-- Campaign Image -->
+        <label class="emblem-new-campaign-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="campaign-image-label">Campaign image</span>
+          <input required type="text" id="imageUrl" name="imageUrl" class="mdc-text-field__input" aria-labelledby="name">
+          <span class="mdc-line-ripple"></span>
+        </label>
+
+        <!-- Causes list -->
+        <label class="emblem-new-campaign-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="campaign-cause-label">Cause for Campaign</span>
+
+          <select name="cause" name="cause">
+            {% for cause in causes %}
+              <option value="{{ cause.id }}">{{ cause.name }}</option>"
+            {% endfor %}
+          </select>
+
+          <span class="mdc-line-ripple"></span>
+        </label>
+
         <!-- Amount (in USD) -->
         <label class="emblem-new-campaign-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
           <span class="mdc-text-field__ripple"></span>
