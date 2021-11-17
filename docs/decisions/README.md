@@ -22,13 +22,6 @@ Decision records should attempt to follow the Y-statement format for consistency
 In the context of **<use case/user story u>**, facing **<concern c>** we decided for **<option o>** and neglected <other options>, to achieve <system qualities/desired consequences>, accepting <downside d/undesired consequences>, because <additional rationale>.
 ```
 
-## Decision: Rollbacks for Cloud Run use Traffic Splitting
-
-In choosing how to **handle rollbacks for Cloud Run services**, deciding between
-reverting deployments to a previous stable revision and rerouting traffic to a previous known-good revision, we decided to **re-route traffic** for highest recovery speed and least chance of unintended side-effects, accepting this capability is not consistent across all hosting platforms and does not address state management.
-
-* **Date:** 2021/03
-
 ## Decision: Using Cloud Run for Website and Content API
 
 Deciding **which Serverless platform to use for the Website _and_ Content API**, facing the options of **Cloud Functions, App Engine, or Cloud Run**, we decided to **deploy to Cloud Run** for _both_ tasks.  Cloud Run has more flexibility than Cloud Functions or App Engine, and additionally offers concurrency and traffic splitting, allowing for a more natural canary rollout pipeline.
@@ -133,17 +126,3 @@ If a more straightforward and/or more secure method of storing these tokens beco
 (either at the Firebase level, or the HTTP-specification level), we may consider migrating to that option.
 
 (For example, we could do away with the `session` cookie if the Firebase client SDK somehow automatically forwarded a generated ID token to the backend with every request.)
-
-## Decision: Create a service account for testing
-
-The service account should have as few privileges as possible (ideally, none). It will be used to create ID tokens during test runs. The only thing that will matter for those test runs is the identity provided in the token, not any privileges it has.
-
-Test runs will add the service account's email address as an approver or a campaign manager as needed for the tests to determine that the API is enforcing authorization property.
-
-The service account should not be used in a production deployment, even though the tokens generated for it expire in no more than an hour.
-
-### Rationale
-
-The API handler uses standard Google authentication libraries to decode and validate the provided ID token. Those libraries require an ID token created by Google, and check their expiration times. Any IAM account can have an ID token provided to it, and we would not want to create a dummy user account for this purpose. Hence, the decision to use a service account.
-
-* **Date:** 2021/09
