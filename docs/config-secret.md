@@ -2,7 +2,7 @@
 
 _Note: This process will be semi-automated with the setup script and terraform._
 
-In order to set up automatic deployments for the website, the [config.py](https://github.com/GoogleCloudPlatform/emblem/blob/main/website/config.py) needs to read various values into the environment. 
+In order to set up automatic deployments for the website, the [config.py](https://github.com/GoogleCloudPlatform/emblem/blob/main/website/config.py) needs to read various values into the environment.
 
 For the less secret values, these will be created during the Terraform setup and stored as part of the Cloud Build trigger configuration.  The [config](https://github.com/GoogleCloudPlatform/emblem/blob/main/ops/deploy.cloudbuild.yaml) file will use substitutions to allow us to pass in various values.  
 
@@ -22,7 +22,8 @@ The website depends on a `config.py` file to read in the Firebase API key and au
 
 1. When building the image in the Cloud Build pipeline, read from Secret Manager to generate the `config.py`.  The benefit here is showing the value of Secret Manager.  Additionally the config is meant to be "public" so it works to have it exposed in the container image.   It is also flexible, allowing us to update the configuration at later dates.  However, changing the `config.py` would require a new deployment, which is traceable and reversible. The downside is that Secret Manager is a billed resource.
 
-1. Update the website code to read from environment variables instead of from `config.py`. We could store the variables in Secret Manager and expose them to Cloud Run as Environment Variables.  This would require changing some of the code in the website.  The other downside is that the values could be updated and potentially break the service without a new deployment, creating more stability risk. 
+1. Update the website code to read from environment variables instead of from `config.py`. We could store the variables in Secret Manager and expose them to Cloud Run as Environment Variables.  This would require changing some of the code in the website.  The other downside is that the values could be updated and potentially break the service without a new deployment, creating more stability risk.
 
 ### Rationale
+
 We've decided to do a combination of all three options.  We've written the `config.py` to dynamically read in environment variables.  The values of these variables are provided by either the Cloud Build trigger configuration or the Secret Manager, depending on the level of sensitivity.  
