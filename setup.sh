@@ -65,7 +65,7 @@ content-api
 
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api" \
---project "$STAGE_PROJECT" \
+--project "$STAGE_PROJECT"  --service-account "cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"  \
 content-api
 
 # Deploy built images (website prod)
