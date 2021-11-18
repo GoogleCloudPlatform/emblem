@@ -74,7 +74,9 @@ def init(app):
         API_URL = app.config.get("API_URL")
         log(f"API_URL={API_URL}", severity="DEBUG")
 
+        g.session_data = None
         session_id = request.cookies.get("session_id")
+
         if session_id is None:
             trace = request.headers.get("X-Cloud-Trace-Context")
             g.api = emblem_client.EmblemClient(API_URL, trace=trace)
@@ -88,6 +90,7 @@ def init(app):
 
         id_token = session_data.get("id_token")
         expiration = session_data.get("expiration")
+        g.session_data = session_data
 
         if (
             expiration is not None
