@@ -52,7 +52,7 @@ REGION="us-central1"
 
 # Submit builds
 gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
---project="$OPS_PROJECT" --substitutions=_REGION="$REGION"
+--project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA=setup
 
 gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
 --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA=setup
