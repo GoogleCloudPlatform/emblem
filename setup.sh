@@ -48,17 +48,50 @@ cd ..
 # Deploy Services #
 ###################
 
-gcloud builds submit --config=setup.cloudbuild.yaml \
---substitutions=_DIR=website,\
-_STAGING_PROJECT="$STAGE_PROJECT",\
-_PROD_PROJECT="$PROD_PROJECT" \
---project="$OPS_PROJECT"
+REGION="us-central1"
+SHORT_SHA="setup"
 
-gcloud builds submit --config=setup.cloudbuild.yaml \
---substitutions=_DIR=content-api,\
-_STAGING_PROJECT="$STAGE_PROJECT",\
-_PROD_PROJECT="$PROD_PROJECT" \
---project="$OPS_PROJECT"
+# Submit builds
+gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
+--project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+
+gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
+--project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+
+# Deploy built images (API)
+gcloud run deploy --allow-unauthenticated \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
+--project "$PROD_PROJECT"  --service-account "cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
+content-api
+
+gcloud run deploy --allow-unauthenticated \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
+--project "$STAGE_PROJECT"  --service-account "cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"  \
+content-api
+
+# Deploy built images (website prod)
+API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
+
+WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions"
+WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${API_URL}"
+
+gcloud run deploy --allow-unauthenticated \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
+--project "$PROD_PROJECT" --service-account "cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com"  \
+--set-env-vars "$WEBSITE_VARS" \
+website
+
+# Deploy built images (website staging)
+API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
+
+WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions"
+WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${API_URL}"
+
+gcloud run deploy --allow-unauthenticated \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
+--project "$STAGE_PROJECT" --service-account "cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+--set-env-vars "$WEBSITE_VARS" \
+website
 
 
 ################
@@ -106,7 +139,7 @@ gcloud alpha builds triggers create pubsub \
 --repo=https://www.github.com/${repo_owner}/${repo_name} \
 --branch=main --build-config=ops/deploy.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
-_REGION=us-central1,_REVISION='$(body.message.messageId)',\
+_REGION="$REGION",_REVISION='$(body.message.messageId)',\
 _SERVICE=website,_TARGET_PROJECT="$STAGE_PROJECT",\
 _STAGING_PROJECT="$STAGE_PROJECT",_PROD_PROJECT="$PROD_PROJECT" \
 --project="${OPS_PROJECT}"
