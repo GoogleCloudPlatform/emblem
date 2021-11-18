@@ -88,7 +88,7 @@ WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${API_URL}"
 
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website" \
---project "$STAGE_PROJECT" \
+--project "$STAGE_PROJECT" --service-account "cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
 --set-env-vars "$WEBSITE_VARS" \
 website
 
