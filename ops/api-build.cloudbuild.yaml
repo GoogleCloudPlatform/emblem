@@ -20,7 +20,7 @@ steps:
     args: 
       - 'build'
       - '-t'
-      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/content-api/content-api'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/content-api/content-api:${SHORT_SHA}'
       - '.'
 
 # Default to us-central1
@@ -29,4 +29,4 @@ substitutions:
 
 # Store in Artifact Registry
 images:
-  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/content-api/content-api'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/content-api/content-api:${SHORT_SHA}'

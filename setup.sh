@@ -49,22 +49,23 @@ cd ..
 ###################
 
 REGION="us-central1"
+SHORT_SHA="setup"
 
 # Submit builds
 gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
---project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA=setup
+--project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
 
 gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
---project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA=setup
+--project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
 
 # Deploy built images (API)
 gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api" \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
 --project "$PROD_PROJECT"  --service-account "cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
 content-api
 
 gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api" \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
 --project "$STAGE_PROJECT"  --service-account "cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"  \
 content-api
 
@@ -75,7 +76,7 @@ WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions"
 WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${API_URL}"
 
 gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website" \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
 --project "$PROD_PROJECT" --service-account "cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com"  \
 --set-env-vars "$WEBSITE_VARS" \
 website
@@ -87,7 +88,7 @@ WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions"
 WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${API_URL}"
 
 gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website" \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
 --project "$STAGE_PROJECT" --service-account "cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
 --set-env-vars "$WEBSITE_VARS" \
 website
