@@ -24,7 +24,9 @@ steps:
         cp -R client-libs/ website/client-libs
         docker build -t \
         ${_REGION}-docker.pkg.dev/${PROJECT_ID}/website/website \
-        website/. 
+        website/.
+
+
 
 # Store in Artifact Registry
 images:
