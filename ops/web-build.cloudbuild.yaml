@@ -24,9 +24,9 @@ steps:
         cp -R client-libs/ website/client-libs
         docker build -t \
         ${_REGION}-docker.pkg.dev/${PROJECT_ID}/website/website:${SHORT_SHA} \
-        website/.
+        website/. 
 
-# Default to us-central1
+# Default to us-central1 
 substitutions:
   _REGION: us-central1
 
