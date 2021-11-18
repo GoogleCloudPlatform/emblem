@@ -60,7 +60,7 @@ gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
 # Deploy built images (API)
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api" \
---project "$PROD_PROJECT" \
+--project "$PROD_PROJECT"  --service-account "cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
 content-api
 
 gcloud run deploy --allow-unauthenticated \
