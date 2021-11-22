@@ -12,23 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-import base64
-import hashlib
 import os
 
 
 ####################################################
 # TODO(developer): set these environment variables #
 ####################################################
-
-
-# The (public!) API key used by Firebase.
-# This should be of the format "AIza..."
-FIREBASE_API_KEY = os.getenv("EMBLEM_FIREBASE_API_KEY")
-
-# The domain name used by Firebase Auth
-FIREBASE_AUTH_DOMAIN = os.getenv("EMBLEM_FIREBASE_AUTH_DOMAIN")
-
-# The URL the Emblem Content API is hosted at
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+REDIRECT_URI = os.getenv("REDIRECT_URI")
 API_URL = os.getenv("EMBLEM_API_URL")
+EMBLEM_SESSION_BUCKET = os.getenv("EMBLEM_SESSION_BUCKET")

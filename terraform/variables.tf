@@ -1,11 +1,3 @@
-variable "suffix" {
-  type = string
-}
-
-variable "billing_account" {
-  type = string
-}
-
 variable "google_region" {
   type    = string
   default = "us-central1"
@@ -22,4 +14,10 @@ variable "google_prod_project_id" {
 
 variable "google_stage_project_id" {
   type = string
+}
+
+# Session bucket file time-to-live (in days)
+variable "session_bucket_ttl" {
+  type    = number
+  default = 14
 }

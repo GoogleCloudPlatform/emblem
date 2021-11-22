@@ -14,15 +14,25 @@
 # limitations under the License.
 
 # Run ./setup.sh from a project with a billing account enabled
-# This will create 3 projects, for ops, staging, and prod
+# This will require 3 projects, for ops, staging, and prod
+# To auto-create the projects, run new_project_setup.sh
 
-PARENT_PROJECT=$(gcloud config get-value project 2>/dev/null)
-BILLING_ACCOUNT=$(gcloud beta billing projects describe ${PARENT_PROJECT} --format="value(billingAccountName)" | sed 's/billingAccounts\///')
-EMBLEM_SUFFIX=$(printf "%06d"  $((RANDOM%999999)))
+# Check env variables
+if [[ -z "${PROD_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
+    exit 1
+elif [[ -z "${STAGE_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)STAGE_PROJECT$(tput sgr0) variable"
+    exit 1
+elif [[ -z "${OPS_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)OPS_PROJECT$(tput sgr0) variable"
+    exit 1
+fi
 
 cat > terraform/terraform.tfvars <<EOF
-suffix = "${EMBLEM_SUFFIX}"
-billing_account = "${BILLING_ACCOUNT}"
+google_prod_project_id = "${PROD_PROJECT}"
+google_stage_project_id = "${STAGE_PROJECT}"
+google_ops_project_id = "${OPS_PROJECT}"
 EOF
 
 ######################
@@ -34,18 +44,54 @@ terraform init
 terraform apply --auto-approve
 cd ..
 
-
 ###################
 # Deploy Services #
 ###################
 
-gcloud builds submit --config=setup.cloudbuild.yaml \
---substitutions=_DIR=website,_SUFFIX=${EMBLEM_SUFFIX} \
---project="emblem-ops-${EMBLEM_SUFFIX}"
+REGION="us-central1"
+SHORT_SHA="setup"
 
-gcloud builds submit --config=setup.cloudbuild.yaml \
---substitutions=_DIR=content-api,_SUFFIX=${EMBLEM_SUFFIX} \
---project="emblem-ops-${EMBLEM_SUFFIX}"
+# Submit builds
+gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
+--project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+
+gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
+--project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+
+# Deploy built images (API)
+gcloud run deploy --allow-unauthenticated \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
+--project "$PROD_PROJECT"  --service-account "cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
+content-api
+
+gcloud run deploy --allow-unauthenticated \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
+--project "$STAGE_PROJECT"  --service-account "cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"  \
+content-api
+
+# Deploy built images (website prod)
+API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
+
+WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions"
+WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${API_URL}"
+
+gcloud run deploy --allow-unauthenticated \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
+--project "$PROD_PROJECT" --service-account "cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com"  \
+--set-env-vars "$WEBSITE_VARS" \
+website
+
+# Deploy built images (website staging)
+API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
+
+WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions"
+WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${API_URL}"
+
+gcloud run deploy --allow-unauthenticated \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
+--project "$STAGE_PROJECT" --service-account "cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+--set-env-vars "$WEBSITE_VARS" \
+website
 
 
 ################
@@ -53,7 +99,7 @@ gcloud builds submit --config=setup.cloudbuild.yaml \
 ################
 
 REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?\
-project=emblem-ops-${EMBLEM_SUFFIX}"
+project=${OPS_PROJECT}"
 echo "Connect your repos: ${REPO_CONNECT_URL}"
 python3 -m webbrowser ${REPO_CONNECT_URL}
 
@@ -84,16 +130,18 @@ gcloud alpha builds triggers create github \
 --name=web-push-to-main \
 --repo-owner=${repo_owner} --repo-name=${repo_name} \
 --branch-pattern="^main$" --build-config=ops/build.cloudbuild.yaml \
---included-files="website/*" --substitutions="_DIR"="website" \
---project="emblem-ops-${EMBLEM_SUFFIX}"
+--included-files="website/*" --substitutions=_DIR="website",\
+_STAGING_PROJECT="$STAGE_PROJECT",_PROD_PROJECT="$PROD_PROJECT" \
+--project="${OPS_PROJECT}"
 
 gcloud alpha builds triggers create pubsub \
---name=web-deploy-staging --topic="projects/emblem-ops-${EMBLEM_SUFFIX}/topics/gcr" \
+--name=web-deploy-staging --topic="projects/${OPS_PROJECT}/topics/gcr" \
 --repo=https://www.github.com/${repo_owner}/${repo_name} \
 --branch=main --build-config=ops/deploy.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
-_REGION=us-central1,_REVISION='$(body.message.messageId)',\
-_SERVICE=website,_TARGET_PROJECT='emblem-stage-${EMBLEM_SUFFIX}' \
---project="emblem-ops-${EMBLEM_SUFFIX}"
+_REGION="$REGION",_REVISION='$(body.message.messageId)',\
+_SERVICE=website,_TARGET_PROJECT="$STAGE_PROJECT",\
+_STAGING_PROJECT="$STAGE_PROJECT",_PROD_PROJECT="$PROD_PROJECT" \
+--project="${OPS_PROJECT}"
 
 

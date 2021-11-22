@@ -12,12 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import datetime
 import os
 
-from flask import Flask, g, redirect, request, render_template
-
-import emblem_client
+from flask import Flask, current_app
 
 from views.campaigns import campaigns_bp
 from views.donations import donations_bp
@@ -38,58 +35,11 @@ app.register_blueprint(robots_txt_bp)
 auth.init(app)
 csp.init(app)
 
+
 if os.path.exists("config.py"):
     app.config.from_object("config")
 else:
-    print("WARNING: config.py file not found! Some features may be broken.")
-
-
-# Determine whether (Firebase) auth config is valid
-api_key = app.config.get("FIREBASE_API_KEY", "")
-domain = app.config.get("FIREBASE_AUTH_DOMAIN")
-valid_auth_config = (
-    "AIza" in api_key and domain and domain != "YOUR_APP.firebaseapp.com"
-)
-
-app.config["SHOW_AUTH"] = valid_auth_config or (not os.getenv("HIDE_AUTH_WARNINGS"))
-
-# TODO(anassri, engelke): use API call instead of this
-# (This is based on the API design doc for now.)
-
-SAMPLE_CAMPAIGNS = [
-    {
-        "id": "aaaa-bbbb-cccc-dddd",
-        "name": "cash for camels",
-        "image_url": "https://images.pexels.com/photos/2080195/pexels-photo-2080195.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-        "goal": 2500,
-        "managers": ["Chris the camel", "Carissa the camel"],
-        "description": "The camels need money.",
-        "updated": datetime.date(2021, 2, 1),
-        "donations": ["cccc-oooo-oooo-llll"],
-    },
-    {
-        "id": "eeee-ffff-gggg-hhhh",
-        "name": "water for fish",
-        "image_url": "https://images.pexels.com/photos/2156311/pexels-photo-2156311.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-        "goal": 2500,
-        "managers": [
-            "Fred the fish",
-        ],
-        "description": "Help us keep all the fish hydrated!",
-        "updated": datetime.date(2021, 5, 10),
-        "donations": [],
-    },
-]
-
-SAMPLE_DONATIONS = [
-    {
-        "id": "cccc-oooo-oooo-llll",
-        "campaign": "aaaa-bbbb-cccc-dddd",
-        "donor": "aaaa-dddd-aaaa-mmmm",
-        "amount": 100,
-        "timeCreated": datetime.date(2021, 5, 20),
-    }
-]
+    raise Exception("Missing configuration file.")
 
 
 if __name__ == "__main__":

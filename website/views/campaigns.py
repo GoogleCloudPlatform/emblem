@@ -14,9 +14,9 @@
 
 from flask import Blueprint, g, redirect, request, render_template
 
-import os
+from middleware.logging import log
+
 import re
-import requests
 
 
 campaigns_bp = Blueprint("campaigns", __name__, template_folder="templates")
@@ -24,37 +24,68 @@ campaigns_bp = Blueprint("campaigns", __name__, template_folder="templates")
 
 @campaigns_bp.route("/")
 def list_campaigns():
-    campaigns = g.api.campaigns_get()
+    try:
+        campaigns = g.api.campaigns_get()
+    except Exception as e:
+        log(f"Exception when listing campaigns: {e}", severity="ERROR")
+        campaigns = []
+
     return render_template("home.html", campaigns=campaigns)
 
 
 @campaigns_bp.route("/createCampaign", methods=["GET"])
 def new_campaign():
-    return render_template("create-campaign.html")
+    try:
+        causes = g.api.causes_get()
+    except Exception as e:
+        log(f"Exception when listing causes: {e}", severity="ERROR")
+        causes = []
+
+    return render_template("create-campaign.html", causes=causes)
 
 
 @campaigns_bp.route("/createCampaign", methods=["POST"])
 def save_campaign():
-    # TODO: do something with the collected data
-    g.api.campaigns_post(
-        {
-            "name": request.form["name"],
-            "goal": float(request.form["goal"]),
-            "managers": re.split(r"[ ,]+", request.form["managers"]),
-        }
-    )
+    try:
+        g.api.campaigns_post(
+            {
+                "name": request.form["name"],
+                "cause": request.form["cause"],
+                "imageUrl": request.form["imageUrl"],
+                "description": request.form["description"],
+                "goal": float(request.form["goal"]),
+                "managers": re.split(r"[ ,]+", request.form["managers"]),
+                "active": True,
+            }
+        )
+    except Exception as e:
+        log(f"Exception when creating a campaign: {e}", severity="ERROR")
+        return render_template("errors/403.html"), 403
 
     return redirect("/")
 
 
 @campaigns_bp.route("/viewCampaign")
 def webapp_view_campaign():
-    campaigns = g.api.campaigns_get()
-    campaign_instance = campaigns[0]
+    campaign_id = request.args.get("campaign_id")
+    if campaign_id is None:
+        log(f"/viewCampaign is missing campaign_id", severity="ERROR")
+        return render_template("errors/500.html"), 500
+
+    try:
+        campaign_instance = g.api.campaigns_id_get(campaign_id)
+    except Exception as e:
+        log(f"Exception when fetching campaigns {campaign_id}: {e}", severity="ERROR")
+        return render_template("errors/403.html"), 403
 
     campaign_instance["donations"] = []
-    campaign_instance["donations"] = g.api.campaigns_id_donations_get(
-        campaign_instance["id"]
-    )
+
+    try:
+        campaign_instance["donations"] = g.api.campaigns_id_donations_get(
+            campaign_instance["id"]
+        )
+    except Exception as e:
+        log(f"Exception when listing campaign donations: {e}", severity="ERROR")
+        return render_template("errors/403.html"), 403
 
     return render_template("view-campaign.html", campaign=campaign_instance)
