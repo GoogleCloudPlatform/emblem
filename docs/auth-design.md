@@ -9,8 +9,8 @@ the application.
 
 Authenticated users (logged-in users) have more access, which often depends on
 the relationship of the data to display or change with the user's identity. For
-example, most users can only view their own donations; authenticated users can
-create new donations, which will be linked to their identity.
+example, most users can only view their own donations, but campaign managers
+can view every donation to their campaign.
 
 There are two major parts to the application: the API, which manages all
 operations on Emblem data, and the website, which provides the user interface.
@@ -30,27 +30,28 @@ API as well.
 
 API requests are made via secure HTTP requests, and are authenticated, if they
 are authenticated, with an HTTP Authorization header. That header includes
-an *id token*, a JWT that contains claims about the user's identity, a validity
-period, and a digital signature from a trusted identity verification agent.
+an *id token*, a [JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token)
+that contains claims about the user's identity, a validity period, and a digital
+signature from a trusted identity verification agent.
 
-We have chosen to use [Google Identity Oauth2](https://developers.google.com/identity/protocols/oauth2/web-server)
+We have chosen to use [Google Identity OAuth2](https://developers.google.com/identity/protocols/oauth2/web-server)
 as Emblem's identity provider. It is the responsibility of the Emblem website
 to take users through that authentication flow to get a valid _id token_,
 and then provide it to the API whenever operations on data are needed.
 
-## First decision: how to authenticate with Google
+## How to authenticate with Google
 
 There are many way to authenticate with Google or with other identity providers
 that may be federated with a Google identity service. We initially decided to
 use [Firebase authentication using Google Sign-in with
 JavaScript](https://firebase.google.com/docs/auth/web/google-signin).
 
-After using Firebase authentication for a short while we decided it was not
+After using Firebase authentication for a short while we found it was not
 a good fit for our needs. It required setting up a Firebase project as well
 as a Google Cloud project, and required three Emblem codebases to be involved
 (website browser-based code, website server-side code, and API server-side code).
-These combined to make setting up new Emblem instances more complicated and
-more prone to failures when done manually.
+These combined to make setting up new Emblem instances complicated and
+prone to failures when done manually.
 
 The project then pivoted to using [OAuth2 with Google
 Identity](https://developers.google.com/identity/protocols/oauth2/web-server),
@@ -77,10 +78,11 @@ URL, including a *code* in a query parameter.
 
 1. The user's browser makes the indicated request to the Emblem callback URL.
 
-1. The Emblem server receives the request, and makes a server-side request
+1. The Emblem website server receives the request, and makes a server-side request
 (*not* involving the browser) to the authentication server providing the *code*
-and a *client secret* registered with the Emblem website's GCP project. The authentication
-server responds with a JSON object that includes an active *id token*.
+and a *client secret* registered with the Emblem website's GCP project.
+The authentication server responds with a JSON object that includes an active
+*id token*.
 
 1. The Emblem website server sends an HTTP redirect to the user's browser to
 return to the website page they started this login flow from. The redirect
@@ -90,12 +92,12 @@ also sets a session cookie that references the *id token*.
 which the website uses to get the *id token*. The website then provides that *id token*
 with each API request.
 
-This flow is perhaps as simple as third-party authentication can be, and is
-expected to be reliable. It requires registering *the callback URL* with
+This flow is perhaps as simple as third-party authentication can be, and has
+been reliable. It requires registering *the callback URL* with
 the Google Cloud project, and acquiring a *client ID* and *client secret* from
 the same project.
 
-## Second decision: how to associate the *id token* with a user session
+## How to associate the *id token* with a user session
 
 A session is established when a user logs in by having the website create a
 cookie in the user's browser. The cookie has no *Expires* value, which causes
@@ -107,52 +109,79 @@ risk).
 
 This cookie must be associated with the *id token*. We considered these alternatives:
 
-1. Create a random value for the cookie, save the *id token* and any other
-session information server-side, keyed by that random value.
-
 1. Make the value of the cookie the *id token* itself.
 
 1. Encrypt the *id token* with a key known to the server, and make that
-encrypted value the value of the key.
+encrypted value the value of the cookie.
 
-Option 1 above seems to be the most secure choice, but the stateless nature of
-the website server would require an external data store. Cloud Firestore might
-be a good option, but in some cases the website and API share a project, and
-the current nature of Cloud Firestore would mean they would share the same
-database. That is possible, but unappealing.
+1. Create a random value for the cookie, save the *id token* and any other
+session information server-side, keyed by that random value.
 
-Given the ephemeral nature of an *id token* and the fact that it would be
-stored and transferred in fairly secure ways, option 2 could be acceptible. But
-we would prefer not to have to do this.
+Option 1 is by far the easiest, but requires the *id token* to be exposed to
+the user's browser. The *id token* provides access to the API without having
+to go through the website as a gatekeeper, so this is a potential problem.
+Though, since the *id token* has a very limited lifetime, this option may be
+acceptible. After all, the cookie is transmitted only via HTTPS and is only
+available to JavaScript in website pages. But it would still be visible to
+users via web browser developer tools
 
-The Flask website framework the website uses makes using encrypted cookies
-easy, enabling option 3. We have decided to use that approach, with an eye to
-moving to option 1 some time in the future, especially when more server-side
-storage options become available.
+Option 2 alleviates some of the concerns with option 1, by encrypting the value
+of the cookie, and the Flask framework offers a tool to do that. We tries this
+out during development, but further investigation showed that Flask's secret
+session cookies we actually only obfuscated. They are digitally signed, which
+prevents user-tampering, but they don't actually protect the value of cookie from
+discovery by the user. The documentation we found of this is several years old,
+but we found nothing indicating that this has changed since then.
 
-## Problem: *id token* expires in no more than 1 hour
+That has left us with Option 3, which is a very common choice. A random value
+will be chosen as the cookie value, and any information needed to identify the
+user, such as the *id token*, will be stored server-side, findable with that
+random value.
 
-The approaches described above meet Emblem authentication needs but require
-the user to be forced to log in again every hour, even if they have been continually
-interacting with the website over that time. This is behavior that could be
-tolerable for an application of Emblem's kind, but we found it undersirable.
+That leaves us with a problem, though. We cannot store this information in
+server memory or filesystem, because the serverless platform does not retain
+that state from request to request. And given our serverless architecture, we
+prefer a storage solution that scales up and down as our compute platforms
+do. Cloud Firestore, in Native or Datastore mode, delivers on this preference,
+as does Cloud Storage.
+
+By default, all Firestore access in a Google Cloud project applies to
+all collections in the database. Since the website and API applications may
+be in the same project, if both were given Firestore access they would each
+have access to the other application's data. In turn, that would give the
+website access to underlying API data, bypassing API access rules. For that
+reason, we have chosen to use Cloud Storage for session data instead of Cloud
+Firestore. Early usage has shown the performance of that approach to be
+acceptable.
+
+
+## Refreshing the *id token* that expires in no more than 1 hour
+
+The approaches described above would all acquire an *id token* at user login and
+then use that token to make API calls. Unfortunately, the longest duration a
+Google sign-in token can have is 60 minutes. So relying on the *id token* from
+the login would lead to the website having to force users to log in again
+every hour, even if they have been continually interacting with the website
+over that time. This would work but would likely alienate users.
 
 Google Identity offers a solution however: a *refresh token*. When a user
 logs in, step 2 of the authentication flow previously described can include
-a query parameter *access_type=offline*, and in return for the *code* sent to
-the service in step 7 will be provided not only the *id token* but also a
-*refresh token*. The *refresh token* is long-lived (possibly eternally, but
-can be limited by user and organization policies) and can be traded for new
-*id token* at any time. That new *id token* is active for an hour, allowing
-the application to extend a user session without logging in again.
+two query parameters: *access_type=offline* and *prompt=consent*. When used
+together with other required parameters, in return for the *code* sent to
+the service in step 7 the website will be provided not only the *id token*
+but also a *refresh token*. The *refresh token* is long-lived (possibly
+eternally, but can be limited by user and organization policies) and can be
+traded for new *id token* at any time. Each new *id token* is active for an
+hour, allowing the application to extend a user session without logging in again.
 
 ### Where is that *refresh token*?
 
-Despite what we understood from the documentation, we were not receiving a refresh token
-upon user login when setting *access_type=offline*. The documentation seemed
-to be incorrect, with no way to get the *refresh token* we need. A search of
-[Stackoverflow](https://stackoverflow.com/) revealed this to be a common
-problem, and [one answer](https://stackoverflow.com/questions/10827920/not-receiving-google-oauth-refresh-token)
+Based on our understanding of the documentation, we exprected to receive a
+refresh token upon user login when setting *access_type=offline*. That
+documentation seemed to be incorrect, with no way to get the *refresh token*
+we need. A search of [Stackoverflow](https://stackoverflow.com/) revealed this
+to be a common problem, and
+[one answer](https://stackoverflow.com/questions/10827920/not-receiving-google-oauth-refresh-token)
 explained what was happening. The server will *only* return a refresh token the
 first time it authenticates a user for a specific application. The user could
 revoke the token in their Google account forcing a new refresh token to be
@@ -169,22 +198,10 @@ setting *prompt=consent* in step 2. The
 appears to allude to that, though not explicitly. In any case, experimentation
 shows that this works, and has been adopted for Emblem.
 
-### How to remember the *refresh token*?
-
-Since the *refresh token* does not (or at least may not) expire it should
-not be put in a browser cookie, not matter how protected, even if it is
-encrypted. However server-side storage for the website, as opposed to the API,
-is still an open question. We will go with the encrypted cookie option for now,
-during early development and demonstrations, but we must change that before
-any outside use.
-
-Since the *refresh token* being used to get an *id token* requires providing
-a server-side *client secret*, this choice is not as bad as it might be.
-
 ## Revoking a *refresh token*
 
 We apparently can keep and use a *refresh token* indefinitely, but should we?
-We can revoke a *refresh token* we have access to. Our initial design decision
-will be to determine whether to do that or not. A likely first step would be
-to revoke the *refresh token* when the user explicitly logs out, or when the
-*refresh token* has not been used in some still to be decided interval.
+We can revoke a *refresh token* we have access to. We revoke the
+*refresh token* when the user explicitly logs out, and we expect to revoke it
+after some period of unuse, but have not decided exactly when or how to do that
+yet.
