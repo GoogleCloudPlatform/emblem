@@ -20,7 +20,7 @@ Read on if you want to explore your own Emblem instance, contribute to the proje
 <!-- TODO: Merge Example Resources with seed data -->
 
 * [API Reference](./api-reference.md)
-* [OpenAPI description](../content-api/openapi.yaml))
+* [OpenAPI description](../content-api/openapi.yaml)
 * [Example Requests](example_requests.md)
   * [Example Campaign Resource (Create)](resource.json)
   * [Example Campaign Resource (Update)](update_resource.json)
