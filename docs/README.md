@@ -9,8 +9,8 @@ Read on if you want to explore your own Emblem instance, contribute to the proje
 ## Getting Started
 
 <!-- TODO: Move documentation to ./docs -->
-* [Content API README](../content-api)
-* [Website README](../website)
+* [Content API README](../content-api/README.md)
+* [Website README](../website/README.md)
 
 * **Interactive Tutorial:** [API Quickstart in Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/emblem&cloudshell_git_branch=main&cloudshell_tutorial=docs/tutorials/api-quickstart.md)
 
