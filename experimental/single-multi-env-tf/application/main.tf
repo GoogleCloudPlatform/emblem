@@ -14,26 +14,11 @@ resource "google_project_service" "appengine" {
   provider = google
 }
 
-resource "google_project_service" "cloudbuild" {
-  service  = "cloudbuild.googleapis.com"
-  project  = data.google_project.main.project_id
-  provider = google
-}
-
 resource "google_project_service" "firestore" {
   service    = "firestore.googleapis.com"
   project    = data.google_project.main.project_id
   provider   = google
   depends_on = [google_project_service.appengine]
-}
-
-resource "google_project_service" "pubsub" {
-  service  = "pubsub.googleapis.com"
-  project  = data.google_project.main.project_id
-  provider = google
-  # Pub/Sub is a common service dependency for other services.
-  # Attempts to disable it before dependents throws errors.
-  disable_dependent_services = true
 }
 
 resource "google_project_service" "run" {
@@ -43,7 +28,7 @@ resource "google_project_service" "run" {
 }
 
 ###
-# Environment-specific Pipeline Resources
+# IAM & Access Control
 ###
 
 # Create a Cloud Run deployer service account.
@@ -54,24 +39,6 @@ resource "google_service_account" "cloud_run_manager" {
   display_name = "cloud-run-manager"
   project      = data.google_project.main.project_id
   provider     = google
-}
-
-# Add Service Account User role to the Cloud Build default service account.
-resource "google_project_iam_member" "cloudbuild_role_service_account_user" {
-  role       = "roles/iam.serviceAccountUser"
-  member     = "serviceAccount:${data.google_project.main.number}@cloudbuild.gserviceaccount.com"
-  project    = data.google_project.main.project_id
-  provider   = google
-  depends_on = [google_project_service.cloudbuild]
-}
-
-# Add Cloud Run Administrator role to the Cloud Build default service account.
-resource "google_project_iam_member" "cloudbuild_role_run_admin" {
-  role       = "roles/run.admin"
-  member     = "serviceAccount:${data.google_project.main.number}@cloudbuild.gserviceaccount.com"
-  project    = data.google_project.main.project_id
-  provider   = google
-  depends_on = [google_project_service.cloudbuild]
 }
 
 ###
