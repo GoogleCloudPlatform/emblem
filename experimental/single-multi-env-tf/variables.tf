@@ -3,10 +3,21 @@ variable "google_ops_project_id" {
   type = string
 }
 
-variable "google_prod_project_id" {
+variable region {
   type = string
+  default = "us-central1"
+  description = "Google Cloud Region"
 }
 
-variable "google_stage_project_id" {
-  type = string
+# Finding good documentation on Terraform maps can be difficult.
+# This was a useful resource:
+# https://operatingops.com/2021/05/31/terraform-map-and-object-patterns/
+variable "environments" {
+  type = map(string)
+  description = "Define the application environments using {\"EnvironmentName\": \"GoogleCloudProjectId\"}"
+  validation {
+    # Ensure a staging environment is defined.
+    condition = contains(keys(var.environments), "staging")
+    error_message = "Cloud Build configuration requires 'staging' and optionally 'prod'."
+  }
 }

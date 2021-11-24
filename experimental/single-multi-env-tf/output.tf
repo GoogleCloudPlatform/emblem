@@ -1,11 +1,11 @@
 output "ops_project_number" {
-  value = data.google_project.ops_project.number
+  value = data.google_project.main.number
 }
 
-output "stage_project_number" {
-  value = module.application_service["stage"].project_number
-}
-
-output "prod_project_number" {
-  value = module.application_service["prod"].project_number
+# Publish application module outputs.
+# Ex., app.staging.project_number
+# To customize the module output, see
+# https://stackoverflow.com/a/64992041
+output app {
+  value = module.application
 }

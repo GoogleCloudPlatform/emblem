@@ -7,6 +7,10 @@
 #    - STAGE_PROJECT
 #    - OPS_PROJECT
 
+
+terraform apply -var 'environments={"staging": "emblem-stage-adamross6"}'
+
+
 test_single_project () {
 # Set Variables
 cat > terraform.tfvars <<EOF
