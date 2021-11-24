@@ -48,8 +48,8 @@ terraform apply --auto-approve
 # This allows terraform destroy to run without modifying App Engine.
 # Remove this when App Engine support for terraform destroy is fixed or Firestore has a direct provisioning solution.
 # https://github.com/GoogleCloudPlatform/emblem/issues/217
-terraform state rm google_app_engine_application.stage_app
-terraform state rm google_app_engine_application.prod_app
+terraform state rm google_app_engine_application.stage_app || true
+terraform state rm google_app_engine_application.prod_app || true
 
 # Return to root directory
 popd
