@@ -93,3 +93,11 @@ resource "google_storage_bucket" "sessions_stage" {
     }
   }
 }
+
+resource "google_project_iam_member" "ops_secret_access_iam_stage" {
+  project    = data.google_project.stage_project.project_id
+  provider   = google.stage
+  role       = "roles/secretmanager.secretAccessor"
+  member     = "serviceAccount:service-${data.google_project.stage_project.number}@serverless-robot-stage.iam.gserviceaccount.com"
+  depends_on = [google_project_service.stage_run_api]
+}

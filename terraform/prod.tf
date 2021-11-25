@@ -93,3 +93,11 @@ resource "google_storage_bucket" "sessions_prod" {
     }
   }
 }
+
+resource "google_project_iam_member" "ops_secret_access_iam_prod" {
+  project    = data.google_project.prod_project.project_id
+  provider   = google.prod
+  role       = "roles/secretmanager.secretAccessor"
+  member     = "serviceAccount:service-${data.google_project.prod_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+  depends_on = [google_project_service.prod_run_api]
+}
