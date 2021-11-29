@@ -22,6 +22,12 @@ resource "google_project_service" "ops_pubsub_api" {
   disable_dependent_services = true
 }
 
+resource "google_project_service" "ops_secretmanager_api" {
+  project  = data.google_project.ops_project.project_id
+  provider = google.ops
+  service  = "secretmanager.googleapis.com"
+}
+
 resource "google_project_service" "ops_artifact_registry_api" {
   project  = data.google_project.ops_project.project_id
   provider = google-beta.ops

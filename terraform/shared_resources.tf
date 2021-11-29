@@ -47,11 +47,17 @@ provider "google-beta" {
 resource "google_secret_manager_secret" "client-id-secret" {
   project     = data.google_project.ops_project.project_id
   secret_id   = "oauth-client-id"
-  replication = "automatic"
+  replication {
+    automatic = "true"
+  }
+  depends_on = [google_project_service.ops_secretmanager_api]
 }
 
 resource "google_secret_manager_secret" "client-secret-secret" {
   project     = data.google_project.ops_project.project_id
   secret_id   = "oauth-client-secret"
-  replication = "automatic"
+  replication {
+    automatic = "true"
+  }
+  depends_on = [google_project_service.ops_secretmanager_api]
 }
