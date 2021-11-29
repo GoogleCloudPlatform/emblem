@@ -45,8 +45,8 @@ provider "google-beta" {
 # To avoid leaking secret data, we set their values directly with `gcloud`.
 # (Otherwise, Terraform would store secret data unencrypted in .tfstate files.)
 resource "google_secret_manager_secret" "client-id-secret" {
-  project     = data.google_project.ops_project.project_id
-  secret_id   = "oauth-client-id"
+  project   = data.google_project.ops_project.project_id
+  secret_id = "oauth-client-id"
   replication {
     automatic = "true"
   }
@@ -54,8 +54,8 @@ resource "google_secret_manager_secret" "client-id-secret" {
 }
 
 resource "google_secret_manager_secret" "client-secret-secret" {
-  project     = data.google_project.ops_project.project_id
-  secret_id   = "oauth-client-secret"
+  project   = data.google_project.ops_project.project_id
+  secret_id = "oauth-client-secret"
   replication {
     automatic = "true"
   }
