@@ -6,6 +6,6 @@ output "ops_project_number" {
 # Ex., app.staging.project_number
 # To customize the module output, see
 # https://stackoverflow.com/a/64992041
-output app {
+output "app" {
   value = module.application
 }
