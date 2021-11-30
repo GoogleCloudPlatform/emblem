@@ -44,6 +44,10 @@ provider "google-beta" {
 # These secret resources are REQUIRED, but configuring them is OPTIONAL.
 # To avoid leaking secret data, we set their values directly with `gcloud`.
 # (Otherwise, Terraform would store secret data unencrypted in .tfstate files.)
+
+# TODO: prod and staging should use different secrets
+# See the following GitHub issue:
+#   https://github.com/GoogleCloudPlatform/emblem/issues/263
 resource "google_secret_manager_secret" "client-id-secret" {
   project   = data.google_project.ops_project.project_id
   secret_id = "oauth-client-id"
