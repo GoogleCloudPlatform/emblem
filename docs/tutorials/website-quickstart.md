@@ -8,11 +8,13 @@ For the best experience, launch this tutorial as an interactive walkthrough on C
 
 Let's get started!
 
-## Clone Emblem from GitHub
-If you've cloned the Emblem Giving repository using the **Open in Cloud Shell** link, you can skip this step. Otherwise, manually clone the repo and `cd` into the `website` folder:
+## Set working directory
+
+Clicking the **Open in Cloud Shell** link automatically clones the Emblem Giving GitHub repo to your Cloud Shell instance.
+
+Open the `website` folder as your current working directory in the Cloud Shell terminal:
 ```bash
-git clone https://github.com/GoogleCloudPlatform/emblem.git
-cd emblem/website
+cd website
 ```
 
 ## Set GCP project
