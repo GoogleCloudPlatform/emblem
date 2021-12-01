@@ -93,25 +93,3 @@ resource "google_storage_bucket" "sessions_stage" {
     }
   }
 }
-
-resource "google_secret_manager_secret_iam_member" "ops_secret_access_iam_stage_client_id" {
-  project   = data.google_project.ops_project.project_id
-  secret_id = "oauth-client-id"
-  role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:cloud-run-manager@${data.google_project.stage_project.project_id}.iam.gserviceaccount.com"
-  depends_on = [
-    google_project_service.stage_run_api,
-    google_project_service.ops_secretmanager_api
-  ]
-}
-
-resource "google_secret_manager_secret_iam_member" "ops_secret_access_iam_stage_client_secret" {
-  project   = data.google_project.ops_project.project_id
-  secret_id = "oauth-client-secret"
-  role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:cloud-run-manager@${data.google_project.stage_project.project_id}.iam.gserviceaccount.com"
-  depends_on = [
-    google_project_service.stage_run_api,
-    google_project_service.ops_secretmanager_api
-  ]
-}
