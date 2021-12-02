@@ -35,35 +35,42 @@ Create a Cloud Storage bucket and set the `EMBLEM_SESSION_BUCKET` variable:
   export EMBLEM_SESSION_BUCKET={{project-id}}-emblem-session
 ```
 
-## Set Emblem environment variables
+## Set client credentials
 
-In the Cloud Shell terminal, set the following environment variables:
-1. `EMBLEM_FIREBASE_API_KEY`: The Firebase Web API Key provided by Cloud Identity Platform. You can find the key in the Firebase Console under [Project Settings](https://console.firebase.google.com/u/3/project/{{project-id}}/settings/general)
+Emblem Giving uses [Google Identity](https://developers.google.com/identity) to manage authentication.
+
+Find your OAuth 2.0 credentials and set them as environment variables in Cloud Shell:
+
+1. Go to the [Credentials](https://console.developers.google.com/apis/credentials) page.
+
+2. Click the name of your credential or the pencil (<walkthrough-cloud-shell-editor-icon></walkthrough-cloud-shell-editor>) icon. Your client ID and secret are at the top of the page.
+
+In the Cloud Shell terminal, set your `CLIENT_ID` and `CLIENT_SECRET` as environment variables:
 ```bash
-export EMBLEM_FIREBASE_API_KEY=<your-api-key>
+export CLIENT_ID=<client-id>
 ```
-2. `EMBLEM_FIREBASE_AUTH_DOMAIN`: The auth domain, usually of the form `{{project-id}}.firebaseapp.com`
 ```bash
-export EMBLEM_FIREBASE_AUTH_DOMAIN={{project-id}}.firebaseapp.com
-```
-3. `EMBLEM_API_URL`: A URL pointing to your instance of the Emblem Content API  
-```bash
-export EMBLEM_API_URL=http://localhost:8080
+export CLIENT_SECRET=<client-secret>
 ```
 
-Once you have set these environment variables, click **Next**.
+Once you have finished setting up your credentials in Cloud Shell, click **Next**.
 
 
 ## Run the Website
 
 Now you can run and preview the Website.
 
-  1. Install the application dependencies:
+1. Set the value of `EMBLEM_API_URL` as the URL for your running instance of the Emblem Content API:
+```bash
+export EMBLEM_API_URL=http://localhost:8080
+```
+
+2. Install the application dependencies:
 ```bash
 pip3 install -r requirements.txt
 ```
 
-  2. Run the Website using Flask:
+3. Run the Website using Flask:
 ```bash
 flask run
 ```
