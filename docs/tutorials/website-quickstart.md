@@ -79,6 +79,6 @@ Your running website will open in a new window.
 
 ## Conclusion
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
-Congratulations! You've successfully run the Emblem Website.
+Congratulations! You've successfully run the Emblem Website in Cloud Shell.
 
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
