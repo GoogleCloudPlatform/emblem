@@ -27,7 +27,7 @@ If prompted, authorize Cloud Shell to make GCP API calls.
 
 ## Create a Cloud Storage bucket
 
-The Website's session data is stored in a Cloud Storage bucket. You'll want to create a new bucket to ensure that the Website data doesn't conflict with any existing data in a bucket.
+The Website's session data is stored in a [Cloud Storage bucket](https://cloud.google.com/storage/docs/key-terms#buckets). You'll want to create a new bucket to ensure that the Website data doesn't cause conflicts within an existing bucket.
 
 Create a Cloud Storage bucket and set the `EMBLEM_SESSION_BUCKET` variable:
 ```bash
