@@ -139,5 +139,5 @@ Congratulations! You've successfully deployed the Emblem Giving API using the Cl
 ### What's next
 - Learn how to run the [Emblem Giving Website](https://github.com/GoogleCloudPlatform/emblem/tree/main/website) by launching the Website Quickstart tutorial from your Cloud Shell terminal: 
     ```bash
-    teachme ../docs/tutorials/website-quickstart
+    teachme ../docs/tutorials/website-quickstart.md
     ```
