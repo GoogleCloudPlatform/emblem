@@ -54,7 +54,6 @@ resource "google_secret_manager_secret" "client-id-secret" {
   replication {
     automatic = "true"
   }
-  depends_on = [google_project_service.ops_secretmanager_api]
 }
 
 resource "google_secret_manager_secret" "client-secret-secret" {
@@ -63,5 +62,4 @@ resource "google_secret_manager_secret" "client-secret-secret" {
   replication {
     automatic = "true"
   }
-  depends_on = [google_project_service.ops_secretmanager_api]
 }
