@@ -1,4 +1,4 @@
-# Run the Emblem Giving Website locally on Cloud Shell
+# Run the Emblem Giving Website with Cloud Shell
 ##
 This tutorial shows you how to quickly run the Emblem Giving Website with Flask. You'll use Cloud Shell, a free browser-based IDE.
 
