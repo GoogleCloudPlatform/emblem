@@ -41,25 +41,12 @@ and then provide it to the API whenever operations on data are needed.
 
 ## How to authenticate with Google
 
-There are many way to authenticate with Google or with other identity providers
-that may be federated with a Google identity service. We initially decided to
-use [Firebase authentication using Google Sign-in with
-JavaScript](https://firebase.google.com/docs/auth/web/google-signin).
+Emblem uses [OAuth2 with Google Identity](https://developers.google.com/identity/protocols/oauth2/web-server)
+for user authentication. The website performs the authentication flow, acquiring
+an *id token* for the authenticated user. That *id token* is included in the
+*Authorization* header for every authenticate API call made by the website.
 
-After using Firebase authentication for a short while we found it was not
-a good fit for our needs. It required setting up a Firebase project as well
-as a Google Cloud project, and required three Emblem codebases to be involved
-(website browser-based code, website server-side code, and API server-side code).
-These combined to make setting up new Emblem instances complicated and
-prone to failures when done manually.
-
-The project then pivoted to using [OAuth2 with Google
-Identity](https://developers.google.com/identity/protocols/oauth2/web-server),
-which is the current solution. This approach involves only the two server-side
-codebases (website and API) and allows the steps in the authentication flow to be
-more easily isolated and examined in detail for debugging.
-
-The current authentication flow, in a nutshell:
+The authentication flow, in a nutshell:
 
 1. User clicks a link in the Emblem website to log in.
 
@@ -173,6 +160,9 @@ but also a *refresh token*. The *refresh token* is long-lived (possibly
 eternally, but can be limited by user and organization policies) and can be
 traded for new *id token* at any time. Each new *id token* is active for an
 hour, allowing the application to extend a user session without logging in again.
+
+More detail about using and revoking refresh tokens is available at [Refreshing
+an access token (offline access)](https://developers.google.com/identity/protocols/oauth2/web-server#offline).
 
 ### Where is that *refresh token*?
 

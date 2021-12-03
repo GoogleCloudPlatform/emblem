@@ -1,4 +1,4 @@
-# Centralized Documentation
+# User Authentication
 
 * **Status:** draft
 * **Last Updated:** 2021-11-23
@@ -44,4 +44,5 @@ well during previews.
 
 ## Links
 
-* https://github.com/GoogleCloudPlatform/emblem/pull/210
+* [This PR](https://github.com/GoogleCloudPlatform/emblem/pull/210)
+* [Oauth2 login and refresh token PR](https://github.com/GoogleCloudPlatform/emblem/pull/212)

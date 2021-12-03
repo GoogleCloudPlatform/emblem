@@ -1,8 +1,12 @@
-# Centralized Documentation
+# Refreshing *id tokens*
 
 * **Status:** draft
 * **Last Updated:** 2021-11-23
 * **Objective:** Determine how to refresh *id tokens*
+
+This document builds on the decision record for [User
+Authentication](./2021-11-user-authentication.md).
+
 ## Context & Problem Statement
 
 The *id tokens* used to prove that API calls are being made on behalf of a
@@ -40,10 +44,14 @@ Options:
 The website will store this *refresh token* and other session data server-side
 to prevent its exposure to the browser.
 
-We have provisionally decided to use Cloud Storage as the server-side data
+We have will use Cloud Storage as the server-side data
 repository, with objects whose names are the randomly generated identifier for
-the cookie, and whose contents are the JSON encoded session data.
+the cookie, and whose contents are the JSON encoded session data. This decision
+may be revisited in the future if the experience with Cloud Storage is found
+to be unsatisfactory.
 
 ## Links
 
-* https://github.com/GoogleCloudPlatform/emblem/pull/210
+* [This PR](https://github.com/GoogleCloudPlatform/emblem/pull/210)
+* [Oauth2 login and refresh token PR](https://github.com/GoogleCloudPlatform/emblem/pull/212)
+* [Auth design](../auth-design.md)
