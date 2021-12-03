@@ -17,7 +17,7 @@ resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
    }
  }
 
- resource "google_cloudbuild_trigger" "api_push_to_main_build_trigger" {
+resource "google_cloudbuild_trigger" "api_push_to_main_build_trigger" {
    project = var.google_ops_project_id
    name = "api-push-to-main"
    filename = "ops/api-build.cloudbuild.yaml"
