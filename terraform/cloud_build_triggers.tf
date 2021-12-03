@@ -31,7 +31,7 @@ resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
     }
   }
 
-  resource "google_cloudbuild_trigger" "website_unit_tests_build_trigger" {
+resource "google_cloudbuild_trigger" "website_unit_tests_build_trigger" {
     project = var.google_ops_project_id
     name = "website-unit-tests"
     filename = "ops/unit-tests.cloudbuild.yaml"
