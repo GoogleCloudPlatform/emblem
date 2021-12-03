@@ -50,7 +50,7 @@ The authentication flow, in a nutshell:
 
 1. User clicks a link in the Emblem website to log in.
 
-1. The website responds with with an HTTP redirect to a Google authentication
+1. The website responds with an HTTP redirect to a Google authentication
 server. The request includes several query parameters providing information
 about the application making the request.
 
@@ -113,9 +113,9 @@ available to JavaScript in website pages. But it would still be visible to
 users via web browser developer tools
 
 Option 2 alleviates some of the concerns with option 1, by encrypting the value
-of the cookie, and the Flask framework offers a tool to do that. We tries this
+of the cookie, and the Flask framework offers a tool to do that. We tried this
 out during development, but further investigation showed that Flask's secret
-session cookies we actually only obfuscated. They are digitally signed, which
+session cookies are actually only obfuscated. They are digitally signed, which
 prevents user-tampering, but they don't actually protect the value of cookie from
 discovery by the user. The documentation we found of this is several years old,
 but we found nothing indicating that this has changed since then.
@@ -166,7 +166,7 @@ an access token (offline access)](https://developers.google.com/identity/protoco
 
 ### Where is that *refresh token*?
 
-Based on our understanding of the documentation, we exprected to receive a
+Based on our understanding of the documentation, we expected to receive a
 refresh token upon user login when setting *access_type=offline*. That
 documentation seemed to be incorrect, with no way to get the *refresh token*
 we need. A search of [Stackoverflow](https://stackoverflow.com/) revealed this
