@@ -50,7 +50,7 @@ provider "google-beta" {
 #   https://github.com/GoogleCloudPlatform/emblem/issues/263
 resource "google_secret_manager_secret" "client-id-secret" {
   project   = data.google_project.ops_project.project_id
-  secret_id = "oauth-client-id"
+  secret_id = "client-id-secret"
   replication {
     automatic = "true"
   }
@@ -58,7 +58,7 @@ resource "google_secret_manager_secret" "client-id-secret" {
 
 resource "google_secret_manager_secret" "client-secret-secret" {
   project   = data.google_project.ops_project.project_id
-  secret_id = "oauth-client-secret"
+  secret_id = "client-secret-secret"
   replication {
     automatic = "true"
   }
