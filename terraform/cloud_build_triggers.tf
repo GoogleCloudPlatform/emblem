@@ -49,7 +49,7 @@ resource "google_cloudbuild_trigger" "website_unit_tests_build_trigger" {
      }
    }
 
-   resource "google_cloudbuild_trigger" "web_push_to_main_build_trigger" {
+resource "google_cloudbuild_trigger" "web_push_to_main_build_trigger" {
      project = var.google_ops_project_id
      name = "web-push-to-main"
      filename = "ops/web-build.cloudbuild.yaml"
