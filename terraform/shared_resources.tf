@@ -54,6 +54,11 @@ resource "google_secret_manager_secret" "client-id-secret" {
   replication {
     automatic = "true"
   }
+
+  # Adding depends_on prevents race conditions in API enablement
+  # This is a workaround for:
+  #   https://github.com/hashicorp/terraform-provider-google/issues/10682
+  depends_on = [google_project_service.ops_secretmanager_api]
 }
 
 resource "google_secret_manager_secret" "client-secret-secret" {
@@ -62,4 +67,9 @@ resource "google_secret_manager_secret" "client-secret-secret" {
   replication {
     automatic = "true"
   }
+
+  # Adding depends_on prevents race conditions in API enablement
+  # This is a workaround for:
+  #   https://github.com/hashicorp/terraform-provider-google/issues/10682
+  depends_on = [google_project_service.ops_secretmanager_api]
 }

@@ -197,7 +197,7 @@ resource "google_secret_manager_secret_iam_member" "ops_secret_access_iam_prod_c
 
 resource "google_secret_manager_secret_iam_member" "ops_secret_access_iam_prod_client_secret" {
   project   = data.google_project.ops_project.project_id
-  secret_id = google_secret_manager_secret.client-id-secret.secret_id
+  secret_id = google_secret_manager_secret.client-secret-secret.secret_id
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:cloud-run-manager@${data.google_project.prod_project.project_id}.iam.gserviceaccount.com"
   depends_on = [
@@ -208,7 +208,7 @@ resource "google_secret_manager_secret_iam_member" "ops_secret_access_iam_prod_c
 
 resource "google_secret_manager_secret_iam_member" "ops_secret_access_iam_stage_client_id" {
   project   = data.google_project.ops_project.project_id
-  secret_id = google_secret_manager_secret.client-secret-secret.secret_id
+  secret_id = google_secret_manager_secret.client-id-secret.secret_id
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:cloud-run-manager@${data.google_project.stage_project.project_id}.iam.gserviceaccount.com"
   depends_on = [
