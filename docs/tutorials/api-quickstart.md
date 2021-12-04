@@ -137,7 +137,7 @@ Congratulations! You've successfully deployed the Emblem Giving API using the Cl
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
 
 ### What's next
-- Learn how to run the [Emblem Giving Website](https://github.com/GoogleCloudPlatform/emblem/tree/main/website) by launching the Website Quickstart tutorial from your Cloud Shell terminal: 
+- Keep your Content API instance running to use with the [Emblem Giving Website](https://github.com/GoogleCloudPlatform/emblem/tree/main/website). Learn how to run the Website by launching the Website Quickstart tutorial from your Cloud Shell terminal:
     ```bash
     teachme ../docs/tutorials/website-quickstart.md
     ```
