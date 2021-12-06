@@ -48,18 +48,28 @@ provider "google-beta" {
 # TODO: prod and staging should use different secrets
 # See the following GitHub issue:
 #   https://github.com/GoogleCloudPlatform/emblem/issues/263
-resource "google_secret_manager_secret" "client-id-secret" {
+resource "google_secret_manager_secret" "client_id_secret" {
   project   = data.google_project.ops_project.project_id
-  secret_id = "oauth-client-id"
+  secret_id = "client_id_secret"
   replication {
     automatic = "true"
   }
+
+  # Adding depends_on prevents race conditions in API enablement
+  # This is a workaround for:
+  #   https://github.com/hashicorp/terraform-provider-google/issues/10682
+  depends_on = [google_project_service.ops_secretmanager_api]
 }
 
-resource "google_secret_manager_secret" "client-secret-secret" {
+resource "google_secret_manager_secret" "client_secret_secret" {
   project   = data.google_project.ops_project.project_id
-  secret_id = "oauth-client-secret"
+  secret_id = "client_secret_secret"
   replication {
     automatic = "true"
   }
+
+  # Adding depends_on prevents race conditions in API enablement
+  # This is a workaround for:
+  #   https://github.com/hashicorp/terraform-provider-google/issues/10682
+  depends_on = [google_project_service.ops_secretmanager_api]
 }
