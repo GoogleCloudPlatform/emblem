@@ -186,44 +186,60 @@ resource "google_project_iam_member" "ops_cloudbuild_pubsub_iam_prod" {
 # Secret Manager IAM resources
 resource "google_secret_manager_secret_iam_member" "ops_secret_access_iam_prod_client_id" {
   project   = data.google_project.ops_project.project_id
-  secret_id = google_secret_manager_secret.client-id-secret.secret_id
+  secret_id = google_secret_manager_secret.client_id_secret.secret_id
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:cloud-run-manager@${data.google_project.prod_project.project_id}.iam.gserviceaccount.com"
+
+  # TODO: These dependencies are not specified implicitly (but should be).
+  #       See the following GitHub issue for more information:
+  #           https://github.com/hashicorp/terraform-provider-google/issues/10682
   depends_on = [
     google_service_account.prod_cloud_run_manager,
-    google_secret_manager_secret.client-id-secret
+    google_secret_manager_secret.client_id_secret
   ]
 }
 
 resource "google_secret_manager_secret_iam_member" "ops_secret_access_iam_prod_client_secret" {
   project   = data.google_project.ops_project.project_id
-  secret_id = google_secret_manager_secret.client-secret-secret.secret_id
+  secret_id = google_secret_manager_secret.client_secret_secret.secret_id
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:cloud-run-manager@${data.google_project.prod_project.project_id}.iam.gserviceaccount.com"
+
+  # TODO: These dependencies are not specified implicitly (but should be).
+  #       See the following GitHub issue for more information:
+  #           https://github.com/hashicorp/terraform-provider-google/issues/10682
   depends_on = [
     google_service_account.prod_cloud_run_manager,
-    google_secret_manager_secret.client-secret-secret
+    google_secret_manager_secret.client_secret_secret
   ]
 }
 
 resource "google_secret_manager_secret_iam_member" "ops_secret_access_iam_stage_client_id" {
   project   = data.google_project.ops_project.project_id
-  secret_id = google_secret_manager_secret.client-id-secret.secret_id
+  secret_id = google_secret_manager_secret.client_id_secret.secret_id
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:cloud-run-manager@${data.google_project.stage_project.project_id}.iam.gserviceaccount.com"
+
+  # TODO: These dependencies are not specified implicitly (but should be).
+  #       See the following GitHub issue for more information:
+  #           https://github.com/hashicorp/terraform-provider-google/issues/10682
   depends_on = [
     google_service_account.stage_cloud_run_manager,
-    google_secret_manager_secret.client-id-secret
+    google_secret_manager_secret.client_id_secret
   ]
 }
 
 resource "google_secret_manager_secret_iam_member" "ops_secret_access_iam_stage_client_secret" {
   project   = data.google_project.ops_project.project_id
-  secret_id = google_secret_manager_secret.client-secret-secret.secret_id
+  secret_id = google_secret_manager_secret.client_secret_secret.secret_id
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:cloud-run-manager@${data.google_project.stage_project.project_id}.iam.gserviceaccount.com"
+
+  # TODO: These dependencies are not specified implicitly (but should be).
+  #       See the following GitHub issue for more information:
+  #           https://github.com/hashicorp/terraform-provider-google/issues/10682
   depends_on = [
     google_service_account.stage_cloud_run_manager,
-    google_secret_manager_secret.client-secret-secret
+    google_secret_manager_secret.client_secret_secret
   ]
 }
