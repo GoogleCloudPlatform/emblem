@@ -107,8 +107,8 @@ website
 # Set up auth #
 ###############
 
-PROD_WEBSITE_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)" | grep website)
-STAGE_WEBSITE_URL=$(gcloud run services list --project ${STAGE_PROJECT} --format "value(URL)" | grep website)
+PROD_WEBSITE_URL=$(gcloud run services describe website --project ${PROD_PROJECT} --format "value(status.address.url)")
+STAGE_WEBSITE_URL=$(gcloud run services describe website --project ${STAGE_PROJECT} --format "value(status.address.url)")
 
 PROD_CALLBACK_URL="${PROD_WEBSITE_URL}/callback"
 STAGE_CALLBACK_URL="${STAGE_WEBSITE_URL}/callback"
@@ -132,7 +132,7 @@ if [[ ${auth_yesno} == "y" ]]; then
     echo ""
     echo "  Otherwise, keep the default settings."
     echo ""
-    open ${AUTH_CLIENT_CREATION_URL}
+    python3 -m webbrowser $AUTH_CLIENT_CONSENT_SCREEN_URL
     read -p "Once you've configured your consent screen, press $(tput bold)Enter$(tput sgr0) to continue."
 
     # Create OAuth client
@@ -151,7 +151,7 @@ if [[ ${auth_yesno} == "y" ]]; then
     echo ""
     echo "  $(tput bold)Keep the resulting pop-up open!$(tput sgr0) You'll need those values in the next step."
     echo ""
-    open ${AUTH_CLIENT_CREATION_URL}
+    python3 -m webbrowser $AUTH_CLIENT_CREATION_URL
     read -p "Once you've configured an OAuth client, press $(tput bold)Enter$(tput sgr0) to continue."
 
     # Prompt user to create secret versions
@@ -164,14 +164,14 @@ if [[ ${auth_yesno} == "y" ]]; then
     echo "  Add new secret versions to the existing secrets. Set $(tput bold)secret value$(tput sgr0)"
     echo "  to the credential values displayed by the $(tput bold)previous step's pop-up$(tput sgr0)."
     echo ""
-    open ${SECRETS_URL}
+    python3 -m webbrowser $SECRETS_URL
     read -p "Once you've configured secret versions, press $(tput bold)Enter$(tput sgr0) to continue."
 
     # Update website Cloud Run services with required secrets
     OPS_PROJECT_NUMBER=$(gcloud projects describe ${OPS_PROJECT} --format "value(projectNumber)")
 
-    AUTH_SECRETS="CLIENT_ID=projects/${OPS_PROJECT_NUMBER}/secrets/client-id-secret:latest"
-    AUTH_SECRETS="${AUTH_SECRETS},CLIENT_SECRET=projects/${OPS_PROJECT_NUMBER}/secrets/client-secret-secret:latest"
+    AUTH_SECRETS="CLIENT_ID=projects/${OPS_PROJECT_NUMBER}/secrets/client_id_secret:latest"
+    AUTH_SECRETS="${AUTH_SECRETS},CLIENT_SECRET=projects/${OPS_PROJECT_NUMBER}/secrets/client_secret_secret:latest"
 
     # TODO: do we want to keep the redirect URI secret, or set it as an env var?
 
