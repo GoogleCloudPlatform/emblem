@@ -53,13 +53,15 @@ test_multi_project () {
     popd
 
     pushd app
-    terraform init --backend-config "path=./stage.tfstate"
+    terraform init --backend-config "path=./stage.tfstate" -reconfigure
+    terraform import module.application.google_app_engine_application.main "${STAGE_PROJECT}" || true
     terraform apply --auto-approve \
         -var google_ops_project_id="${OPS_PROJECT}" \
         -var google_project_id="${STAGE_PROJECT}"
     stage_project_number=$(terraform output -raw project_number)
 
-    terraform init --backend-config "path=./prod.tfstate"
+    terraform init --backend-config "path=./prod.tfstate" -reconfigure
+    terraform import module.application.google_app_engine_application.main "${PROD_PROJECT}" || true
     terraform apply --auto-approve \
         -var google_ops_project_id="${OPS_PROJECT}" \
         -var google_project_id="${PROD_PROJECT}"
@@ -82,20 +84,21 @@ test_multi_project () {
     # TODO: Terraform standards suggest env dirs as root module.
     # This would allow avoiding init thrash, and open up concurrent operations.
     pushd app
-    terraform init --backend-config "path=./prod.tfstate"
-    terraform state rm google_app_engine_application.main || true
+    terraform init --backend-config "path=./prod.tfstate" -reconfigure
+    terraform state rm module.application.google_app_engine_application.main || true
     terraform destroy --auto-approve \
         -var google_ops_project_id="${OPS_PROJECT}" \
         -var google_project_id="${PROD_PROJECT}"
-    terraform init --backend-config "path=./stage.tfstate"
-    terraform state rm google_app_engine_application.main || true
+    terraform init --backend-config "path=./stage.tfstate" -reconfigure
+    terraform state rm module.application.google_app_engine_application.main || true
     terraform destroy --auto-approve \
         -var google_ops_project_id="${OPS_PROJECT}" \
         -var google_project_id="${STAGE_PROJECT}"
     popd
 
-    terraform -chdir=ops destroy --auto-approve
+    terraform -chdir=ops destroy --auto-approve \
+        -var google_ops_project_id="${OPS_PROJECT}"
 }
 
-#test_single_project
+# test_single_project
 test_multi_project
