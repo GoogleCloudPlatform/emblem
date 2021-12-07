@@ -14,14 +14,17 @@ test_single_project() {
     pushd ops
     terraform init
     terraform apply --auto-approve \
-        -var google_ops_project_id="${SINGLE_PROJECT}" 
+        -var google_ops_project_id="${SINGLE_PROJECT}" > /dev/null
     popd
 
     pushd app
     terraform init
-    terraform apply --auto-approve \
-        -var google_ops_project_id="${SINGLE_PROJECT}" \
-        -var google_project_id="${SINGLE_PROJECT}"
+    cat > terraform.tfvars <<EOF
+google_ops_project_id = "${SINGLE_PROJECT}"
+google_project_id = "${SINGLE_PROJECT}"
+EOF
+    terraform import module.application.google_app_engine_application.main "${SINGLE_PROJECT}" || true
+    terraform apply --auto-approve > /dev/null
     ops_project_number=$(terraform output -raw ops_project_number)
     stage_project_number=$(terraform output -raw project_number)
     popd
@@ -36,35 +39,41 @@ test_single_project() {
         exit
     fi
 
-    terraform -chdir=app state rm google_app_engine_application.main || true
-    terraform -chdir=app destroy --auto-approve \
-        -var google_ops_project_id="${SINGLE_PROJECT}" \
-        -var google_project_id="${SINGLE_PROJECT}"
+    terraform -chdir=app state rm module.application.google_app_engine_application.main || true
+    terraform -chdir=app destroy --auto-approve > /dev/null
     terraform -chdir=ops destroy --auto-approve \
-        -var google_ops_project_id="${SINGLE_PROJECT}"
+        -var google_ops_project_id="${SINGLE_PROJECT}" > /dev/null
+    
 }
 
 test_multi_project () {
     pushd ops
     terraform init
     terraform apply --auto-approve \
-        -var google_ops_project_id="${OPS_PROJECT}"
+        -var google_ops_project_id="${OPS_PROJECT}" > /dev/null
     ops_project_number=$(terraform output -raw ops_project_number)
     popd
 
     pushd app
-    terraform init --backend-config "path=./stage.tfstate" -reconfigure
+    # Set Staging Variables
+    cat > terraform.tfvars <<EOF
+google_ops_project_id = "${OPS_PROJECT}"
+google_project_id = "${STAGE_PROJECT}"
+EOF
+
+    terraform init --backend-config "path=./stage.tfstate" -reconfigure 
     terraform import module.application.google_app_engine_application.main "${STAGE_PROJECT}" || true
-    terraform apply --auto-approve \
-        -var google_ops_project_id="${OPS_PROJECT}" \
-        -var google_project_id="${STAGE_PROJECT}"
+    terraform apply --auto-approve > /dev/null
     stage_project_number=$(terraform output -raw project_number)
 
+    # Set Prod Variables
+    cat > terraform.tfvars <<EOF
+google_ops_project_id = "${OPS_PROJECT}"
+google_project_id = "${PROD_PROJECT}"
+EOF
     terraform init --backend-config "path=./prod.tfstate" -reconfigure
     terraform import module.application.google_app_engine_application.main "${PROD_PROJECT}" || true
-    terraform apply --auto-approve \
-        -var google_ops_project_id="${OPS_PROJECT}" \
-        -var google_project_id="${PROD_PROJECT}"
+    terraform apply --auto-approve > /dev/null
     prod_project_number=$(terraform output -raw project_number)
     popd    
 
@@ -84,21 +93,29 @@ test_multi_project () {
     # TODO: Terraform standards suggest env dirs as root module.
     # This would allow avoiding init thrash, and open up concurrent operations.
     pushd app
-    terraform init --backend-config "path=./prod.tfstate" -reconfigure
+    # Set Prod Variables
+    cat > terraform.tfvars <<EOF
+google_ops_project_id = "${OPS_PROJECT}"
+google_project_id = "${PROD_PROJECT}"
+EOF
+    terraform init --backend-config "path=./prod.tfstate" -reconfigure > /dev/null
     terraform state rm module.application.google_app_engine_application.main || true
-    terraform destroy --auto-approve \
-        -var google_ops_project_id="${OPS_PROJECT}" \
-        -var google_project_id="${PROD_PROJECT}"
-    terraform init --backend-config "path=./stage.tfstate" -reconfigure
+    terraform destroy --auto-approve > /dev/null
+
+    # Set Staging Variables
+    cat > terraform.tfvars <<EOF
+google_ops_project_id = "${OPS_PROJECT}"
+google_project_id = "${STAGE_PROJECT}"
+EOF
+    terraform init --backend-config "path=./stage.tfstate" -reconfigure > /dev/null
     terraform state rm module.application.google_app_engine_application.main || true
-    terraform destroy --auto-approve \
-        -var google_ops_project_id="${OPS_PROJECT}" \
-        -var google_project_id="${STAGE_PROJECT}"
+    terraform destroy --auto-approve  > /dev/null
     popd
 
     terraform -chdir=ops destroy --auto-approve \
-        -var google_ops_project_id="${OPS_PROJECT}"
+        -var google_ops_project_id="${OPS_PROJECT}" > /dev/null
+
 }
 
-# test_single_project
+test_single_project
 test_multi_project
