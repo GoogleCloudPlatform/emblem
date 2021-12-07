@@ -202,7 +202,7 @@ def logout():
     session.delete(session_id)
 
     # Wipe out the session cookie
-    response = make_response("auth/logout.html", 200)
+    response = make_response(render_template("auth/logout.html"), 200)
     response.delete_cookie("session_id")
 
     return response
