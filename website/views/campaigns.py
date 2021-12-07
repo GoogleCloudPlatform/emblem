@@ -16,11 +16,36 @@ from flask import Blueprint, g, redirect, request, render_template
 
 from middleware.logging import log
 
-import re
+from functools import reduce
 
+from datetime import datetime
+
+import pytz
+
+import re
 
 campaigns_bp = Blueprint("campaigns", __name__, template_folder="templates")
 
+def convert_utc(time):
+  pacific_zone = pytz.timezone('America/Los_Angeles')
+  if time is not None:
+    converted_time = time.astimezone(pacific_zone)
+  else:
+    return time
+  return converted_time.strftime('%m/%d/%y (%I:%M %p %Z)')
+
+def get_donor_name(donation):
+    if donation is None:
+        return ''
+    try:
+        donor = g.api.donors_id_get(donation["donor"])
+        if donor is not None:
+            donation["donorName"] = donor["name"]
+            donation["formattedDateCreated"] = convert_utc(donation.time_created)
+    except Exception as e:
+        log(f"Exception when listing campaign donations: {e}", severity="ERROR")
+        return render_template("errors/403.html"), 403
+    return donation
 
 @campaigns_bp.route("/")
 def list_campaigns():
@@ -64,7 +89,6 @@ def save_campaign():
 
     return redirect("/")
 
-
 @campaigns_bp.route("/viewCampaign")
 def webapp_view_campaign():
     campaign_id = request.args.get("campaign_id")
@@ -74,16 +98,20 @@ def webapp_view_campaign():
 
     try:
         campaign_instance = g.api.campaigns_id_get(campaign_id)
+        campaign_instance["formattedDateCreated"] = convert_utc(campaign_instance.time_created)
+        campaign_instance["formattedDateUpdated"] = convert_utc(campaign_instance.updated)
     except Exception as e:
         log(f"Exception when fetching campaigns {campaign_id}: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403
 
     campaign_instance["donations"] = []
+    campaign_instance["raised"] = 0
 
     try:
-        campaign_instance["donations"] = g.api.campaigns_id_donations_get(
-            campaign_instance["id"]
-        )
+        donations = g.api.campaigns_id_donations_get(campaign_instance["id"])
+        if len(donations) > 0:
+            campaign_instance["donations"] = list(map(get_donor_name, donations))
+            campaign_instance["raised"] = reduce(lambda t, d: t + int(d['amount'] if d is not None else 0), donations, 0)
     except Exception as e:
         log(f"Exception when listing campaign donations: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403

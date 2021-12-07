@@ -145,3 +145,8 @@ terraform.tfvars
 
 # Mac stuff
 .DS_Store
+
+# Vim temp files
+*.swo
+*.swp
+
