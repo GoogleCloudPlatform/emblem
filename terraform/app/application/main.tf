@@ -89,3 +89,11 @@ resource "google_storage_bucket" "sessions" {
   project  = data.google_project.main.project_id
   provider = google
 }
+
+resource "google_storage_bucket_iam_member" "sessions-iam" {
+  bucket = google_storage_bucket.sessions.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:cloud-run-manager@${data.google_project.main.project_id}.iam.gserviceaccount.com"
+
+  depends_on = [google_service_account.cloud_run_manager]
+}
