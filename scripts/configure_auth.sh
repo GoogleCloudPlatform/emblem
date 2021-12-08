@@ -92,7 +92,9 @@ OPS_PROJECT_NUMBER=$(gcloud projects describe ${OPS_PROJECT} --format "value(pro
 AUTH_SECRETS="CLIENT_ID=projects/${OPS_PROJECT_NUMBER}/secrets/client_id_secret:latest"
 AUTH_SECRETS="${AUTH_SECRETS},CLIENT_SECRET=projects/${OPS_PROJECT_NUMBER}/secrets/client_secret_secret:latest"
 
-# TODO: do we want to keep the redirect URI secret, or set it as an env var?
+# TODO: fetch the redirect URI dynamically (from HTTP headers) instead of 
+#       using env vars, for things like custom domains and load balancers.
+#       See https://github.com/GoogleCloudPlatform/emblem/issues/277
 
 gcloud run services update website \
     --update-env-vars "REDIRECT_URI=${STAGE_CALLBACK_URL}" \
