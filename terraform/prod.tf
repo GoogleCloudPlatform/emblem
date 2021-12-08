@@ -93,3 +93,11 @@ resource "google_storage_bucket" "sessions_prod" {
     }
   }
 }
+
+resource "google_storage_bucket_iam_member" "prod_sessions_iam" {
+  bucket = google_storage_bucket.sessions_prod.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:cloud-run-manager@${data.google_project.prod_project.project_id}.iam.gserviceaccount.com"
+
+  depends_on = [google_service_account.prod_cloud_run_manager]
+}

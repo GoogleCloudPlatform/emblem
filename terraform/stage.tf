@@ -93,3 +93,11 @@ resource "google_storage_bucket" "sessions_stage" {
     }
   }
 }
+
+resource "google_storage_bucket_iam_member" "stage_sessions_iam" {
+  bucket = google_storage_bucket.sessions_stage.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:cloud-run-manager@${data.google_project.stage_project.project_id}.iam.gserviceaccount.com"
+
+  depends_on = [google_service_account.stage_cloud_run_manager]
+}
