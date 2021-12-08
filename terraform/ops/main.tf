@@ -108,7 +108,7 @@ resource "google_secret_manager_secret" "oauth_client_id" {
   depends_on = [google_project_service.secretmanager]
 }
 
-resource "google_secret_manager_secret" "client_secret_secret" {
+resource "google_secret_manager_secret" "oauth_client_secret" {
   project   = data.google_project.main.project_id
   secret_id = "client_secret_secret"
   replication {
