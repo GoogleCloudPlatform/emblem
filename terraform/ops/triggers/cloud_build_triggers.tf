@@ -18,13 +18,13 @@ resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
 }
 
 resource "google_cloudbuild_trigger" "api_push_to_main_build_trigger" {
-  project  = var.google_ops_project_id
-  name     = "api-push-to-main"
-  filename = "ops/api-build.cloudbuild.yaml"
+  project        = var.google_ops_project_id
+  name           = "api-push-to-main"
+  filename       = "ops/api-build.cloudbuild.yaml"
   included_files = ["content-api/**"]
   github {
     owner = var.repo_owner
-    name = var.repo_name
+    name  = var.repo_name
     push {
       branch = "^main$"
     }
