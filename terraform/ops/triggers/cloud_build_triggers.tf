@@ -1,7 +1,7 @@
 resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
-  project  = var.google_ops_project_id
-  name     = "api-unit-tests"
-  filename = "ops/unit-tests.cloudbuild.yaml"
+  project        = var.google_ops_project_id
+  name           = "api-unit-tests"
+  filename       = "ops/unit-tests.cloudbuild.yaml"
   included_files = ["content-api/**"]
   substitutions  = {
     _DIR             = "content-api"
@@ -35,7 +35,9 @@ resource "google_cloudbuild_trigger" "website_unit_tests_build_trigger" {
   project        = var.google_ops_project_id
   name           = "website-unit-tests"
   filename       = "ops/unit-tests.cloudbuild.yaml"
-  included_files = ["website/**"]
+  included_files = [
+    "website/**"
+  ]
   substitutions  = {
     _DIR = "website"
   }
