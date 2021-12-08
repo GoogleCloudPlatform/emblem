@@ -4,9 +4,9 @@ resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
   filename = "ops/unit-tests.cloudbuild.yaml"
   included_files = ["content-api/**"]
   substitutions = {
-     _DIR = "content-api"
-     _SERVICE_ACCOUNT = "restricted-test-identity@emblem-ops.iam.gserviceaccount.com"
-  }
+    _DIR = "content-api"
+    _SERVICE_ACCOUNT = "restricted-test-identity@emblem-ops.iam.gserviceaccount.com"
+    }
   github {
     owner = var.repo_owner
     name  = var.repo_name
@@ -32,8 +32,8 @@ resource "google_cloudbuild_trigger" "api_push_to_main_build_trigger" {
 }
 
 resource "google_cloudbuild_trigger" "website_unit_tests_build_trigger" {
-  project = var.google_ops_project_id
-  name = "website-unit-tests"
+  project  = var.google_ops_project_id
+  name     = "website-unit-tests"
   filename = "ops/unit-tests.cloudbuild.yaml"
   included_files = ["website/**"]
   substitutions = {
