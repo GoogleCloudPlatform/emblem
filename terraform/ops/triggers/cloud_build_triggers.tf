@@ -36,7 +36,7 @@ resource "google_cloudbuild_trigger" "website_unit_tests_build_trigger" {
   name           = "website-unit-tests"
   filename       = "ops/unit-tests.cloudbuild.yaml"
   included_files = ["website/**"]
-  substitutions  = {
+  substitutions = {
     _DIR = "website"
   }
   github {
