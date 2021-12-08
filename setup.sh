@@ -137,6 +137,23 @@ gcloud run deploy --allow-unauthenticated \
 --set-env-vars "$WEBSITE_VARS" \
 website
 
+###############
+# Set up auth #
+###############
+echo ""
+read -p "Would you like to configure $(tput bold)$(tput setaf 3)end-user authentication?$(tput sgr0) (y/n) " auth_yesno
+
+if [[ ${auth_yesno} == "y" ]]; then
+    sh ./scripts/configure_auth.sh
+else
+    echo "Skipping end-user authentication configuration. You can configure it later by running:"
+    echo ""
+    echo "  export $(tput bold)PROD_PROJECT$(tput sgr0)=$(tput setaf 6)${PROD_PROJECT}$(tput sgr0)"
+    echo "  export $(tput bold)STAGE_PROJECT$(tput sgr0)=$(tput setaf 6)${STAGE_PROJECT}$(tput sgr0)"
+    echo "  export $(tput bold)OPS_PROJECT$(tput sgr0)=$(tput setaf 6)${OPS_PROJECT}$(tput sgr0)"
+    echo "  $(tput setaf 6)sh scripts/configure_auth.sh$(tput sgr0)"
+    echo ""
+fi
 
 ################
 # Set up CI/CD #
