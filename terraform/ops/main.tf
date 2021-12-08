@@ -95,7 +95,7 @@ resource "google_project_service" "secretmanager" {
 # TODO: prod and staging should use different secrets
 # See the following GitHub issue:
 #   https://github.com/GoogleCloudPlatform/emblem/issues/263
-resource "google_secret_manager_secret" "client_id_secret" {
+resource "google_secret_manager_secret" "oauth_client_id" {
   project   = data.google_project.main.project_id
   secret_id = "client_id_secret"
   replication {
