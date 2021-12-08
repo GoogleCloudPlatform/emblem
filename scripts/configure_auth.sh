@@ -96,9 +96,9 @@ AUTH_SECRETS="${AUTH_SECRETS},CLIENT_SECRET=projects/${OPS_PROJECT_NUMBER}/secre
 
 gcloud run services update website \
     --update-env-vars "REDIRECT_URI=${STAGE_CALLBACK_URL}" \
-    --set-secrets "${AUTH_SECRETS}" \
+    --update-secrets "${AUTH_SECRETS}" \
     --project "$STAGE_PROJECT"
 gcloud run services update website \
     --update-env-vars "REDIRECT_URI=${PROD_CALLBACK_URL}" \
-    --set-secrets "${AUTH_SECRETS}" \
+    --update-secrets "${AUTH_SECRETS}" \
     --project "$PROD_PROJECT"
