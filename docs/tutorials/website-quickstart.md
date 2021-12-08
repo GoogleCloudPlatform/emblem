@@ -1,4 +1,4 @@
-# Run the Emblem Giving Website locally on Cloud Shell
+# Run the Emblem Giving Website with Cloud Shell
 ##
 This tutorial shows you how to quickly run the Emblem Giving Website with Flask. You'll use Cloud Shell, a free browser-based IDE.
 
@@ -43,7 +43,9 @@ Find your OAuth 2.0 credentials and set them as environment variables in Cloud S
 
 1. Go to the [Credentials](https://console.developers.google.com/apis/credentials) page.
 
-2. Click the name of your credential or the pencil (<walkthrough-cloud-shell-editor-icon></walkthrough-cloud-shell-editor>) icon. Your client ID and secret are at the top of the page.
+2. Choose an existing credential or create a new one by clicking **Create Credentials > OAuth Client ID** and following the instructions to create a Client ID and Consent Screen.
+
+3. Click the name of your credential or the pencil (<walkthrough-cloud-shell-editor-icon></walkthrough-cloud-shell-editor>) icon to open your OAuth credential details. Your client ID and secret are at the top of the page.
 
 In the Cloud Shell terminal, set your `CLIENT_ID` and `CLIENT_SECRET` as environment variables:
 ```bash

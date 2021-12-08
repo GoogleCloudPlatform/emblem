@@ -29,19 +29,40 @@ elif [[ -z "${OPS_PROJECT}" ]]; then
     exit 1
 fi
 
-cat > terraform/terraform.tfvars <<EOF
-google_prod_project_id = "${PROD_PROJECT}"
-google_stage_project_id = "${STAGE_PROJECT}"
-google_ops_project_id = "${OPS_PROJECT}"
-EOF
 
 ######################
 # Terraform Projects #
 ######################
 
-pushd terraform/
+
+## Ops Project ##
+pushd terraform/ops
 terraform init
-terraform apply --auto-approve
+terraform apply --auto-approve \
+    -var google_ops_project_id="${OPS_PROJECT}" 
+popd
+
+
+## Staging Project ##
+pushd terraform/app
+
+# Set Staging Variables
+cat > terraform.tfvars <<EOF
+google_ops_project_id = "${OPS_PROJECT}"
+google_project_id = "${STAGE_PROJECT}"
+EOF
+
+terraform init --backend-config "path=./stage.tfstate" -reconfigure 
+# Import App Engine if it already exists in the project. 
+# App Engine cannot be deleted so running terraform in a project with 
+# an already extant App Engine project raises an error on terraform apply.
+# Importing the module resolves the error.  
+#
+# Note: If AppEngine is in a different region than Cloud Run or in the wrong mode 
+# (Datastore vs Firestore), this could cause latency or query compatibility issues.
+
+terraform import module.application.google_app_engine_application.main "${STAGE_PROJECT}" || true
+terraform apply --auto-approve 
 
 # Firestore requires App Engine for automatic provisioning.
 # App Engine is not compatible with terraform destroy.
@@ -49,8 +70,21 @@ terraform apply --auto-approve
 # Remove this when App Engine support for terraform destroy is fixed or Firestore has a direct provisioning solution.
 # https://github.com/GoogleCloudPlatform/emblem/issues/217
 terraform state rm google_app_engine_application.stage_app || true
-terraform state rm google_app_engine_application.prod_app || true
 
+
+## Prod Project ##
+
+# Set Prod Variables
+cat > terraform.tfvars <<EOF
+google_ops_project_id = "${OPS_PROJECT}"
+google_project_id = "${PROD_PROJECT}"
+EOF
+
+terraform init --backend-config "path=./prod.tfstate" -reconfigure
+terraform import module.application.google_app_engine_application.main "${PROD_PROJECT}" || true
+terraform apply --auto-approve 
+terraform state rm module.application.google_app_engine_application.main || true
+    
 # Return to root directory
 popd
 
@@ -103,6 +137,23 @@ gcloud run deploy --allow-unauthenticated \
 --set-env-vars "$WEBSITE_VARS" \
 website
 
+###############
+# Set up auth #
+###############
+echo ""
+read -p "Would you like to configure $(tput bold)$(tput setaf 3)end-user authentication?$(tput sgr0) (y/n) " auth_yesno
+
+if [[ ${auth_yesno} == "y" ]]; then
+    sh ./scripts/configure_auth.sh
+else
+    echo "Skipping end-user authentication configuration. You can configure it later by running:"
+    echo ""
+    echo "  export $(tput bold)PROD_PROJECT$(tput sgr0)=$(tput setaf 6)${PROD_PROJECT}$(tput sgr0)"
+    echo "  export $(tput bold)STAGE_PROJECT$(tput sgr0)=$(tput setaf 6)${STAGE_PROJECT}$(tput sgr0)"
+    echo "  export $(tput bold)OPS_PROJECT$(tput sgr0)=$(tput setaf 6)${OPS_PROJECT}$(tput sgr0)"
+    echo "  $(tput setaf 6)sh scripts/configure_auth.sh$(tput sgr0)"
+    echo ""
+fi
 
 ################
 # Set up CI/CD #
@@ -136,13 +187,16 @@ done
 # Create Triggers #
 ###################
 
-gcloud alpha builds triggers create github \
---name=web-push-to-main \
---repo-owner=${repo_owner} --repo-name=${repo_name} \
---branch-pattern="^main$" --build-config=ops/build.cloudbuild.yaml \
---included-files="website/*" --substitutions=_DIR="website",\
-_STAGING_PROJECT="$STAGE_PROJECT",_PROD_PROJECT="$PROD_PROJECT" \
---project="${OPS_PROJECT}"
+pushd terraform/ops/triggers
+# Set Trigger Variables
+cat > terraform.tfvars <<EOF
+google_ops_project_id = "${OPS_PROJECT}"
+repo_owner = "${repo_owner}"
+repo_name = "${repo_name}"
+EOF
+
+terraform init
+terraform apply --auto-approve
 
 gcloud alpha builds triggers create pubsub \
 --name=web-deploy-staging --topic="projects/${OPS_PROJECT}/topics/gcr" \
