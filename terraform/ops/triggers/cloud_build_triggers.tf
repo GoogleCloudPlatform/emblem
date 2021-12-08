@@ -3,7 +3,7 @@ resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
   name           = "api-unit-tests"
   filename       = "ops/unit-tests.cloudbuild.yaml"
   included_files = ["content-api/**"]
-  substitutions  = {
+  substitutions = {
     _DIR             = "content-api"
     _SERVICE_ACCOUNT = "restricted-test-identity@emblem-ops.iam.gserviceaccount.com"
   }
@@ -35,9 +35,7 @@ resource "google_cloudbuild_trigger" "website_unit_tests_build_trigger" {
   project        = var.google_ops_project_id
   name           = "website-unit-tests"
   filename       = "ops/unit-tests.cloudbuild.yaml"
-  included_files = [
-    "website/**"
-  ]
+  included_files = ["website/**"]
   substitutions  = {
     _DIR = "website"
   }
