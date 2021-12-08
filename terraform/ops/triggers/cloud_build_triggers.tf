@@ -3,10 +3,10 @@ resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
   name     = "api-unit-tests"
   filename = "ops/unit-tests.cloudbuild.yaml"
   included_files = ["content-api/**"]
-  substitutions = {
+  substitutions  = {
     _DIR = "content-api"
     _SERVICE_ACCOUNT = "restricted-test-identity@emblem-ops.iam.gserviceaccount.com"
-    }
+  }
   github {
     owner = var.repo_owner
     name  = var.repo_name
@@ -18,8 +18,8 @@ resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
 }
 
 resource "google_cloudbuild_trigger" "api_push_to_main_build_trigger" {
-  project = var.google_ops_project_id
-  name = "api-push-to-main"
+  project  = var.google_ops_project_id
+  name     = "api-push-to-main"
   filename = "ops/api-build.cloudbuild.yaml"
   included_files = ["content-api/**"]
   github {
@@ -32,26 +32,26 @@ resource "google_cloudbuild_trigger" "api_push_to_main_build_trigger" {
 }
 
 resource "google_cloudbuild_trigger" "website_unit_tests_build_trigger" {
-  project  = var.google_ops_project_id
-  name     = "website-unit-tests"
-  filename = "ops/unit-tests.cloudbuild.yaml"
+  project        = var.google_ops_project_id
+  name           = "website-unit-tests"
+  filename       = "ops/unit-tests.cloudbuild.yaml"
   included_files = ["website/**"]
-  substitutions = {
+  substitutions  = {
     _DIR = "website"
   }
   github {
     owner = var.repo_owner
-    name = var.repo_name
+    name  = var.repo_name
     pull_request {
-    branch = "^main$"
-    comment_control="COMMENTS_ENABLED_FOR_EXTERNAL_CONTRIBUTORS_ONLY"
+      branch = "^main$"
+      comment_control="COMMENTS_ENABLED_FOR_EXTERNAL_CONTRIBUTORS_ONLY"
     }
   }
 }
 
 resource "google_cloudbuild_trigger" "web_push_to_main_build_trigger" {
-  project = var.google_ops_project_id
-  name = "web-push-to-main"
+  project  = var.google_ops_project_id
+  name     = "web-push-to-main"
   filename = "ops/web-build.cloudbuild.yaml"
   included_files = [
     "website/*",
@@ -60,7 +60,7 @@ resource "google_cloudbuild_trigger" "web_push_to_main_build_trigger" {
     ]
   github {
     owner = var.repo_owner
-    name = var.repo_name
+    name  = var.repo_name
     push {
       branch = "^main$"
     }
