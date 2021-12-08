@@ -57,6 +57,10 @@ terraform init --backend-config "path=./stage.tfstate" -reconfigure
 # App Engine cannot be deleted so running terraform in a project with 
 # an already extant App Engine project raises an error on terraform apply.
 # Importing the module resolves the error.  
+#
+# Note: If AppEngine is in a different region than Cloud Run or in the wrong mode 
+# (Datastore vs Firestore), this could cause latency or query compatibility issues.
+
 terraform import module.application.google_app_engine_application.main "${STAGE_PROJECT}" || true
 terraform apply --auto-approve 
 
