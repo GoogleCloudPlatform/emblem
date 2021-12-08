@@ -41,10 +41,10 @@ resource "google_pubsub_topic" "gcr" {
 }
 
 resource "google_project_iam_member" "pubsub_publisher_iam_member" {
-  project    = data.google_project.ops.project_id
+  project    = data.google_project.main.project_id
   provider   = google
   role       = "roles/pubsub.publisher"
-  member     = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
+  member     = "serviceAccount:${data.google_project.main.number}@cloudbuild.gserviceaccount.com"
 }
 
 ###
