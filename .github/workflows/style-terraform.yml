@@ -33,9 +33,11 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
       - run: terraform init
       - name: Terraform Fmt
-        run: terraform fmt --recursive
-      - uses: googleapis/code-suggester@v1 # takes the changes from git directory
-        with:
-          command: review
-          pull_number: ${{ github.event.pull_request.number }}
-          git_dir: '.'
+        run: terraform fmt --recursive --check
+      # Switched terraform fmt to --check and disabling code-suggester.
+      # TODO(#143): Revisit CLA Bot approach.
+      # - uses: googleapis/code-suggester@v1 # takes the changes from git directory
+      #   with:
+      #     command: review
+      #     pull_number: ${{ github.event.pull_request.number }}
+      #     git_dir: '.'
