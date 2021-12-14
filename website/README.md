@@ -9,9 +9,9 @@ The website uses the following Google Cloud services:
 - **Secret Manager** - manages OAuth client secrets
 - **Cloud Storage** - stores session data
 
-Emblem automates deployment of the Website and Content API and setup of Operations Management with the Testing & Delivery Pipeline.
+Emblem uses a testing & delivery pipeline to automate deployment of the web application (Website & Content API) and setup of operations management.
 
-To deploy the website without using the automated pipeline, follow the instructions in the [Quickstart](#quickstart) or [Setup](#setup) guide below.
+To deploy the Emblem Website manually, either launch the [Quickstart](#quickstart) interactive tutorial or follow the[Setup](#setup) guide below.
 
 ## Quickstart
 
@@ -40,8 +40,7 @@ run `pip install -r requirements.txt`.
 ### Setting up authentication
 To enable end-user authentication within the application, you'll need to create an [OAuth client ID](https://console.cloud.google.com/apis/credentials/oauthclient) and configure an [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent). If you don't already have an OAuth client set up, you can run the Emblem [configure_auth](./scripts/configure_auth.sh) script in your terminal.
 
->**Note:** end-user authentication is required to access
-some - _but not all_ - application pages.
+>**Note:** end-user authentication is required to access some - _but not all_ - application pages.
 
 ### Configuration
 To configure the app, set the following environment variables:
@@ -55,10 +54,12 @@ To configure the app, set the following environment variables:
 
 The `CLIENT_ID` and `CLIENT_SECRET` can be found in the details page of your [Credentials dashboard](https://console.cloud.google.com/apis/credentials).
 
+> **Note: these are sensitive values that should be kept secure.** When deployed with the production pipeline, Emblem uses Secret Manager to store these values more securely.
+
 The `EMBLEM_API_URL` value will be determined by where you host the Content API. (If you're using Cloud Run, it will look something like `https://<SERVICE_NAME>-<HASH>.run.app`)
 
 Congratulations! You are now ready to run the Emblem web app.
 
-## Running
+### Running
 
-To run the web app, use the `flask run` command.
+To run the website, use the `flask run` command. By default, the website will run on port `8080`.
