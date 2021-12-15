@@ -32,6 +32,38 @@ emblem_install() {
     fi
 }
 
+emblem_guided_auth() {
+    echo "Emblem End-user Authentication: Guided Setup"
+
+    if [[ $# -gt 0 ]]; then
+        export PROD_PROJECT=$1
+        export STAGE_PROJECT=$1
+        export OPS_PROJECT=$1
+        bash ./scripts/configure_auth.sh
+    else
+        echo "error: Please name a project to configure."
+        exit 1
+    fi
+}
+
+emblem_describe() {
+    if [[ $# -gt 0 ]]; then
+        export PROD_PROJECT=$1
+        export STAGE_PROJECT=$1
+        export OPS_PROJECT=$1
+
+        export CLOUDSDK_CORE_PROJECT=${OPS_PROJECT}
+        website=$(gcloud run services describe website --format 'value(status.address.url)')
+        api=$(gcloud run services describe content-api --format 'value(status.address.url)')
+        echo "Website: $website"
+        echo "Content API: $api"
+        echo "Logs: https://console.cloud.google.com/logs/query;query=;timeRange=PT3H?project=${OPS_PROJECT}"
+    else
+        echo "error: Please name a project to describe."
+        exit 1
+    fi
+}
+
 emblem_help() {
     echo "Welcome to Emblem Control!"
     echo
@@ -39,11 +71,12 @@ emblem_help() {
     echo -e "\tcreate\t\t\t\tCreate a new instance"
     echo -e "\t\t--from-project\t\tPopulate billing & organization from specified project"
     echo -e "\tinstall\t\t\t\tSet up Emblem in the named project"
+    echo -e "\tguided\t\t\t\tGuide to setting up incremental Emblem improvements"
+    echo -e "\t\tauth\t\t\tSet up end-user authentication"
     echo -e "\thelp\t\t\t\tThis help message"
     echo
     echo "emblemctl version: 0.1^-pi (experimental)"
 }
-
 
 cmd=${1:-help}
 if [ "$cmd" == "create" ]; then
@@ -52,6 +85,16 @@ if [ "$cmd" == "create" ]; then
 elif [ "$cmd" == "install" ]; then
     shift
     emblem_install "$@"
+elif [ "$cmd" == "guided" ]; then
+    shift
+    if [[ "$#" -gt 0 ]] && [[ "$1" == "auth" ]]; then
+        emblem_guided_auth "$@"
+    else
+        echo -e "Guide options include 'auth'"
+    fi
+elif [ "$cmd" == "describe" ]; then
+    shift
+    emblem_describe "$@"
 else
     emblem_help "$@"
 fi
