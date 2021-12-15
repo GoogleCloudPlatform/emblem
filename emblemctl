@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+emblem_create() {
+    echo "Creating new instance..."
+
+    if [[ $# -gt 0 ]]; then
+        gcloud projects create $1
+        billing=$(gcloud alpha billing projects describe emblem-ops --format 'value(billingAccountName)')
+        gcloud alpha billing projects link $1 --billing-account $billing
+        gcloud services enable cloudresourcemanager.googleapis.com
+        emblem_install $1
+    else
+        echo "error: Please name a project to create or use emblemctl install to use an existing project"
+        exit 1
+    fi
+}
+
+emblem_install() {
+    echo "Installing Emblem..."
+    echo "If you have access issues, please use 'gcloud auth application-default login' and unset GOOGLE_APPLICATION_CREDENTIALS if set."
+
+    if [[ $# -gt 0 ]]; then
+        export PROD_PROJECT=$1
+        export STAGE_PROJECT=$1
+        export OPS_PROJECT=$1
+        ./setup.sh
+    else
+        echo "error: Please name a project to install Emblem."
+        exit 1
+    fi
+}
+
+emblem_help() {
+    echo "Welcome to Emblem Control!"
+    echo
+    echo "Available Commands:"
+    echo -e "\tcreate\t\t\t\tCreate a new instance"
+    echo -e "\t\t--from-project\t\tPopulate billing & organization from specified project"
+    echo -e "\tinstall\t\t\t\tSet up Emblem in the named project"
+    echo -e "\thelp\t\t\t\tThis help message"
+    echo
+    echo "emblemctl version: 0.1^-pi (experimental)"
+}
+
+
+cmd=${1:-help}
+if [ "$cmd" == "create" ]; then
+    shift
+    emblem_create "$@"
+elif [ "$cmd" == "install" ]; then
+    shift
+    emblem_install "$@"
+else
+    emblem_help "$@"
+fi

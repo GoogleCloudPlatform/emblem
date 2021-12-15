@@ -17,6 +17,8 @@
 # This will require 3 projects, for ops, staging, and prod
 # To auto-create the projects, run clean_project_setup.sh
 
+set -e
+
 # Check env variables
 if [[ -z "${PROD_PROJECT}" ]]; then
     echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
@@ -70,22 +72,6 @@ terraform apply --auto-approve
 # Remove this when App Engine support for terraform destroy is fixed or Firestore has a direct provisioning solution.
 # https://github.com/GoogleCloudPlatform/emblem/issues/217
 terraform state rm module.application.google_app_engine_application.main || true
-
-
-## Prod Project ##
-
-# Set Prod Variables
-cat > terraform.tfvars <<EOF
-google_ops_project_id = "${OPS_PROJECT}"
-google_project_id = "${PROD_PROJECT}"
-EOF
-
-terraform init --backend-config "path=./prod.tfstate" -reconfigure
-terraform import module.application.google_app_engine_application.main "${PROD_PROJECT}" || true
-terraform apply --auto-approve 
-terraform state rm module.application.google_app_engine_application.main || true
-    
-# Return to root directory
 popd
 
 ###################
@@ -105,29 +91,10 @@ gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
 # Deploy built images (API)
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
---project "$PROD_PROJECT"  --service-account "cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
-content-api
-
-gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
 --project "$STAGE_PROJECT"  --service-account "cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"  \
 content-api
 
-# Deploy built images (website prod)
-API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
-
-WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions"
-WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${API_URL}"
-
-gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
---project "$PROD_PROJECT" --service-account "cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com"  \
---set-env-vars "$WEBSITE_VARS" \
-website
-
 # Deploy built images (website staging)
-API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
-
 WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions"
 WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${API_URL}"
 
@@ -207,5 +174,3 @@ _REGION="$REGION",_REVISION='$(body.message.messageId)',\
 _SERVICE=website,_TARGET_PROJECT="$STAGE_PROJECT",\
 _STAGING_PROJECT="$STAGE_PROJECT",_PROD_PROJECT="$PROD_PROJECT" \
 --project="${OPS_PROJECT}"
-
-
