@@ -17,6 +17,8 @@
 # This will require 3 projects, for ops, staging, and prod
 # To auto-create the projects, run clean_project_setup.sh
 
+set -eu
+
 # Check env variables
 if [[ -z "${PROD_PROJECT}" ]]; then
     echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
