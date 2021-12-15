@@ -15,7 +15,7 @@
 
 # Run ./setup.sh from a project with a billing account enabled
 # This will require 3 projects, for ops, staging, and prod
-# To auto-create the projects, run new_project_setup.sh
+# To auto-create the projects, run clean_project_setup.sh
 
 # Check env variables
 if [[ -z "${PROD_PROJECT}" ]]; then
