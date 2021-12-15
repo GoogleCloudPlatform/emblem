@@ -15,7 +15,7 @@
 
 # Run ./setup.sh from a project with a billing account enabled
 # This will require 3 projects, for ops, staging, and prod
-# To auto-create the projects, run new_project_setup.sh
+# To auto-create the projects, run clean_project_setup.sh
 
 # Check env variables
 if [[ -z "${PROD_PROJECT}" ]]; then
@@ -170,10 +170,10 @@ continue=1
 while [[ ${continue} -gt 0 ]]
 do
 
-read -p "Please input the repo-owner [GoogleCloudPlatform]: " repo_owner
-repo_owner=${name:-GoogleCloudPlatform}
+read -p "Please input the repo owner [GoogleCloudPlatform]: " repo_owner
+repo_owner=${repo_owner:-GoogleCloudPlatform}
 read -p "Please input the repo name [emblem]: " repo_name
-repo_name=${name:-emblem}
+repo_name=${repo_name:-emblem}
 
 read -p "Is this the correct repo: ${repo_owner}/${repo_name}? (y/n) " yesno
 
