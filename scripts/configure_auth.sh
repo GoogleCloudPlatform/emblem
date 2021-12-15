@@ -16,6 +16,8 @@
 # This file will provision end-user authentication
 # resources in an already-deployed Emblem instance.
 
+set -e
+
 # Check input env variables
 if [[ -z "${PROD_PROJECT}" ]]; then
     echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
