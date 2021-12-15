@@ -56,21 +56,17 @@
       <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
         <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Help" title="Help">help_outline</button>
 
-        <a href="/">
-          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Search Campaigns" title="Search Campaigns">search</button>
-        </a>
-
         <!-- Login controls -->
         {% if 'session_id' in request.cookies %}
           <!-- Logged in -->
           <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Profile" title="Profile">account_circle</button>
           <a href="/logout">
-            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log Out" title="Log Out">exit_to_app</button>
+            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log Out" title="Log Out">logout</button>
           </a>
         {% else %}
           <!-- No hidden auth failures; login enabled -->
           <a href="/login">
-            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log In" title="Log In">pin_invoke</button>
+            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log In" title="Log In">login</button>
           </a>
         {% endif %}
       </section>
