@@ -103,10 +103,9 @@ resource "google_pubsub_topic" "canary" {
 
 resource "google_secret_manager_secret_iam_member" "secret_access_iam_client_id" {
   project   = data.google_project.ops.project_id
-  secret_id = "client_id_secret"
+  secret_id = data.terraform_remote_state.ops.outputs.secret_ids.client_id
   role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:cloud-run-manager@${data.google_project.main.project_id}.iam.gserviceaccount.com"
-
+  member    = "serviceAccount:${module.application.cloud_run_manager}"
   depends_on = [
     # Ensure environment setup, specifically Cloud Run Manager service account.
     module.application
@@ -115,10 +114,9 @@ resource "google_secret_manager_secret_iam_member" "secret_access_iam_client_id"
 
 resource "google_secret_manager_secret_iam_member" "secret_access_iam_client_secret" {
   project   = data.google_project.ops.project_id
-  secret_id = "client_secret_secret"
+  secret_id = data.terraform_remote_state.ops.outputs.secret_ids.client_secret
   role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:cloud-run-manager@${data.google_project.main.project_id}.iam.gserviceaccount.com"
-
+  member    = "serviceAccount:${module.application.cloud_run_manager}"
   depends_on = [
     # Ensure environment setup, specifically Cloud Run Manager service account.
     module.application

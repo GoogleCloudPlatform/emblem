@@ -12,3 +12,10 @@ output "artifact_registry" {
   }
   description = "Application Artifact Registries"
 }
+
+output "secret_ids" {
+  value = {
+   "client_id" = google_secret_manager_secret.oauth_client_id.secret_id
+   "client_secret" = google_secret_manager_secret.oauth_client_secret.secret_id
+   }
+}
