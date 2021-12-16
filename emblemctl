@@ -1,12 +1,28 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -eu
+
+emblem_seed() {
+    echo "Seeding default content..."
+    if [[ $# -gt 0 ]]; then
+        export PROD_PROJECT=$1
+        export STAGE_PROJECT=$1
+        export OPS_PROJECT=$1
+        export CLOUDSDK_CORE_PROJECT=$1
+        pushd content-api/data
+        python3 seed_test_approver.py $(gcloud config get-value account 2>/dev/null)
+        popd
+    else
+        echo "error: Please specify a project"
+        exit 1
+    fi
+}
 
 emblem_create() {
     echo "Creating new instance..."
 
     if [[ $# -gt 0 ]]; then
-        gcloud projects create $1
+        gcloud projects create $1 || true
         billing=$(gcloud alpha billing projects describe emblem-ops --format 'value(billingAccountName)')
         gcloud alpha billing projects link $1 --billing-account $billing
         gcloud services enable cloudresourcemanager.googleapis.com
@@ -26,6 +42,7 @@ emblem_install() {
         export STAGE_PROJECT=$1
         export OPS_PROJECT=$1
         ./setup.sh
+        emblem_seed $@
     else
         echo "error: Please name a project to install Emblem."
         exit 1
@@ -71,6 +88,7 @@ emblem_help() {
     echo -e "\tcreate\t\t\t\tCreate a new instance"
     echo -e "\t\t--from-project\t\tPopulate billing & organization from specified project"
     echo -e "\tinstall\t\t\t\tSet up Emblem in the named project"
+    echo -e "\tseed\t\t\t\tSeed default content"
     echo -e "\tguided\t\t\t\tGuide to setting up incremental Emblem improvements"
     echo -e "\t\tauth\t\t\tSet up end-user authentication"
     echo -e "\thelp\t\t\t\tThis help message"
@@ -85,9 +103,13 @@ if [ "$cmd" == "create" ]; then
 elif [ "$cmd" == "install" ]; then
     shift
     emblem_install "$@"
+elif [ "$cmd" == "seed" ]; then
+    shift
+    emblem_seed "$@"
 elif [ "$cmd" == "guided" ]; then
     shift
     if [[ "$#" -gt 0 ]] && [[ "$1" == "auth" ]]; then
+        shift
         emblem_guided_auth "$@"
     else
         echo -e "Guide options include 'auth'"
