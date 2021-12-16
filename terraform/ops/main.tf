@@ -45,6 +45,7 @@ resource "google_project_iam_member" "pubsub_publisher_iam_member" {
   provider = google
   role     = "roles/pubsub.publisher"
   member   = "serviceAccount:${data.google_project.main.number}@cloudbuild.gserviceaccount.com"
+  depends_on = [google_project_service.cloudbuild]
 }
 
 ###
