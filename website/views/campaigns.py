@@ -22,12 +22,6 @@ from views.helpers.time import convert_utc
 
 from functools import reduce
 
-from datetime import datetime
-
-import math
-
-import pytz
-
 import re
 
 campaigns_bp = Blueprint("campaigns", __name__, template_folder="templates")
@@ -98,7 +92,7 @@ def webapp_view_campaign():
             campaign_instance["donations"] = list(map(get_donor_name, donations))
             raised = reduce(lambda t, d: t + int(d['amount'] if d is not None else 0), donations, 0)
             campaign_instance["raised"] = raised
-            campaign_instance["percent_complete"] = math.ceil(raised/float(campaign_instance.goal)) if raised is not None else 0
+            campaign_instance["percent_complete"] = (raised/float(campaign_instance.goal))*100 if raised is not None else 0
     except Exception as e:
         log(f"Exception when listing campaign donations: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403
