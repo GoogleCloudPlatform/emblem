@@ -26,7 +26,7 @@
       <p>{{ campaign.description }}</p>
 
       <p class="emblem-campaign-status">
-        This campaign is X% complete.
+        This campaign is {{ "%.2f"|format(campaign.percent_complete) }}% complete.
       </p>
     </div>
 

@@ -16,36 +16,21 @@ from flask import Blueprint, g, redirect, request, render_template
 
 from middleware.logging import log
 
+from views.helpers.donors import get_donor_name
+
+from views.helpers.time import convert_utc
+
 from functools import reduce
 
 from datetime import datetime
+
+import math
 
 import pytz
 
 import re
 
 campaigns_bp = Blueprint("campaigns", __name__, template_folder="templates")
-
-def convert_utc(time):
-  pacific_zone = pytz.timezone('America/Los_Angeles')
-  if time is not None:
-    converted_time = time.astimezone(pacific_zone)
-  else:
-    return time
-  return converted_time.strftime('%m/%d/%y (%I:%M %p %Z)')
-
-def get_donor_name(donation):
-    if donation is None:
-        return ''
-    try:
-        donor = g.api.donors_id_get(donation["donor"])
-        if donor is not None:
-            donation["donorName"] = donor["name"]
-            donation["formattedDateCreated"] = convert_utc(donation.time_created)
-    except Exception as e:
-        log(f"Exception when listing campaign donations: {e}", severity="ERROR")
-        return render_template("errors/403.html"), 403
-    return donation
 
 @campaigns_bp.route("/")
 def list_campaigns():
@@ -111,7 +96,9 @@ def webapp_view_campaign():
         donations = g.api.campaigns_id_donations_get(campaign_instance["id"])
         if len(donations) > 0:
             campaign_instance["donations"] = list(map(get_donor_name, donations))
-            campaign_instance["raised"] = reduce(lambda t, d: t + int(d['amount'] if d is not None else 0), donations, 0)
+            raised = reduce(lambda t, d: t + int(d['amount'] if d is not None else 0), donations, 0)
+            campaign_instance["raised"] = raised
+            campaign_instance["percent_complete"] = math.ceil(raised/float(campaign_instance.goal)) if raised is not None else 0
     except Exception as e:
         log(f"Exception when listing campaign donations: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403
