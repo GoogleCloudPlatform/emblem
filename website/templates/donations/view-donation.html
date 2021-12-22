@@ -20,9 +20,9 @@
 
 {% block content %}
 <div class="mdc-layout-grid">
+  <a href="/">Back to campaign list</a>
   <div class="mdc-layout-grid__inner">
     <div class="emblem-campaign-details mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-      <a href="/">Back to campaign list</a>
       <ul class="mdc-list">
         <li role="separator" class="mdc-list-divider"></li>
         <li class="mdc-list-item">
@@ -45,9 +45,17 @@
         <li role="separator" class="mdc-list-divider"></li>
         <li class="mdc-list-item">
           <span class="mdc-list-item__text">Time</span>
-          <span class="mdc-list-item__meta">{{ donation.timeCreated }}</span>
+          <span class="mdc-list-item__meta">{{ donation.time_created }}</span>
         </li>
       </ul>
+      <!-- Donate button -->
+      <a href="/donate?campaign_id={{ campaign.id }}" class="mdc-button mdc-button--raised">
+        <span class="mdc-button__ripple"></span>
+        <i class="material-icons mdc-button__icon" aria-hidden="true"
+          >favorite</i
+        >
+        <span class="mdc-button__label">Donate again</span>
+      </a>
     </div>
   </div>
 </div>
