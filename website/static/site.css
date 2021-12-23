@@ -43,13 +43,12 @@ a {
 }
 
 .emblem-hero-image {
-  width: fit-content;
+  width: inherit;
   height: 33vh;
-}
-
-.emblem-hero-image img {
-  width: 100%;
-  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
 }
 
 .emblem-unpadded-grid.mdc-layout-grid {
@@ -65,24 +64,32 @@ a {
 }
 
 /**** Campaign cards ****/
-.mdc-card {
-  padding: 16px;
+.mdc-list {
+  padding: 0;
 }
 
-.mdc-list-divider,
-.mdc-card.emblem-campaign-card .mdc-list-item a {
-  padding: 8px 0;
+.mdc-list-item {
+  padding: 15px;
+  margin: 0 15px;
+}
+
+.mdc-list-item:not(:last-child) {
+  border-bottom: 1px solid lightgrey;
 }
 
 .emblem-campaign-card {
   font-size: 18px;
+  cursor: pointer;
+}
+
+.emblem-campaign-card:hover {
+  background-color: #f7f7f7;
 }
 
 /* Title */
 .emblem-campaign-card .emblem-campaign-title {
   font-size: 30px;
   position: relative;
-  top: -0.3em;
 }
 
 .emblem-campaign-card .emblem-campaign-title .material-icons {
@@ -90,16 +97,21 @@ a {
   top: 0.1em;
 }
 
-/* Campaign image */
-.emblem-campaign-card .emblem-campaign-image {
-  padding: 0;
-  margin: -16px;
+.emblem-campaign-card .mdc-list {
+  line-height: normal;
 }
 
-.emblem-campaign-card .emblem-campaign-image img {
-  width: fit-content;
-  height: 20em;
-  padding-bottom: 8px;
+/* Campaign image */
+.emblem-campaign-card .emblem-campaign-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  padding: 10px;
+  background-repeat: no-repeat;
+  background-image: url(https://github.githubassets.com/images/icons/emoji/unicode/1f4a0.png);
+  background-size: auto;
+  background-position: center;
 }
 
 /* Donate button */
@@ -116,7 +128,6 @@ a {
 /* Learn more button */
 .emblem-campaign-card .emblem-campaign-learn-more {
   position: relative;
-  left: -0.5em;
 }
 
 .emblem-campaign-card .emblem-campaign-learn-more .material-icons {
