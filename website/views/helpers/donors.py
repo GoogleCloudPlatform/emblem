@@ -20,10 +20,14 @@ from views.helpers.time import convert_utc
 
 from functools import reduce
 
+
 def get_donor_name(donation):
     if donation is None:
-      log(f"Exception while retrieving donor name: No donation given", severity="ERROR")
-      return ''
+        log(
+            f"Exception while retrieving donor name: No donation given",
+            severity="ERROR",
+        )
+        return ""
 
     try:
         donor = g.api.donors_id_get(donation["donor"])

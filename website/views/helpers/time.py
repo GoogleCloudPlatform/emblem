@@ -16,13 +16,16 @@ from middleware.logging import log
 
 import pytz
 
+
 def convert_utc(time):
-  pacific_zone = pytz.timezone('America/Los_Angeles')
+    pacific_zone = pytz.timezone("America/Los_Angeles")
 
-  if time is not None:
-    converted_time = time.astimezone(pacific_zone)
-  else:
-    log(f"Exception while converting timestamp: No datetime given", severity="ERROR")
-    return time
+    if time is not None:
+        converted_time = time.astimezone(pacific_zone)
+    else:
+        log(
+            f"Exception while converting timestamp: No datetime given", severity="ERROR"
+        )
+        return time
 
-  return converted_time.strftime('%m/%d/%y (%I:%M %p %Z)')
+    return converted_time.strftime("%m/%d/%y (%I:%M %p %Z)")
