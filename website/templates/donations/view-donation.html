@@ -13,31 +13,50 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!doctype html>
-<title>View Donation | Cymbal Giving</title>
 
-<a href="/">Back to campaign list</a>
+{% extends "base.html" %}
 
-<p>
-    <b>Donation ID:</b>
-    {{ donation.id }}
-</p>
+{% block title %}View Donation | Cymbal Giving{% endblock %}
 
-<p>
-    <b>Campaign Name:</b>
-    {{ campaign.name }}
-</p>
+{% block content %}
+<div class="mdc-layout-grid">
+  <a href="/">Back to campaign list</a>
+  <div class="mdc-layout-grid__inner">
+    <div class="emblem-campaign-details mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+      <ul class="mdc-list">
+        <li role="separator" class="mdc-list-divider"></li>
+        <li class="mdc-list-item">
+          <span class="mdc-list-item__text">Donation ID:</span>
+          <span class="mdc-list-item__meta">{{ donation.id }}</span>
+        </li>
+        
+        <li role="separator" class="mdc-list-divider"></li>
+        <li class="mdc-list-item">
+          <span class="mdc-list-item__text">Campaign Name</span>
+          <span class="mdc-list-item__meta">{{ campaign.name }}</span>
+        </li>
 
-<p>
-    <b>Amount:</b>
-    {{ donation.amount }}
-</p>
-
-<p>
-    <b>Time:</b>
-    {{ donation.timeCreated }}
-</p>
-
-<p>
-  <a href="/donate?campaign_id={{ campaign.id }}">Donate again</a>
-</p>
+        <li role="separator" class="mdc-list-divider"></li>
+        <li class="mdc-list-item">
+          <span class="mdc-list-item__text">Amount</span>
+          <span class="mdc-list-item__meta">${{ "%.2f"|format(donation.amount) }}</span>
+        </li>
+        
+        <li role="separator" class="mdc-list-divider"></li>
+        <li class="mdc-list-item">
+          <span class="mdc-list-item__text">Time</span>
+          <span class="mdc-list-item__meta">{{ donation.time_created }}</span>
+        </li>
+      </ul>
+      <!-- Donate button -->
+      <a href="/donate?campaign_id={{ campaign.id }}" class="mdc-button mdc-button--raised">
+        <span class="mdc-button__ripple"></span>
+        <i class="material-icons mdc-button__icon" aria-hidden="true"
+          >favorite</i
+        >
+        <span class="mdc-button__label">Donate again</span>
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
