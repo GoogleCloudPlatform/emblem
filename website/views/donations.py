@@ -45,26 +45,28 @@ def new_donation():
 @donations_bp.route("/donate", methods=["POST"])
 def record_donation():
     session_data = g.session_data
-    
+
     if session_data is None:
         log(f"Exception when donating. User has no session.", severity="INFO")
         return render_template("errors/403.html"), 403
-    
+
     # Retrieving name and address from form
     donor_name = request.form.get("name")
     donor_address = {
-      "street": request.form.get('street'),
-      "city": request.form.get('city'),
-      "state": request.form.get('state'),
-      "zipcode": request.form.get('zipcode')
+        "street": request.form.get("street"),
+        "city": request.form.get("city"),
+        "state": request.form.get("state"),
+        "zipcode": request.form.get("zipcode"),
     }
 
     try:
-        donor = g.api.donors_post({
-            "name": donor_name if donor_name else "Unknown",
-            "email": session_data["email"],
-            "mailing_address": str(donor_address)
-       })
+        donor = g.api.donors_post(
+            {
+                "name": donor_name if donor_name else "Unknown",
+                "email": session_data["email"],
+                "mailing_address": str(donor_address),
+            }
+        )
     except Exception as e:
         log(f"Exception when creating a donor: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403
@@ -82,9 +84,9 @@ def record_donation():
     donor_id = donor["id"]
     amount = float(request.form.get("amount"))
     new_donation = {
-      "campaign": campaign_id,
-      "donor": donor_id,
-      "amount": amount,
+        "campaign": campaign_id,
+        "donor": donor_id,
+        "amount": amount,
     }
 
     try:
