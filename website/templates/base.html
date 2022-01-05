@@ -16,7 +16,6 @@
 <!doctype html>
 
 <head>
-
   <!-- Meta tags for SEO -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,12 +62,12 @@
           <!-- Logged in -->
           <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Profile" title="Profile">account_circle</button>
           <a href="/logout">
-            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log Out" title="Log Out">exit_to_app</button>
+            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log Out" title="Log Out">logout</button>
           </a>
         {% else %}
           <!-- No hidden auth failures; login enabled -->
           <a href="/login">
-            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log In" title="Log In">pin_invoke</button>
+            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Log In" title="Log In">login</button>
           </a>
         {% endif %}
       </section>
@@ -87,5 +86,4 @@
 
     {% block content %}{% endblock %}
   </main>
-
 </body>
