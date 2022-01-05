@@ -55,10 +55,49 @@
           <input required type="text" id="amount" name="amount" class="mdc-text-field__input" aria-labelledby="amount">
           <span class="mdc-line-ripple"></span>
         </label>
+        
+        <!-- Donor name -->
+        <label class="emblem-donation-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="donor-name-label">Donor name:</span>
+          <input required type="text" id="name" name="name" class="mdc-text-field__input" aria-labelledby="name">
+          <span class="mdc-line-ripple"></span>
+        </label>
+        
+        <!-- Donor address: street -->
+        <label class="emblem-donation-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="donor-address-street-label">Address:</span>
+          <input required type="text" id="street" name="street" class="mdc-text-field__input" aria-labelledby="street">
+          <span class="mdc-line-ripple"></span>
+        </label>
+        
+        <!-- Donor address: city -->
+        <label class="emblem-donation-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="donor-address-city-label">City:</span>
+          <input required type="text" id="city" name="city" class="mdc-text-field__input" aria-labelledby="city">
+          <span class="mdc-line-ripple"></span>
+        </label>
+        
+        <!-- Donor address: state -->
+        <label class="emblem-donation-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="donor-address-state-label">State:</span>
+          <input required type="text" id="state" name="state" class="mdc-text-field__input" aria-labelledby="state">
+          <span class="mdc-line-ripple"></span>
+        </label>
+        
+        <!-- Donor address: zipcode -->
+        <label class="emblem-donation-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="donor-address-zipcode-label">Zip Code:</span>
+          <input required type="text" id="zipcode" name="zipcode" class="mdc-text-field__input" aria-labelledby="zipcode">
+          <span class="mdc-line-ripple"></span>
+        </label>
 
         <!-- Campaign ID (hidden) -->
         <input type="hidden" value="{{ campaign.id }}" id="campaignId" name="campaignId" />
-        
       </div>
 
       <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
