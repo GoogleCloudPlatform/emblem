@@ -143,12 +143,32 @@ def data():
     except:
         pass  # Still need to clean up test data
 
-    # Tear down test data
-        db.delete("causes", TEST_CAUSE["id"], resource_fields["causes"], None, host_url=None)
+        # Tear down test data
+        db.delete(
+            "causes", TEST_CAUSE["id"], resource_fields["causes"], None, host_url=None
+        )
         for email_address in [EMAIL, "nobody@example.com"]:
-            db.delete("campaigns", TEST_CAMPAIGN[email_address]["id"], resource_fields["campaigns"], None, host_url=None)
-            db.delete("donors", TEST_DONOR[email_address]["id"], resource_fields["donors"], None, host_url=None)
-            db.delete("donations", TEST_DONATION[email_address]["id"], resource_fields["causes"], None, host_url=None)
+            db.delete(
+                "campaigns",
+                TEST_CAMPAIGN[email_address]["id"],
+                resource_fields["campaigns"],
+                None,
+                host_url=None,
+            )
+            db.delete(
+                "donors",
+                TEST_DONOR[email_address]["id"],
+                resource_fields["donors"],
+                None,
+                host_url=None,
+            )
+            db.delete(
+                "donations",
+                TEST_DONATION[email_address]["id"],
+                resource_fields["causes"],
+                None,
+                host_url=None,
+            )
 
 
 @pytest.fixture
