@@ -16,8 +16,13 @@ from flask import Blueprint, g, redirect, request, render_template
 
 from middleware.logging import log
 
-import re
+from views.helpers.donors import get_donor_name
 
+from views.helpers.time import convert_utc
+
+from functools import reduce
+
+import re
 
 campaigns_bp = Blueprint("campaigns", __name__, template_folder="templates")
 
@@ -74,16 +79,32 @@ def webapp_view_campaign():
 
     try:
         campaign_instance = g.api.campaigns_id_get(campaign_id)
+        campaign_instance["formattedDateCreated"] = convert_utc(
+            campaign_instance.time_created
+        )
+        campaign_instance["formattedDateUpdated"] = convert_utc(
+            campaign_instance.updated
+        )
     except Exception as e:
         log(f"Exception when fetching campaigns {campaign_id}: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403
 
     campaign_instance["donations"] = []
+    campaign_instance["raised"] = 0
 
     try:
-        campaign_instance["donations"] = g.api.campaigns_id_donations_get(
-            campaign_instance["id"]
-        )
+        donations = g.api.campaigns_id_donations_get(campaign_instance["id"])
+        if len(donations) > 0:
+            campaign_instance["donations"] = list(map(get_donor_name, donations))
+            raised = reduce(
+                lambda t, d: t + int(d["amount"] if d is not None else 0), donations, 0
+            )
+            campaign_instance["raised"] = raised
+            campaign_instance["percent_complete"] = (
+                (raised / float(campaign_instance.goal)) * 100
+                if raised is not None
+                else 0
+            )
     except Exception as e:
         log(f"Exception when listing campaign donations: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403

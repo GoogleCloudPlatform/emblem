@@ -202,7 +202,7 @@ terraform apply --auto-approve
 
 gcloud alpha builds triggers create pubsub \
 --name=web-deploy-staging --topic="projects/${OPS_PROJECT}/topics/gcr" \
---repo=https://www.github.com/${repo_owner}/${repo_name} \
+--repo=https://github.com/${repo_owner}/${repo_name} \
 --branch=main --build-config=ops/deploy.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
 _REGION="$REGION",_REVISION='$(body.message.messageId)',\
