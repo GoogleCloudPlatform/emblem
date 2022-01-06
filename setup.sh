@@ -198,4 +198,5 @@ EOF
 terraform init
 terraform apply --auto-approve
 
+
 sh scripts/pubsub_triggers.sh 
