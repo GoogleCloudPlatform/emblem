@@ -198,14 +198,4 @@ EOF
 terraform init
 terraform apply --auto-approve
 
-gcloud alpha builds triggers create pubsub \
---name=web-deploy-staging --topic="projects/${OPS_PROJECT}/topics/gcr" \
---repo=https://github.com/${repo_owner}/${repo_name} \
---branch=main --build-config=ops/deploy.cloudbuild.yaml \
---substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
-_REGION="$REGION",_REVISION='$(body.message.messageId)',\
-_SERVICE=website,_TARGET_PROJECT="$STAGE_PROJECT",\
-_STAGING_PROJECT="$STAGE_PROJECT",_PROD_PROJECT="$PROD_PROJECT" \
---project="${OPS_PROJECT}"
-
-
+sh scripts/pubsub_triggers.sh 
