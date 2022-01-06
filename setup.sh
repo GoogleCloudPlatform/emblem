@@ -17,19 +17,8 @@
 # This will require 3 projects, for ops, staging, and prod
 # To auto-create the projects, run clean_project_setup.sh
 
+# Checks for variables and exits if missing
 set -eu
-
-# Check env variables
-if [[ -z "${PROD_PROJECT}" ]]; then
-    echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
-    exit 1
-elif [[ -z "${STAGE_PROJECT}" ]]; then
-    echo "Please set the $(tput bold)STAGE_PROJECT$(tput sgr0) variable"
-    exit 1
-elif [[ -z "${OPS_PROJECT}" ]]; then
-    echo "Please set the $(tput bold)OPS_PROJECT$(tput sgr0) variable"
-    exit 1
-fi
 
 
 ######################
