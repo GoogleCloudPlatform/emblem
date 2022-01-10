@@ -41,6 +41,22 @@ resource "google_service_account" "cloud_run_manager" {
   provider     = google
 }
 
+resource "google_service_account" "website_manager" {
+  account_id   = "website-manager"
+  description  = "Manages website deployments on Cloud Run."
+  display_name = "website-manager"
+  project      = data.google_project.main.project_id
+  provider     = google
+}
+
+resource "google_service_account" "api_manager" {
+  account_id   = "api-manager"
+  description  = "Manages API deployments on Cloud Run."
+  display_name = "api-manager"
+  project      = data.google_project.main.project_id
+  provider     = google
+}
+
 ###
 # Storage & Databases
 ###
