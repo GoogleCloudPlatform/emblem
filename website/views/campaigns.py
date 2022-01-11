@@ -80,8 +80,12 @@ def webapp_view_campaign():
 
     try:
         campaign_instance = g.api.campaigns_id_get(campaign_id)
-        campaign_instance["formattedDateCreated"] = convert_utc(campaign_instance.time_created)
-        campaign_instance["formattedDateUpdated"] = convert_utc(campaign_instance.updated)
+        campaign_instance["formattedDateCreated"] = convert_utc(
+            campaign_instance.time_created
+        )
+        campaign_instance["formattedDateUpdated"] = convert_utc(
+            campaign_instance.updated
+        )
     except Exception as e:
         log(f"Exception when fetching campaigns {campaign_id}: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403
