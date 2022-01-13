@@ -33,7 +33,8 @@ elif [[ -z "${EMBLEM_BILLING_ACCOUNT}" ]]; then
 fi
 
 # Clear Terraform state
-rm ../terraform/*.tfstat* || true
+rm app/*.tfstat* || true
+rm ops/*.tfstat* || true
 
 # Generate project IDs
 export PROD_PROJECT="emblem-prod-$SUFFIX"

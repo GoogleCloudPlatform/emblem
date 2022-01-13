@@ -109,5 +109,5 @@ resource "google_storage_bucket" "sessions" {
 resource "google_storage_bucket_iam_member" "sessions-iam" {
   bucket = google_storage_bucket.sessions.name
   role   = "roles/storage.objectAdmin"
-  member = "serviceAccount:${google_service_account.cloud_run_manager.email}"
+  member = "serviceAccount:${google_service_account.website_manager.email}"
 }
