@@ -107,12 +107,12 @@ gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
 # Deploy built images (API)
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
---project "$PROD_PROJECT"  --service-account "cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
+--project "$PROD_PROJECT"  --service-account "api-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
 content-api
 
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
---project "$STAGE_PROJECT"  --service-account "cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"  \
+--project "$STAGE_PROJECT"  --service-account "api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"  \
 content-api
 
 # Deploy built images (website prod)
@@ -123,7 +123,7 @@ WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${API_URL}"
 
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
---project "$PROD_PROJECT" --service-account "cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com"  \
+--project "$PROD_PROJECT" --service-account "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com"  \
 --set-env-vars "$WEBSITE_VARS" \
 website
 
@@ -135,7 +135,7 @@ WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${API_URL}"
 
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
---project "$STAGE_PROJECT" --service-account "cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+--project "$STAGE_PROJECT" --service-account "website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
 --set-env-vars "$WEBSITE_VARS" \
 website
 
