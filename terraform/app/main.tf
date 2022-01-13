@@ -105,9 +105,9 @@ resource "google_secret_manager_secret_iam_member" "secret_access_iam_client_id"
   project   = data.google_project.ops.project_id
   secret_id = data.terraform_remote_state.ops.outputs.secret_ids.client_id
   role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:${module.application.cloud_run_manager}"
+  member    = "serviceAccount:${module.application.website_manager}"
   depends_on = [
-    # Ensure environment setup, specifically Cloud Run Manager service account.
+    # Ensure environment setup, specifically Website Manager service account.
     module.application
   ]
 }
@@ -116,9 +116,9 @@ resource "google_secret_manager_secret_iam_member" "secret_access_iam_client_sec
   project   = data.google_project.ops.project_id
   secret_id = data.terraform_remote_state.ops.outputs.secret_ids.client_secret
   role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:${module.application.cloud_run_manager}"
+  member    = "serviceAccount:${module.application.website_manager}"
   depends_on = [
-    # Ensure environment setup, specifically Cloud Run Manager service account.
+    # Ensure environment setup, specifically Website Manager service account.
     module.application
   ]
 }

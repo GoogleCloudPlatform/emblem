@@ -41,6 +41,22 @@ resource "google_service_account" "cloud_run_manager" {
   provider     = google
 }
 
+resource "google_service_account" "website_manager" {
+  account_id   = "website-manager"
+  description  = "Manages website deployments on Cloud Run."
+  display_name = "website-manager"
+  project      = data.google_project.main.project_id
+  provider     = google
+}
+
+resource "google_service_account" "api_manager" {
+  account_id   = "api-manager"
+  description  = "Manages API deployments on Cloud Run."
+  display_name = "api-manager"
+  project      = data.google_project.main.project_id
+  provider     = google
+}
+
 ###
 # Storage & Databases
 ###
@@ -93,5 +109,5 @@ resource "google_storage_bucket" "sessions" {
 resource "google_storage_bucket_iam_member" "sessions-iam" {
   bucket = google_storage_bucket.sessions.name
   role   = "roles/storage.objectAdmin"
-  member = "serviceAccount:${google_service_account.cloud_run_manager.email}"
+  member = "serviceAccount:${google_service_account.website_manager.email}"
 }
