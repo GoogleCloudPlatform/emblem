@@ -35,6 +35,7 @@ def list_campaigns():
         log(f"Exception when listing campaigns: {e}", severity="ERROR")
         campaigns = []
 
+    print(campaigns)
     return render_template("home.html", campaigns=campaigns)
 
 
