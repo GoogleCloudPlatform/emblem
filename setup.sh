@@ -116,10 +116,10 @@ gcloud run deploy --allow-unauthenticated \
 content-api
 
 # Deploy built images (website prod)
-API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
+PROD_API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
 
 WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions"
-WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${API_URL}"
+WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${PROD_API_URL}"
 
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
@@ -128,10 +128,10 @@ gcloud run deploy --allow-unauthenticated \
 website
 
 # Deploy built images (website staging)
-API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
+STAGE_API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
 
 WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions"
-WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${API_URL}"
+WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${STAGE_API_URL}"
 
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
