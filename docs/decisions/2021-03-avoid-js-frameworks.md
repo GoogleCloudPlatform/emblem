@@ -19,7 +19,7 @@ Frontend frameworks can provide a lot of power, but add complexity. Emblem might
 
 ## Decision
 
-Chose Option 2 to keep the frontend implementation approachable to backend developers as both contributors and learners.
+Chose Option 1 to keep the frontend implementation approachable to backend developers as both contributors and learners.
 
 ### Expected Consequences <!-- optional -->
 
