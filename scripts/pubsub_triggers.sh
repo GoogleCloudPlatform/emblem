@@ -14,66 +14,44 @@
 # limitations under the License.
 
 # This file creates pub/sub Cloud Build triggers.
-# It should be migrated to Terraform once Terraform supports it.
+# TODO: Manage with Terraform when available.
 
+set -eu
 #################################
 ## Staging Deployment Triggers ##
 #################################
 
+# Note, we are using the `gcloud alpha` command because this is currently
+# the only way to automate pub/sub trigger creation.
+
 gcloud alpha builds triggers create pubsub \
 --name=web-deploy-staging --topic="projects/${OPS_PROJECT}/topics/gcr" \
---repo=https://github.com/${repo_owner}/${repo_name} \
---branch=main --build-config=ops/deploy.cloudbuild.yaml \
+--repo="${GITHUB_URL}" --branch=main \
+--build-config=ops/deploy.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
 _REGION="$REGION",_REVISION='$(body.message.messageId)',\
-_SERVICE=website,_TARGET_PROJECT="$STAGE_PROJECT",\
-_ENV="staging",_ENV_VARS="$_ENV_VARS" \
+_SERVICE=website,_TARGET_PROJECT="$STAGE_PROJECT",_ENV="staging" \
  --filter='_IMAGE_NAME == "website"' \
  --project="${OPS_PROJECT}"
 
 gcloud alpha builds triggers create pubsub \
 --name=api-deploy-staging --topic="projects/${OPS_PROJECT}/topics/gcr" \
---repo=https://github.com/${repo_owner}/${repo_name} \
---branch=main --build-config=ops/deploy.cloudbuild.yaml \
+--repo="${GITHUB_URL}" --branch=main \
+--build-config=ops/deploy.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
 _REGION="$REGION",_REVISION='$(body.message.messageId)',\
 _SERVICE=content-api,_TARGET_PROJECT="$STAGE_PROJECT",_ENV="staging" \
 --filter='_IMAGE_NAME == "content-api"' \
 --project="${OPS_PROJECT}" 
 
-##############################
-## Prod Deployment Triggers ##
-##############################
-
-gcloud alpha builds triggers create pubsub \
---name=web-deploy-prod --topic="projects/${OPS_PROJECT}/topics/deploy-prod" \
---repo=https://github.com/${repo_owner}/${repo_name} \
---branch=main --build-config=ops/deploy.cloudbuild.yaml \
---substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
-_REGION="$REGION",_REVISION='$(body.message.messageId)',\
-_SERVICE=website,_TARGET_PROJECT="$PROD_PROJECT",\
-_ENV="prod",_ENV_VARS="$_ENV_VARS" \
---filter='_IMAGE_NAME == "website"' \
---project="${OPS_PROJECT}" --require-approval 
-
-gcloud alpha builds triggers create pubsub \
---name=api-deploy-prod --topic="projects/${OPS_PROJECT}/topics/deploy-prod" \
---repo=https://github.com/${repo_owner}/${repo_name} \
---branch=main --build-config=ops/deploy.cloudbuild.yaml \
---substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
-_REGION="$REGION",_REVISION='$(body.message.messageId)',\
-_SERVICE=content-api,_TARGET_PROJECT="$PROD_PROJECT",_ENV="prod" \
---filter='IMAGE_NAME == "content-api"' \
---project="${OPS_PROJECT}" --require-approval 
-
 # ##############################
 # ### Canary Rollout Staging ###
 # ##############################
 
 gcloud alpha builds triggers create pubsub \
---name=api-canary-staging --topic="projects/${OPS_PROJECT}/topics/canary-staging" \
---repo=https://github.com/${repo_owner}/${repo_name} \
---branch=main --build-config=ops/canary.cloudbuild.yaml \
+--name=api-canary-staging --topic="projects/${OPS_PROJECT}/topics/canary-${STAGE_PROJECT}" \
+--repo="${GITHUB_URL}" --branch=main \
+--build-config=ops/canary.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.attributes._IMAGE_NAME)',\
 _REGION='$(body.message.attributes._REGION)',\
 _REVISION='$(body.message.attributes._REVISION)',\
@@ -85,9 +63,9 @@ _ENV == "staging"' \
 --project="${OPS_PROJECT}" 
 
 gcloud alpha builds triggers create pubsub \
---name=web-canary-staging --topic="projects/${OPS_PROJECT}/topics/canary-staging" \
---repo=https://github.com/${repo_owner}/${repo_name} \
---branch=main --build-config=ops/canary.cloudbuild.yaml \
+--name=web-canary-staging --topic="projects/${OPS_PROJECT}/topics/canary-${STAGE_PROJECT}" \
+--repo="${GITHUB_URL}" --branch=main \
+--build-config=ops/canary.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.attributes._IMAGE_NAME)',\
 _REGION='$(body.message.attributes._REGION)',\
 _REVISION='$(body.message.attributes._REVISION)',\
@@ -98,14 +76,38 @@ _ENV='$(body.message.attributes._ENV)'\
 _ENV == "staging"' \
 --project="${OPS_PROJECT}" 
 
+# ##############################
+# ## Prod Deployment Triggers ##
+# ##############################
+if [ "${PROD_PROJECT}" !="${STAGE_PROJECT}" ]; then 
+gcloud alpha builds triggers create pubsub \
+--name=web-deploy-prod --topic="projects/${OPS_PROJECT}/topics/deploy-${PROD_PROJECT}" \
+--repo="${GITHUB_URL}" --branch=main \
+--build-config=ops/deploy.cloudbuild.yaml \
+--substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
+_REGION="$REGION",_REVISION='$(body.message.messageId)',\
+_SERVICE=website,_TARGET_PROJECT="$PROD_PROJECT",_ENV="prod"\
+--filter='_IMAGE_NAME == "website"' \
+--project="${OPS_PROJECT}" --require-approval 
+
+gcloud alpha builds triggers create pubsub \
+--name=api-deploy-prod --topic="projects/${OPS_PROJECT}/topics/deploy-${PROD_PROJECT}" \
+--repo="${GITHUB_URL}" --branch=main \
+--build-config=ops/deploy.cloudbuild.yaml \
+--substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
+_REGION="$REGION",_REVISION='$(body.message.messageId)',\
+_SERVICE=content-api,_TARGET_PROJECT="$PROD_PROJECT",_ENV="prod" \
+--filter='IMAGE_NAME == "content-api"' \
+--project="${OPS_PROJECT}" --require-approval 
+
 # ###########################
 # ### Canary Rollout Prod ###
 # ###########################
 
 gcloud alpha builds triggers create pubsub \
---name=api-canary-prod --topic="projects/${OPS_PROJECT}/topics/canary-prod" \
---repo=https://github.com/${repo_owner}/${repo_name} \
---branch=main --build-config=ops/canary.cloudbuild.yaml \
+--name=api-canary-prod --topic="projects/${OPS_PROJECT}/topics/canary-${PROD_PROJECT}" \
+--repo="${GITHUB_URL}" --branch=main \
+--build-config=ops/canary.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.attributes._IMAGE_NAME)',\
 _REGION='$(body.message.attributes._REGION)',\
 _REVISION='$(body.message.attributes._REVISION)',\
@@ -117,9 +119,9 @@ _ENV == "prod"' \
 --project="${OPS_PROJECT}" 
 
 gcloud alpha builds triggers create pubsub \
---name=web-canary-prod --topic="projects/${OPS_PROJECT}/topics/canary-prod" \
---repo=https://github.com/${repo_owner}/${repo_name} \
---branch=main --build-config=ops/canary.cloudbuild.yaml \
+--name=web-canary-prod --topic="projects/${OPS_PROJECT}/topics/canary-${PROD_PROJECT}" \
+--repo="${GITHUB_URL}" --branch=main \
+--build-config=ops/canary.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.attributes._IMAGE_NAME)',\
 _REGION='$(body.message.attributes._REGION)',\
 _REVISION='$(body.message.attributes._REVISION)',\
@@ -129,3 +131,4 @@ _ENV='$(body.message.attributes._ENV)'\
 --filter='_SERVICE == "website" && 
 _ENV == "prod"' \
 --project="${OPS_PROJECT}" 
+fi

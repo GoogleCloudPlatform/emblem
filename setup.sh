@@ -75,7 +75,7 @@ terraform state rm module.application.google_app_engine_application.main || true
 
 
 ## Prod Project ##
-
+if [ "${PROD_PROJECT}" !="${STAGE_PROJECT}" ]; then 
 # Set Prod Variables
 cat > terraform.tfvars <<EOF
 google_ops_project_id = "${OPS_PROJECT}"
@@ -86,6 +86,7 @@ terraform init --backend-config "path=./prod.tfstate" -reconfigure
 terraform import module.application.google_app_engine_application.main "${PROD_PROJECT}" || true
 terraform apply --auto-approve 
 terraform state rm module.application.google_app_engine_application.main || true
+fi
     
 # Return to root directory
 popd
@@ -94,7 +95,7 @@ popd
 # Deploy Services #
 ###################
 
-REGION="us-central1"
+export REGION="us-central1"
 SHORT_SHA="setup"
 
 # Submit builds
@@ -116,7 +117,7 @@ gcloud run deploy --allow-unauthenticated \
 content-api
 
 # Deploy built images (website prod)
-PROD_API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
+PROD_API_URL=$(gcloud run services describe content-api --project ${PROD_PROJECT} --format "value(status.url)")
 
 WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions"
 WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${PROD_API_URL}"
@@ -128,7 +129,7 @@ gcloud run deploy --allow-unauthenticated \
 website
 
 # Deploy built images (website staging)
-STAGE_API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
+STAGE_API_URL=$(gcloud run services describe content-api --project ${STAGE_PROJECT} --format "value(status.url)")
 
 WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions"
 WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${STAGE_API_URL}"
@@ -199,6 +200,7 @@ EOF
 
 terraform init
 terraform apply --auto-approve
+popd
 
-
-sh scripts/pubsub_triggers.sh 
+export GITHUB_URL="https://github.com/${repo_owner}/${repo_name}"
+sh ./scripts/pubsub_triggers.sh 
