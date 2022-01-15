@@ -1,8 +1,8 @@
 {
   "name": "webapp",
   "version": "0.0.1",
-  "description": "",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "echo \"No test script\"",
     "build": "webpack",
@@ -10,9 +10,6 @@
     "lint": "eslint src --ext .js,.jsx",
     "fixlint": "eslint --fix app --ext .js,.jsx"
   },
-  "keywords": [],
-  "author": "",
-  "license": "",
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@babel/eslint-parser": "^7.5.4",
@@ -37,6 +34,7 @@
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.8",
     "axios": "^0.24.0",
     "normalize.css": "^8.0.1",

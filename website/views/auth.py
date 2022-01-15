@@ -38,6 +38,7 @@ from flask import (
     render_template,
     request,
     session,
+    after_this_request
 )
 
 import requests
@@ -52,6 +53,11 @@ auth_bp = Blueprint("auth", __name__, template_folder="templates")
 
 @auth_bp.route("/login", methods=["GET"])
 def login_get():
+    @after_this_request
+    # Enable Access-Control-Allow-Origin
+    def add_header(response):
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
     """login_get
 
     Handles requests made to the path /login. This may occur due to a user
