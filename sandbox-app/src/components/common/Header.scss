@@ -1,4 +1,19 @@
 .header {
+  display: flex! important;
+  align-items: center;
+  justify-content: space-between;
   color: black !important;
   background-color: white !important;
+  padding: 20px;
 }
+
+
+.title {
+  margin: 0 auto;
+}
+
+.subTitle {
+  font-size: 12px;
+  margin: 0 auto;
+}
+

@@ -19,8 +19,18 @@ const CampaignCard = ({ campaign }) => {
                     <div className="description">{description}</div>
                 </div>
                 <div className="actionWrapper">
-                    <Button variant="contained">Donate</Button>
-                    <Button variant="outlined" onClick={()=> navigate(`/campaign/${id}`)}>Learn more</Button>
+                    <Button
+                        variant="contained"
+                        onClick={()=> navigate(`/campaign/${id}/donation`)}
+                    >
+                        Donate
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        onClick={()=> navigate(`/campaign/${id}`)}
+                    >
+                        Learn more
+                    </Button>
                 </div>
             </div>
         </Card> 

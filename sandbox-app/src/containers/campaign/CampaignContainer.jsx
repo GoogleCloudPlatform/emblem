@@ -1,25 +1,30 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import CampaignCard from '../components/campaign/CampaignCard';
-import DonationTable from '../components/donation/DonationTable';
-import { useParams } from 'react-router-dom';
-import { useFetch } from '../hooks/fetch';
-import './DonationContainer.scss';
+import CampaignCard from '../../components/campaign/CampaignCard';
+import DonationTable from '../../components/donation/DonationTable';
+import { useFetch } from '../../hooks/fetch';
+import './CampaignContainer.scss';
 
-const DonationContainer = () => {
+const CampaignContainer = () => {
+    const navigate = useNavigate();
     let { campaignId } = useParams();
     
     const campaign = useFetch(`http://127.0.0.1:5000/api/v1/get_campaign?campaign_id=${campaignId}`);
     const { name, cause, description, formattedDateCreated, formattedDateUpdated } = campaign || {};
     
     return (
-        <div className="DonationContainer">
+        <div className="campaignContainer">
             <div className="leftPanel">
-                <>
-                    <h2 className="title">{name}</h2>
-                    <h3 className="description">{description}</h3>
-                    <Button variant="contained">Edit campaign</Button>
-                </>
+                <h2 className="title">{name}</h2>
+                <h3 className="description">{description}</h3>
+                <Button variant="contained" sx={{ marginRight: '5px' }}>Edit campaign</Button>
+                <Button
+                    variant="contained"
+                    onClick={()=> navigate(`/campaign/${campaignId}/donation`)}
+                >
+                    Make a donation
+                </Button>
                 <div className="section">
                     <div className="circle"></div> 
                     <div>
@@ -38,7 +43,6 @@ const DonationContainer = () => {
                     <div>Donation History</div>
                     <DonationTable />
                 </div>
-                <Button variant="contained">Make a donation</Button>
             </div> 
             <div className="rightPanel">
                 <CampaignCard campaign={campaign}/>
@@ -47,4 +51,4 @@ const DonationContainer = () => {
     );
 }
 
-export default DonationContainer;
+export default CampaignContainer;
