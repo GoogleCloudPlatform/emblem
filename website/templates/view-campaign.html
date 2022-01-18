@@ -26,7 +26,7 @@
       <p>{{ campaign.description }}</p>
 
       <p class="emblem-campaign-status">
-        This campaign is X% complete.
+        This campaign is {{ "%.2f"|format(campaign.percentComplete) }}% complete.
       </p>
     </div>
 
@@ -41,20 +41,22 @@
         <li role="separator" class="mdc-list-divider"></li>
         <li class="mdc-list-item">
           <span class="mdc-list-item__text">Raised</span>
-          <span class="mdc-list-item__meta">$??? (of ${{ "%.2f"|format(campaign.goal) }} goal)</span>
+          <span class="mdc-list-item__meta">
+            ${{ "%.2f"|format(campaign.raised) }} (of ${{ "%.2f"|format(campaign.goal) }} goal)
+          </span>
         </li>
 
         <li role="separator" class="mdc-list-divider"></li>
         <li class="mdc-list-item">
           <span class="mdc-list-item__text">Created</span>
-          <span class="mdc-list-item__meta">{{ campaign.timeCreated }}</span>
+          <span class="mdc-list-item__meta">{{ campaign.formattedDateCreated }}</span>
         </li>
 
         {% if campaign.timeCreated != campaign.updated %}
           <li role="separator" class="mdc-list-divider"></li>
           <li class="mdc-list-item">
             <span class="mdc-list-item__text">Last Updated</span>
-            <span class="mdc-list-item__meta">{{ campaign.updated }}</span>
+            <span class="mdc-list-item__meta">{{ campaign.formattedDateUpdated }}</span>
           </li>
         {% endif %}
 
@@ -135,24 +137,31 @@
           </tr>
         </thead>
         <tbody class="mdc-data-table__content">
-          {% for donation in campaign.donations %}
+          {% set donation_count = campaign.donations | length %}
+          {% if donation_count == 0 %}
             <tr class="mdc-data-table__row">
               <td class="mdc-data-table__cell">
-                {{ donation.donor }}
-              </td>
-              <td class="mdc-data-table__cell">
-                ${{ "%.2f"|format(donation.amount) }}
-              </td>
-              <td class="mdc-data-table__cell">
-                {{ donation.timeCreated }}
+                No donations yet
               </td>
             </tr>
-          {% endfor %}
+          {% else %}
+            {% for donation in campaign.donations %}
+              <tr class="mdc-data-table__row">
+                <td class="mdc-data-table__cell">
+                  {{ donation.donorName }}
+                </td>
+                <td class="mdc-data-table__cell">
+                  ${{ "%.2f"|format(donation.amount) }}
+                </td>
+                <td class="mdc-data-table__cell">
+                  {{ donation.formattedDateCreated }}
+                </td>
+              </tr>
+            {% endfor %}
+          {% endif %}
         </tbody>
       </table>
     </div>
-
-
   </div>
 </div>
 
