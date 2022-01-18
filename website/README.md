@@ -11,7 +11,7 @@ The website uses the following Google Cloud services:
 
 Emblem uses a testing & delivery pipeline to automate deployment of the web application (Website & Content API) and setup of operations management.
 
-To deploy the Emblem Website manually, either launch the [Quickstart](#quickstart) interactive tutorial or follow the[Setup](#setup) guide below.
+To deploy the Emblem Website manually, either launch the [Quickstart](#quickstart) interactive tutorial or follow the [Setup](#setup) guide below.
 
 ## Quickstart
 
