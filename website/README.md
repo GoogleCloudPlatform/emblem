@@ -38,9 +38,12 @@ To install dependencies for the website, `cd` into the `website` directory and
 run `pip install -r requirements.txt`.
 
 ### Setting up authentication
-To enable end-user authentication within the application, you'll need to create an [OAuth client ID](https://console.cloud.google.com/apis/credentials/oauthclient) and configure an [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent). If you don't already have an OAuth client set up, you can run the Emblem [configure_auth](./scripts/configure_auth.sh) script in your terminal.
-
 >**Note:** end-user authentication is required to access some - _but not all_ - application pages.
+
+To enable end-user authentication within the application, you'll need to create an [OAuth client ID](https://console.cloud.google.com/apis/credentials/oauthclient) and configure an [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent). If you don't already have an OAuth client set up, you can run the Emblem [configure_auth](./scripts/configure_auth.sh) script in your terminal: 
+```bash
+sh ./scripts/configure_auth.sh
+```
 
 ### Configuration
 To configure the app, set the following environment variables:
