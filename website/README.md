@@ -62,4 +62,4 @@ Congratulations! You are now ready to run the Emblem web app.
 
 ### Running
 
-To run the website, use the `flask run` command. By default, the website will run on port `8080`.
+To run the website locally, use the `flask run` command. By default, the website will run on port `8080`.
