@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import './CampaignForm.scss';
 
 const CampaignForm = () => {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -20,21 +21,9 @@ const CampaignForm = () => {
                 noValidate
                 autoComplete="off"
                 onSubmit={handleSubmit(onSubmit)}>
-                <TextField id="filled-basic" label="Enter a donation amount" variant="filled" {...register("example")} />
-                <TextField id="filled-basic" label="Filled" variant="filled" {...register("exampleRequired", { required: true })} />
+                <TextField className="field" label="Campaign name" variant="filled" {...register("example")} />
+                <TextField className="field" label="Description" variant="filled" {...register("exampleRequired", { required: true })} />
                 {errors.exampleRequired && <span>This field is required</span>}
-                <FormControl {...register("payment", { required: true })}>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value="10"
-                        label="Payment"
-                    >
-                        <MenuItem value={'10'}>Ten</MenuItem>
-                        <MenuItem value={'20'}>Twenty</MenuItem>
-                        <MenuItem value={'30'}>Thirty</MenuItem>
-                    </Select>
-                </FormControl>
                 <Input type="submit" />
             </Box>
         </div>
