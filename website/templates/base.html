@@ -16,7 +16,6 @@
 <!doctype html>
 
 <head>
-
   <!-- Meta tags for SEO -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,6 +53,9 @@
         <span class="mdc-top-app-bar__title">{{ self.title() }}</span>
       </section>
       <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+        <a href="/">
+          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Home" title="Home">home</button>
+        </a>
         <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Help" title="Help">help_outline</button>
         <!-- Login controls -->
         {% if 'session_id' in request.cookies %}
@@ -84,5 +86,4 @@
 
     {% block content %}{% endblock %}
   </main>
-
 </body>
