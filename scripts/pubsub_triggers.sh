@@ -13,16 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -u
 # This file creates pub/sub Cloud Build triggers.
 # TODO: Manage with Terraform when available.
 
-set -u
+# Note, we are using the `gcloud alpha` command because this is currently
+# the only way to automate pub/sub trigger creation.  
+# Terraform bug here: https://github.com/hashicorp/terraform-provider-google/issues/10434
+
 #################################
 ## Staging Deployment Triggers ##
 #################################
-
-# Note, we are using the `gcloud alpha` command because this is currently
-# the only way to automate pub/sub trigger creation.
 
 # Both of the immediate two commands below output a noisy error 
 # that does not affect the creation of the trigger
