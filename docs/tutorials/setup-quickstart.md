@@ -39,6 +39,10 @@ gcloud auth application-default login
 
 If you encounter auth errors, you may need to unset your `GOOGLE_APPLICATION_CREDENTIALS` in your terminal.
 
+```bash
+unset GOOGLE_APPLICATION_CREDENTIALS
+```
+
 ## Set projects
 
 Emblem uses three projects: `prod`, `stage`, and `ops`. 
@@ -104,7 +108,7 @@ Watch the terminal as [Terraform](https://terraform.io) builds and deploys the E
 
 If you are prompted to enable any APIs for your projects, enter "y" in the terminal to enable them.
 
-If you are prompted to select a region for the Cloud Run deployments, enter the number of the region closest to you. 
+If you are prompted to select a region for the Cloud Run deployments, enter the number of the region closest to your users. 
 
 ## Configure end-user authentication
 
@@ -121,7 +125,7 @@ sh ./scripts/configure_auth.sh
 ## Connect Cloud Build triggers
 
 When you receive the prompt below:
-`Connect your repos: https://console.cloud.google.com/cloud-build/triggers/connect?project=$OPS_PROJECT`
+`Connect your repos: https://console.cloud.google.com/cloud-build/triggers/connect`
 
 Click the link provided in the prompt and follow the instructions to connect your repository. 
 
@@ -132,4 +136,4 @@ Once your repo has been connected, click **Done**, then return to the terminal a
 Your Emblem application is now running!
 
 ### Next steps
-Test the delivery pipeline by pushing a change to your Emblem repo. Check out the [Cloud Build dashboard](https://console.cloud.google.com/cloud-build/builds?authuser=3&project=$OPS_PROJECT) and inspect the build logs and tests.
+Test the delivery pipeline by pushing a change to your Emblem repo. Check out the [Cloud Build dashboard](https://console.cloud.google.com/cloud-build/builds) and inspect the build logs and tests.
