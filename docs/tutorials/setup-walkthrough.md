@@ -3,10 +3,9 @@
 ## Introduction
 
 In this tutorial, you'll set up the Emblem application by following these steps:
-1. run a [Terraform](https://www.terraform.io/) script to deploy Emblem to [Cloud Run](https://cloud.google.com/run)
+1. run a script to deploy Emblem to [Cloud Run](https://cloud.google.com/run)
 2. configure authentication with [OAuth 2.0 and Google Identity](https://developers.google.com/identity/protocols/oauth2)
 3. initiate continuous integration using [Cloud Build](https://cloud.google.com/build)
-4. explore operations monitoring
 
 ---
 
@@ -97,13 +96,11 @@ sh setup.sh
 
 The script enables all necessary APIs, creates service accounts, deploys Emblem to Cloud Run, creates Cloud Build triggers,
 
-Watch the terminal as Terraform builds and deploys the Emblem pipeline.
+Watch the terminal to see outputs as [Terraform](https://www.terraform.io/) builds and deploys the Emblem pipeline.
 
 If you are prompted to enable any APIs for your projects, enter `y` in the terminal to enable them.
 
 If you are prompted to select a region for the Cloud Run deployments, enter the number that corresponds to the region closest to you. 
-
-[...]: # (DEV_TODO: - add --region or --zone tag to the setup.sh gcloud commands to bypass this step.)
 
 ## Configure end-user authentication
 
@@ -134,7 +131,3 @@ Your Emblem application is now running!
 
 ### Next steps
 - **Test the delivery pipeline** by pushing a change to your Emblem repo. Check out the [Cloud Build dashboard](https://console.cloud.google.com/cloud-build/builds) and inspect the build logs and tests.
-
-- **Explore metrics** of your Emblem application with the [Metrics Explorer](https://console.cloud.google.com/monitoring/metrics-explorer).
-
-[...]: # (DEV TODO - Print out links to application and relevant console items like Cloud Build & Logging in the terminal, which include the correct user projects.)
