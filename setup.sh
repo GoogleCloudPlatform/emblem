@@ -75,7 +75,7 @@ terraform state rm module.application.google_app_engine_application.main || true
 
 
 ## Prod Project ##
-if [ "${PROD_PROJECT}" !="${STAGE_PROJECT}" ]; then 
+if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
 # Set Prod Variables
 cat > terraform.tfvars <<EOF
 google_ops_project_id = "${OPS_PROJECT}"
@@ -105,18 +105,20 @@ gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
 gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
 --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
 
-# Deploy built images (API)
+
+#################
+# Prod Services #
+#################
+
+# Only deploy to separate project for multi-project setups
+if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
+# Deploy API
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
 --project "$PROD_PROJECT"  --service-account "api-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
 content-api
 
-gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
---project "$STAGE_PROJECT"  --service-account "api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"  \
-content-api
 
-# Deploy built images (website prod)
 PROD_API_URL=$(gcloud run services describe content-api --project ${PROD_PROJECT} --format "value(status.url)")
 
 WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions"
@@ -127,7 +129,16 @@ gcloud run deploy --allow-unauthenticated \
 --project "$PROD_PROJECT" --service-account "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com"  \
 --set-env-vars "$WEBSITE_VARS" \
 website
+fi
 
+##################
+# Stage Services #
+##################
+
+gcloud run deploy --allow-unauthenticated \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
+--project "$STAGE_PROJECT"  --service-account "api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"  \
+content-api
 # Deploy built images (website staging)
 STAGE_API_URL=$(gcloud run services describe content-api --project ${STAGE_PROJECT} --format "value(status.url)")
 

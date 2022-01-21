@@ -16,7 +16,7 @@
 # This file creates pub/sub Cloud Build triggers.
 # TODO: Manage with Terraform when available.
 
-set -eu
+set -u
 #################################
 ## Staging Deployment Triggers ##
 #################################
@@ -24,6 +24,10 @@ set -eu
 # Note, we are using the `gcloud alpha` command because this is currently
 # the only way to automate pub/sub trigger creation.
 
+# Both of the immediate two commands below output a noisy error 
+# that does not affect the creation of the trigger
+# eg: ERROR: (gcloud.alpha.builds.triggers.create.pubsub) 
+#     Malformed operator [_IMAGE_NAME *HERE* == "website"].
 gcloud alpha builds triggers create pubsub \
 --name=web-deploy-staging --topic="projects/${OPS_PROJECT}/topics/gcr" \
 --repo="${GITHUB_URL}" --branch=main \
@@ -79,7 +83,7 @@ _ENV == "staging"' \
 # ##############################
 # ## Prod Deployment Triggers ##
 # ##############################
-if [ "${PROD_PROJECT}" !="${STAGE_PROJECT}" ]; then 
+if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
 gcloud alpha builds triggers create pubsub \
 --name=web-deploy-prod --topic="projects/${OPS_PROJECT}/topics/deploy-${PROD_PROJECT}" \
 --repo="${GITHUB_URL}" --branch=main \
@@ -97,7 +101,7 @@ gcloud alpha builds triggers create pubsub \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
 _REGION="$REGION",_REVISION='$(body.message.messageId)',\
 _SERVICE=content-api,_TARGET_PROJECT="$PROD_PROJECT",_ENV="prod" \
---filter='IMAGE_NAME == "content-api"' \
+--filter='_IMAGE_NAME == "content-api"' \
 --project="${OPS_PROJECT}" --require-approval 
 
 # ###########################
