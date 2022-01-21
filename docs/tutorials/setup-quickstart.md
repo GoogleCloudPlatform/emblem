@@ -132,4 +132,4 @@ Once your repo has been connected, click **Done**, then return to the terminal a
 Your Emblem application is now running!
 
 ### Next steps
-Test the delivery pipeline by pushing a change to your Emblem repo. Check out the [Cloud Build dashboard](https://console.cloud.google.com/cloud-build/builds?authuser=3&project=$OPS_PROJECT).
+Test the delivery pipeline by pushing a change to your Emblem repo. Check out the [Cloud Build dashboard](https://console.cloud.google.com/cloud-build/builds?authuser=3&project=$OPS_PROJECT) and inspect the build logs and tests.
