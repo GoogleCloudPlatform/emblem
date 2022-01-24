@@ -83,7 +83,7 @@ google_project_id = "${PROD_PROJECT}"
 EOF
 
 terraform init --backend-config "path=./prod.tfstate" -reconfigure
-terraform import module.application.google_app_engine_application.main "${PROD_PROJECT}" || true
+terraform import module.application.google_app_engine_application.main "${PROD_PROJECT}" 2>/dev/null || true
 terraform apply --auto-approve 
 terraform state rm module.application.google_app_engine_application.main || true
     
