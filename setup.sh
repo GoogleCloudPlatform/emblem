@@ -91,9 +91,9 @@ fi
 # Return to root directory
 popd
 
-###################
-# Deploy Services #
-###################
+####################
+# Build Containers #
+####################
 
 export REGION="us-central1"
 SHORT_SHA="setup"

@@ -28,7 +28,7 @@ set -u
 # Both of the immediate two commands below output a noisy error 
 # that does not affect the creation of the trigger
 # eg: ERROR: (gcloud.alpha.builds.triggers.create.pubsub) 
-#     Malformed operator [_IMAGE_NAME *HERE* == "website"].
+#     Unknown transform function matches [_IMAGE_NAME.matches( *HERE* "website")].
 gcloud alpha builds triggers create pubsub \
 --name=web-deploy-staging --topic="projects/${OPS_PROJECT}/topics/gcr" \
 --repo="${GITHUB_URL}" --branch=main \
@@ -36,7 +36,7 @@ gcloud alpha builds triggers create pubsub \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
 _REGION="$REGION",_REVISION='$(body.message.messageId)',\
 _SERVICE=website,_TARGET_PROJECT="$STAGE_PROJECT",_ENV="staging" \
- --filter='_IMAGE_NAME == "website"' \
+ --filter='_IMAGE_NAME.matches("website")' \
  --project="${OPS_PROJECT}"
 
 gcloud alpha builds triggers create pubsub \
@@ -46,7 +46,7 @@ gcloud alpha builds triggers create pubsub \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
 _REGION="$REGION",_REVISION='$(body.message.messageId)',\
 _SERVICE=content-api,_TARGET_PROJECT="$STAGE_PROJECT",_ENV="staging" \
---filter='_IMAGE_NAME == "content-api"' \
+--filter='_IMAGE_NAME.matches("content-api")' \
 --project="${OPS_PROJECT}" 
 
 # ##############################
@@ -63,8 +63,7 @@ _REVISION='$(body.message.attributes._REVISION)',\
 _SERVICE='$(body.message.attributes._SERVICE)',\
 _TRAFFIC='$(body.message.attributes._TRAFFIC)',\
 _ENV='$(body.message.attributes._ENV)'\
---filter='_SERVICE == "content-api" &&
-_ENV == "staging"' \
+--filter='_SERVICE == "content-api" && _ENV == "staging"' \
 --project="${OPS_PROJECT}" 
 
 gcloud alpha builds triggers create pubsub \
@@ -77,8 +76,7 @@ _REVISION='$(body.message.attributes._REVISION)',\
 _SERVICE='$(body.message.attributes._SERVICE)',\
 _TRAFFIC='$(body.message.attributes._TRAFFIC)',\
 _ENV='$(body.message.attributes._ENV)'\
---filter='_SERVICE == "website" && 
-_ENV == "staging"' \
+--filter='_SERVICE == "website" && _ENV == "staging"' \
 --project="${OPS_PROJECT}" 
 
 # ##############################
@@ -119,8 +117,7 @@ _REVISION='$(body.message.attributes._REVISION)',\
 _SERVICE='$(body.message.attributes._SERVICE)',\
 _TRAFFIC='$(body.message.attributes._TRAFFIC)',\
 _ENV='$(body.message.attributes._ENV)'\
---filter='_SERVICE == "content-api" && 
-_ENV == "prod"' \
+--filter='_SERVICE == "content-api" && _ENV == "prod"' \
 --project="${OPS_PROJECT}" 
 
 gcloud alpha builds triggers create pubsub \
@@ -133,7 +130,6 @@ _REVISION='$(body.message.attributes._REVISION)',\
 _SERVICE='$(body.message.attributes._SERVICE)',\
 _TRAFFIC='$(body.message.attributes._TRAFFIC)',\
 _ENV='$(body.message.attributes._ENV)'\
---filter='_SERVICE == "website" && 
-_ENV == "prod"' \
+--filter='_SERVICE == "website" && _ENV == "prod"' \
 --project="${OPS_PROJECT}" 
 fi
