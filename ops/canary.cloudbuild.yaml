@@ -64,7 +64,7 @@ steps:
         --message="Increase ${_SERVICE}-${_REVISION} traffic to $((${_TRAFFIC}+5))" \
         --attribute=_TARGET_PROJECT=${_TARGET_PROJECT},_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION},_REGION=${_REGION},_TRAFFIC=$((${_TRAFFIC}+5))
         elif [ ${_ENV} = "staging" ]
-        then gcloud pubsub topics publish deploy-prod \
+        then gcloud pubsub topics publish deploy-${_TARGET_PROJECT} \
         --message="Deploying ${_SERVICE}-prod-${_REVISION}" \
         --attribute=_TARGET_PROJECT=${_TARGET_PROJECT},_IMAGE_NAME=${_IMAGE_NAME},_ENV=prod,_SERVICE=${_SERVICE},_REVISION=${_REVISION},_REGION=${_REGION},_TRAFFIC=$((${_TRAFFIC}+5))
         fi

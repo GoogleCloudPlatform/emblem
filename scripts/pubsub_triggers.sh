@@ -30,7 +30,7 @@ set -u
 # eg: ERROR: (gcloud.alpha.builds.triggers.create.pubsub) 
 #     Unknown transform function matches [_IMAGE_NAME.matches( *HERE* "website")].
 gcloud alpha builds triggers create pubsub \
---name=web-deploy-staging --topic="projects/${OPS_PROJECT}/topics/gcr" \
+--name=web-deploy-"$STAGE_PROJECT" --topic="projects/${OPS_PROJECT}/topics/gcr" \
 --repo="${GITHUB_URL}" --branch=main \
 --build-config=ops/deploy.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
@@ -40,7 +40,7 @@ _SERVICE=website,_TARGET_PROJECT="$STAGE_PROJECT",_ENV="staging" \
  --project="${OPS_PROJECT}"
 
 gcloud alpha builds triggers create pubsub \
---name=api-deploy-staging --topic="projects/${OPS_PROJECT}/topics/gcr" \
+--name=api-deploy-"$STAGE_PROJECT" --topic="projects/${OPS_PROJECT}/topics/gcr" \
 --repo="${GITHUB_URL}" --branch=main \
 --build-config=ops/deploy.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
@@ -54,7 +54,7 @@ _SERVICE=content-api,_TARGET_PROJECT="$STAGE_PROJECT",_ENV="staging" \
 # ##############################
 
 gcloud alpha builds triggers create pubsub \
---name=api-canary-staging --topic="projects/${OPS_PROJECT}/topics/canary-${STAGE_PROJECT}" \
+--name=api-canary-"$STAGE_PROJECT" --topic="projects/${OPS_PROJECT}/topics/canary-${STAGE_PROJECT}" \
 --repo="${GITHUB_URL}" --branch=main \
 --build-config=ops/canary.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.attributes._IMAGE_NAME)',\
@@ -68,7 +68,7 @@ _TARGET_PROJECT='$(body.message.attributes._TARGET_PROJECT)' \
 --project="${OPS_PROJECT}" 
 
 gcloud alpha builds triggers create pubsub \
---name=web-canary-staging --topic="projects/${OPS_PROJECT}/topics/canary-${STAGE_PROJECT}" \
+--name=web-canary-"$STAGE_PROJECT" --topic="projects/${OPS_PROJECT}/topics/canary-${STAGE_PROJECT}" \
 --repo="${GITHUB_URL}" --branch=main \
 --build-config=ops/canary.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.attributes._IMAGE_NAME)',\
@@ -86,7 +86,7 @@ _TARGET_PROJECT='$(body.message.attributes._TARGET_PROJECT)' \
 # ##############################
 if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
 gcloud alpha builds triggers create pubsub \
---name=web-deploy-prod --topic="projects/${OPS_PROJECT}/topics/deploy-${PROD_PROJECT}" \
+--name=web-deploy-"$PROD_PROJECT" --topic="projects/${OPS_PROJECT}/topics/deploy-${PROD_PROJECT}" \
 --repo="${GITHUB_URL}" --branch=main \
 --build-config=ops/deploy.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
@@ -96,7 +96,7 @@ _SERVICE=website,_TARGET_PROJECT="$PROD_PROJECT",_ENV="prod"\
 --project="${OPS_PROJECT}" --require-approval 
 
 gcloud alpha builds triggers create pubsub \
---name=api-deploy-prod --topic="projects/${OPS_PROJECT}/topics/deploy-${PROD_PROJECT}" \
+--name=api-deploy-"$PROD_PROJECT" --topic="projects/${OPS_PROJECT}/topics/deploy-${PROD_PROJECT}" \
 --repo="${GITHUB_URL}" --branch=main \
 --build-config=ops/deploy.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
@@ -110,7 +110,7 @@ _SERVICE=content-api,_TARGET_PROJECT="$PROD_PROJECT",_ENV="prod" \
 # ###########################
 
 gcloud alpha builds triggers create pubsub \
---name=api-canary-prod --topic="projects/${OPS_PROJECT}/topics/canary-${PROD_PROJECT}" \
+--name=api-canary-"$PROD_PROJECT" --topic="projects/${OPS_PROJECT}/topics/canary-${PROD_PROJECT}" \
 --repo="${GITHUB_URL}" --branch=main \
 --build-config=ops/canary.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.attributes._IMAGE_NAME)',\
@@ -124,7 +124,7 @@ _TARGET_PROJECT='$(body.message.attributes._TARGET_PROJECT)' \
 --project="${OPS_PROJECT}" 
 
 gcloud alpha builds triggers create pubsub \
---name=web-canary-prod --topic="projects/${OPS_PROJECT}/topics/canary-${PROD_PROJECT}" \
+--name=web-canary-"$PROD_PROJECT" --topic="projects/${OPS_PROJECT}/topics/canary-${PROD_PROJECT}" \
 --repo="${GITHUB_URL}" --branch=main \
 --build-config=ops/canary.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.attributes._IMAGE_NAME)',\
