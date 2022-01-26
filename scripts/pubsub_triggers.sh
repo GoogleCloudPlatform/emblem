@@ -62,7 +62,8 @@ _REGION='$(body.message.attributes._REGION)',\
 _REVISION='$(body.message.attributes._REVISION)',\
 _SERVICE='$(body.message.attributes._SERVICE)',\
 _TRAFFIC='$(body.message.attributes._TRAFFIC)',\
-_ENV='$(body.message.attributes._ENV)'\
+_ENV='$(body.message.attributes._ENV)',\
+_TARGET_PROJECT='$(body.message.attributes._TARGET_PROJECT)' \
 --filter='_SERVICE == "content-api" && _ENV == "staging"' \
 --project="${OPS_PROJECT}" 
 
@@ -75,7 +76,8 @@ _REGION='$(body.message.attributes._REGION)',\
 _REVISION='$(body.message.attributes._REVISION)',\
 _SERVICE='$(body.message.attributes._SERVICE)',\
 _TRAFFIC='$(body.message.attributes._TRAFFIC)',\
-_ENV='$(body.message.attributes._ENV)'\
+_ENV='$(body.message.attributes._ENV)',\
+_TARGET_PROJECT='$(body.message.attributes._TARGET_PROJECT)' \
 --filter='_SERVICE == "website" && _ENV == "staging"' \
 --project="${OPS_PROJECT}" 
 
@@ -116,7 +118,8 @@ _REGION='$(body.message.attributes._REGION)',\
 _REVISION='$(body.message.attributes._REVISION)',\
 _SERVICE='$(body.message.attributes._SERVICE)',\
 _TRAFFIC='$(body.message.attributes._TRAFFIC)',\
-_ENV='$(body.message.attributes._ENV)'\
+_ENV='$(body.message.attributes._ENV)',\
+_TARGET_PROJECT='$(body.message.attributes._TARGET_PROJECT)' \
 --filter='_SERVICE == "content-api" && _ENV == "prod"' \
 --project="${OPS_PROJECT}" 
 
@@ -129,7 +132,8 @@ _REGION='$(body.message.attributes._REGION)',\
 _REVISION='$(body.message.attributes._REVISION)',\
 _SERVICE='$(body.message.attributes._SERVICE)',\
 _TRAFFIC='$(body.message.attributes._TRAFFIC)',\
-_ENV='$(body.message.attributes._ENV)'\
+_ENV='$(body.message.attributes._ENV)',\
+_TARGET_PROJECT='$(body.message.attributes._TARGET_PROJECT)' \
 --filter='_SERVICE == "website" && _ENV == "prod"' \
 --project="${OPS_PROJECT}" 
 fi

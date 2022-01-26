@@ -36,7 +36,7 @@ steps:
       - publish
       - canary-${_TARGET_PROJECT}
       - --message="Start ${_SERVICE}-${_REVISION} rollout"
-      - --attribute=_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION},_REGION=${_REGION},_TRAFFIC=5,
+      - --attribute=_TARGET_PROJECT=${_TARGET_PROJECT},_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION},_REGION=${_REGION},_TRAFFIC=5,
       - --project=${_TARGET_PROJECT}
 
 options:
