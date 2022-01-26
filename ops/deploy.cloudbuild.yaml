@@ -27,7 +27,7 @@ steps:
       - --allow-unauthenticated
       - --no-traffic
       - --set-env-vars=${_ENV_VARS}
-      - --tag=${_REVISION}
+      - --tag=t-${_REVISION}
 
   # Send message to pub/sub to start canary rollout process
   - name: 'gcr.io/cloud-builders/gcloud'

@@ -28,7 +28,7 @@ steps:
       - '-c'
       - |
         URL=$(gcloud run services describe website --format "value(status.url)" --region=${_REGION} --project=${_TARGET_PROJECT})
-        latest=$(echo "${URL/https:\/\//${_REVISION}---}")
+        latest=$(echo "${URL/https:\/\//t-${_REVISION}---}")
         set -e
         curl -si --fail --show-error https://$latest
   
