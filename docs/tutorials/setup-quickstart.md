@@ -23,7 +23,7 @@ To clone Emblem into a preconfigured Cloud Shell instance and launch the setup i
 * [git](https://github.com)
 * [Cloud SDK](https://cloud.google.com/sdk/docs/install)
 
-2. Clone the Emblem application and cd into the `emblem` directory by running the command below in your terminal:
+2. Clone the Emblem application and `cd` into the `emblem` directory by running the command below in your terminal:
   ```bash
   git clone https://github.com/GoogleCloudPlatform/emblem.git
   cd emblem
