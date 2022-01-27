@@ -105,7 +105,7 @@ fi
 echo ""
 echo "  Open the $(tput bold)client_id_secret$(tput sgr0) and click +NEW VERSION. "
 echo "  In the 'Secret value' field, enter the $(tput bold)client ID$(tput sgr0) from the previous step. "
-echo "  Click ADD NEW VERSION."
+echo "  Click $(tput bold)Add new version$(tput sgr0)."
 echo "  Repeat the steps above for $(tput bold)client_secret_secret$(tput sgr0)."
 echo ""
 if [[ $CLOUD_SHELL]]; then
