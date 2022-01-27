@@ -76,7 +76,7 @@ Set the project variables in your Cloud Shell terminal. Replace each `<prod>`, `
   ```
 2. Set your billing account. (You can view your existing billing accounts by running `gcloud alpha billing accounts list` in the terminal.)
   ```bash
-  export BILLING_ACCOUNT_NAME="My Billing Account"
+export BILLING_ACCOUNT_NAME="My Billing Account"  # TODO(developer): change if necessary
   export EMBLEM_BILLING_ACCOUNT=$(gcloud alpha billing accounts list --filter "$BILLING_ACCOUNT_NAME" --format "value(name)")
   ```
 
