@@ -53,7 +53,8 @@ You can use existing Google Cloud projects or create new projects. Choose either
 
 ### Select existing projects
 
-Emblem uses Cloud Firestore in Native mode as the database for each project. Since the selected mode is permanent for a project, make sure that your existing projects are not already using Datastore mode by checking the configuration in the [Firestore console](https://console.cloud.google.com/firestore).
+Emblem uses [Cloud Firestore in Native mode](https://cloud.google.com/datastore/docs/firestore-or-datastore#in_native_mode) as the database for each project. Since the selected mode is permanent for a project, make sure that your existing projects are not already using Datastore mode by checking the configuration in the [Firestore console](https://console.cloud.google.com/firestore).
+
 
 1. Set the project variables in your terminal. Replace each `<prod>`, `<stage>`, and `<ops>` value with the corresponding project ID for your `prod`, `stage`, and `ops` projects.
 
