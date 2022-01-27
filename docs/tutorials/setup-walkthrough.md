@@ -3,9 +3,9 @@
 ## Introduction
 
 In this tutorial, you'll set up the Emblem application by following these steps:
-1. run a script to deploy Emblem to [Cloud Run](https://cloud.google.com/run)
-2. configure authentication with [OAuth 2.0 and Google Identity](https://developers.google.com/identity/protocols/oauth2)
-3. initiate continuous integration using [Cloud Build](https://cloud.google.com/build)
+1. Run a script to deploy Emblem to [Cloud Run](https://cloud.google.com/run)
+2. Configure authentication with [OAuth 2.0 and Google Identity](https://developers.google.com/identity/protocols/oauth2)
+3. Initiate continuous integration using [Cloud Build](https://cloud.google.com/build)
 
 ---
 
@@ -28,6 +28,10 @@ gcloud auth application-default login
 ```
 
 If you encounter auth errors, you may need to unset your `GOOGLE_APPLICATION_CREDENTIALS` in your terminal.
+
+```bash
+unset GOOGLE_APPLICATION_CREDENTIALS
+``
 
 ## Set projects
 
@@ -100,7 +104,7 @@ Watch the terminal to see outputs as [Terraform](https://www.terraform.io/) buil
 
 If you are prompted to enable any APIs for your projects, enter `y` in the terminal to enable them.
 
-If you are prompted to select a region for the Cloud Run deployments, enter the number that corresponds to the region closest to you. 
+If you are prompted to select a region for the Cloud Run deployments, enter the number that corresponds to the region closest to your users. 
 
 ## Configure end-user authentication
 
@@ -118,7 +122,7 @@ sh ./scripts/configure_auth.sh
 
 When you receive the prompt below, click the link provided and follow the instructions to connect your Emblem GitHub repository:
 
-`Connect your repos: https://console.cloud.google.com/cloud-build/triggers/connect?project=$OPS_PROJECT`
+`Connect your repos: https://console.cloud.google.com/cloud-build/triggers/connect`
 
 Once your repo has been connected, click **Done**, then return to the Cloud Shell terminal and press any key to continue. You will be prompted to enter the `repo owner` and `repo name`; enter the values from your repository and confirm them by pressing `y`.
 
