@@ -63,7 +63,8 @@ _REVISION='$(body.message.attributes._REVISION)',\
 _SERVICE='$(body.message.attributes._SERVICE)',\
 _TRAFFIC='$(body.message.attributes._TRAFFIC)',\
 _ENV='$(body.message.attributes._ENV)',\
-_TARGET_PROJECT='$(body.message.attributes._TARGET_PROJECT)' \
+_TARGET_PROJECT='$(body.message.attributes._TARGET_PROJECT)',\
+_PROD_PROJECT="$PROD_PROJECT" \
 --filter='_SERVICE == "content-api" && _ENV == "staging"' \
 --project="${OPS_PROJECT}" 
 
@@ -77,7 +78,8 @@ _REVISION='$(body.message.attributes._REVISION)',\
 _SERVICE='$(body.message.attributes._SERVICE)',\
 _TRAFFIC='$(body.message.attributes._TRAFFIC)',\
 _ENV='$(body.message.attributes._ENV)',\
-_TARGET_PROJECT='$(body.message.attributes._TARGET_PROJECT)' \
+_TARGET_PROJECT='$(body.message.attributes._TARGET_PROJECT)',\
+_PROD_PROJECT="$PROD_PROJECT" \
 --filter='_SERVICE == "website" && _ENV == "staging"' \
 --project="${OPS_PROJECT}" 
 
@@ -91,7 +93,7 @@ gcloud alpha builds triggers create pubsub \
 --build-config=ops/deploy.cloudbuild.yaml \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
 _REGION="$REGION",_REVISION='$(body.message.messageId)',\
-_SERVICE=website,_TARGET_PROJECT="$PROD_PROJECT",_ENV="prod"\
+_SERVICE=website,_TARGET_PROJECT="$PROD_PROJECT",_ENV="prod" \
 --filter='_IMAGE_NAME == "website"' \
 --project="${OPS_PROJECT}" --require-approval 
 
@@ -119,7 +121,8 @@ _REVISION='$(body.message.attributes._REVISION)',\
 _SERVICE='$(body.message.attributes._SERVICE)',\
 _TRAFFIC='$(body.message.attributes._TRAFFIC)',\
 _ENV='$(body.message.attributes._ENV)',\
-_TARGET_PROJECT='$(body.message.attributes._TARGET_PROJECT)' \
+_TARGET_PROJECT='$(body.message.attributes._TARGET_PROJECT)',\
+_PROD_PROJECT="$PROD_PROJECT" \
 --filter='_SERVICE == "content-api" && _ENV == "prod"' \
 --project="${OPS_PROJECT}" 
 
@@ -133,7 +136,8 @@ _REVISION='$(body.message.attributes._REVISION)',\
 _SERVICE='$(body.message.attributes._SERVICE)',\
 _TRAFFIC='$(body.message.attributes._TRAFFIC)',\
 _ENV='$(body.message.attributes._ENV)',\
-_TARGET_PROJECT='$(body.message.attributes._TARGET_PROJECT)' \
+_TARGET_PROJECT='$(body.message.attributes._TARGET_PROJECT)',\
+_PROD_PROJECT="$PROD_PROJECT" \
 --filter='_SERVICE == "website" && _ENV == "prod"' \
 --project="${OPS_PROJECT}" 
 fi
