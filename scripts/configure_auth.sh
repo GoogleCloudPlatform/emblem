@@ -44,7 +44,7 @@ echo "--------------------------------------------"
 echo "$(tput setaf 6)Configure OAuth 2.0 consent screen$(tput sgr0)"
 echo ""
 if [[ $CLOUD_SHELL ]]; then
-    echo "  Open the Cloud Console by clicking this URL: https://console.cloud.google.com/?project=${OPS_PROJECT}&cloudshell=true"
+    echo "  Open the Cloud Console by clicking this URL: $(tput bold)https://console.cloud.google.com/?project=${OPS_PROJECT}&cloudshell=true$(tput sgr0)"
     echo "  In the Cloud Console Search bar, search for 'OAuth Consent Screen' and click on the $(tput bold)OAuth consent screen$(tput sgr0) page. "
 else
     echo "  Visit this URL in the Cloud Console: $(tput bold)${AUTH_CLIENT_CONSENT_SCREEN_URL}$(tput sgr0)"
