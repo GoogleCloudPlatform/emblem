@@ -56,7 +56,7 @@ echo "  At the bottom of the page, enter a $(tput bold)Developer contact email$(
 echo ""
 echo "  Under Scopes, leave the default scopes and click $(tput bold)Save and continue$(tput sgr0)."
 echo ""
-echo "  Under Test users, add your email as a $(tput bold)Test User$(tput sgr0) and click $(tput bold)Save and continue$(tput sgr0)."
+echo "  Under $(tput bold)Test Users$(tput sgr0), add your email as a $(tput bold)Test User$(tput sgr0) and click $(tput bold)Save and continue$(tput sgr0)."
 echo ""
 if [[ $CLOUD_SHELL ]]; then
     echo ""
