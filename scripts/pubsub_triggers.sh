@@ -94,7 +94,7 @@ gcloud alpha builds triggers create pubsub \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
 _REGION="$REGION",_REVISION='$(body.message.messageId)',\
 _SERVICE=website,_TARGET_PROJECT="$PROD_PROJECT",_ENV="prod" \
---filter='_IMAGE_NAME == "website"' \
+--filter='_IMAGE_NAME.matches("website")' \
 --project="${OPS_PROJECT}" --require-approval 
 
 gcloud alpha builds triggers create pubsub \
@@ -104,7 +104,7 @@ gcloud alpha builds triggers create pubsub \
 --substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
 _REGION="$REGION",_REVISION='$(body.message.messageId)',\
 _SERVICE=content-api,_TARGET_PROJECT="$PROD_PROJECT",_ENV="prod" \
---filter='_IMAGE_NAME == "content-api"' \
+--filter='_IMAGE_NAME.matches("content-api")' \
 --project="${OPS_PROJECT}" --require-approval 
 
 # ###########################
