@@ -102,8 +102,9 @@ gcloud alpha builds triggers create pubsub \
 --name=api-deploy-"$PROD_PROJECT" --topic="projects/${OPS_PROJECT}/topics/deploy-${PROD_PROJECT}" \
 --repo="${GITHUB_URL}" --branch=main \
 --build-config=ops/deploy.cloudbuild.yaml \
---substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
-_REGION="$REGION",_REVISION='$(body.message.messageId)',\
+--substitutions=_IMAGE_NAME='$(body.message.attributes._IMAGE_NAME)',\
+_REGION='$(body.message.attributes._REGION)',\
+_REVISION='$(body.message.attributes._REVISION)',\
 _SERVICE=content-api,_TARGET_PROJECT="$PROD_PROJECT",_ENV="prod" \
 --filter='_IMAGE_NAME.matches("content-api")' \
 --project="${OPS_PROJECT}" --require-approval 
