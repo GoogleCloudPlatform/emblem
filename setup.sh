@@ -75,7 +75,7 @@ terraform state rm module.application.google_app_engine_application.main || true
 
 
 ## Prod Project ##
-
+if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
 # Set Prod Variables
 cat > terraform.tfvars <<EOF
 google_ops_project_id = "${OPS_PROJECT}"
@@ -86,15 +86,16 @@ terraform init --backend-config "path=./prod.tfstate" -reconfigure
 terraform import module.application.google_app_engine_application.main "${PROD_PROJECT}" 2>/dev/null || true
 terraform apply --auto-approve 
 terraform state rm module.application.google_app_engine_application.main || true
+fi
     
 # Return to root directory
 popd
 
-###################
-# Deploy Services #
-###################
+####################
+# Build Containers #
+####################
 
-REGION="us-central1"
+export REGION="us-central1"
 SHORT_SHA="setup"
 
 # Submit builds
@@ -104,19 +105,21 @@ gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
 gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
 --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
 
-# Deploy built images (API)
+
+#################
+# Prod Services #
+#################
+
+# Only deploy to separate project for multi-project setups
+if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
+# Deploy API
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
 --project "$PROD_PROJECT"  --service-account "api-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
-content-api
+--region "${REGION}" content-api
 
-gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
---project "$STAGE_PROJECT"  --service-account "api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"  \
-content-api
 
-# Deploy built images (website prod)
-PROD_API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
+PROD_API_URL=$(gcloud run services describe content-api --project ${PROD_PROJECT} --format "value(status.url)")
 
 WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions"
 WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${PROD_API_URL}"
@@ -124,11 +127,20 @@ WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${PROD_API_URL}"
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
 --project "$PROD_PROJECT" --service-account "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com"  \
---set-env-vars "$WEBSITE_VARS" \
+--set-env-vars "$WEBSITE_VARS" --region "${REGION}" --tag "latest" \
 website
+fi
 
-# Deploy built images (website staging)
-STAGE_API_URL=$(gcloud run services list --project ${PROD_PROJECT} --format "value(URL)")
+##################
+# Stage Services #
+##################
+
+gcloud run deploy --allow-unauthenticated \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
+--project "$STAGE_PROJECT"  --service-account "api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"  \
+--region "${REGION}" content-api
+
+STAGE_API_URL=$(gcloud run services describe content-api --project ${STAGE_PROJECT} --format "value(status.url)")
 
 WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions"
 WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${STAGE_API_URL}"
@@ -136,7 +148,7 @@ WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${STAGE_API_URL}"
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
 --project "$STAGE_PROJECT" --service-account "website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
---set-env-vars "$WEBSITE_VARS" \
+--set-env-vars "$WEBSITE_VARS" --region "${REGION}" --tag "latest" \
 website
 
 ###############
@@ -199,15 +211,7 @@ EOF
 
 terraform init
 terraform apply --auto-approve
+popd
 
-gcloud alpha builds triggers create pubsub \
---name=web-deploy-staging --topic="projects/${OPS_PROJECT}/topics/gcr" \
---repo=https://github.com/${repo_owner}/${repo_name} \
---branch=main --build-config=ops/deploy.cloudbuild.yaml \
---substitutions=_IMAGE_NAME='$(body.message.data.tag)',\
-_REGION="$REGION",_REVISION='$(body.message.messageId)',\
-_SERVICE=website,_TARGET_PROJECT="$STAGE_PROJECT",\
-_STAGING_PROJECT="$STAGE_PROJECT",_PROD_PROJECT="$PROD_PROJECT" \
---project="${OPS_PROJECT}"
-
-
+export GITHUB_URL="https://github.com/${repo_owner}/${repo_name}"
+sh ./scripts/pubsub_triggers.sh 
