@@ -127,7 +127,7 @@ WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${PROD_API_URL}"
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
 --project "$PROD_PROJECT" --service-account "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com"  \
---set-env-vars "$WEBSITE_VARS" --region "${REGION}" \
+--set-env-vars "$WEBSITE_VARS" --region "${REGION}" --tag "latest" \
 website
 fi
 
@@ -148,7 +148,7 @@ WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${STAGE_API_URL}"
 gcloud run deploy --allow-unauthenticated \
 --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
 --project "$STAGE_PROJECT" --service-account "website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
---set-env-vars "$WEBSITE_VARS" --region "${REGION}" \
+--set-env-vars "$WEBSITE_VARS" --region "${REGION}" --tag "latest" \
 website
 
 ###############
