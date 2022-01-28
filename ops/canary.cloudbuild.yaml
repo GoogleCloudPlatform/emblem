@@ -57,6 +57,7 @@ steps:
     - '--region=${_REGION}'
     - '--platform=managed'
     - '--project=${_TARGET_PROJECT}'
+    - '--update-tags=latest=${_REVISION}'
 
   # This build uses Pub/Sub to trigger *subsequent* builds that 
   # increase traffic until it reaches 100%.

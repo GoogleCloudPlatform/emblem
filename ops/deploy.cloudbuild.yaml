@@ -28,7 +28,6 @@ steps:
       - --no-traffic
       - --set-env-vars=${_ENV_VARS}
       - --tag=t-${_REVISION}
-      - --tag=latest
 
   # Send message to pub/sub to start canary rollout process
   - name: 'gcr.io/cloud-builders/gcloud'
