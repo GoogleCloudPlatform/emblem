@@ -31,11 +31,7 @@ steps:
       - '-c'
       - |
         URL=$(gcloud run services describe website --format "value(status.url)" --region=${_REGION} --project=${_TARGET_PROJECT})
-        if [ $_SERVICE == "website" ]; then
-        latest=$(echo "${URL/https:\/\//t-${_REVISION}---}")
-        else
         latest=$(echo "${URL/https:\/\//latest---}")
-        fi
         set -e
         curl -si --fail --show-error https://$latest
   
@@ -57,7 +53,6 @@ steps:
     - '--region=${_REGION}'
     - '--platform=managed'
     - '--project=${_TARGET_PROJECT}'
-    - '--update-tags=latest=${_REVISION}'
 
   # This build uses Pub/Sub to trigger *subsequent* builds that 
   # increase traffic until it reaches 100%.
