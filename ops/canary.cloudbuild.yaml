@@ -22,9 +22,6 @@ steps:
         echo ${_BODY}
 
   # Simple health check, index should return 200.
-  # Check the website.  If the API is working, it'll return in the website.
-  # If we're rolling out a new revision of the website, check specific revision,
-  # else, check latest. 
   - name: gcr.io/cloud-builders/gcloud
     entrypoint: /bin/bash
     args:
