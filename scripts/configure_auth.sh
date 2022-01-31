@@ -67,7 +67,7 @@ read -p "Once you've configured your consent screen, press $(tput bold)Enter$(tp
 
 # Create OAuth client
 echo "--------------------------------------------"
-echo " $(tput setaf 6)Create an OAuth 2.0 client$(tput sgr0)"
+echo "$(tput setaf 6)Create an OAuth 2.0 client$(tput sgr0)"
 echo ""
 if [[ $CLOUD_SHELL ]]; then
     echo "  In the Cloud Console Search bar, search for 'OAuth Credentials' and click on the $(tput bold)Credentials$(tput sgr0) page. "
