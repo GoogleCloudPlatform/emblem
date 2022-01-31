@@ -97,6 +97,12 @@ resource "google_pubsub_topic" "canary" {
   provider = google
 }
 
+resource "google_pubsub_topic" "deploy" {
+  name     = "deploy-${data.google_project.main.project_id}"
+  project  = data.google_project.ops.project_id
+  provider = google
+}
+
 ##
 # Secret Manager IAM Resources
 ##
