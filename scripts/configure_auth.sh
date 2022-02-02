@@ -108,7 +108,7 @@ echo "  In the $(tput bold)Secret value$(tput sgr0) field, enter the $(tput bold
 echo "  Click $(tput bold)Add new version$(tput sgr0)."
 echo "  Repeat the steps above for $(tput bold)client_secret_secret$(tput sgr0)."
 echo ""
-if [[ $CLOUD_SHELL]]; then
+if [[ $CLOUD_SHELL ]]; then
     echo ""
 else
     python3 -m webbrowser $SECRETS_URL
