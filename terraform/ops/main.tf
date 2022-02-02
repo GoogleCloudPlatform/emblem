@@ -58,8 +58,11 @@ resource "google_project_iam_member" "pubsub_publisher_iam_member" {
 resource "time_sleep" "wait_for_artifactregistry" {
   depends_on = [google_project_service.artifactregistry]
 
-  # Some API enablements are eventually consistent.
-  # (So, we use a delay to avoid Terraform failures.)
+  # Artifact Registry API enablement is eventually consistent
+  # for brand-new GCP projects; we add a delay as a work-around.
+  # 
+  # For more information, see this GitHub issue:
+  # https://github.com/hashicorp/terraform-provider-google/issues/11020
   create_duration = "10s"
 }
 
