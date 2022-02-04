@@ -17,11 +17,11 @@ In order to achieve this, we need a way to automatically deploy and rollout our 
 
 ## Considered Options
 
-### Basic Deployment
+#### Basic Deployment
  
 This option is simple and fast.  However, if we deploy our new revisions directly to 100% traffic, there is a higher risk of bugs being introduced into the environment, with a larger impact on our users.  If we had "off hours", this could be a viable option. 
 
-### Blue-Green Deployment
+#### Blue-Green Deployment
 
 A blue-green deployment strategy uses two services, one is "blue" (staging) and one is "green" (prod). Once the blue service is deemed safe and stable, user traffic is shifted to that service.  This is lower risk than the Basic Deployment strategy, but a shift of 100% traffic in one lump still carries significant risk.  For instance, users in different regions may experience your service differently, which would not be visible until the traffic swap. At that point, you have an instance which has affected a large number of users and needs to be reverted. 
 
@@ -29,7 +29,7 @@ It can also be very complex and expensive to replicate a full production environ
 
 Thankfully, the question of cost is largely mitigated by the Serverless scale-to-zero cost model. 
 
-### Canary Rollouts
+#### Canary Rollouts
 
 In a canary rollout, a new deployment is created and the traffic is incrementally increased in small chunks. It is the least risky, becuase if a bug is found in production, the rollout can be stopped and the traffic reverted for the small number of users affected.  Furthermore, it does not require maintaining two full production environments.  
 
