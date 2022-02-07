@@ -6,7 +6,7 @@
 
 ## Context & Problem Statement
 
-DORA research shows that using continuous delivery improves all four delivery metrics: deployment frequency, lead time for change, change failure rate, and time to restore.  Many developers see velocity and stability being mutually exclusive.  However, the research shows that if you set up your rollout system with an eye for continuous delivery, you can have both!  
+[DORA](https://www.devops-research.com/research.html) research shows that using continuous delivery improves all four delivery metrics: deployment frequency, lead time for change, change failure rate, and time to restore.  Many developers see velocity and stability being mutually exclusive.  However, the research shows that if you set up your rollout system with an eye for continuous delivery, you can have both!  
 
 In order to achieve this, we need a way to automatically deploy and rollout our application that is both low-risk and low-latency.  
 
@@ -37,7 +37,7 @@ The downside of canary rollouts, is that the rollout system is almost always com
 
 ## Decision
 
-We decided to use canary rollouts, as they carries the least risk. Furthermore, implementing canary rollouts allows us to better understand our users who want to use the same strategy but do not have a good system to manage it.  
+We decided to use canary rollouts, as they carry the least risk. Furthermore, implementing canary rollouts allows us to better understand our users who want to use the same strategy but do not have a good system to manage it.  
 
 The handmade pipeline we've created uses Cloud Build, Pub/Sub, and the Cloud Run traffic management feature.  It automatically deploys to `staging` and requires a manual approval for deployment to `prod`.  Lastly, users may adjust the traffic increments to both the `staging` environment and `prod`.  
 
