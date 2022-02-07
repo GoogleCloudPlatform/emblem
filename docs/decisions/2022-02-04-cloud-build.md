@@ -37,7 +37,7 @@ The downside of canary rollouts, is that the rollout system is almost always com
 
 ## Decision
 
-We decided to use canary rollouts, as it carries the least risk. Furthermore, implementing canary rollouts allows us to gain empathy for our users who want to use the same strategy but do not have a good system to manage it.  
+We decided to use canary rollouts, as they carries the least risk. Furthermore, implementing canary rollouts allows us to better understand our users who want to use the same strategy but do not have a good system to manage it.  
 
 The handmade pipeline we've created uses Cloud Build, Pub/Sub, and the Cloud Run traffic management feature.  It automatically deploys to `staging` and requires a manual approval for deployment to `prod`.  Lastly, users may adjust the traffic increments to both the `staging` environment and `prod`.  
 
