@@ -25,7 +25,7 @@ This option is simple and fast.  However, if we deploy our new revisions directl
 
 A blue-green deployment strategy uses two services, one is "blue" (staging) and one is "green" (prod). Once the blue service is deemed safe and stable, user traffic is shifted to that service.  This is lower risk than the Basic Deployment strategy, but a shift of 100% traffic in one lump still carries significant risk.  For instance, users in different regions may experience your service differently, which would not be visible until the traffic swap. At that point, you have an instance which has affected a large number of users and needs to be reverted. 
 
-It can also be very complex and expensive to replicate a full production environment. While we manage our infrastructure with `Terraform`, one cannot ever be certain that all resources are ready for traffic, or that all environment variables are udpated, etc.  
+It can also be very complex and expensive to replicate a full production environment. While we manage our infrastructure with `Terraform`, one cannot ever be certain that all resources are ready for traffic, or that all environment variables are updated, etc.  
 
 Thankfully, the question of cost is largely mitigated by the Serverless scale-to-zero cost model. 
 
