@@ -17,7 +17,7 @@ If a bug is introduced, it should affect the smallest possible group of end-user
 
 ## Considered Options
 
-#### Basic Deployment
+#### All-At-Once Deployment
  
 This option is simple and fast.  However, if we deploy our new revisions directly to 100% traffic, there is a higher risk of bugs being introduced into the production environment, with a larger impact on our users.  If we had planned outages, this could be a viable option. 
 
