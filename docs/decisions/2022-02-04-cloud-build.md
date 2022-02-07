@@ -41,7 +41,7 @@ We decided to use canary rollouts, as it carries the least risk. Furthermore, im
 
 The handmade pipeline we've created uses Cloud Build, Pub/Sub, and the Cloud Run traffic management feature.  It automatically deploys to `staging` and requires a manual approval for deployment to `prod`.  Lastly, users may adjust the traffic increments to both the `staging` environment and `prod`.  
 
-In the future, we hope to migrate to a managed deployment system, which will allow us to more easily visualize our pipeline and manage our rollouts.  We will use this opportunity to show our users our migration story from handbuilt deployment system to managed deployment product. 
+In the future, we hope to migrate to a managed deployment system, which will allow us to more easily visualize our pipeline and manage our rollouts.  We will use this opportunity to show our users our migration story from a handbuilt deployment system to a managed deployment product. 
 
 
 ## Links
