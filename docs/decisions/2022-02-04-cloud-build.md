@@ -13,7 +13,7 @@ In order to achieve this, we need a way to automatically deploy and rollout our 
 ## Priorities & Constraints <!-- optional -->
 
 * There should be no downtime in deployment
-* If a bug is introduced, it should affect the smallest possible group of users. Ideally, 0%. 
+If a bug is introduced, it should affect the smallest possible group of end-users. (Ideally, nobody.)
 
 ## Considered Options
 
