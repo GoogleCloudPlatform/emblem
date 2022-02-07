@@ -31,7 +31,7 @@ Thankfully, the question of cost is largely mitigated by the Serverless scale-to
 
 #### Canary Rollouts
 
-In a canary rollout, a new deployment is created and the traffic is incrementally increased in small chunks. It is the least risky, becuase if a bug is found in production, the rollout can be stopped and the traffic reverted for the small number of users affected.  Furthermore, it does not require maintaining two full production environments.  
+In a canary rollout, a new deployment is created and the traffic is incrementally increased in small chunks. It is the least risky, because if a bug is found in production, the rollout can be stopped and the traffic reverted for the small number of users affected.  Furthermore, it does not require maintaining two full production environments.  
 
 The downside of canary rollouts, is that the rollout system is almost always complex and difficult to automate.  
 
