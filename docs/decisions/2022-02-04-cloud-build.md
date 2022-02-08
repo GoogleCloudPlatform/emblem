@@ -43,6 +43,12 @@ The handmade pipeline we've created uses Cloud Build, Pub/Sub, and the Cloud Run
 
 In the future, we hope to migrate to a managed deployment system, which will allow us to more easily visualize our pipeline and manage our rollouts.  We will use this opportunity to show our users our migration story from a handbuilt deployment system to a managed deployment product. 
 
+## Design elements
+
+Our canary rollout system uses Cloud Build to recursively increase traffic until we hit 100%.  This approach allows us to maintain a DRY style of code, thus helping reduce tech debt and ensure maintainability.  Furthermore, it means the user can adjust the traffic jumps, because each increase is `current_traffic` + `N`.  The alternative is to write each traffic increase explicitly, which hardcodes in the values and increases the chance of the commands getting out of sync over time.  
+
+We are using Cloud Build because it is the main Google Cloud Platform CI/CD tool.  This allows us to take advantage of the security benefits of the Cloud Build identity and other integrations (eg Secret Manager).  
+
 
 ## Links
 
