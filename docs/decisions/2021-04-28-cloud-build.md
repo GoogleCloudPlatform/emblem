@@ -6,7 +6,7 @@
 
 ## Context & Problem Statement
 
-[DORA](https://www.devops-research.com/research.html) research shows that using continuous delivery improves all four delivery metrics: deployment frequency, lead time for change, change failure rate, and time to restore.  Many developers see velocity and stability being mutually exclusive.  However, the research shows that if you set up your rollout system with an eye for continuous delivery, you can have both!  
+[DORA](https://www.devops-research.com/research.html) research shows that using continuous delivery improves all four delivery metrics: deployment frequency, lead time for change, change failure rate, and time to restore.  Many developers see velocity and stability as mutually exclusive.  However, the research shows that if you set up your rollout system with an eye for continuous delivery, you can have both!  
 
 In order to achieve this, we need a way to automatically deploy and rollout our application that is both low-risk and low-latency.  
 
@@ -33,7 +33,7 @@ Thankfully, the question of cost is largely mitigated by the Serverless scale-to
 
 In a canary rollout, a new deployment is created and the traffic is incrementally increased in small chunks. It is the least risky, because if a bug is found in production, the rollout can be stopped and the traffic reverted for the small number of users affected.  Furthermore, it does not require maintaining two full production environments.  
 
-The downside of canary rollouts, is that the rollout system is almost always complex and difficult to automate.  
+The downside is that canary rollout systems are almost always complex and difficult to automate.  
 
 ## Decision
 
