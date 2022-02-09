@@ -10,7 +10,7 @@ Real financial transactions are not made, and the giving campaigns in the app ma
 
 * **Release Stage:** Internal Preview (pre-MVP)
 * **Work Pattern:** Active development, 2 week sprints
-* **Self-service / Independent Setup:** TODO, current instructions are incomplete
+* **Self-service / Independent Setup:** Follow the instructions to set up Emblem by reading the [setup quickstart](./docs/tutorials/setup-quickstart.md) or by launching the [Interactive Walkthrough](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2FGoogleCloudPlatform%2Femblem&cloudshell_tutorial=docs%2Ftutorials%2Fsetup-walkthrough.md) on Cloud Shell.
 
 ## Learn About This Project
 
