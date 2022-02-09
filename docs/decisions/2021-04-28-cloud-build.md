@@ -1,6 +1,6 @@
 # Canary Rollouts for Continuous Delivery Pipeline
 
-* **Status:** proposed
+* **Status:** approved
 * **Last Updated:** 2022-02-04
 * **Objective:** Create a safe continuous rollout system using generally available Cloud Run and Cloud Build features.
 
