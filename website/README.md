@@ -1,6 +1,6 @@
 # Emblem - Website
 
-![Emblem Application architecture diagram](./img/application.png)
+![Emblem Application architecture diagram](../docs/images/application.png)
 ## Design
 The Emblem Website is configured as a [Cloud Run](https://cloud.google.com/run) service written using the [Flask](https://flask.palletsprojects.com/en/2.0.x/) web framework for Python.
 
