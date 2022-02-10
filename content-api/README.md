@@ -1,6 +1,6 @@
 # Emblem - Content API
 
-![Emblem Application architecture diagram](./img/application.png)
+![Emblem Application architecture diagram](../docs/images/application.png)
 ## Design
 The Emblem Content API is configured as a Cloud Run service written using the [Flask](https://flask.palletsprojects.com/en/2.0.x/) web framework for Python. The [OpenAPI specification](./openapi.yaml) defines the operations and data for this API.
 

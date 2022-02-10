@@ -45,11 +45,26 @@ resource "google_project_iam_member" "pubsub_publisher_iam_member" {
   provider = google
   role     = "roles/pubsub.publisher"
   member   = "serviceAccount:${data.google_project.main.number}@cloudbuild.gserviceaccount.com"
+
+  depends_on = [
+    google_project_service.cloudbuild
+  ]
 }
 
 ###
 # Container Hosting
 ##
+
+resource "time_sleep" "wait_for_artifactregistry" {
+  depends_on = [google_project_service.artifactregistry]
+
+  # Artifact Registry API enablement is eventually consistent
+  # for brand-new GCP projects; we add a delay as a work-around.
+  # 
+  # For more information, see this GitHub issue:
+  # https://github.com/hashicorp/terraform-provider-google/issues/11020
+  create_duration = "10s"
+}
 
 resource "google_artifact_registry_repository" "website_docker" {
   format        = "DOCKER"
@@ -59,8 +74,8 @@ resource "google_artifact_registry_repository" "website_docker" {
   provider      = google-beta
 
   depends_on = [
-    # Need to enable Artifact Registry service before repository creation.
-    google_project_service.artifactregistry
+    # Need to ensure Artifact Registry API is enabled first.
+    time_sleep.wait_for_artifactregistry
   ]
 }
 
@@ -72,8 +87,8 @@ resource "google_artifact_registry_repository" "api_docker" {
   provider      = google-beta
 
   depends_on = [
-    # Need to enable Artifact Registry service before repository creation.
-    google_project_service.artifactregistry
+    # Need to ensure Artifact Registry API is enabled first.
+    time_sleep.wait_for_artifactregistry
   ]
 }
 

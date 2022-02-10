@@ -1,3 +1,10 @@
+data "terraform_remote_state" "ops" {
+  backend = "local"
+  config = {
+    path = "../terraform.tfstate"
+  }
+}
+
 resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
   project        = var.google_ops_project_id
   name           = "api-unit-tests"
