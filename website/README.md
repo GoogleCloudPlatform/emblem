@@ -66,3 +66,16 @@ Congratulations! You are now ready to run the Emblem web app.
 ### Running
 
 To run the website locally, use the `flask run` command. By default, the website will run on port `8080`.
+
+## Seed Database
+To mimic a real-world production instance, you can deploy the [Content API](../content-api/README.md) and seed the Firestore database with sample data. Add fake campaigns, causes, donors, and donations by running the [seed_database](../content-api/data/seed_database.py) script:
+```
+python seed_database.py
+```
+
+This script imports content from [sample_data.json](../content-api/data/sample_data.json). The campaigns, causes, donors, and donations in the sample data are fictional.
+
+Once the database has been seeded, you can interact with the data on your running Website instance or by making requests to the API directly.
+```
+curl -X GET $EMBLEM_API_URL/causes/6aee60eead3741a98f15
+```

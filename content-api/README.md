@@ -82,3 +82,16 @@ all API operations as an Approver.
 The API server will be deployed and run. Note the
 URI of the new service. This URI will need to be provided to
 the Emblem website when it is installed.
+
+## Seed Database
+To mimic a real-world production instance, you can seed the Firestore database with sample data. Add fake campaigns, causes, donors, and donations by running the [seed_database](./data/seed_database.py) script:
+```
+python seed_database.py
+```
+
+This script imports content from [sample_data.json](./data/sample_data.json). The campaigns, causes, donors, and donations in the sample data are fictional.
+
+Once the database has been seeded, you can interact with the data by running the [Website](../website/README.md) or by making requests to the API directly.
+```
+curl -X GET $EMBLEM_API_URL/causes/6aee60eead3741a98f15
+```
