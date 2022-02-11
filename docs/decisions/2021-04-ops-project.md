@@ -22,7 +22,7 @@ The benefit here is that prod is completely isolated from all development and st
 
 However, this makes it necessary to build the image twice.  Promoting from staging to prod would therefore carry significant risk.  
 
-Additionally, there is the added complexity of having to use two projects to check the pipeline progress.  This reduces discoverability and generally makes debugging and traiging issues more difficult.  
+Additionally, there is the added complexity of having to use two projects to check the pipeline progress.  This reduces discoverability and generally makes debugging and triaging issues more difficult.  
 
 Lastly, you have to connect both projects to your GitHub account to read from the repo.
 
