@@ -87,7 +87,7 @@ URI of the new service. This URI will need to be provided to
 the Emblem website when it is installed.
 
 ## Seed Database
-To mimic a real-world production instance, you can seed the Firestore database with sample data. Add fake campaigns, causes, donors, and donations by running the [seed_database](./data/seed_database.py) script:
+To mimic a real-world production instance, you can seed the Firestore database with sample data. Add fake campaigns, causes, donors, and donations by running the [`seed_database`](./data/seed_database.py) script:
 
     python seed_database.py
 
