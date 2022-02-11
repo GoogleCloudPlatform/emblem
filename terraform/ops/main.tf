@@ -136,3 +136,17 @@ resource "google_secret_manager_secret" "oauth_client_secret" {
   depends_on = [google_project_service.secretmanager]
 }
 
+###
+# Service Accounts (test users for the website)
+###
+resource "google_service_account" "website_test_user" {
+  project      = data.google_project.main.project_id
+  account_id   = "website-test-user"
+  display_name = "Website Test User"
+}
+
+resource "google_service_account" "website_test_approver" {
+  project      = data.google_project.main.project_id
+  account_id   = "website-test-approver"
+  display_name = "Website Test Approver"
+}
