@@ -1,9 +1,8 @@
 # Managing the application via a central "Ops" project
 
 * **Status:** approved 
-* **Last Updated:** YYYY-MM-DD
-* **Builds on:** [Short Title](2021-05-15-short-title.md)
-* **Objective:** [description or link to contextual issue]
+* **Last Updated:** 2022-02-11
+* **Objective:** Manage application operations
 
 ## Context & Problem Statement
 
@@ -42,5 +41,5 @@ The additional benefits of easier pipeline management and connecting fewer proje
 
 ## Links
 
-* Related PRs
 * Related User Journeys
+  * https://github.com/GoogleCloudPlatform/emblem/issues/26
