@@ -73,7 +73,7 @@ To mimic a real-world production instance, you can deploy the [Content API](../c
 python seed_database.py
 ```
 
-This script imports content from [sample_data.json](../content-api/data/sample_data.json). The campaigns, causes, donors, and donations in the sample data are fictional.
+This script imports content from [`sample_data.json`](../content-api/data/sample_data.json). The campaigns, causes, donors, and donations in the sample data are fictional.
 
 Once the database has been seeded, you can interact with the data on your running Website instance or by making requests to the API directly.
 ```
