@@ -1,39 +1,44 @@
-# Short title of solved problem and solution
+# Managing the application via a central "Ops" project
 
-* **Status:** [proposed | rejected | approved | deprecated | superceded by [2021-01-01 Example](2021-01-01-example.md)]
+* **Status:** approved 
 * **Last Updated:** YYYY-MM-DD
 * **Builds on:** [Short Title](2021-05-15-short-title.md)
 * **Objective:** [description or link to contextual issue]
 
 ## Context & Problem Statement
 
-2-3 sentences explaining the problem and why it's challenging.
+We need a project to run tests, build images, store images, and orchestrate pipelines. 
 
-## Priorities & Constraints <!-- optional -->
+## Priorities & Constraints
 
-* list of concerns
-* that are influencing the decision
+* We should avoid having separate copies of an image for prod and staging environments
 
 ## Considered Options
 
-* Option 1: Thing
-* Option 2: Another
+### Manage staging and prod separately
+
+In this approach, staging and prod are completely separate.  They have their own copies of the container images and their own orchestration pipelines.  
+
+The benefit here is that prod is completely isolated from all development and staging efforts.  There is no chance of cross-project leakage.  
+
+However, this makes it necessary to build the image twice.  Promoting from staging to prod would therefore carry significant risk.  
+
+Additionally, there is the added complexity of having to use two projects to check the pipeline progress.  This reduces discoverability and generally makes debugging and traiging issues more difficult.  
+
+Lastly, you have to connect both projects to your GitHub account to read from the repo.
+
+### Maintain an independent "Ops" project to manage all the resources
+
+In this approach, the "Ops" project serves as a central resource for managing both prod and staging.  The images are built and stored in this project and shared with the other environments. Additionally, the pipelines are managed in the same spot and you can watch the progress of the application rollout from staging to prod altogether.   
+
+This also means that only one project has to connect to the GitHub repo, reducing the number of steps for setting up the project. 
 
 ## Decision
 
-Chosen option [Option 1: Thing]
+We have chosen the Ops managed approach, primarily to reduce the risk of having separate copies of the container image in prod and staging. We want to be absolutely sure that the image tested in staging is the one deployed to production.  
 
-[justification]
+The additional benefits of easier pipeline management and connecting fewer projects to GitHub are icing on the cake.  
 
-### Expected Consequences <!-- optional -->
-
-* List of unrelated outcomes this decision creates
-
-### Revisiting this Decision <!-- optional -->
-
-### Research <!-- optional -->
-
-* Resources reviewed as part of making this decision
 
 ## Links
 
