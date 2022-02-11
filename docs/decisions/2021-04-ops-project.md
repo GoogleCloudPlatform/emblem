@@ -37,9 +37,3 @@ This also means that only one project has to connect to the GitHub repo, reducin
 We have chosen the Ops managed approach, primarily to reduce the risk of having separate copies of the container image in prod and staging. We want to be absolutely sure that the image tested in staging is the one deployed to production.  
 
 The additional benefits of easier pipeline management and connecting fewer projects to GitHub are icing on the cake.  
-
-
-## Links
-
-* Related User Journeys
-  * https://github.com/GoogleCloudPlatform/emblem/issues/26
