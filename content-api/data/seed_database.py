@@ -18,7 +18,7 @@ import os
 import json
 
 
-project = os.getenv("PROJECT")
+project = os.getenv("PROJECT_ID")
 
 
 def seed_database(content):
@@ -36,7 +36,7 @@ def seed_database(content):
     print("Successfully seeded database")
 
 
-with open("created_results.json", "r") as f:
+with open("sample_data.json", "r") as f:
     seed_content = json.load(f)
 
 seed_database(seed_content)
