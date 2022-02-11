@@ -91,7 +91,7 @@ To mimic a real-world production instance, you can seed the Firestore database w
 
     python seed_database.py
 
-This script imports content from [sample_data.json](./data/sample_data.json). The campaigns, causes, donors, and donations in the sample data are fictional.
+This script imports content from [`sample_data.json`](./data/sample_data.json). The campaigns, causes, donors, and donations in the sample data are fictional.
 
 Once the database has been seeded, you can interact with the data by running the [Website](../website/README.md) or by making requests to the API directly.
 
