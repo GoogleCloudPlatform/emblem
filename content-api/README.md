@@ -67,17 +67,20 @@ all API operations as an Approver.
    to one that has permission to access the database. The
    email you used to create the project is fine. Also select
    the project you created the database in.
-1. Create a container for the API server using Cloud Build. Replace
-   _PROJECT_ in the command with your project ID.
+1. Set the variable `PROJECT_ID` to the project you selected in the previous step by running the following command:
 
-        gcloud builds submit . --tag=gcr.io/_PROJECT_/content-api
+        export PROJECT_ID=$(gcloud config get-value project)
+
+1. Create a container for the API server using Cloud Build.
+
+        gcloud builds submit . --tag=gcr.io/$PROJECT_ID/content-api
 
     This will create a container image and save it in
     a container registry.
 
 1. Deploy to Cloud Run.
 
-        gcloud run deploy --image=gcr.io/_PROJECT_/content-api
+        gcloud run deploy --image=gcr.io/$PROJECT_ID/content-api
 
 The API server will be deployed and run. Note the
 URI of the new service. This URI will need to be provided to
@@ -85,13 +88,15 @@ the Emblem website when it is installed.
 
 ## Seed Database
 To mimic a real-world production instance, you can seed the Firestore database with sample data. Add fake campaigns, causes, donors, and donations by running the [seed_database](./data/seed_database.py) script:
-```
-python seed_database.py
-```
+
+    python seed_database.py
 
 This script imports content from [sample_data.json](./data/sample_data.json). The campaigns, causes, donors, and donations in the sample data are fictional.
 
 Once the database has been seeded, you can interact with the data by running the [Website](../website/README.md) or by making requests to the API directly.
-```
-curl -X GET $EMBLEM_API_URL/causes/6aee60eead3741a98f15
-```
+
+    # Get the URL from your deployed API.
+    export EMBLEM_API_URL=$(gcloud run services describe content-api --project $PROJECT_ID --format "value(status.url)")
+
+    # Make an HTTP request to get a "cause" entry.
+    curl -X GET $EMBLEM_API_URL/causes/6aee60eead3741a98f15

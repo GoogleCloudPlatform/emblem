@@ -77,5 +77,10 @@ This script imports content from [sample_data.json](../content-api/data/sample_d
 
 Once the database has been seeded, you can interact with the data on your running Website instance or by making requests to the API directly.
 ```
+# Get the URL from your deployed API.
+# If the API is running locally, set EMBLEM_API_URL to your local API URL.
+export EMBLEM_API_URL=$(gcloud run services describe content-api --project $PROJECT_ID --format "value(status.url)")
+
+# Make an HTTP request to get a cause
 curl -X GET $EMBLEM_API_URL/causes/6aee60eead3741a98f15
 ```
