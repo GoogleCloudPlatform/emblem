@@ -31,7 +31,7 @@ If you encounter auth errors, you may need to unset your `GOOGLE_APPLICATION_CRE
 
 ```bash
 unset GOOGLE_APPLICATION_CREDENTIALS
-``
+```
 
 ## Set projects
 
