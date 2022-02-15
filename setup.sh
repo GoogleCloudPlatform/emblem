@@ -119,7 +119,7 @@ gcloud run deploy --allow-unauthenticated \
 --region "${REGION}" content-api
 
 
-PROD_API_URL=$(gcloud run services describe content-api --project ${PROD_PROJECT} --format "value(status.url)")
+PROD_API_URL=$(gcloud run services describe content-api --project ${PROD_PROJECT} --region ${REGION} --format "value(status.url)")
 
 WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions"
 WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${PROD_API_URL}"
@@ -140,7 +140,7 @@ gcloud run deploy --allow-unauthenticated \
 --project "$STAGE_PROJECT"  --service-account "api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"  \
 --region "${REGION}" content-api
 
-STAGE_API_URL=$(gcloud run services describe content-api --project ${STAGE_PROJECT} --format "value(status.url)")
+STAGE_API_URL=$(gcloud run services describe content-api --project ${STAGE_PROJECT} --region ${REGION} --format "value(status.url)")
 
 WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions"
 WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${STAGE_API_URL}"
