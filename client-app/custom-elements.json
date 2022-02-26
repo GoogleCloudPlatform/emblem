@@ -4,6 +4,95 @@
   "modules": [
     {
       "kind": "javascript-module",
+      "path": "src/app-dashboard.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Dashboard",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "app-dashboard",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "Dashboard",
+            "module": "src/app-dashboard.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "Dashboard",
+            "module": "src/app-dashboard.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/app-shell.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AppShell",
+          "members": [
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Cymbal Giving'",
+              "privacy": "public",
+              "attribute": "title"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "title",
+              "fieldName": "title"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "app-shell",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "AppShell",
+            "module": "src/app-shell.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "AppShell",
+            "module": "src/app-shell.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "build/app-shell-06732316.js",
       "declarations": [
         {
@@ -47116,143 +47205,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/app-dashboard.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "Dashboard",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "app-dashboard",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "app-dashboard",
-          "declaration": {
-            "name": "Dashboard",
-            "module": "src/app-dashboard.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "Dashboard",
-            "module": "src/app-dashboard.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/app-shell.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "AppShell",
-          "members": [
-            {
-              "kind": "field",
-              "name": "title",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Cymbal Giving'",
-              "privacy": "public",
-              "attribute": "title"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "title",
-              "fieldName": "title"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "app-shell",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "app-shell",
-          "declaration": {
-            "name": "AppShell",
-            "module": "src/app-shell.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "AppShell",
-            "module": "src/app-shell.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "build/assets/webcomponents-loader-97836d09.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "build/polyfills/core-js.106c2c07924884539783fb2b3e012514.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "build/polyfills/custom-elements-es5-adapter.3342b468203af1a14ca005e80d14148f.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "build/polyfills/fetch.a1ad5fb96dc0cb61b9454244c9bd7fe6.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "build/polyfills/lit-polyfill-support.82aa27f27be323af5a455ac87919622a.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "build/polyfills/regenerator-runtime.de2e6a3a74a500cae72a3cab1a403efc.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "build/polyfills/systemjs.6744a76d48d4fcc398208e8269c87aa1.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "build/polyfills/webcomponents.d7ffce1754011cfedff5f846f12e0c11.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/stores/base.js",
       "declarations": [],
       "exports": [
@@ -47316,56 +47268,51 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/containers/campaign/campaign-page.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CampaignPage",
-          "members": [
-            {
-              "kind": "field",
-              "name": "campaign",
-              "type": {
-                "text": "object"
-              },
-              "default": "{}",
-              "privacy": "public",
-              "attribute": "campaign"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "campaign",
-              "fieldName": "campaign"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "campaign-page",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "campaign-page",
-          "declaration": {
-            "name": "CampaignPage",
-            "module": "src/containers/campaign/campaign-page.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "CampaignPage",
-            "module": "src/containers/campaign/campaign-page.js"
-          }
-        }
-      ]
+      "path": "build/assets/webcomponents-loader-97836d09.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/polyfills/core-js.106c2c07924884539783fb2b3e012514.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/polyfills/custom-elements-es5-adapter.3342b468203af1a14ca005e80d14148f.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/polyfills/fetch.a1ad5fb96dc0cb61b9454244c9bd7fe6.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/polyfills/lit-polyfill-support.82aa27f27be323af5a455ac87919622a.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/polyfills/regenerator-runtime.de2e6a3a74a500cae72a3cab1a403efc.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/polyfills/systemjs.6744a76d48d4fcc398208e8269c87aa1.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/polyfills/webcomponents.d7ffce1754011cfedff5f846f12e0c11.js",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -47520,6 +47467,59 @@
           "declaration": {
             "name": "Header",
             "module": "src/components/header/header.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/containers/campaign/campaign-page.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CampaignPage",
+          "members": [
+            {
+              "kind": "field",
+              "name": "campaign",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "privacy": "public",
+              "attribute": "campaign"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "campaign",
+              "fieldName": "campaign"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "campaign-page",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-page",
+          "declaration": {
+            "name": "CampaignPage",
+            "module": "src/containers/campaign/campaign-page.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "CampaignPage",
+            "module": "src/containers/campaign/campaign-page.js"
           }
         }
       ]

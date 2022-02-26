@@ -1,15 +1,13 @@
-FROM node:10
+FROM --platform=linux/amd64 node:16
 
 WORKDIR .
 
 ENV PORT 8000
 ENV HOST 0.0.0.0
 
-COPY package*.json ./
-
-RUN npm install 
-RUN npm build 
-
 COPY . .
 
-CMD npm start
+RUN npm install 
+RUN npm run build
+
+CMD ["npm start"]
