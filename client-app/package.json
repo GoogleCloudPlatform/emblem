@@ -18,6 +18,8 @@
     "@bundled-es-modules/axios": "^0.21.1",
     "@material/mwc-button": "^0.25.3",
     "@material/mwc-icon-button": "^0.25.3",
+    "@material/mwc-tab": "^0.25.3",
+    "@material/mwc-tab-bar": "^0.25.3",
     "@material/mwc-top-app-bar": "^0.25.3",
     "@reduxjs/toolkit": "^1.7.2",
     "@vaadin/router": "^1.7.4",

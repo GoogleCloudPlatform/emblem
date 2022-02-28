@@ -5,7 +5,7 @@ import '@material/mwc-top-app-bar';
 import '@material/mwc-icon-button';
 import CampaignCard from './campaign-card.js';
 import campaignStyles from './styles/campaignList.js';
-import { fetchCampaigns } from '../../stores/slices/campaigns.js';
+import { fetchCampaignList } from '../../stores/slices/campaignList.js';
 import store from '../../stores/base.js';
 
 class CampaignList extends connect(store)(LitElement) {
@@ -24,11 +24,11 @@ class CampaignList extends connect(store)(LitElement) {
   }
 
   firstUpdated() {
-    store.dispatch(fetchCampaigns());
+    store.dispatch(fetchCampaignList());
   }
 
   stateChanged(state) {
-    this.state = state.campaigns;
+    this.state = state.campaignList;
   }
 
   render() {

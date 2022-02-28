@@ -1,8 +1,5 @@
 import { LitElement, html } from 'lit';
 import { connect } from 'pwa-helpers/connect-mixin.js';
-
-import '@material/mwc-button';
-import '@material/mwc-top-app-bar';
 import shellStyles from './styles/shell.js';
 import CampaignList from './components/campaign/campaign-list.js';
 
