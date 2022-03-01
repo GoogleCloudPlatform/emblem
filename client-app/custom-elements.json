@@ -8145,6 +8145,270 @@
     },
     {
       "kind": "javascript-module",
+      "path": "build/app-shell-38a1b3af.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_0",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "campaign",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "privacy": "public",
+              "attribute": "campaign",
+              "inheritedFrom": {
+                "name": "e",
+                "module": "build/campaign-page-0ecf21d9.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-7cb9664a.js"
+          },
+          "tagName": "campaign-card",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "campaign",
+              "fieldName": "campaign",
+              "inheritedFrom": {
+                "name": "e",
+                "module": "build/campaign-page-0ecf21d9.js"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "W",
+          "members": [
+            {
+              "kind": "method",
+              "name": "stateChanged",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "type": {
+                "text": "object"
+              },
+              "default": "{status:\"loading\",campaigns:[]}",
+              "privacy": "public",
+              "attribute": "state"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "state",
+              "fieldName": "state"
+            }
+          ],
+          "superclass": {
+            "module": "build/app-shell-38a1b3af.js"
+          },
+          "tagName": "campaign-list",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_2",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-7cb9664a.js"
+          },
+          "tagName": "campaign-card",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_3",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-7cb9664a.js"
+          },
+          "tagName": "app-header",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_4",
+          "members": [
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"Cymbal Giving\""
+            },
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-7cb9664a.js"
+          },
+          "tagName": "app-dashboard",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
+          "declaration": {
+            "name": "anonymous_0",
+            "module": "build/app-shell-38a1b3af.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "W",
+            "module": "build/app-shell-38a1b3af.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "anonymous_2",
+            "module": "build/app-shell-38a1b3af.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "anonymous_3",
+            "module": "build/app-shell-38a1b3af.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "anonymous_4",
+            "module": "build/app-shell-38a1b3af.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "build/app-shell-3bf9cf43.js",
       "declarations": [
         {
@@ -10923,6 +11187,270 @@
           "declaration": {
             "name": "anonymous_6",
             "module": "build/app-shell-5f0f94d9.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/app-shell-6026f6f3.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_0",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "campaign",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "privacy": "public",
+              "attribute": "campaign",
+              "inheritedFrom": {
+                "name": "e",
+                "module": "build/campaign-page-0ecf21d9.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-7cb9664a.js"
+          },
+          "tagName": "campaign-card",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "campaign",
+              "fieldName": "campaign",
+              "inheritedFrom": {
+                "name": "e",
+                "module": "build/campaign-page-0ecf21d9.js"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "W",
+          "members": [
+            {
+              "kind": "method",
+              "name": "stateChanged",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "type": {
+                "text": "object"
+              },
+              "default": "{status:\"loading\",campaigns:[]}",
+              "privacy": "public",
+              "attribute": "state"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "state",
+              "fieldName": "state"
+            }
+          ],
+          "superclass": {
+            "module": "build/app-shell-6026f6f3.js"
+          },
+          "tagName": "campaign-list",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_2",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-7cb9664a.js"
+          },
+          "tagName": "campaign-card",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_3",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-7cb9664a.js"
+          },
+          "tagName": "app-header",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_4",
+          "members": [
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"Cymbal Giving\""
+            },
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-7cb9664a.js"
+          },
+          "tagName": "app-dashboard",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
+          "declaration": {
+            "name": "anonymous_0",
+            "module": "build/app-shell-6026f6f3.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "W",
+            "module": "build/app-shell-6026f6f3.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "anonymous_2",
+            "module": "build/app-shell-6026f6f3.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "anonymous_3",
+            "module": "build/app-shell-6026f6f3.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "anonymous_4",
+            "module": "build/app-shell-6026f6f3.js"
           }
         }
       ]
@@ -39523,6 +40051,67 @@
     },
     {
       "kind": "javascript-module",
+      "path": "build/campaign-page-66ec77d5.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ot",
+          "members": [
+            {
+              "kind": "method",
+              "name": "stateChanged",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "campaign",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "privacy": "public",
+              "attribute": "campaign"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "campaign",
+              "fieldName": "campaign"
+            }
+          ],
+          "superclass": {
+            "module": "build/campaign-page-66ec77d5.js"
+          },
+          "tagName": "campaign-page",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-page",
+          "declaration": {
+            "name": "ot",
+            "module": "build/campaign-page-66ec77d5.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ot",
+            "module": "build/campaign-page-66ec77d5.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "build/campaign-page-6b8ba07d.js",
       "declarations": [
         {
@@ -52290,6 +52879,74 @@
     },
     {
       "kind": "javascript-module",
+      "path": "build/legacy-app-shell-a2e4c277.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "_t"
+        },
+        {
+          "kind": "variable",
+          "name": "xt"
+        },
+        {
+          "kind": "variable",
+          "name": "wt"
+        },
+        {
+          "kind": "variable",
+          "name": "Rt"
+        },
+        {
+          "kind": "variable",
+          "name": "Jt"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
+          "declaration": {
+            "name": "_t",
+            "module": "build/legacy-app-shell-a2e4c277.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "xt",
+            "module": "build/legacy-app-shell-a2e4c277.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "wt",
+            "module": "build/legacy-app-shell-a2e4c277.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "Rt",
+            "module": "build/legacy-app-shell-a2e4c277.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "Jt",
+            "module": "build/legacy-app-shell-a2e4c277.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "build/legacy-app-shell-ab638fd8.js",
       "declarations": [
         {
@@ -53648,6 +54305,74 @@
           "declaration": {
             "name": "Br",
             "module": "build/legacy-app-shell-b868eacb.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/legacy-app-shell-c6cbd5a1.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "_t"
+        },
+        {
+          "kind": "variable",
+          "name": "xt"
+        },
+        {
+          "kind": "variable",
+          "name": "wt"
+        },
+        {
+          "kind": "variable",
+          "name": "Rt"
+        },
+        {
+          "kind": "variable",
+          "name": "Jt"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
+          "declaration": {
+            "name": "_t",
+            "module": "build/legacy-app-shell-c6cbd5a1.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "xt",
+            "module": "build/legacy-app-shell-c6cbd5a1.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "wt",
+            "module": "build/legacy-app-shell-c6cbd5a1.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "Rt",
+            "module": "build/legacy-app-shell-c6cbd5a1.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "Jt",
+            "module": "build/legacy-app-shell-c6cbd5a1.js"
           }
         }
       ]
@@ -59809,6 +60534,26 @@
     },
     {
       "kind": "javascript-module",
+      "path": "build/legacy-campaign-page-92955f2a.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "wt"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-page",
+          "declaration": {
+            "name": "wt",
+            "module": "build/legacy-campaign-page-92955f2a.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "build/legacy-campaign-page-9518456b.js",
       "declarations": [
         {
@@ -60751,26 +61496,12 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/stores/base.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "module": "src/stores/base.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/styles/shell.js",
       "declarations": [
         {
           "kind": "variable",
           "name": "shellStyles",
-          "default": "css`\n  :host {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: flex-start;\n    font-family: 'Google Sans';\n    font-size: 12px;\n    color: #000;\n    background-color: #fff;\n  }\n\n  main {\n    flex-grow: 1;\n  }\n\n  app-header {\n    width: 100%;\n    height: 100%;\n  }\n\n  .app-footer {\n    font-size: 12px;\n    align-items: center;\n  }\n`"
+          "default": "css`\n  :host {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: flex-start;\n    font-family: 'Google Sans';\n    font-size: 12px;\n    color: #000;\n    background-color: #fff;\n  }\n\n  main {\n    margin: auto 20px;\n    flex-grow: 1;\n  }\n\n  app-header {\n    width: 100%;\n    height: 100%;\n  }\n`"
         }
       ],
       "exports": [
@@ -60780,6 +61511,20 @@
           "declaration": {
             "name": "shellStyles",
             "module": "src/styles/shell.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/stores/base.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "module": "src/stores/base.js"
           }
         }
       ]
@@ -60808,163 +61553,6 @@
           "declaration": {
             "name": "initRouter",
             "module": "src/utils/router.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/campaign/campaign-card.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CampaignCard",
-          "members": [
-            {
-              "kind": "field",
-              "name": "item",
-              "type": {
-                "text": "object"
-              },
-              "default": "{}",
-              "privacy": "public",
-              "attribute": "item"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "item",
-              "fieldName": "item"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "campaign-card",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "campaign-card",
-          "declaration": {
-            "name": "CampaignCard",
-            "module": "src/components/campaign/campaign-card.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "CampaignCard",
-            "module": "src/components/campaign/campaign-card.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/campaign/campaign-list.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CampaignList",
-          "members": [
-            {
-              "kind": "method",
-              "name": "stateChanged",
-              "parameters": [
-                {
-                  "name": "state"
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "state",
-              "type": {
-                "text": "object"
-              },
-              "default": "{ status: 'loading', campaigns: [] }",
-              "privacy": "public",
-              "attribute": "state"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "state",
-              "fieldName": "state"
-            }
-          ],
-          "mixins": [
-            {
-              "name": "connect(store)",
-              "module": "src/components/campaign/campaign-list.js"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "campaign-list",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "campaign-list",
-          "declaration": {
-            "name": "CampaignList",
-            "module": "src/components/campaign/campaign-list.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "CampaignList",
-            "module": "src/components/campaign/campaign-list.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/header/header.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "Header",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "app-header",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "app-header",
-          "declaration": {
-            "name": "Header",
-            "module": "src/components/header/header.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "Header",
-            "module": "src/components/header/header.js"
           }
         }
       ]
@@ -61145,6 +61733,163 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/campaign/campaign-card.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CampaignCard",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "privacy": "public",
+              "attribute": "item"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "item",
+              "fieldName": "item"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "campaign-card",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
+          "declaration": {
+            "name": "CampaignCard",
+            "module": "src/components/campaign/campaign-card.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "CampaignCard",
+            "module": "src/components/campaign/campaign-card.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/campaign/campaign-list.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CampaignList",
+          "members": [
+            {
+              "kind": "method",
+              "name": "stateChanged",
+              "parameters": [
+                {
+                  "name": "state"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "type": {
+                "text": "object"
+              },
+              "default": "{ status: 'loading', campaigns: [] }",
+              "privacy": "public",
+              "attribute": "state"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "state",
+              "fieldName": "state"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "connect(store)",
+              "module": "src/components/campaign/campaign-list.js"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "campaign-list",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "CampaignList",
+            "module": "src/components/campaign/campaign-list.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "CampaignList",
+            "module": "src/components/campaign/campaign-list.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/header/header.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Header",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "app-header",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "Header",
+            "module": "src/components/header/header.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "Header",
+            "module": "src/components/header/header.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/campaign/styles/campaignCard.js",
       "declarations": [
         {
@@ -61213,7 +61958,7 @@
         {
           "kind": "variable",
           "name": "campaignPage",
-          "default": "css`\n    \n    .leftPanel,\n    .rightPanel {\n      width: 50%;\n    }\n\n    .about, \n    .website {\n      display: flex;\n      align-items: center;\n      margin: 10px 0;\n      border-bottom: 1px solid light-grey;\n    }\n    \n    .circle {\n      width: 50px;\n      height: 50px;\n      margin-right: 10px;\n      background: linear-gradient(332.1deg, #86F7B1 14.81%, #2C67FF 62.34%);\n      border-radius: 50px;\n    }\n\n    .campaignContainer {\n      display: flex;\n      align-items: center;\n      justify-content: space-evenly;\n    }\n    \n    .campaignWrapper {\n      display: flex;\n      align-items: flex-start;\n      flex-direction: column;\n      justify-content: center;\n    }\n\n    table.donationTable {\n      border: 1px solid lightgray;\n      border-radius: 5px;\n      min-width: 640px;\n      margin: 10px 0;\n    }\n\n    table.donationTable th {\n      background-color: light-grey;\n    }\n    \n    table.donationTable tr {\n      border-bottom: 1px solid light-grey;\n    }\n`"
+          "default": "css`\n    .leftPanel,\n    .rightPanel {\n      width: 50%;\n    }\n\n    .about, \n    .website {\n      display: flex;\n      align-items: center;\n      margin: 10px 0;\n      border-bottom: 1px solid light-grey;\n    }\n    \n    .circle {\n      width: 50px;\n      height: 50px;\n      margin-right: 10px;\n      background: linear-gradient(332.1deg, #86F7B1 14.81%, #2C67FF 62.34%);\n      border-radius: 50px;\n    }\n\n    .campaignContainer {\n      display: flex;\n      align-items: center;\n      justify-content: space-evenly;\n    }\n    \n    .campaignWrapper {\n      display: flex;\n      align-items: flex-start;\n      flex-direction: column;\n      justify-content: center;\n    }\n\n    table.donationTable {\n      border: 1px solid lightgray;\n      border-radius: 5px;\n      min-width: 640px;\n      margin: 10px 0;\n    }\n\n    table.donationTable .tableHeader {\n      background-color: lightgray;\n    }\n    \n    table.donationTable .tableHeader th {\n      background-color: lightgray;\n      padding: 7px;\n    }\n    \n    table.donationTable tr {\n      border-bottom: 1px solid lightgray;\n      padding: 7px;\n    }\n`"
         }
       ],
       "exports": [

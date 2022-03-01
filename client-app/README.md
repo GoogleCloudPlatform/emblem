@@ -1,20 +1,15 @@
+# "Cymbal Giving" frontend application
 
-# Cymbal Giving
+## Quicklinks
+* [Requirements](requirements)
+* [Getting Started](#getting-started)
+* [Learning](requirements)
+* [Contribution](#contribution)
+* [Code of Conduct](#code-of-conduct)
 
 ## Requirements
 
 Please have [node](https://nodejs.org/en/ ) 10 & npm 6 or higher installed.
-
-
-## Tooling
-
-* LitElement - library to create [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) that are framework-agnostic.
-* [![open-wc](https://img.shields.io/badge/built%20with-open--wc-blue.svg)](https://github.com/open-wc) - using open-wc recommendations/ app scaffolding
-* [redux](https://www.npmjs.com/package/redux) - uses flux pattern for state management
-* [pwa-helpers](https://github.com/Polymer/pwa-helpers)
-* [axios](https://github.com/axios/) - axios for fetching 
-* [material ui](https://github.com/material-components/material-web.git) - component library
-* [vaadin router](https://vaadin.com/router) - app routing
 
 ## Get started
 
@@ -23,7 +18,6 @@ npm install
 npm build 
 npm start
 ```
-
 - `start` runs your app for development, reloading on file changes
 - `start:build` runs your app after it has been built using the build command
 - `build` builds your app and outputs it in your `dist` directory
@@ -34,8 +28,13 @@ npm start
 
 ## Learning
 
-Would like more frontend [resources](docs/resources.md)?
+Want to learn more frontend [resources](docs/resources.md)? This includes tooling used for this project.
 
-## To contribute
+## Contribution
 
-Please check out our contribution [guide](docs/contribution_guide.md).
+Interested in helping out? Follow the yellow brick road to this [guide](docs/contribution_guide.md).
+
+## Code of Conduct
+
+Please read through our [code of conduct](docs/code_of_conduct.md)
+

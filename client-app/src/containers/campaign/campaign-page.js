@@ -1,13 +1,11 @@
 import { LitElement, html } from 'lit';
 import { connect } from 'pwa-helpers/connect-mixin.js';
-
+import { getCampaignItem } from '../../stores/selectors/campaigns.js';
+import { fetchCampaign } from '../../stores/slices/campaign.js';
+import store from '../../stores/base.js';
+import campaignStyles from './styles/campaignPage.js';
 import '@material/mwc-tab-bar';
 import '@material/mwc-tab';
-import { getCampaignItem } from '../../stores/selectors/campaigns.js';
-import campaignStyles from './styles/campaignPage.js';
-import { fetchCampaign } from '../../stores/slices/campaign.js';
-import CampaignCard from '../../components/campaign/campaign-card.js';
-import store from '../../stores/base.js';
 
 class CampaignPage extends connect(store)(LitElement) {
   static properties = {
@@ -84,7 +82,7 @@ class CampaignPage extends connect(store)(LitElement) {
                 <mwc-tab label="UPCOMING CAMPAIGNS"></mwc-tab>
                 <mwc-tab label="PAST CAMPAIGNS"></mwc-tab>
               </mwc-tab-bar>
-              <campaign-card .item={campaign}></campaign-card>
+              <div class="tabBody"></div>
             </div>
           </div>`
         ): 'Loading'}

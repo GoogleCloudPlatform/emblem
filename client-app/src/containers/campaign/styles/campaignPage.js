@@ -1,7 +1,6 @@
 import { css } from 'lit';
 
 const campaignPage =  css`
-    
     .leftPanel,
     .rightPanel {
       width: 50%;

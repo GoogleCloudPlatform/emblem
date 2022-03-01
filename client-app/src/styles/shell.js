@@ -13,17 +13,13 @@ const shellStyles =  css`
   }
 
   main {
+    margin: auto 20px;
     flex-grow: 1;
   }
 
   app-header {
     width: 100%;
     height: 100%;
-  }
-
-  .app-footer {
-    font-size: 12px;
-    align-items: center;
   }
 `;
 

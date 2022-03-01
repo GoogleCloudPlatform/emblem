@@ -1,7 +1,7 @@
 import { axios } from '@bundled-es-modules/axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-//TODO: Refactor out
+//TODO: Refactor out into another file
 const developmentUrl = 'http://127.0.0.1:5000/api/v1';
 
 export const fetchCampaignList = createAsyncThunk(
