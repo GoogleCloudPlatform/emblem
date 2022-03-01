@@ -7,8 +7,7 @@
 
 ## Context & Problem Statement
 
-In order to make contributing to the web application easier and the introduction of new features in the 
-[figma mock](https://www.figma.com/file/2qnS79SjZJeyTKC3YLVYwA/Project-Emblem?node-id=0%3A1) contains,
+In order to make contributing to the web application easier and the introduction of new application features,
 the team has re-visited the opportunity to add in a JS framework.
 
 ## Priorities & Constraints
@@ -29,8 +28,6 @@ Chosen option [Option 2: LitElement]
 The team has ultimately chosen LitElement over React after quick dive, due to the approachability of the JS framework compared to React.
 Additionally, the future opportunity to work with the web components team was a great plus.
 
-GVC Poll: https://docs.google.com/spreadsheets/d/17TMt6qsUbvc_ifj5vOgIz8GTg_uCbLpxt6dY7jMaFUM/edit?usp=sharing
-
 ### Expected Consequences
 
 Learning curve
@@ -41,8 +38,6 @@ Current Emblem architecture will need to accomodate the new web application in t
 * Current decision of leaving the flask app as a proxy to the api is still pending
 * Containerizing the new web app will need to be revisited (w/ or w/o flask app tbd)
 
-### Research 
-* Full version of decision: go/emblem-frontend-decision-2022
 
 
 

@@ -31,7 +31,7 @@ If you encounter auth errors, you may need to unset your `GOOGLE_APPLICATION_CRE
 
 ```bash
 unset GOOGLE_APPLICATION_CREDENTIALS
-``
+```
 
 ## Set projects
 
@@ -74,10 +74,9 @@ Set the project variables in your Cloud Shell terminal. Replace each `<prod>`, `
   gcloud projects create $STAGE_PROJECT
   gcloud projects create $OPS_PROJECT
   ```
-2. Set your billing account. (You can view your existing billing accounts by running `gcloud alpha billing accounts list` in the terminal.)
+2. Select a billing account and set the variable below to the **Account ID** of your billing account. (You can view your existing billing accounts by running `gcloud alpha billing accounts list` in the terminal.)
   ```bash
-export BILLING_ACCOUNT_NAME="My Billing Account"  # TODO(developer): change if necessary
-  export EMBLEM_BILLING_ACCOUNT=$(gcloud alpha billing accounts list --filter "$BILLING_ACCOUNT_NAME" --format "value(name)")
+  export EMBLEM_BILLING_ACCOUNT=<ACCOUNT ID>
   ```
 
 3. Link the newly created projects to your billing account:
