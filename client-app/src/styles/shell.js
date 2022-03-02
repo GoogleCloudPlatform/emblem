@@ -4,12 +4,7 @@ const shellStyles =  css`
   :host {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
     font-family: 'Google Sans';
-    font-size: 12px;
-    color: #000;
-    background-color: #fff;
   }
 
   main {
@@ -20,6 +15,15 @@ const shellStyles =  css`
   app-header {
     width: 100%;
     height: 100%;
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    font-family: Google Sans;
+    font-size: 25px;
+    width: 100%;
+    padding: 30px;
   }
 `;
 

@@ -25,14 +25,18 @@ const campaignPage =  css`
     .campaignContainer {
       display: flex;
       align-items: center;
-      justify-content: space-evenly;
+      justify-content: space-between;
+      margin: 30px auto;
+      font-family: "Google Sans";
+      width: 100%;
     }
     
     .campaignWrapper {
       display: flex;
-      align-items: flex-start;
-      flex-direction: column;
-      justify-content: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin: auto 30px;
+      width: inherit;
     }
 
     table.donationTable {

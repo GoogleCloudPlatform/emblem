@@ -8,6 +8,7 @@ import {terser} from 'rollup-plugin-terser';
 import minifyHTML from 'rollup-plugin-minify-html-literals';
 import summary from 'rollup-plugin-summary';
 import commonjs from '@rollup/plugin-commonjs';
+import image from '@rollup/plugin-image';
 
 // Configure an instance of @web/rollup-plugin-html
 const htmlPlugin = html({
@@ -20,6 +21,7 @@ export default {
   // HTML files for non-SPA app
   input: 'index.html',
   plugins: [
+    image(),
     htmlPlugin,
     // Resolve bare module specifiers to relative paths
     resolve({

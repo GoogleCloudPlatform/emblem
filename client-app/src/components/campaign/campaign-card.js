@@ -21,8 +21,8 @@ class CampaignCard extends LitElement {
         <div class="cardImage" style="background-image:url(${this.item.image_url}); background-color: lightgray; background-size: cover; height: 150px;"></div>
         <div class="cardWrapper">
           <div class="cardContent">
-            <p class="cardName">${this.item.name}<p>
-            <p>${this.item.description}</p>
+            <div class="title">${this.item.name}</div>
+            <div class="description">${this.item.description}</div>
           </div>
           <div class="actionWrapper">
             <a class="fillButton" href="/donate">Donate</a>

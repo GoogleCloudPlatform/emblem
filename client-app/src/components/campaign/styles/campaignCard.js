@@ -8,25 +8,27 @@ const campaignStyles =  css`
       margin: 10px;
       border-radius: 10px;
       font-size: 16px;
+      width: 450px;
+      overflow: hidden;
     }
 
     .cardWrapper {
       margin: 10px;
-      min-width: 280px;
-      min-height: 250px;
       display: flex;
+      height: 250px;
       flex-direction: column;
       justify-content: space-between;
     }
 
-    .cardName {
+    .title {
       font-size: 20px;
+      margin-bottom: 17px;
     }
 
-    .card:nth-child(2n) {
-      flex-break: after;
+    .description {
+      color: #5C6063;
     }
-    
+
     .actionWrapper {
       display: flex;
       align-items: center;

@@ -12,6 +12,9 @@ class Dashboard extends LitElement {
 
   render() {
     return html`
+      <div class="title">
+        Discover a cause or a campaign
+      </div>
       <campaign-list></campaign-list>
     `;
   }

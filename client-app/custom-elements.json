@@ -4,6 +4,95 @@
   "modules": [
     {
       "kind": "javascript-module",
+      "path": "src/app-dashboard.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Dashboard",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "app-dashboard",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "Dashboard",
+            "module": "src/app-dashboard.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "Dashboard",
+            "module": "src/app-dashboard.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/app-shell.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AppShell",
+          "members": [
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Cymbal Giving'",
+              "privacy": "public",
+              "attribute": "title"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "title",
+              "fieldName": "title"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "app-shell",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "AppShell",
+            "module": "src/app-shell.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "AppShell",
+            "module": "src/app-shell.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "build/app-shell-04825684.js",
       "declarations": [
         {
@@ -6131,6 +6220,270 @@
           "declaration": {
             "name": "anonymous_5",
             "module": "build/app-shell-272dbfd1.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/app-shell-2850e1f0.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_0",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "campaign",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "privacy": "public",
+              "attribute": "campaign",
+              "inheritedFrom": {
+                "name": "e",
+                "module": "build/campaign-page-0ecf21d9.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "campaign-card",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "campaign",
+              "fieldName": "campaign",
+              "inheritedFrom": {
+                "name": "e",
+                "module": "build/campaign-page-0ecf21d9.js"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Z",
+          "members": [
+            {
+              "kind": "method",
+              "name": "stateChanged",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "type": {
+                "text": "object"
+              },
+              "default": "{status:\"loading\",campaigns:[]}",
+              "privacy": "public",
+              "attribute": "state"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "state",
+              "fieldName": "state"
+            }
+          ],
+          "superclass": {
+            "module": "build/app-shell-2850e1f0.js"
+          },
+          "tagName": "campaign-list",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_2",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "campaign-card",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_3",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "app-header",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_4",
+          "members": [
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"Cymbal Giving\""
+            },
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "app-dashboard",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
+          "declaration": {
+            "name": "anonymous_0",
+            "module": "build/app-shell-2850e1f0.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "Z",
+            "module": "build/app-shell-2850e1f0.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "anonymous_2",
+            "module": "build/app-shell-2850e1f0.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "anonymous_3",
+            "module": "build/app-shell-2850e1f0.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "anonymous_4",
+            "module": "build/app-shell-2850e1f0.js"
           }
         }
       ]
@@ -14453,6 +14806,270 @@
     },
     {
       "kind": "javascript-module",
+      "path": "build/app-shell-7cf7713b.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_0",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "campaign",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "privacy": "public",
+              "attribute": "campaign",
+              "inheritedFrom": {
+                "name": "e",
+                "module": "build/campaign-page-0ecf21d9.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "campaign-card",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "campaign",
+              "fieldName": "campaign",
+              "inheritedFrom": {
+                "name": "e",
+                "module": "build/campaign-page-0ecf21d9.js"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "W",
+          "members": [
+            {
+              "kind": "method",
+              "name": "stateChanged",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "type": {
+                "text": "object"
+              },
+              "default": "{status:\"loading\",campaigns:[]}",
+              "privacy": "public",
+              "attribute": "state"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "state",
+              "fieldName": "state"
+            }
+          ],
+          "superclass": {
+            "module": "build/app-shell-7cf7713b.js"
+          },
+          "tagName": "campaign-list",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_2",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "campaign-card",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_3",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "app-header",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_4",
+          "members": [
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"Cymbal Giving\""
+            },
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "app-dashboard",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
+          "declaration": {
+            "name": "anonymous_0",
+            "module": "build/app-shell-7cf7713b.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "W",
+            "module": "build/app-shell-7cf7713b.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "anonymous_2",
+            "module": "build/app-shell-7cf7713b.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "anonymous_3",
+            "module": "build/app-shell-7cf7713b.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "anonymous_4",
+            "module": "build/app-shell-7cf7713b.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "build/app-shell-7db5a61c.js",
       "declarations": [
         {
@@ -18806,6 +19423,534 @@
     },
     {
       "kind": "javascript-module",
+      "path": "build/app-shell-978efad2.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_0",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "campaign",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "privacy": "public",
+              "attribute": "campaign",
+              "inheritedFrom": {
+                "name": "e",
+                "module": "build/campaign-page-0ecf21d9.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "campaign-card",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "campaign",
+              "fieldName": "campaign",
+              "inheritedFrom": {
+                "name": "e",
+                "module": "build/campaign-page-0ecf21d9.js"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "W",
+          "members": [
+            {
+              "kind": "method",
+              "name": "stateChanged",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "type": {
+                "text": "object"
+              },
+              "default": "{status:\"loading\",campaigns:[]}",
+              "privacy": "public",
+              "attribute": "state"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "state",
+              "fieldName": "state"
+            }
+          ],
+          "superclass": {
+            "module": "build/app-shell-978efad2.js"
+          },
+          "tagName": "campaign-list",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_2",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "campaign-card",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_3",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "app-header",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_4",
+          "members": [
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"Cymbal Giving\""
+            },
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "app-dashboard",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
+          "declaration": {
+            "name": "anonymous_0",
+            "module": "build/app-shell-978efad2.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "W",
+            "module": "build/app-shell-978efad2.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "anonymous_2",
+            "module": "build/app-shell-978efad2.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "anonymous_3",
+            "module": "build/app-shell-978efad2.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "anonymous_4",
+            "module": "build/app-shell-978efad2.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/app-shell-9f7af141.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_0",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "campaign",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "privacy": "public",
+              "attribute": "campaign",
+              "inheritedFrom": {
+                "name": "e",
+                "module": "build/campaign-page-0ecf21d9.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "campaign-card",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "campaign",
+              "fieldName": "campaign",
+              "inheritedFrom": {
+                "name": "e",
+                "module": "build/campaign-page-0ecf21d9.js"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "W",
+          "members": [
+            {
+              "kind": "method",
+              "name": "stateChanged",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "type": {
+                "text": "object"
+              },
+              "default": "{status:\"loading\",campaigns:[]}",
+              "privacy": "public",
+              "attribute": "state"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "state",
+              "fieldName": "state"
+            }
+          ],
+          "superclass": {
+            "module": "build/app-shell-9f7af141.js"
+          },
+          "tagName": "campaign-list",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_2",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "campaign-card",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_3",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "app-header",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_4",
+          "members": [
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"Cymbal Giving\""
+            },
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "app-dashboard",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
+          "declaration": {
+            "name": "anonymous_0",
+            "module": "build/app-shell-9f7af141.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "W",
+            "module": "build/app-shell-9f7af141.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "anonymous_2",
+            "module": "build/app-shell-9f7af141.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "anonymous_3",
+            "module": "build/app-shell-9f7af141.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "anonymous_4",
+            "module": "build/app-shell-9f7af141.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "build/app-shell-aed980f7.js",
       "declarations": [
         {
@@ -19620,6 +20765,270 @@
           "declaration": {
             "name": "anonymous_6",
             "module": "build/app-shell-bb9080c9.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/app-shell-bcc37494.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_0",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "campaign",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "privacy": "public",
+              "attribute": "campaign",
+              "inheritedFrom": {
+                "name": "e",
+                "module": "build/campaign-page-0ecf21d9.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "campaign-card",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "campaign",
+              "fieldName": "campaign",
+              "inheritedFrom": {
+                "name": "e",
+                "module": "build/campaign-page-0ecf21d9.js"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "W",
+          "members": [
+            {
+              "kind": "method",
+              "name": "stateChanged",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "type": {
+                "text": "object"
+              },
+              "default": "{status:\"loading\",campaigns:[]}",
+              "privacy": "public",
+              "attribute": "state"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "state",
+              "fieldName": "state"
+            }
+          ],
+          "superclass": {
+            "module": "build/app-shell-bcc37494.js"
+          },
+          "tagName": "campaign-list",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_2",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "campaign-card",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_3",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "app-header",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "anonymous_4",
+          "members": [
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"Cymbal Giving\""
+            },
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "o",
+            "module": "/build/base-5fc208eb.js"
+          },
+          "tagName": "app-dashboard",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
+          "declaration": {
+            "name": "anonymous_0",
+            "module": "build/app-shell-bcc37494.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "W",
+            "module": "build/app-shell-bcc37494.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "anonymous_2",
+            "module": "build/app-shell-bcc37494.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "anonymous_3",
+            "module": "build/app-shell-bcc37494.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "anonymous_4",
+            "module": "build/app-shell-bcc37494.js"
           }
         }
       ]
@@ -32115,6 +33524,2049 @@
     },
     {
       "kind": "javascript-module",
+      "path": "build/base-5fc208eb.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "e"
+        },
+        {
+          "kind": "variable",
+          "name": "t"
+        },
+        {
+          "kind": "variable",
+          "name": "r",
+          "default": "new Map"
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "n",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styleSheet"
+            },
+            {
+              "kind": "method",
+              "name": "toString"
+            },
+            {
+              "kind": "field",
+              "name": "cssText",
+              "default": "e"
+            }
+          ],
+          "tagName": "campaign-page",
+          "customElement": true
+        },
+        {
+          "kind": "variable",
+          "name": "i"
+        },
+        {
+          "kind": "variable",
+          "name": "o"
+        },
+        {
+          "kind": "function",
+          "name": "l",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "variable",
+          "name": "a"
+        },
+        {
+          "kind": "variable",
+          "name": "s"
+        },
+        {
+          "kind": "variable",
+          "name": "c"
+        },
+        {
+          "kind": "variable",
+          "name": "d",
+          "type": {
+            "text": "object"
+          },
+          "default": "{attribute:!0,type:String,converter:u,reflect:!1,hasChanged:l}"
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "f",
+          "members": [
+            {
+              "kind": "method",
+              "name": "addInitializer",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createProperty",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "e"
+                },
+                {
+                  "name": "t",
+                  "default": "d"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getPropertyDescriptor",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "e"
+                },
+                {
+                  "name": "t"
+                },
+                {
+                  "name": "r"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getPropertyOptions",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "finalize",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "finalizeStyles",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_$Eh",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "e"
+                },
+                {
+                  "name": "t"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "o"
+            },
+            {
+              "kind": "method",
+              "name": "addController",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeController",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_$Em"
+            },
+            {
+              "kind": "method",
+              "name": "createRenderRoot"
+            },
+            {
+              "kind": "method",
+              "name": "enableUpdating",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_$ES",
+              "parameters": [
+                {
+                  "name": "e"
+                },
+                {
+                  "name": "t"
+                },
+                {
+                  "name": "r",
+                  "default": "d"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_$AK",
+              "parameters": [
+                {
+                  "name": "e"
+                },
+                {
+                  "name": "t"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_$EC"
+            },
+            {
+              "kind": "method",
+              "name": "scheduleUpdate"
+            },
+            {
+              "kind": "method",
+              "name": "_$AE",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_$EU"
+            },
+            {
+              "kind": "field",
+              "name": "updateComplete"
+            },
+            {
+              "kind": "method",
+              "name": "getUpdateComplete"
+            },
+            {
+              "kind": "field",
+              "name": "_$Et",
+              "default": "new Map"
+            },
+            {
+              "kind": "field",
+              "name": "isUpdatePending",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "!1"
+            },
+            {
+              "kind": "field",
+              "name": "hasUpdated",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "!1"
+            },
+            {
+              "kind": "field",
+              "name": "_$Ei",
+              "type": {
+                "text": "null"
+              },
+              "default": "null"
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "customElement": true
+        },
+        {
+          "kind": "variable",
+          "name": "p"
+        },
+        {
+          "kind": "function",
+          "name": "_",
+          "parameters": [
+            {
+              "name": "e",
+              "default": "\"\""
+            }
+          ]
+        },
+        {
+          "kind": "variable",
+          "name": "h"
+        },
+        {
+          "kind": "variable",
+          "name": "m"
+        },
+        {
+          "kind": "variable",
+          "name": "g",
+          "default": "`<${m}>`"
+        },
+        {
+          "kind": "variable",
+          "name": "b",
+          "default": "document"
+        },
+        {
+          "kind": "variable",
+          "name": "w",
+          "default": "e=>null===e||\"object\"!=typeof e&&\"function\"!=typeof e"
+        },
+        {
+          "kind": "variable",
+          "name": "j",
+          "default": "/\"/g"
+        },
+        {
+          "kind": "variable",
+          "name": "$"
+        },
+        {
+          "kind": "variable",
+          "name": "k"
+        },
+        {
+          "kind": "variable",
+          "name": "T"
+        },
+        {
+          "kind": "variable",
+          "name": "R"
+        },
+        {
+          "kind": "function",
+          "name": "M",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            },
+            {
+              "name": "r",
+              "default": "e"
+            },
+            {
+              "name": "n"
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "B",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_$AU"
+            },
+            {
+              "kind": "method",
+              "name": "_$AI",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "element",
+              "default": "e"
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "number"
+              },
+              "default": "6"
+            },
+            {
+              "kind": "field",
+              "name": "_$AN",
+              "default": "void 0"
+            },
+            {
+              "kind": "field",
+              "name": "_$AM",
+              "default": "t"
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "default": "new Map"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "J",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ce",
+          "members": [
+            {
+              "kind": "method",
+              "name": "createRenderRoot"
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}"
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0"
+            }
+          ],
+          "superclass": {
+            "name": "oe",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "function",
+          "name": "de",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r"
+        },
+        {
+          "kind": "variable",
+          "name": "fe",
+          "default": "function(){return fe=Object.assign||function(e){for(var t,r=1,n=arguments.length;r<n;r++)for(var i in t=arguments[r])Object.prototype.hasOwnProperty.call(t,i)&&(e[i]=t[i]);return e},fe.apply(this,arguments)}"
+        },
+        {
+          "kind": "function",
+          "name": "pe",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            },
+            {
+              "name": "n"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "ve",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "ye",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "ge",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "be",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "we",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "Ae",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "Ee",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "Se",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "Pe",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "variable",
+          "name": "$e",
+          "default": "xe"
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ke",
+          "members": [
+            {
+              "kind": "method",
+              "name": "click"
+            },
+            {
+              "kind": "method",
+              "name": "createFoundation"
+            },
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Dt",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "ce",
+                "module": "build/base-f5fec061.js"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "ce",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "variable",
+          "name": "Te"
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "variable",
+          "name": "Be"
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Xe",
+          "members": [
+            {
+              "kind": "field",
+              "name": "startPress",
+              "default": "t=>{e().then((e=>{e&&e.startPress(t)}))}"
+            },
+            {
+              "kind": "field",
+              "name": "endPress",
+              "default": "()=>{e().then((e=>{e&&e.endPress()}))}"
+            },
+            {
+              "kind": "field",
+              "name": "startFocus",
+              "default": "()=>{e().then((e=>{e&&e.startFocus()}))}"
+            },
+            {
+              "kind": "field",
+              "name": "endFocus",
+              "default": "()=>{e().then((e=>{e&&e.endFocus()}))}"
+            },
+            {
+              "kind": "field",
+              "name": "startHover",
+              "default": "()=>{e().then((e=>{e&&e.startHover()}))}"
+            },
+            {
+              "kind": "field",
+              "name": "endHover",
+              "default": "()=>{e().then((e=>{e&&e.endHover()}))}"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "Je",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r",
+          "parameters": [
+            {
+              "name": "n"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "s",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "o",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "a",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "s",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "c",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "l",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r",
+          "parameters": [
+            {
+              "name": "r"
+            },
+            {
+              "name": "n"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "c",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "i",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "i"
+        },
+        {
+          "kind": "function",
+          "name": "s",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "a",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "i",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "c",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "i",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "n",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r"
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "n",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "n",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "i",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "o",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "a",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "n",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "i",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "n"
+        },
+        {
+          "kind": "function",
+          "name": "r",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "n",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "o",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "a",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "l"
+        },
+        {
+          "kind": "function",
+          "name": "d"
+        },
+        {
+          "kind": "function",
+          "name": "f",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "p",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "h",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r"
+        },
+        {
+          "kind": "function",
+          "name": "n",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "i",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "i"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "o"
+        },
+        {
+          "kind": "function",
+          "name": "a"
+        },
+        {
+          "kind": "function",
+          "name": "f"
+        },
+        {
+          "kind": "function",
+          "name": "r",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "n",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "n"
+        },
+        {
+          "kind": "function",
+          "name": "s",
+          "parameters": [
+            {
+              "name": "o"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "$",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t"
+        },
+        {
+          "kind": "function",
+          "name": "R",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "M",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            },
+            {
+              "name": "n"
+            },
+            {
+              "name": "i"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r"
+        },
+        {
+          "kind": "function",
+          "name": "B",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "d",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "J",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "n",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "i",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "o",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "a",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "n"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "n",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "i",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "o",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "a",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "s",
+          "parameters": [
+            {
+              "name": "r"
+            },
+            {
+              "name": "n"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e"
+        },
+        {
+          "kind": "function",
+          "name": "ce"
+        },
+        {
+          "kind": "function",
+          "name": "de",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "fe"
+        },
+        {
+          "kind": "function",
+          "name": "pe"
+        },
+        {
+          "kind": "function",
+          "name": "ve"
+        },
+        {
+          "kind": "function",
+          "name": "ye"
+        },
+        {
+          "kind": "function",
+          "name": "n"
+        },
+        {
+          "kind": "function",
+          "name": "s",
+          "parameters": [
+            {
+              "name": "o"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "k",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r"
+        },
+        {
+          "kind": "function",
+          "name": "R",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            },
+            {
+              "name": "n"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "M",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "B",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r"
+        },
+        {
+          "kind": "function",
+          "name": "J",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "d",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "n",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "r",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "n",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "i",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "o",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "a",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "n"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "n",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "i",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "o",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "a",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "s",
+          "parameters": [
+            {
+              "name": "r"
+            },
+            {
+              "name": "n"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "fe",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            },
+            {
+              "name": "n"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e"
+        },
+        {
+          "kind": "function",
+          "name": "pe",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "ve"
+        },
+        {
+          "kind": "function",
+          "name": "ye"
+        },
+        {
+          "kind": "function",
+          "name": "ge",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "be"
+        },
+        {
+          "kind": "function",
+          "name": "we"
+        },
+        {
+          "kind": "function",
+          "name": "Ae"
+        },
+        {
+          "kind": "function",
+          "name": "Ee"
+        },
+        {
+          "kind": "variable",
+          "name": "Zn"
+        },
+        {
+          "kind": "variable",
+          "name": "ei"
+        },
+        {
+          "kind": "variable",
+          "name": "ri"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "e",
+          "declaration": {
+            "name": "t",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "e",
+          "declaration": {
+            "name": "t",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "$",
+          "declaration": {
+            "name": "$",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "B",
+          "declaration": {
+            "name": "ke",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "M",
+          "declaration": {
+            "name": "Te",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "R",
+          "declaration": {
+            "name": "Xe",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "_",
+          "declaration": {
+            "name": "pe",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "a",
+          "declaration": {
+            "name": "Ee",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "b",
+          "declaration": {
+            "name": "we",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "c",
+          "declaration": {
+            "name": "de",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "d",
+          "declaration": {
+            "name": "fe",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "e",
+          "declaration": {
+            "name": "ge",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "f",
+          "declaration": {
+            "name": "Pe",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "g",
+          "declaration": {
+            "name": "$e",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "h",
+          "declaration": {
+            "name": "Je",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "i",
+          "declaration": {
+            "name": "Ae",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "j",
+          "declaration": {
+            "name": "ri",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "k",
+          "declaration": {
+            "name": "Zn",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "l",
+          "declaration": {
+            "name": "ve",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "m",
+          "declaration": {
+            "name": "Se",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "n",
+          "declaration": {
+            "name": "ye",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "o",
+          "declaration": {
+            "name": "Be",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "p",
+          "declaration": {
+            "name": "ei",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "r",
+          "declaration": {
+            "name": "J",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "s",
+          "declaration": {
+            "name": "ce",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "t",
+          "declaration": {
+            "name": "be",
+            "module": "build/base-5fc208eb.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "w",
+          "declaration": {
+            "name": "T",
+            "module": "build/base-5fc208eb.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "build/base-7cb9664a.js",
       "declarations": [
         {
@@ -40454,6 +43906,67 @@
     },
     {
       "kind": "javascript-module",
+      "path": "build/campaign-page-916f73bd.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ot",
+          "members": [
+            {
+              "kind": "method",
+              "name": "stateChanged",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "campaign",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "privacy": "public",
+              "attribute": "campaign"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "campaign",
+              "fieldName": "campaign"
+            }
+          ],
+          "superclass": {
+            "module": "build/campaign-page-916f73bd.js"
+          },
+          "tagName": "campaign-page",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-page",
+          "declaration": {
+            "name": "ot",
+            "module": "build/campaign-page-916f73bd.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ot",
+            "module": "build/campaign-page-916f73bd.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "build/campaign-page-a0bd84ed.js",
       "declarations": [
         {
@@ -44078,6 +47591,74 @@
           "declaration": {
             "name": "Qn",
             "module": "build/legacy-app-shell-1c68debd.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/legacy-app-shell-2224bc47.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "yt"
+        },
+        {
+          "kind": "variable",
+          "name": "xt"
+        },
+        {
+          "kind": "variable",
+          "name": "wt"
+        },
+        {
+          "kind": "variable",
+          "name": "kt"
+        },
+        {
+          "kind": "variable",
+          "name": "$t"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
+          "declaration": {
+            "name": "yt",
+            "module": "build/legacy-app-shell-2224bc47.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "xt",
+            "module": "build/legacy-app-shell-2224bc47.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "wt",
+            "module": "build/legacy-app-shell-2224bc47.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "kt",
+            "module": "build/legacy-app-shell-2224bc47.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "$t",
+            "module": "build/legacy-app-shell-2224bc47.js"
           }
         }
       ]
@@ -52879,6 +56460,74 @@
     },
     {
       "kind": "javascript-module",
+      "path": "build/legacy-app-shell-a2d70920.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "_t"
+        },
+        {
+          "kind": "variable",
+          "name": "xt"
+        },
+        {
+          "kind": "variable",
+          "name": "wt"
+        },
+        {
+          "kind": "variable",
+          "name": "Et"
+        },
+        {
+          "kind": "variable",
+          "name": "te"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
+          "declaration": {
+            "name": "_t",
+            "module": "build/legacy-app-shell-a2d70920.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "xt",
+            "module": "build/legacy-app-shell-a2d70920.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "wt",
+            "module": "build/legacy-app-shell-a2d70920.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "Et",
+            "module": "build/legacy-app-shell-a2d70920.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "te",
+            "module": "build/legacy-app-shell-a2d70920.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "build/legacy-app-shell-a2e4c277.js",
       "declarations": [
         {
@@ -53481,6 +57130,74 @@
           "declaration": {
             "name": "vt",
             "module": "build/legacy-app-shell-ab7f4b95.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/legacy-app-shell-ac549eb7.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "_t"
+        },
+        {
+          "kind": "variable",
+          "name": "xt"
+        },
+        {
+          "kind": "variable",
+          "name": "wt"
+        },
+        {
+          "kind": "variable",
+          "name": "Ct"
+        },
+        {
+          "kind": "variable",
+          "name": "ee"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
+          "declaration": {
+            "name": "_t",
+            "module": "build/legacy-app-shell-ac549eb7.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "xt",
+            "module": "build/legacy-app-shell-ac549eb7.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "wt",
+            "module": "build/legacy-app-shell-ac549eb7.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "Ct",
+            "module": "build/legacy-app-shell-ac549eb7.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "ee",
+            "module": "build/legacy-app-shell-ac549eb7.js"
           }
         }
       ]
@@ -55874,6 +59591,142 @@
           "declaration": {
             "name": "Yt",
             "module": "build/legacy-app-shell-d1c9dc66.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/legacy-app-shell-d21ec665.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "_t"
+        },
+        {
+          "kind": "variable",
+          "name": "xt"
+        },
+        {
+          "kind": "variable",
+          "name": "wt"
+        },
+        {
+          "kind": "variable",
+          "name": "Rt"
+        },
+        {
+          "kind": "variable",
+          "name": "Jt"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
+          "declaration": {
+            "name": "_t",
+            "module": "build/legacy-app-shell-d21ec665.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "xt",
+            "module": "build/legacy-app-shell-d21ec665.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "wt",
+            "module": "build/legacy-app-shell-d21ec665.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "Rt",
+            "module": "build/legacy-app-shell-d21ec665.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "Jt",
+            "module": "build/legacy-app-shell-d21ec665.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "build/legacy-app-shell-d2dc70ee.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "_t"
+        },
+        {
+          "kind": "variable",
+          "name": "xt"
+        },
+        {
+          "kind": "variable",
+          "name": "wt"
+        },
+        {
+          "kind": "variable",
+          "name": "Ct"
+        },
+        {
+          "kind": "variable",
+          "name": "ee"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
+          "declaration": {
+            "name": "_t",
+            "module": "build/legacy-app-shell-d2dc70ee.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "xt",
+            "module": "build/legacy-app-shell-d2dc70ee.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-dashboard",
+          "declaration": {
+            "name": "wt",
+            "module": "build/legacy-app-shell-d2dc70ee.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "Ct",
+            "module": "build/legacy-app-shell-d2dc70ee.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "app-shell",
+          "declaration": {
+            "name": "ee",
+            "module": "build/legacy-app-shell-d2dc70ee.js"
           }
         }
       ]
@@ -59400,6 +63253,322 @@
     },
     {
       "kind": "javascript-module",
+      "path": "build/legacy-base-322df39e.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "t",
+          "default": "this"
+        },
+        {
+          "kind": "variable",
+          "name": "e"
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "e"
+            },
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            },
+            {
+              "name": "n"
+            },
+            {
+              "name": "i"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            },
+            {
+              "name": "n"
+            },
+            {
+              "name": "i"
+            },
+            {
+              "name": "o"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            },
+            {
+              "name": "n"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "t"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e",
+          "parameters": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "t"
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e"
+        },
+        {
+          "kind": "function",
+          "name": "t"
+        },
+        {
+          "kind": "function",
+          "name": "t",
+          "parameters": [
+            {
+              "name": "t"
+            },
+            {
+              "name": "r"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "e"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "e",
+          "declaration": {
+            "name": "t",
+            "module": "build/legacy-base-322df39e.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "e",
+          "declaration": {
+            "name": "t",
+            "module": "build/legacy-base-322df39e.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "build/legacy-base-34040e08.js",
       "declarations": [],
       "exports": []
@@ -60430,6 +64599,26 @@
     },
     {
       "kind": "javascript-module",
+      "path": "build/legacy-campaign-page-6bdce861.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "wt"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-page",
+          "declaration": {
+            "name": "wt",
+            "module": "build/legacy-campaign-page-6bdce861.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "build/legacy-campaign-page-772f4744.js",
       "declarations": [
         {
@@ -61359,89 +65548,63 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/app-dashboard.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "Dashboard",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "app-dashboard",
-          "customElement": true
-        }
-      ],
+      "path": "src/stores/base.js",
+      "declarations": [],
       "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "app-dashboard",
-          "declaration": {
-            "name": "Dashboard",
-            "module": "src/app-dashboard.js"
-          }
-        },
         {
           "kind": "js",
           "name": "default",
           "declaration": {
-            "name": "Dashboard",
-            "module": "src/app-dashboard.js"
+            "module": "src/stores/base.js"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/app-shell.js",
+      "path": "src/utils/router.js",
       "declarations": [
         {
-          "kind": "class",
-          "description": "",
-          "name": "AppShell",
-          "members": [
-            {
-              "kind": "field",
-              "name": "title",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Cymbal Giving'",
-              "privacy": "public",
-              "attribute": "title"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "title",
-              "fieldName": "title"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "app-shell",
-          "customElement": true
+          "kind": "function",
+          "name": "initRouter"
         }
       ],
       "exports": [
         {
-          "kind": "custom-element-definition",
-          "name": "app-shell",
+          "kind": "js",
+          "name": "initRouter",
           "declaration": {
-            "name": "AppShell",
-            "module": "src/app-shell.js"
+            "name": "initRouter",
+            "module": "src/utils/router.js"
           }
         },
         {
           "kind": "js",
           "name": "default",
           "declaration": {
-            "name": "AppShell",
-            "module": "src/app-shell.js"
+            "name": "initRouter",
+            "module": "src/utils/router.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/styles/shell.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "shellStyles",
+          "default": "css`\n  :host {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: flex-start;\n    font-family: 'Google Sans';\n    font-size: 12px;\n    color: #000;\n    background-color: #fff;\n  }\n\n  main {\n    margin: auto 20px;\n    flex-grow: 1;\n  }\n\n  app-header {\n    width: 100%;\n    height: 100%;\n  }\n`"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "shellStyles",
+            "module": "src/styles/shell.js"
           }
         }
       ]
@@ -61496,63 +65659,157 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/styles/shell.js",
+      "path": "src/components/campaign/campaign-card.js",
       "declarations": [
         {
-          "kind": "variable",
-          "name": "shellStyles",
-          "default": "css`\n  :host {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: flex-start;\n    font-family: 'Google Sans';\n    font-size: 12px;\n    color: #000;\n    background-color: #fff;\n  }\n\n  main {\n    margin: auto 20px;\n    flex-grow: 1;\n  }\n\n  app-header {\n    width: 100%;\n    height: 100%;\n  }\n`"
+          "kind": "class",
+          "description": "",
+          "name": "CampaignCard",
+          "members": [
+            {
+              "kind": "field",
+              "name": "item",
+              "type": {
+                "text": "object"
+              },
+              "default": "{}",
+              "privacy": "public",
+              "attribute": "item"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "item",
+              "fieldName": "item"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "campaign-card",
+          "customElement": true
         }
       ],
       "exports": [
         {
-          "kind": "js",
-          "name": "default",
+          "kind": "custom-element-definition",
+          "name": "campaign-card",
           "declaration": {
-            "name": "shellStyles",
-            "module": "src/styles/shell.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/stores/base.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "module": "src/stores/base.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/utils/router.js",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "initRouter"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "initRouter",
-          "declaration": {
-            "name": "initRouter",
-            "module": "src/utils/router.js"
+            "name": "CampaignCard",
+            "module": "src/components/campaign/campaign-card.js"
           }
         },
         {
           "kind": "js",
           "name": "default",
           "declaration": {
-            "name": "initRouter",
-            "module": "src/utils/router.js"
+            "name": "CampaignCard",
+            "module": "src/components/campaign/campaign-card.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/campaign/campaign-list.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CampaignList",
+          "members": [
+            {
+              "kind": "method",
+              "name": "stateChanged",
+              "parameters": [
+                {
+                  "name": "state"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "type": {
+                "text": "object"
+              },
+              "default": "{ status: 'loading', campaigns: [] }",
+              "privacy": "public",
+              "attribute": "state"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "state",
+              "fieldName": "state"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "connect(store)",
+              "module": "src/components/campaign/campaign-list.js"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "campaign-list",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "campaign-list",
+          "declaration": {
+            "name": "CampaignList",
+            "module": "src/components/campaign/campaign-list.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "CampaignList",
+            "module": "src/components/campaign/campaign-list.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/header/header.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Header",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "app-header",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "app-header",
+          "declaration": {
+            "name": "Header",
+            "module": "src/components/header/header.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "Header",
+            "module": "src/components/header/header.js"
           }
         }
       ]
@@ -61727,163 +65984,6 @@
           "name": "default",
           "declaration": {
             "module": "src/stores/slices/campaignList.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/campaign/campaign-card.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CampaignCard",
-          "members": [
-            {
-              "kind": "field",
-              "name": "item",
-              "type": {
-                "text": "object"
-              },
-              "default": "{}",
-              "privacy": "public",
-              "attribute": "item"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "item",
-              "fieldName": "item"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "campaign-card",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "campaign-card",
-          "declaration": {
-            "name": "CampaignCard",
-            "module": "src/components/campaign/campaign-card.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "CampaignCard",
-            "module": "src/components/campaign/campaign-card.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/campaign/campaign-list.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CampaignList",
-          "members": [
-            {
-              "kind": "method",
-              "name": "stateChanged",
-              "parameters": [
-                {
-                  "name": "state"
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "state",
-              "type": {
-                "text": "object"
-              },
-              "default": "{ status: 'loading', campaigns: [] }",
-              "privacy": "public",
-              "attribute": "state"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "state",
-              "fieldName": "state"
-            }
-          ],
-          "mixins": [
-            {
-              "name": "connect(store)",
-              "module": "src/components/campaign/campaign-list.js"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "campaign-list",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "campaign-list",
-          "declaration": {
-            "name": "CampaignList",
-            "module": "src/components/campaign/campaign-list.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "CampaignList",
-            "module": "src/components/campaign/campaign-list.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/header/header.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "Header",
-          "members": [],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "app-header",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "app-header",
-          "declaration": {
-            "name": "Header",
-            "module": "src/components/header/header.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "Header",
-            "module": "src/components/header/header.js"
           }
         }
       ]

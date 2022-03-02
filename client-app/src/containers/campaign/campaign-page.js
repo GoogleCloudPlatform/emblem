@@ -40,7 +40,7 @@ class CampaignPage extends connect(store)(LitElement) {
               <h1 class="title">${campaign.name}</h1>
               <h3 class="description">
                 ${campaign.description}
-              </div>
+              </h3>
               <div class="about">
                 <div class="circle"></div>
                 <div>

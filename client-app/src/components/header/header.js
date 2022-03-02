@@ -4,20 +4,27 @@ import '@material/mwc-icon-button';
 
 import headerStyles from './styles/header.js';
 
+const cloudLogo = new URL('../../../assets/google-cloud-logo.png', import.meta.url).href;
+const cymbalGivingLogo = new URL('../../../assets/cymbal-giving-logo.png', import.meta.url).href;
+
 class Header extends LitElement {
   static styles = headerStyles;
 
   render() {
     return html`
-      <mwc-top-app-bar>
-        <div slot="title">
-          <div class="titleContainer">
-            <h2 class="title">Cymbal Giving</h2>
-            <p class="subTitle">a Cymbal Fintech company</p>
+      <div class="headerContainer">
+        <img class="cymbalGivingLogo" src=${cymbalGivingLogo}></img>
+        <div class="headerWrapper">
+          <div class="cloudLogoWrapper">
+            <p>Powered by</p>
+            <img class="cloudLogo" src=${cloudLogo}></img>
           </div>
+          <mwc-icon-button icon="help_outline" slot="actionItems"></mwc-icon-button>
+          <mwc-icon-button icon="notifications" slot="actionItems"></mwc-icon-button>
+          <mwc-icon-button icon="account_circle" slot="actionItems"></mwc-icon-button>
+          <mwc-icon-button icon="login" slot="actionItems"></mwc-icon-button>
         </div>
-        <mwc-icon-button icon="favorite" slot="actionItems"></mwc-icon-button>
-      </mwc-top-app-bar>
+      </div>
       <div class="banner">
         This website is hosted for demo purposes only. No money will be moved by exploring these features. This is not a Google product. © 2021 Google Inc
       </div>

@@ -1,10 +1,34 @@
 import { css } from 'lit';
 
 const headerStyles =  css`
-      mwc-top-app-bar {
-        --mdc-theme-primary: white;
-        --mdc-theme-on-primary: black;
-        box-shadow: 0 0 5px #ccc;
+      .cloudLogo {
+        height: 25px;
+      }
+
+      .cymbalGivingLogo {
+        height: 100px;
+      }
+
+      .headerContainer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #606367;
+      }
+
+      .headerWrapper {
+        display: flex;
+        align-items: center;
+      }
+
+      .cloudLogoWrapper {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .cloudLogoWrapper p {
+        margin: 5px 0;
+        font-size: 18px;
       }
 
       .banner {
@@ -19,19 +43,6 @@ const headerStyles =  css`
         text-align: center;
         box-shadow: 0 0 8px #ccc;
         margin-bottom: 10px;
-      }
-
-      .title {
-        margin: 0 auto;
-      }
-
-      .subTitle {
-        font-size: 12px;
-        margin: 0 auto;
-      }
-
-      .titleContainer {
-        padding:10px;
       }
     `;
 
