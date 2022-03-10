@@ -25,5 +25,5 @@ TBD
 
 ## Code of Conduct
 
-Please read through our [code of conduct](docs/code_of_conduct.md)
+Please read through our [code of conduct](../../CODE_OF_CONDUCT.md)
 

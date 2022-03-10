@@ -38,7 +38,6 @@ from flask import (
     render_template,
     request,
     session,
-    after_this_request
 )
 
 import requests

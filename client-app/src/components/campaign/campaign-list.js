@@ -34,16 +34,24 @@ class CampaignList extends connect(store)(LitElement) {
   render() {
     const { status, campaigns } = this.state;
 
+    let content;
+
+    switch(status) {
+      case 'succeeded': 
+        content = campaigns.map((d, i) => html`<campaign-card .item=${d}></campaign-card>`);
+        break;
+      case 'loading': 
+        content = html`<div>loading ...</div>`;
+        break;
+      default: 
+        content = html`Error has occurred.`;
+    }
+
     // Notice property binding
     // https://lit.dev/docs/v1/lit-html/writing-templates/#bind-to-properties
     return html`
       <div class='campaignList'>
-        ${status === 'loading' 
-          ?  html`<div>loading ...</div>`
-          : status === 'succeeded' 
-            ? campaigns.map((d, i) => html`<campaign-card .item=${d}></campaign-card>`)
-            : html`Error has occurred.`
-        }
+        ${content} 
       </div>
     `;
   }

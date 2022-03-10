@@ -48,13 +48,15 @@ class CampaignPage extends connect(store)(LitElement) {
                   <p>${campaign.description}</p>
                 </div>
               </div>
-              <div class="website">
-                <div class="circle"></div>
-                <div>
-                  <h5>Website</h5>
-                  <a href="http://google.com">http://google.com</a>
+              ${campaign.url && html`
+                <div class="website">
+                  <div class="circle"></div>
+                  <div>
+                    <h5>Website</h5>
+                    <a href=${campaign.url}>${campaign.url}</a>
+                  </div>
                 </div>
-              </div>
+              `}
               <div class="donationHistory">
                 <h4>Donation history</h4>
                 <table class="donationTable">
@@ -66,9 +68,9 @@ class CampaignPage extends connect(store)(LitElement) {
                   ${donations && donations.length 
                     ? donations.map((d, i) => html`
                         <tr>
-                          <td>Jane Doe</td>
-                          <td>100.00</td>
-                          <td>1/30/2022</td>
+                          <td>${d.donor}</td>
+                          <td>${d.amount}</td>
+                          <td>${d.timeCreated}</td>
                         </tr>
                       `) 
                       : html`<tr><td>No donations yet.</td></tr>`}
