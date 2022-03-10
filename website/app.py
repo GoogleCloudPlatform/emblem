@@ -16,7 +16,6 @@ import os
 
 from flask import Flask, current_app
 
-from views.routes import routes_bp
 from views.campaigns import campaigns_bp
 from views.donations import donations_bp
 from views.errors import errors_bp
@@ -24,12 +23,9 @@ from views.auth import auth_bp
 from views.robots_txt import robots_txt_bp
 
 from middleware import auth, csp
-from flask_cors import CORS
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-app.register_blueprint(routes_bp)
 app.register_blueprint(errors_bp)
 app.register_blueprint(donations_bp)
 app.register_blueprint(campaigns_bp)
@@ -52,4 +48,4 @@ if __name__ == "__main__":
 
     # This is used when running locally. Gunicorn is used to run the
     # application on Cloud Run; see "entrypoint" parameter in the Dockerfile.
-    app.run(host="localhost", port=PORT, debug=True)
+    app.run(host="127.0.0.1", port=PORT, debug=True)

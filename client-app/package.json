@@ -12,6 +12,7 @@
     "build": "rimraf dist && rollup -c rollup.config.js && npm run analyze -- --exclude dist",
     "start:build": " web-dev-server --root-dir dist --app-index index.html --open",
     "analyze": "cem analyze --litelement",
+    "server": "node server/proxy.js",
     "start": "web-dev-server"
   },
   "dependencies": {
@@ -44,11 +45,15 @@
     "@web/rollup-plugin-polyfills-loader": "^1.1.1",
     "@web/test-runner": "^0.13.22",
     "babel-plugin-template-html-minifier": "^4.1.0",
+    "cors": "^2.8.5",
     "deepmerge": "^4.2.2",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
+    "express": "^4.17.3",
+    "http-proxy-middleware": "^2.0.3",
     "husky": "^4.3.8",
     "lint-staged": "^10.5.4",
+    "morgan": "^1.10.0",
     "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.67.3",

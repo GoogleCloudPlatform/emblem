@@ -1,6 +1,6 @@
 # Learning more frontend development
 
-If this project has peaked your interest in frontend development, we would like to
+If this project has piqued your interest in frontend development, we would like to
 recommened the following resources to help your UX journey. Please understand this is not an 
 exhaustive list of resources. The scope of this document is only meant to target any 
 further reading related to the technologies used for this project.

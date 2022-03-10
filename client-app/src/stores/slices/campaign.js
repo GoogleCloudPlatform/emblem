@@ -1,20 +1,24 @@
 import { axios } from '@bundled-es-modules/axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-//TODO: Refactor out
-const developmentUrl = 'http://127.0.0.1:5000/api/v1';
+const developmentUrl = 'http://localhost:3000';
 
 export const fetchCampaign = createAsyncThunk(
 'posts/fetchCampaign',
   async (campaignId) => {
-    console.log(campaignId);
-    const response = await axios(`${developmentUrl}/get_campaign?campaign_id=${campaignId}`, { 
-      method: 'GET',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',  
-        'Access-Control-Allow-Origin':'*'
-      }});
+    let response;
+
+    try {
+      response = await axios.get(`${developmentUrl}/campaigns/${campaignId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':'your_key'
+        },
+      });
+    } catch(e) {
+      console.log(e);
+    }
+
 
     return response?.data;
   }

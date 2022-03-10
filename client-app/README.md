@@ -16,9 +16,12 @@ Please have [node](https://nodejs.org/en/ ) 10 & npm 6 or higher installed.
 ```bash
 npm install
 npm build 
+npm run server
 npm start
 ```
-- `start` runs your app for development, reloading on file changes
+
+- `server` runs the proxy server to target api on port `3000`
+- `start` runs your app for development on port `8080`, reloading on file changes
 - `start:build` runs your app after it has been built using the build command
 - `build` builds your app and outputs it in your `dist` directory
 - `test` runs your test suite with Web Test Runner

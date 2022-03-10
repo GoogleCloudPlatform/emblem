@@ -63,7 +63,7 @@ class CampaignPage extends connect(store)(LitElement) {
                     <th>Amount</th>
                     <th>Date</th>
                   </tr>
-                  ${donations.length 
+                  ${donations && donations.length 
                     ? donations.map((d, i) => html`
                         <tr>
                           <td>Jane Doe</td>
