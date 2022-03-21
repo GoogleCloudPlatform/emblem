@@ -64,7 +64,7 @@ resource "time_sleep" "wait_for_artifactregistry" {
   # 
   # For more information, see this GitHub issue:
   # https://github.com/hashicorp/terraform-provider-google/issues/11020
-  create_duration = "10s"
+  create_duration = "20s"
 }
 
 resource "google_artifact_registry_repository" "website_docker" {
