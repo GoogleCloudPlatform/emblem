@@ -1,5 +1,6 @@
 import { css } from 'lit';
 
+/* stylelint-disable font-family-no-missing-generic-family-keyword */
 const shellStyles =  css`
   :host {
     display: flex;
@@ -20,12 +21,12 @@ const shellStyles =  css`
   .title {
     display: flex;
     align-items: center;
-    font-family: Google Sans;
     font-size: 25px;
     width: 100%;
     padding: 30px;
   }
 `;
+/* stylelint-enable font-family-no-missing-generic-family-keyword */
 
 export default shellStyles;
 

@@ -1,5 +1,6 @@
 import { css } from 'lit';
 
+/* stylelint-disable font-family-no-missing-generic-family-keyword */
 const campaignPage =  css`
     .leftPanel,
     .rightPanel {
@@ -60,5 +61,6 @@ const campaignPage =  css`
       padding: 7px;
     }
 `;
+/* stylelint-enable font-family-no-missing-generic-family-keyword */
 
 export default campaignPage;

@@ -1,4 +1,4 @@
-# "Cymbal Giving" frontend application
+# Emblem Giving frontend application
 
 ## Quicklinks
 * [Requirements](requirements)
@@ -9,15 +9,17 @@
 
 ## Requirements
 
-Please have [node](https://nodejs.org/en/ ) 10 & npm 6 or higher installed.
+Please have [node](https://nodejs.org/en/ ) 14 & npm 8 or higher installed.
 
 ## Get started
+
+Within your terminal, open one tab to run the proxy and another to run the app.
 
 ```bash
 npm install
 npm build 
-npm run server
-npm start
+npm run server // Runs the proxy
+npm start // Runs your application locally
 ```
 
 - `server` runs the proxy server to target api on port `3000`
@@ -25,7 +27,8 @@ npm start
 - `start:build` runs your app after it has been built using the build command
 - `build` builds your app and outputs it in your `dist` directory
 - `test` runs your test suite with Web Test Runner
-- `lint` runs the linter for your project
+- `lint` runs the eslinter for your project
+- `lint:css` runs the css linter (stylelint) for your project
 - `format` fixes linting and formatting errors
 
 

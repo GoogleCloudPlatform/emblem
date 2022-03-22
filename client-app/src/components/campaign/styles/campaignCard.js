@@ -1,9 +1,9 @@
 import { css } from 'lit';
 
+/* stylelint-disable font-family-no-missing-generic-family-keyword */
 const campaignStyles =  css`
     .card {
       border: 1px solid lightgray;
-      border-radius: 5px;
       background-color: white;
       margin: 10px;
       border-radius: 10px;
@@ -60,7 +60,7 @@ const campaignStyles =  css`
       font-family: 'Google Sans';
     }
 `;
+/* stylelint-enable font-family-no-missing-generic-family-keyword */
 
 export default campaignStyles;
-
 

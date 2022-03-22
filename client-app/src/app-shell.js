@@ -15,7 +15,7 @@ class AppShell extends LitElement {
 
   constructor() {
     super();
-    this.title = 'Cymbal Giving';
+    this.title = 'Emblem Giving';
   }
 
   firstUpdated() {
