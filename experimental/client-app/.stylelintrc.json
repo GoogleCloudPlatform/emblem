@@ -1,0 +1,16 @@
+{
+  "processors": [
+    [
+      "stylelint-processor-styled-components",
+      {
+        "moduleName": "lit-element",
+        "importName": "css",
+        "strict": true
+      }
+    ]
+  ],
+  "extends": [
+    "stylelint-config-recommended",
+    "stylelint-config-styled-components"
+  ]
+}
