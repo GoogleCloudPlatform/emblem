@@ -103,6 +103,32 @@ resource "google_pubsub_topic" "deploy" {
   provider = google
 }
 
+resource "google_pubsub_topic_iam_member" "canary_publisher_iam" {
+  project  = data.google_project.ops.project_id
+  topic    = google_pubsub_topic.canary.name
+  provider = google
+  role     = "roles/pubsub.publisher"
+  member   = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
+
+  # Ensure the Cloud Build service account is available.
+  # This root module depends on the ops root module having already run.
+  # If the root modules are combined, uncomment this dependency.
+  # depends_on = [google_project_service.cloudbuild]
+}
+
+resource "google_pubsub_topic_iam_member" "deploy_publisher_iam" {
+  project  = data.google_project.ops.project_id
+  topic    = google_pubsub_topic.deploy.name
+  provider = google
+  role     = "roles/pubsub.publisher"
+  member   = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
+
+  # Ensure the Cloud Build service account is available.
+  # This root module depends on the ops root module having already run.
+  # If the root modules are combined, uncomment this dependency.
+  # depends_on = [google_project_service.cloudbuild]
+}
+
 ##
 # Secret Manager IAM Resources
 ##
