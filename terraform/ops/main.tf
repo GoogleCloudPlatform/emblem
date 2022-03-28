@@ -32,6 +32,17 @@ resource "google_project_service" "pubsub" {
 # Pub/Sub Topics
 ###
 
+resource "time_sleep" "wait_for_artifactregistry_sa" {
+  depends_on = [google_project_service.artifactregistry]
+
+  # Artifact Registry service account creation is eventually consistent
+  # for brand-new GCP projects; we add a delay as a work-around.
+  #
+  # For more information, see this GitHub issue:
+  # https://github.com/hashicorp/terraform-provider-google/issues/11020
+  create_duration = "60s"
+}
+
 # Create this topic to emit writes to Artifact Registry as events.
 # https://cloud.google.com/artifact-registry/docs/configure-notifications#topic
 resource "google_pubsub_topic" "gcr" {
@@ -45,10 +56,11 @@ resource "google_pubsub_topic_iam_member" "pubsub_publisher_iam_member" {
   topic    = google_pubsub_topic.gcr.name
   provider = google
   role     = "roles/pubsub.publisher"
-  member   = "serviceAccount:${data.google_project.main.number}@cloudbuild.gserviceaccount.com"
+  member   = "serviceAccount:service-${data.google_project.main.number}@gcp-sa-artifactregistry.iam.gserviceaccount.com"
 
   depends_on = [
-    google_project_service.cloudbuild
+    # Need to ensure Artifact Registry Service Account is created first.
+    time_sleep.wait_for_artifactregistry_sa
   ]
 }
 
