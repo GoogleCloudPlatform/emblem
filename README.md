@@ -18,7 +18,11 @@ Real financial transactions are not made, and the giving campaigns in the app ma
 
 * Go deeper into project details in the [documentation](./docs)
 * Read through the [technical decisions](docs/decisions/README.md) that got us where we are today.
+
+## Contributing
+
 * Become a [CONTRIBUTOR](./CONTRIBUTING.md)!
+* Check out our shovel-ready [Good First Issues](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22good+first+issue%22) or go a bit deeper in [Help Wanted](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22)
 
 Googlers-only: Learn more about this project from the [pitch deck](https://docs.google.com/presentation/d/13F8Ns-mR6WG12C2ulI4dCIqjSUJgextiNxZA0I6wagw/edit)
 
