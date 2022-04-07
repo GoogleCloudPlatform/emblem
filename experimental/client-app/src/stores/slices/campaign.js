@@ -15,18 +15,19 @@
 import { axios } from '@bundled-es-modules/axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const developmentUrl = 'http://localhost:3000';
+const developmentUrl = 'http://127.0.0.1:5000';
 
 export const fetchCampaign = createAsyncThunk(
 'posts/fetchCampaign',
   async (campaignId) => {
     let response;
 
+
     try {
-      response = await axios.get(`${developmentUrl}/campaigns/${campaignId}`, {
+      response = await axios.get(`${developmentUrl}/api/v1/campaigns/${campaignId}`, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization':'your_key'
+          "Access-Control-Allow-Origin": "*"  
         },
       });
     } catch(e) {
