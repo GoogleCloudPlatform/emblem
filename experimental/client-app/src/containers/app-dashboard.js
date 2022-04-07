@@ -14,22 +14,49 @@
 
 import { LitElement, html } from 'lit';
 import { connect } from 'pwa-helpers/connect-mixin.js';
-import shellStyles from './styles/shell.js';
-import CampaignList from './components/campaign/campaign-list.js';
+import shellStyles from '../styles/shell.js';
+import CampaignList from '../components/campaign/campaign-list.js';
+import { fetchCampaignList } from '../stores/slices/campaignList.js';
+import store from '../stores/base.js';
 
-class Dashboard extends LitElement {
+class Dashboard extends connect(store)(LitElement) {
   static styles = shellStyles;
 
   constructor() {
     super();
+    this.state = { status: 'loading', campaigns: [] };
+  }
+  
+  firstUpdated() {
+    store.dispatch(fetchCampaignList());
+  }
+
+  // Note: https://lit.dev/docs/components/lifecycle/#reactive-update-cycle
+  stateChanged(state) {
+    this.state = state.campaignList;
+    this.requestUpdate();
   }
 
   render() {
+    const { status, campaigns } = this.state;
+    let content;
+
+    switch(status) {
+      case 'succeeded': 
+        content = html`<campaign-list .campaigns=${campaigns}></campaign-list>`;
+        break;
+      case 'loading': 
+        content = html`<div>loading ...</div>`;
+        break;
+      default: 
+        content = html`Error has occurred.`;
+    }
+    
     return html`
       <div class="title">
         Discover a cause or a campaign
       </div>
-      <campaign-list></campaign-list>
+      ${content}
     `;
   }
 }
@@ -37,4 +64,3 @@ class Dashboard extends LitElement {
 customElements.define('app-dashboard', Dashboard);
 
 export default Dashboard;
-
