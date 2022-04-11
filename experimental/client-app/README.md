@@ -18,20 +18,12 @@ Within your terminal, open one tab to run the proxy and another to run the app.
 ```bash
 npm install
 npm build 
-npm run server // Runs the proxy
-npm start // Runs your application locally
+npm run dev
 ```
 
 - `server` runs the proxy server to target api on port `3000`
-- `start` runs your app for development on port `8080`, reloading on file changes
-- `start:build` runs your app after it has been built using the build command
-- `build` builds your app and outputs it in your `dist` directory
-- `test` runs your test suite with Web Test Runner
-- `lint` runs the eslinter for your project
-- `lint:css` runs the css linter (stylelint) for your project
-- `format` fixes linting and formatting errors
-
-
+- `start` runs your app for development on port `8000`, reloading on file changes
+- `dev` uses npm-run-all to run the above `server` and `start` scripts in parallel (Perfect for cloudshell development.)
 ## Learning
 
 Want to learn more frontend [resources](docs/resources.md)? This includes tooling used for this project.

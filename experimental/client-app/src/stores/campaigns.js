@@ -12,34 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { axios } from '@bundled-es-modules/axios';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchCampaign, fetchCampaignList } from '../actions/campaigns.js';
 
-const developmentUrl = 'http://127.0.0.1:5000';
-
-export const fetchCampaign = createAsyncThunk(
-'posts/fetchCampaign',
-  async (campaignId) => {
-    let response;
-
-
-    try {
-      response = await axios.get(`${developmentUrl}/api/v1/campaigns/${campaignId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          "Access-Control-Allow-Origin": "*"  
-        },
-      });
-    } catch(e) {
-      console.log(e);
-    }
-
-
-    return response?.data;
-  }
-);
-
-export const campaignSlice = createSlice({
+export const campaignReducer = createSlice({
   name: 'campaign',
   initialState: {
     campaign: {},
@@ -62,6 +38,30 @@ export const campaignSlice = createSlice({
       });
     /* eslint-enable no-param-reassign */
   }
-});
+}).reducer;
 
-export default campaignSlice.reducer;
+export const campaignListReducer = createSlice({
+  name: 'campaigns',
+  initialState: {
+    campaigns: [],
+    status: 'idle',
+    error: null
+  },
+  extraReducers(builder) {
+    /* eslint-disable no-param-reassign */
+    builder
+      .addCase(fetchCampaignList.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(fetchCampaignList.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.campaigns = action.payload
+      })
+      .addCase(fetchCampaignList.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.error.message
+        state.campaigns = [];
+      });
+    /* eslint-enable no-param-reassign */
+  }
+}).reducer;
