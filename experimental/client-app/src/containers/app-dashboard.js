@@ -16,7 +16,7 @@ import { LitElement, html } from 'lit';
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import shellStyles from '../styles/shell.js';
 import CampaignList from '../components/campaign/campaign-list.js';
-import { fetchCampaignList } from '../stores/slices/campaignList.js';
+import { fetchCampaignList } from '../actions/campaigns.js';
 import store from '../stores/base.js';
 
 class Dashboard extends connect(store)(LitElement) {

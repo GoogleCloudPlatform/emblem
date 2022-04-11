@@ -14,17 +14,14 @@
 
 import { LitElement, html } from 'lit';
 import { connect } from 'pwa-helpers/connect-mixin.js';
-import { getCampaignItem } from '../../stores/selectors/campaigns.js';
-import { fetchCampaign } from '../../stores/slices/campaign.js';
+import { getCampaignItem } from '../../selectors/campaigns.js';
+import { fetchCampaign } from '../../actions/campaigns.js';
 import store from '../../stores/base.js';
 import campaignStyles from './styles/campaignPage.js';
 import '@material/mwc-tab-bar';
 import '@material/mwc-tab';
 
 class CampaignPage extends connect(store)(LitElement) {
-  static properties = {
-    campaign: { name: { type: String }},
-  };
   static styles = campaignStyles;
 
   constructor() {

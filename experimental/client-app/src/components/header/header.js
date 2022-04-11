@@ -15,7 +15,6 @@
 import { LitElement, html, css } from 'lit';
 import '@material/mwc-top-app-bar';
 import '@material/mwc-icon-button';
-
 import headerStyles from './styles/header.js';
 
 const cloudLogo = new URL('../../../assets/google-cloud-logo.png', import.meta.url).href;

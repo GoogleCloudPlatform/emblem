@@ -15,7 +15,6 @@
 import { LitElement, html, css } from 'lit';
 import campaignStyles from './styles/campaignCard.js';
 
-
 class CampaignCard extends LitElement {
   static properties = {
     item: {type: Object},
