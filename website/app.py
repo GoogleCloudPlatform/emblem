@@ -36,7 +36,9 @@ auth.init(app)
 csp.init(app)
 
 
-if os.path.exists("config.py"):
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.py")
+
+if os.path.exists(CONFIG_PATH):
     app.config.from_object("config")
 else:
     raise Exception("Missing configuration file.")
