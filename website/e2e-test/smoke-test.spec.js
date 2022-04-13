@@ -1,9 +1,30 @@
+// Copyright 2022 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the 'License');
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an 'AS IS' BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 const { test, expect } = require('@playwright/test');
 
-const EMBLEM_URL = 'http://localhost:8080'
+const {EMBLEM_URL} = process.env;
 
 test('Renders homepage', async ({ page }) => {
-  await page.goto(EMBLEM_URL);
-  const title = page.locator('.navbar__inner .navbar__title');
-  await expect(page).toHaveTitle(/View Campaigns/i);
+  // Any browser errors should cause a test failure
+  page.on("console", (message) => {
+    if (message.type() === "error") {
+      throw message.text();
+    }
+  })
+
+  // Assert the target page loads successfully
+  const response = await page.goto(EMBLEM_URL, 'networkidle');
+  await expect(response.status()).toBe(200)
 });

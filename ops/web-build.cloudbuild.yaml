@@ -14,6 +14,34 @@
 
 
 steps:
+  # Testing dependencies
+  - name: node
+    entrypoint: npm
+    args: ['install']
+    dir: 'website/e2e-test'
+  - name: node
+    entrypoint: npx
+    args: ['playwright', 'install']
+    dir: 'website/e2e-test'
+
+  # Run E2E tests
+  # These DO NOT use auth, so we can use a
+  # "dummy value" for EMBLEM_SESSION_BUCKET
+  - name: 'us-central1-docker.pkg.dev/emblem-ops/ci-cd/emblem-playwright'
+    entrypoint: /bin/bash
+    args: 
+      - '-c'
+      - |
+        cp -R ../client-libs/ client-libs
+        pip install -r requirements.txt
+        python -m flask run &
+        cd e2e-test && npm test
+    dir: 'website'
+    env:
+      - "EMBLEM_URL=http://127.0.0.1:5000"
+      - "EMBLEM_SESSION_BUCKET=nonexistent-bucket"
+      - "EMBLEM_API_URL=${_EMBLEM_API_URL}"
+
   # Docker Build 
   # Copying the client-libs for Docker context
   - name: gcr.io/cloud-builders/docker
