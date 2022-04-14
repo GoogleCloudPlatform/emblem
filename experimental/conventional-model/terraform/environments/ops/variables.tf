@@ -1,17 +1,17 @@
-variables "project_id" {
+variable "project_id" {
     type    = string
     description = ""
 }
-variables "region" {
+variable "region" {
     type    = string
     default = "us-central1"
     description = ""
 }
-variables "repo_owner" {
+variable "repo_owner" {
     type    = string
     description = ""
 }
-variables "repo_name" {
+variable "repo_name" {
     type    = string
     description = ""
 }
