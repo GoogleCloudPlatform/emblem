@@ -25,3 +25,9 @@ variable "enable_apis" {
   description = "Toggle to include required APIs."
   default     = true
 }
+
+variable "deploy_triggers" {
+  type        = bool
+  default     = false
+  description = "This value should only be changed to true after connecting a Github repository to your project."
+}

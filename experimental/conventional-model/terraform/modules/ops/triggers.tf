@@ -7,6 +7,7 @@ resource "time_sleep" "wait_for_cloud_build_service" {
 
 resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
   project        = var.project_id
+  count = var.deploy_triggers ? 1 : 0
   name           = "api-unit-tests"
   filename       = "ops/unit-tests.cloudbuild.yaml"
   included_files = ["content-api/**"]
@@ -29,6 +30,7 @@ resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
 
 resource "google_cloudbuild_trigger" "api_push_to_main_build_trigger" {
   project        = var.project_id
+  count = var.deploy_triggers ? 1 : 0
   name           = "api-push-to-main"
   filename       = "ops/api-build.cloudbuild.yaml"
   included_files = ["content-api/**"]
@@ -46,6 +48,7 @@ resource "google_cloudbuild_trigger" "api_push_to_main_build_trigger" {
 
 resource "google_cloudbuild_trigger" "website_unit_tests_build_trigger" {
   project        = var.project_id
+  count = var.deploy_triggers ? 1 : 0
   name           = "website-unit-tests"
   filename       = "ops/unit-tests.cloudbuild.yaml"
   included_files = ["website/**"]
@@ -67,6 +70,7 @@ resource "google_cloudbuild_trigger" "website_unit_tests_build_trigger" {
 
 resource "google_cloudbuild_trigger" "web_push_to_main_build_trigger" {
   project  = var.project_id
+  count = var.deploy_triggers ? 1 : 0
   name     = "web-push-to-main"
   filename = "ops/web-build.cloudbuild.yaml"
   included_files = [
