@@ -28,9 +28,10 @@ resource "google_project_iam_member" "pubsub_publisher_iam_member" {
 # For more information, see this GitHub issue:
 # https://github.com/hashicorp/terraform-provider-google/issues/11020
 resource "time_sleep" "wait_for_artifactregistry" {
-  depends_on = [google_project_service.emblem_ops_beta_services]
-
   create_duration = "20s"
+  depends_on = [
+    google_project_service.emblem_ops_beta_services
+  ]
 }
 
 resource "google_artifact_registry_repository" "website_docker" {
