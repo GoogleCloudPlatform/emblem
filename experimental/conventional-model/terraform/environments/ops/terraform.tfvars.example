@@ -1,0 +1,4 @@
+project_id = <PROJECT_ID>
+region     = <REGION>
+repo_owner = <REPO_OWNER>
+repo_name  = <REPO_NAME>
