@@ -1,33 +1,3 @@
-data "google_project" "main" {
-  project_id = var.project_id
-}
-
-resource "google_project_service" "artifactregistry" {
-  service = "artifactregistry.googleapis.com"
-  project = var.project_id
-  # Artifact Registry is only available in the Beta provider.
-  provider = google-beta
-}
-
-resource "google_project_service" "cloudbuild" {
-  service = "cloudbuild.googleapis.com"
-  project = var.project_id
-  # Artifact Registry is only available in the Beta provider.
-  provider = google-beta
-}
-
-resource "google_project_service" "pubsub" {
-  service  = "pubsub.googleapis.com"
-  project  = var.project_id
-  provider = google
-
-  # Cloud Build and many other services require Pub/Sub to be enabled. 
-  # If you try to disable Pub/Sub while these services are enabled, it will fail.
-  # Therefore, in order to run `terraform destroy`, we need to tell TF that we 
-  # want to disable all dependent services.
-  disable_dependent_services = true
-}
-
 ###
 # Pub/Sub Topics
 ###
@@ -47,7 +17,7 @@ resource "google_project_iam_member" "pubsub_publisher_iam_member" {
   member   = "serviceAccount:${data.google_project.main.number}@cloudbuild.gserviceaccount.com"
 
   depends_on = [
-    google_project_service.cloudbuild
+    google_project_service.emblem_ops_services
   ]
 }
 
@@ -56,7 +26,7 @@ resource "google_project_iam_member" "pubsub_publisher_iam_member" {
 ##
 
 resource "time_sleep" "wait_for_artifactregistry" {
-  depends_on = [google_project_service.artifactregistry]
+  depends_on = [google_project_service.emblem_ops_beta_services]
 
   # Artifact Registry API enablement is eventually consistent
   # for brand-new GCP projects; we add a delay as a work-around.
@@ -96,11 +66,7 @@ resource "google_artifact_registry_repository" "api_docker" {
 # Secret Manager
 ###
 
-resource "google_project_service" "secretmanager" {
-  service  = "secretmanager.googleapis.com"
-  project  = var.project_id
-  provider = google
-}
+
 
 # OAuth 2.0 secrets
 # These secret resources are REQUIRED, but configuring them is OPTIONAL.
@@ -120,7 +86,7 @@ resource "google_secret_manager_secret" "oauth_client_id" {
   # Adding depends_on prevents race conditions in API enablement
   # This is a workaround for:
   #   https://github.com/hashicorp/terraform-provider-google/issues/10682
-  depends_on = [google_project_service.secretmanager]
+  depends_on = [google_project_service.emblem_ops_services]
 }
 
 resource "google_secret_manager_secret" "oauth_client_secret" {
@@ -133,7 +99,7 @@ resource "google_secret_manager_secret" "oauth_client_secret" {
   # Adding depends_on prevents race conditions in API enablement
   # This is a workaround for:
   #   https://github.com/hashicorp/terraform-provider-google/issues/10682
-  depends_on = [google_project_service.secretmanager]
+  depends_on = [google_project_service.emblem_ops_services]
 }
 
 ###
