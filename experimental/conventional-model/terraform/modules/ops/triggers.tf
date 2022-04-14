@@ -1,3 +1,10 @@
+resource "time_sleep" "wait_for_cloud_build_service" {
+  create_duration = "20s"
+  depends_on = [
+    google_project_service.emblem_ops_services
+  ]
+}
+
 resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
   project        = var.project_id
   name           = "api-unit-tests"
@@ -15,6 +22,9 @@ resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
       comment_control = "COMMENTS_ENABLED_FOR_EXTERNAL_CONTRIBUTORS_ONLY"
     }
   }
+  depends_on = [
+    time_sleep.wait_for_cloud_build_service
+  ]
 }
 
 resource "google_cloudbuild_trigger" "api_push_to_main_build_trigger" {
@@ -29,6 +39,9 @@ resource "google_cloudbuild_trigger" "api_push_to_main_build_trigger" {
       branch = "^main$"
     }
   }
+  depends_on = [
+    time_sleep.wait_for_cloud_build_service
+  ]
 }
 
 resource "google_cloudbuild_trigger" "website_unit_tests_build_trigger" {
@@ -47,6 +60,9 @@ resource "google_cloudbuild_trigger" "website_unit_tests_build_trigger" {
       comment_control = "COMMENTS_ENABLED_FOR_EXTERNAL_CONTRIBUTORS_ONLY"
     }
   }
+  depends_on = [
+    time_sleep.wait_for_cloud_build_service
+  ]
 }
 
 resource "google_cloudbuild_trigger" "web_push_to_main_build_trigger" {
@@ -65,5 +81,8 @@ resource "google_cloudbuild_trigger" "web_push_to_main_build_trigger" {
       branch = "^main$"
     }
   }
+  depends_on = [
+    time_sleep.wait_for_cloud_build_service
+  ]
 }
 
