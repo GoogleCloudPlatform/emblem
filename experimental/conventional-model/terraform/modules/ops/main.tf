@@ -1,6 +1,6 @@
-###
-# Pub/Sub Topics
-###
+data "google_project" "target_project" {
+  project_id = var.project_id
+}
 
 # Create this topic to emit writes to Artifact Registry as events.
 # https://cloud.google.com/artifact-registry/docs/configure-notifications#topic
@@ -14,25 +14,22 @@ resource "google_project_iam_member" "pubsub_publisher_iam_member" {
   project  = var.project_id
   provider = google
   role     = "roles/pubsub.publisher"
-  member   = "serviceAccount:${data.google_project.main.number}@cloudbuild.gserviceaccount.com"
+  member   = "serviceAccount:${data.google_project.target_project.number}@cloudbuild.gserviceaccount.com"
 
   depends_on = [
     google_project_service.emblem_ops_services
   ]
 }
 
-###
 # Container Hosting
-##
 
+# Artifact Registry API enablement is eventually consistent
+# for brand-new GCP projects; we add a delay as a work-around.
+# For more information, see this GitHub issue:
+# https://github.com/hashicorp/terraform-provider-google/issues/11020
 resource "time_sleep" "wait_for_artifactregistry" {
   depends_on = [google_project_service.emblem_ops_beta_services]
 
-  # Artifact Registry API enablement is eventually consistent
-  # for brand-new GCP projects; we add a delay as a work-around.
-  # 
-  # For more information, see this GitHub issue:
-  # https://github.com/hashicorp/terraform-provider-google/issues/11020
   create_duration = "20s"
 }
 
