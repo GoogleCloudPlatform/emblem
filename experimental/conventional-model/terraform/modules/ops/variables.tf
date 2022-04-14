@@ -13,11 +13,13 @@ variable "region" {
 variable "repo_owner" {
   description = "Repo Owner (GoogleCloudPlatform)"
   type        = string
+  default     =  ""
 }
 
 variable "repo_name" {
   description = "Repo Name (emblem)"
   type        = string
+  default     =  ""
 }
 
 variable "enable_apis" {

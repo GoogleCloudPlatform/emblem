@@ -1,4 +1,7 @@
 project_id = <PROJECT_ID>
 region     = <REGION>
-repo_owner = <REPO_OWNER>
-repo_name  = <REPO_NAME>
+
+# Provide the following values after connecting repository to your ops project:
+# deploy_triggers = true
+# repo_owner      = <REPO_OWNER>
+# repo_name       = <REPO_NAME>
