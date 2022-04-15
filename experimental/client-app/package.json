@@ -1,8 +1,8 @@
 {
   "name": "emblem-giving-app",
-  "description": "Webcomponent app-shell following open-wc recommendations",
+  "description": "Emblem giving serverless application following open-wc recommendations",
   "license": "MIT",
-  "author": "app-shell",
+  "author": "Google LLC",
   "version": "0.0.1",
   "scripts": {
     "lint": "eslint --ext .js,.html . --ignore-path .gitignore && prettier \"**/*.js\" --check --ignore-path .gitignore",
