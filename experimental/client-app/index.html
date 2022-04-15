@@ -4,14 +4,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="Description" content="Emblem Giving">
-    <!-- Your application must load the Roboto and Material Icons fonts. -->
+    <script>
+      window.process = {
+        env: {
+          NODE_ENV: 'development'
+        }
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">
     
     <base href="/">
-
+    
     <style>
       html,
       body {
