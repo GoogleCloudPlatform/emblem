@@ -13,7 +13,8 @@
 // limitations under the License.
 
 export const getConfig = () => ({
-    NODE_ENV: '__env__',
-    API_URL: '__api_url__'
-  });
-
+  NODE_ENV: '__env__',
+  FLASK: '__flask__', // todo: change to flaskbase
+  IS_FLASK: '__is_flask__',
+  API_URL: '__api_url__'
+});

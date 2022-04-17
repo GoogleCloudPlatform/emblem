@@ -17,6 +17,7 @@ import { connect } from 'pwa-helpers/connect-mixin.js';
 import { getCampaignItem } from '../../selectors/campaigns.js';
 import { fetchCampaign } from '../../actions/campaigns.js';
 import store from '../../stores/base.js';
+import CampaignCard from '../../components/campaign/campaign-card.js';
 import campaignStyles from './styles/campaignPage.js';
 import '@material/mwc-tab-bar';
 import '@material/mwc-tab';
@@ -95,10 +96,14 @@ class CampaignPage extends connect(store)(LitElement) {
                 <mwc-tab label="UPCOMING CAMPAIGNS"></mwc-tab>
                 <mwc-tab label="PAST CAMPAIGNS"></mwc-tab>
               </mwc-tab-bar>
-              <div class="tabBody"></div>
+              <div class="tabBody">
+                <div class="tabCard">
+                  <campaign-card .item=${campaign}></campaign-card>
+                </div>
+              </div>
             </div>
           </div>`
-        ): 'Loading'}
+        ): 'loading...'}
       </div>
     `;
   }

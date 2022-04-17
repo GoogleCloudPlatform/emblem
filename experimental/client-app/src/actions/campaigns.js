@@ -16,27 +16,28 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getConfig } from '../utils/config.js';
 
 const developmentUrl = getConfig().API_URL;
+const isFlaskProxy = getConfig().IS_FLASK; 
 
 export const fetchCampaign = createAsyncThunk('fetchCampaign', async (campaignId) => {
   let campaign;
+  const campaignUrl = isFlaskProxy ? `${developmentUrl}/get_campaign?campaign_id=${campaignId}` :  `${developmentUrl}/campaigns/${campaignId}`;
+  
   try {
-    const response = await fetch(`${developmentUrl}/campaigns/${campaignId}`);
+    const response = await fetch(campaignUrl, {headers: {'access-control-allow-origin': '*'}});
     campaign = await response.json();
   } catch(e) {
     console.error(e);
   }
   return campaign;
-}
-);
+});
 
 export const fetchCampaignList = createAsyncThunk('fetchCampaignList', async () => {
   let campaigns;
   try {
-    const response = await fetch(`${developmentUrl}/campaigns`);
+    const response = await fetch(`${developmentUrl}/campaigns`, {headers: {'access-control-allow-origin': '*'}});
     campaigns = await response.json();
   } catch(e) {
     console.error(e);
   }
   return campaigns;
-}
-);
+});

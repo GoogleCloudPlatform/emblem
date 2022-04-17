@@ -18,7 +18,6 @@ import shellStyles from './styles/shell.js';
 import Dashboard from './containers/app-dashboard.js';
 import Header from './components/header/header.js';
 import { initRouter } from './utils/router.js';
-import { getConfig } from './utils/config.js';
 
 class AppShell extends LitElement {
   static properties = {
@@ -37,7 +36,6 @@ class AppShell extends LitElement {
   }
 
   render() {
-    console.log(getConfig());
     return html`
       <app-header></app-header>
     `;
