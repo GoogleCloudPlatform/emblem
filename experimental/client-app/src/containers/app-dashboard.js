@@ -56,7 +56,7 @@ class Dashboard extends connect(store)(LitElement) {
       <div class="title">
         Discover a cause or a campaign
       </div>
-      ${content}
+      <div class="dashboardWrapper">${content}</div>
     `;
   }
 }

@@ -39,6 +39,12 @@ const shellStyles =  css`
     width: 100%;
     padding: 30px;
   }
+
+  .dashboardWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 /* stylelint-enable font-family-no-missing-generic-family-keyword */
 
