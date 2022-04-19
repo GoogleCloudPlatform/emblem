@@ -43,6 +43,9 @@
     THIS IS A PROVISIONAL IMPLEMENTATION. The module interface will remain
     constant or backwardly compatible, but the mechanism for storing the session
     data may change.
+    
+    TODO: Test performance and confirm Cloud Storage meets our latency target.
+          If not, evaluate alternate session data stores.
 
     Important note:
 
