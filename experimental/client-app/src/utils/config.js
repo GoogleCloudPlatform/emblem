@@ -16,4 +16,4 @@ export const getConfig = () => ({
     NODE_ENV: '__env__',
     API_URL: '__api_url__',
     THEME: '__theme__'
-});
+  });

@@ -24,7 +24,6 @@ const theme = process.env.THEME;
 export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
   open: '/',
   watch: !hmr,
-  /** Resolve bare module imports */
   nodeResolve: {
     exportConditions: ['browser', 'development']
   },

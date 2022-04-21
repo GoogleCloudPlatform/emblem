@@ -48,4 +48,3 @@ class AppShell extends LitElement {
 customElements.define('app-shell', AppShell);
 
 export default AppShell;
-
