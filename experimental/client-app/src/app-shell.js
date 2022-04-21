@@ -24,12 +24,13 @@ class AppShell extends LitElement {
   static properties = {
     title: { type: String },
   };
-  
   static styles = shellStyles;
 
   constructor() {
     super();
-    this.title = 'Emblem Giving';
+    const { THEME } = getConfig() || {};
+    this.title = THEME === 'cymbal' ? 'Cymbal Giving' : 'Emblem Giving';
+    this.state = { theme: THEME };
   }
 
   firstUpdated() {
@@ -37,9 +38,9 @@ class AppShell extends LitElement {
   }
 
   render() {
-    console.log(getConfig());
+    const { theme } = this.state;
     return html`
-      <app-header></app-header>
+      <app-header .theme=${theme}></app-header>
     `;
   }
 }
@@ -47,4 +48,3 @@ class AppShell extends LitElement {
 customElements.define('app-shell', AppShell);
 
 export default AppShell;
-

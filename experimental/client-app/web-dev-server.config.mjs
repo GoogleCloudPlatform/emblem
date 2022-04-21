@@ -19,20 +19,20 @@ const replace = fromRollup(rollupReplace);
 const hmr = process.argv.includes('--hmr');
 const env = process.env.NODE_ENV;
 const isFlaskProxy = process.env.FLASK_PROXY;
-
+const theme = process.env.THEME;
 
 export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
   open: '/',
   watch: !hmr,
-  /** Resolve bare module imports */
   nodeResolve: {
-exportConditions: ['browser', 'development']
+    exportConditions: ['browser', 'development']
   },
   plugins: [
     replace({
       include: ['src/utils/config.js'],
       preventAssignment: false,
       '__env__': env || 'development',
+      '__theme__': theme || 'default', // one of cymbal or default
       '__api_url__': isFlaskProxy ? 'http://127.0.0.1:5000/api/v1' : 'http://localhost:3000'
     }),
   ]

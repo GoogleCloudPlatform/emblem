@@ -98,7 +98,7 @@ class CampaignPage extends connect(store)(LitElement) {
               <div class="tabBody"></div>
             </div>
           </div>`
-        ): 'Loading'}
+        ): html`<div>loading...</div>`}
       </div>
     `;
   }
