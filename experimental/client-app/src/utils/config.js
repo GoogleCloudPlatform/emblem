@@ -12,12 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { configureStore } from '@reduxjs/toolkit';
-import { campaignReducer, campaignListReducer } from './campaigns.js';
+export const getConfig = () => ({
+    NODE_ENV: '__env__',
+    API_URL: '__api_url__'
+  });
 
-export default configureStore({
-  reducer: {
-    campaign: campaignReducer,
-    campaignList: campaignListReducer
-  }
-});
