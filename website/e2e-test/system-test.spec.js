@@ -24,7 +24,7 @@ test('Lists Campaigns', async ({ page }) => {
 
   // Values for our staging website
   SAMPLE_CAMPAIGN_NAME = 'Cash for Camels';
-  SAMPLE_CAMPAIGN_DESCRIPTION = 'Support Camels';
+  SAMPLE_CAMPAIGN_DESCRIPTION = 'Support camels';
 
   await page.goto(EMBLEM_URL);
 
