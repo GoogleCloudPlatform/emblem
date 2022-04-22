@@ -22,9 +22,9 @@ test('Lists Campaigns', async ({ page }) => {
   //SAMPLE_CAMPAIGN_NAME = 'Books for Ostriches needs your help!';
   //SAMPLE_CAMPAIGN_DESCRIPTION = 'This time of year, Books for Ostriches could really use your help. Donate to my campaign to raise funds for Books for Ostriches today!'
 
-  // Values for Ace's laptop :)
-  SAMPLE_CAMPAIGN_NAME = 'Take the Trash Out';
-  SAMPLE_CAMPAIGN_DESCRIPTION = "It's your turn!";
+  // Values for our staging website
+  SAMPLE_CAMPAIGN_NAME = 'Cash for Camels';
+  SAMPLE_CAMPAIGN_DESCRIPTION = 'Support Camels';
 
   await page.goto(EMBLEM_URL);
 
