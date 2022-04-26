@@ -92,10 +92,10 @@ resource "google_artifact_registry_repository" "api_docker" {
   ]
 }
 
-resource "google_artifact_registry_repository" "cicd_runner_docker" {
+resource "google_artifact_registry_repository" "e2e_runner_docker" {
   format        = "DOCKER"
   location      = var.region
-  repository_id = "cicd-runner"
+  repository_id = "e2e-runner"
   project       = data.google_project.main.project_id
   provider      = google-beta
 

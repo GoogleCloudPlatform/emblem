@@ -105,7 +105,7 @@ gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
 gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
 --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
 
-gcloud builds submit --config=ops/cicd-runner-build.cloudbuild.yaml \
+gcloud builds submit --config=ops/e2e-runner-build.cloudbuild.yaml \
 --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
 
 

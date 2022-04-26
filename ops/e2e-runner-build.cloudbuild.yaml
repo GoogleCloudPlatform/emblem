@@ -1,4 +1,4 @@
-# Copyright 2021 Google LLC
+# Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,16 +14,15 @@
 
 
 steps:
-  # Docker Build 
-  # Copying the client-libs for Docker context
+  # Docker Build
   - name: gcr.io/cloud-builders/docker
     entrypoint: /bin/bash
-    dir: ops/cicd
+    dir: ops/e2e-runner
     args: 
       - '-c'
       - |
         docker build -t \
-        ${_REGION}-docker.pkg.dev/${PROJECT_ID}/cicd-runner/cicd-runner:${SHORT_SHA} \
+        ${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-runner/e2e-runner:${SHORT_SHA} \
         . 
 
 # Default to us-central1 
@@ -32,4 +31,4 @@ substitutions:
 
 # Store in Artifact Registry
 images:
-  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/cicd-runner/cicd-runner:latest'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-runner/e2e-runner:latest'
