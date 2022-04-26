@@ -25,6 +25,8 @@ steps:
         cp -R ../client-libs/ client-libs
         pip install -r requirements.txt
         python -m flask run &
+        ls $(npm root -g) &
+        npm root -g &
         cd e2e-test && npm test
     dir: 'website'
     env:
