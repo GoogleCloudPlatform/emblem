@@ -27,7 +27,7 @@ steps:
   # Run E2E tests
   # These DO NOT use auth, so we can use a
   # "dummy value" for EMBLEM_SESSION_BUCKET
-  - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/cicd-runner/cicd-runner:{_CICD_SHA}'
+  - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/cicd-runner/cicd-runner:${_CICD_SHA}'
     entrypoint: /bin/bash
     args:
       - '-c'
