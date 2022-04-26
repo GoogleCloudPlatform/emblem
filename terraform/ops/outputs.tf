@@ -7,8 +7,9 @@ output "ops_project_number" {
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/artifact_registry_repository
 output "artifact_registry" {
   value = {
-    "api"     = google_artifact_registry_repository.api_docker.name
-    "website" = google_artifact_registry_repository.website_docker.name
+    "api"         = google_artifact_registry_repository.api_docker.name
+    "website"     = google_artifact_registry_repository.website_docker.name
+    "cicd-runner" = google_artifact_registry_repository.cicd_runner_docker.name
   }
   description = "Application Artifact Registries"
 }

@@ -92,6 +92,19 @@ resource "google_artifact_registry_repository" "api_docker" {
   ]
 }
 
+resource "google_artifact_registry_repository" "cicd_runner_docker" {
+  format        = "DOCKER"
+  location      = var.region
+  repository_id = "cicd-runner"
+  project       = data.google_project.main.project_id
+  provider      = google-beta
+
+  depends_on = [
+    # Need to ensure Artifact Registry API is enabled first.
+    time_sleep.wait_for_artifactregistry
+  ]
+}
+
 ###
 # Secret Manager
 ###

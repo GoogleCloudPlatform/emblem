@@ -105,6 +105,9 @@ gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
 gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
 --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
 
+gcloud builds submit --config=ops/cicd-runner-build.cloudbuild.yaml \
+--project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+
 
 #################
 # Prod Services #
@@ -214,4 +217,4 @@ terraform apply --auto-approve
 popd
 
 export GITHUB_URL="https://github.com/${repo_owner}/${repo_name}"
-sh ./scripts/pubsub_triggers.sh 
+sh ./scripts/pubsub_triggers.sh
