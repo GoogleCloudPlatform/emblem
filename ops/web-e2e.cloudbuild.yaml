@@ -14,16 +14,6 @@
 
 
 steps:
-  # Testing dependencies
-  - name: node
-    entrypoint: npm
-    args: ['install']
-    dir: 'website/e2e-test'
-  - name: node
-    entrypoint: npx
-    args: ['playwright', 'install']
-    dir: 'website/e2e-test'
-
   # Run E2E tests
   # These DO NOT use auth, so we can use a
   # "dummy value" for EMBLEM_SESSION_BUCKET
