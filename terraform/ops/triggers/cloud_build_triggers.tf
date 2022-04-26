@@ -74,10 +74,10 @@ resource "google_cloudbuild_trigger" "web_push_to_main_build_trigger" {
   }
 }
 
-resource "google_cloudbuild_trigger" "cicd_runner_push_to_main_build_trigger" {
+resource "google_cloudbuild_trigger" "e2e_runner_push_to_main_build_trigger" {
   project  = var.google_ops_project_id
-  name     = "cicd-runner-push-to-main"
-  filename = "ops/cicd-runner-build.cloudbuild.yaml"
+  name     = "e2e-runner-push-to-main"
+  filename = "ops/e2e-runner-build.cloudbuild.yaml"
   included_files = [
     "website/*",
   ]
