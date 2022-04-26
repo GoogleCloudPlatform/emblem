@@ -23,9 +23,5 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -y python3.9 python3-setuptools python3-pip
 
-# Install NPM packages
-RUN npm install -g @playwright/test
-RUN npx playwright install
-
 # Alias "python" to "python3"
 RUN ln -s /usr/bin/python3 /usr/bin/python
