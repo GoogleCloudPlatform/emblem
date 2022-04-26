@@ -4,7 +4,7 @@
   "description": "End to end tests for the Emblem project",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test "
+    "test": "playwright test"
   },
   "repository": {
     "type": "git",
