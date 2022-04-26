@@ -27,7 +27,7 @@ steps:
   # Run E2E tests
   # These DO NOT use auth, so we can use a
   # "dummy value" for EMBLEM_SESSION_BUCKET
-  - name: 'us-central1-docker.pkg.dev/emblem-ops/ci-cd/emblem-playwright'
+  - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/cicd-runner/cicd-runner:{_CICD_SHA}'
     entrypoint: /bin/bash
     args:
       - '-c'
@@ -45,3 +45,5 @@ steps:
 # Specify a default value for optional variables
 substitutions:
   _EMBLEM_SESSION_BUCKET: nonexistent-bucket
+  _REGION: us-central1
+  _CICD_SHA: latest
