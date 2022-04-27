@@ -2,8 +2,8 @@
 
  - Status: approved
  - Last Updated: 2022-04
- - Related issues: #307
- - Related PRs: #342, #361
+ - Related issues: [#307](https://github.com/GoogleCloudPlatform/emblem/issues/307)
+ - Related PRs: [#342](https://github.com/GoogleCloudPlatform/emblem/issues/342), [#361](https://github.com/GoogleCloudPlatform/emblem/issues/361)
 
 ## Goals
 
