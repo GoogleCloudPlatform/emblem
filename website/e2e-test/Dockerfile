@@ -23,5 +23,11 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -y python3.9 python3-setuptools python3-pip
 
+# NOTE: Playwright NPM packages ***CAN NOT*** be installed here,
+# and must be installed within Cloud Build itself. This is because:
+# 1) Those packages are listed in `package.json`
+# 2) Thus, `npm` insists that they are installed locally.
+# 3) Cloud Build overwrites local packages upon `git clone`-ing.
+
 # Alias "python" to "python3"
 RUN ln -s /usr/bin/python3 /usr/bin/python
