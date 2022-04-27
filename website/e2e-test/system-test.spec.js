@@ -14,23 +14,21 @@
 
 const { test, expect } = require('@playwright/test');
 
+// Retrieve sample values from database seed
+const SAMPLE_DATA_PATH = '../../content-api/data/sample_data.json';
+const SAMPLE_DATA = require(SAMPLE_DATA_PATH);
+const SAMPLE_CAMPAIGN = SAMPLE_DATA.filter(d => d.id == '59d32e9805fc4d3388db')[0];
+
 const {EMBLEM_URL} = process.env;
 
 test('Lists Campaigns', async ({ page }) => {
-  // Values retrieved from seeding database
-  // https://github.com/GoogleCloudPlatform/emblem/blob/main/content-api/data/sample_data.json
-  //SAMPLE_CAMPAIGN_NAME = 'Books for Ostriches needs your help!';
-  //SAMPLE_CAMPAIGN_DESCRIPTION = 'This time of year, Books for Ostriches could really use your help. Donate to my campaign to raise funds for Books for Ostriches today!'
-
-  // Values for our staging website
-  SAMPLE_CAMPAIGN_NAME = 'Cash for Camels';
-  SAMPLE_CAMPAIGN_DESCRIPTION = 'Support camels';
+  const { name, description } = SAMPLE_CAMPAIGN.data;
 
   await page.goto(EMBLEM_URL);
 
   const title = page.locator('.emblem-campaign-title').nth(0);
-  await expect(title).toContainText(SAMPLE_CAMPAIGN_NAME);
+  await expect(title).toContainText(name);
 
   const card = page.locator('.emblem-campaign-card').nth(0);
-  await expect(card).toContainText(SAMPLE_CAMPAIGN_DESCRIPTION);
+  await expect(card).toContainText(description);
 });
