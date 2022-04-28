@@ -74,3 +74,21 @@ resource "google_cloudbuild_trigger" "web_push_to_main_build_trigger" {
   }
 }
 
+resource "google_cloudbuild_trigger" "e2e_runner_push_to_main_build_trigger" {
+  project  = var.google_ops_project_id
+  name     = "e2e-runner-push-to-main"
+  filename = "ops/e2e-runner-build.cloudbuild.yaml"
+  included_files = [
+    "website/*",
+  ]
+  github {
+    owner = var.repo_owner
+    name  = var.repo_name
+    # NOTE: this image will ONLY be updated when a PR
+    # is merged into `main`. "Presubmit only" changes
+    # within a non-merged PR will NOT be included!
+    push {
+      branch = "^main$"
+    }
+  }
+}
