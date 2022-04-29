@@ -79,7 +79,7 @@ resource "google_cloudbuild_trigger" "e2e_runner_push_to_main_build_trigger" {
   name     = "e2e-runner-push-to-main"
   filename = "ops/e2e-runner-build.cloudbuild.yaml"
   included_files = [
-    "website/*",
+    "website/e2e-test/Dockerfile",
   ]
   github {
     owner = var.repo_owner
@@ -90,5 +90,25 @@ resource "google_cloudbuild_trigger" "e2e_runner_push_to_main_build_trigger" {
     push {
       branch = "^main$"
     }
+  }
+}
+
+resource "google_cloudbuild_trigger" "e2e_runner_nightly_build_trigger" {
+  project  = var.google_ops_project_id
+  name     = "e2e-runner-nightly"
+
+  pubsub_config {
+    topic = "projects/${var.google_ops_project_id}/topics/${var.nightly_build_topic}"
+  }
+
+  source_to_build {
+    uri       = "https://github.com/${var.repo_owner}/${var.repo_name}"
+    ref       = "refs/heads/main"
+    repo_type = "GITHUB"
+  }
+
+  git_file_source {
+    path      = "ops/e2e-runner-build.cloudbuild.yaml"
+    repo_type = "GITHUB"
   }
 }
