@@ -9,7 +9,6 @@
 
 There are several web-testing frameworks we could choose from. We need to determine which is best for the Emblem website's specific needs.
 
-
 ## Considered Options
 
 * [Puppeteer](https://pptr.dev)
