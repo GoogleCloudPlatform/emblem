@@ -19,7 +19,7 @@ There are several web-testing frameworks we could choose from. We need to determ
 
 ## Decision
 
-We settled on **Playwright**, as **Cypress**, **Puppeteer* and **Sauce Labs** all had significant drawbacks for our use case.
+We settled on **Playwright**, as **Cypress**, **Puppeteer* and **Sauce Labs** all had drawbacks for our use case.
 
 #### Cypress
 Cypress does not support tests that cover multiple different pages.
@@ -31,6 +31,12 @@ Puppeteer [doesn't handle Shadow DOM](https://github.com/puppeteer/puppeteer/iss
 
 #### Sauce Labs
 Sauce labs requires a separate account to function. Since Emblem instances need to be easy to set up, we did not want to add an additional step to the setup process.
+
+### Revisiting this Decision
+
+We plan to revise this decision if one or more of the following issues arise:
+1) Playwright's goals and our needs no longer match up (due to changes on either side).
+2) Playwright stops being maintained.
 
 ### Research
 
