@@ -46,3 +46,5 @@ Sauce labs requires a separate account to function. Since Emblem instances need 
 * Related User Journeys
   - [SJ4: Deploy a change](https://github.com/GoogleCloudPlatform/emblem/issues/26)
   - [SJ5: Rollback a bad change](https://github.com/GoogleCloudPlatform/emblem/issues/27)
+* Related GitHub Issues
+  - [Early discussion of Website testing strategy](https://github.com/GoogleCloudPlatform/emblem/issues/175)
