@@ -37,6 +37,7 @@ class CampaignPage extends connect(store)(LitElement) {
 
   stateChanged(state) {
     this.campaign = state.campaign;
+    this.requestUpdate();
   }
 
   render() {

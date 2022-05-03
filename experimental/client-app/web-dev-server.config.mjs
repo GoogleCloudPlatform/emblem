@@ -32,8 +32,8 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
       include: ['src/utils/config.js'],
       preventAssignment: false,
       '__env__': env || 'development',
-      '__flask__': 'http://127.0.0.1:5000',
-      '__is_flask__': isFlaskProxy,
+      '__theme__': theme || 'default', // one of cymbal or default
+      '__flask_proxy__': isFlaskProxy,
       '__api_url__': isFlaskProxy ? 'http://127.0.0.1:5000/api/v1' : 'http://localhost:3000'
     }),
   ]
