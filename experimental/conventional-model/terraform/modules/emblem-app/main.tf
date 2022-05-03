@@ -15,3 +15,78 @@ resource "google_app_engine_application" "main" {
     google_project_service.emblem_app_services
   ]
 }
+
+data "google_project" "app" {
+  project_id = var.project_id
+}
+
+data "google_project" "ops" {
+  project_id = var.ops_project_id
+}
+
+# TODO: narrow scope of IAM permission to only necessary service accounts rather than whole project
+resource "google_project_iam_member" "cloudbuild_role_service_account_user" {
+  role    = "roles/iam.serviceAccountUser"
+  member  = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
+  project = var.project_id
+}
+
+resource "google_project_iam_member" "cloudbuild_role_run_admin" {
+  role    = "roles/run.admin"
+  member  = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
+  project = var.project_id
+}
+
+## Cloud Run service agent access to Artifact Registry (Content API).
+# TODO: Migrate resource over to Ops module
+resource "google_artifact_registry_repository_iam_member" "api_cloudrun_role_ar_reader" {
+  provider   = google-beta
+  project    = var.ops_project_id
+  location   = var.region
+  repository = "content-api" // this previously was contrived from ops output
+  role       = "roles/artifactregistry.reader"
+  member     = "serviceAccount:service-${data.google_project.app.number}@serverless-robot-prod.iam.gserviceaccount.com"
+}
+
+
+## Cloud Run service agent access to Artifact Registry (Website).
+resource "google_artifact_registry_repository_iam_member" "website_cloudrun_role_ar_reader" {
+  provider   = google-beta
+  project    = var.ops_project_id
+  location   = var.region
+  repository = "website" // this previously was contrived from ops output
+  role       = "roles/artifactregistry.reader"
+  member     = "serviceAccount:service-${data.google_project.app.number}@serverless-robot-prod.iam.gserviceaccount.com"
+}
+
+###
+# Pipeline Orchestration
+###
+
+resource "google_pubsub_topic" "canary" {
+  name    = "canary-${var.project_id}"
+  project = var.project_id
+}
+
+resource "google_pubsub_topic" "deploy" {
+  name    = "deploy-${var.project_id}"
+  project = var.project_id
+}
+
+##
+# Secret Manager IAM Resources
+##
+
+resource "google_secret_manager_secret_iam_member" "secret_access_iam_client_id" {
+  project   = var.ops_project_id
+  secret_id = "client_id_secret" // this previously was contrived from ops remote state
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.website_manager.email}"
+}
+
+resource "google_secret_manager_secret_iam_member" "secret_access_iam_client_secret" {
+  project   = var.ops_project_id
+  secret_id = "client_secret_secret"
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.website_manager.email}"
+}

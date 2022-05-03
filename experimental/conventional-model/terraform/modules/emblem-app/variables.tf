@@ -17,3 +17,7 @@ variable "session_bucket_ttl" {
   type    = number
   default = 14
 }
+
+variable "ops_project_id" {
+  type = string
+}
