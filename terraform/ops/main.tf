@@ -105,6 +105,19 @@ resource "google_artifact_registry_repository" "api_docker" {
   ]
 }
 
+resource "google_artifact_registry_repository" "e2e_runner_docker" {
+  format        = "DOCKER"
+  location      = var.region
+  repository_id = "e2e-runner"
+  project       = data.google_project.main.project_id
+  provider      = google-beta
+
+  depends_on = [
+    # Need to ensure Artifact Registry API is enabled first.
+    time_sleep.wait_for_artifactregistry
+  ]
+}
+
 ###
 # Secret Manager
 ###

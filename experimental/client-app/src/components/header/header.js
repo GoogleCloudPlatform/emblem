@@ -15,19 +15,24 @@
 import { LitElement, html, css } from 'lit';
 import '@material/mwc-top-app-bar';
 import '@material/mwc-icon-button';
-
 import headerStyles from './styles/header.js';
 
 const cloudLogo = new URL('../../../assets/google-cloud-logo.png', import.meta.url).href;
 const cymbalGivingLogo = new URL('../../../assets/cymbal-giving-logo.png', import.meta.url).href;
 
 class Header extends LitElement {
+  static properties = {
+    theme: { type: String },
+  };
   static styles = headerStyles;
-
+  
   render() {
     return html`
       <div class="headerContainer">
-        <img class="cymbalGivingLogo" src=${cymbalGivingLogo}></img>
+        ${this.theme === 'cymbal'
+          ? html`<img class="cymbalGivingLogo" src=${cymbalGivingLogo}></img>` 
+          : html`<div>Emblem Giving</div>`
+        }
         <div class="headerWrapper">
           <div class="cloudLogoWrapper">
             <p>Powered by</p>
