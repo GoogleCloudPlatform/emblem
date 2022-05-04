@@ -94,8 +94,8 @@ resource "google_cloudbuild_trigger" "e2e_runner_push_to_main_build_trigger" {
 }
 
 resource "google_cloudbuild_trigger" "e2e_runner_nightly_build_trigger" {
-  project  = var.google_ops_project_id
-  name     = "e2e-runner-nightly"
+  project = var.google_ops_project_id
+  name    = "e2e-runner-nightly"
 
   pubsub_config {
     topic = "projects/${var.google_ops_project_id}/topics/${var.nightly_build_topic}"
