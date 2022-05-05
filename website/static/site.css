@@ -17,8 +17,7 @@
 body {
   margin: 0;
   color: #505050;
-  font-family: Roboto, sans-serif;
-  font-display: swap;
+  font-family: 'Google Sans', sans-serif;
 }
 
 a {
@@ -32,7 +31,6 @@ a {
   color: #606060;
   display: block;
   padding: 0.75em;
-  font-size: 14px;
   text-align: center;
 }
 
@@ -69,13 +67,15 @@ a {
 }
 
 .mdc-list-item {
-  padding: 15px;
+  padding: 15px 0;
   margin: 0 15px;
 }
 
 .emblem-campaign-card {
   font-size: 18px;
   cursor: pointer;
+  height: 100%;
+  padding: 15px;
 }
 
 .emblem-campaign-card:hover {
@@ -84,7 +84,7 @@ a {
 
 /* Title */
 .emblem-campaign-card .emblem-campaign-title {
-  font-size: 30px;
+  font-size: 25px;
   position: relative;
 }
 
@@ -108,6 +108,13 @@ a {
 }
 
 /* Donate button */
+
+.emblem-campaign-card .emblem-campaign-donate {
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
 .emblem-campaign-card .emblem-campaign-donate a {
   color: #6300ee;
 }
@@ -218,7 +225,7 @@ img.emblem-avatar {
   width: 100%;
 }
 
-.emblem-new-donation .emblem-donation-buttons {
+.emblem-new-donation .emblem-action-buttons {
   display: inline-block;
   float: right;
 }
@@ -230,6 +237,8 @@ img.emblem-avatar {
 }
 
 .emblem-new-campaign-input {
+  display: flex;
+  align-items: center;
   width: 100%;
   margin-bottom: 1em;
 }

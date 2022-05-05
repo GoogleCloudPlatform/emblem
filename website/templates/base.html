@@ -49,14 +49,12 @@
   <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
     <div class="mdc-top-app-bar__row">
       <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-        <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button" aria-label="Open navigation menu">menu</button>
-        <span class="mdc-top-app-bar__title">{{ self.title() }}</span>
+        <span class="mdc-top-app-bar__title">Emblem Giving</span>
       </section>
       <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
         <a href="/">
           <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Home" title="Home">home</button>
         </a>
-        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Help" title="Help">help_outline</button>
         <!-- Login controls -->
         {% if 'session_id' in request.cookies %}
           <!-- Logged in -->
