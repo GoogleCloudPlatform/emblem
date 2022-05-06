@@ -18,15 +18,21 @@
   --mdc-theme-primary: #306DFD;
 }
 
+th, 
+td, 
+ul li, 
 body {
-  margin: 0;
-  color: #505050;
-  font-family: 'Google Sans', sans-serif;
+  font-family: 'Google Sans', sans-serif !important;
 }
 
 a {
   color: #505050;
   text-decoration: none;
+}
+
+body {
+  margin: 0;
+  color: #505050;
 }
 
 .emblem-message {
