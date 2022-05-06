@@ -20,16 +20,13 @@
 {% block content %}
 <div class="mdc-layout-grid">
   <div class="mdc-layout-grid__inner">
-
     <!-- Campaign overview (top left quadrant) -->
     <div class="emblem-campaign-overview mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+      <div class="emblem-campaign-image" style="max-width: 250px; height: 150px; border-radius: 5px; background-image: url({{ campaign.image_url }}); background-size: cover;"></div>
+      <h2>{{ campaign.name }}</h2>
       <p>{{ campaign.description }}</p>
-
-      <p class="emblem-campaign-status">
-        This campaign is {{ "%.2f"|format(campaign.percentComplete) }}% complete.
-      </p>
+      <p>This campaign is {{ "%.2f"|format(campaign.percentComplete) }}% complete.</p>
     </div>
-
     <!-- Campaign info (top right quadrant) -->
     <div class="emblem-campaign-details mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
       <ul class="mdc-list">
@@ -69,26 +66,17 @@
             {% endfor %}
           </span>
         </li>
-
-        <li role="separator" class="mdc-list-divider"></li>
-        <li class="mdc-list-item">
-          <span class="mdc-list-item__text">Closes</span>
-          <span class="mdc-list-item__meta">???</span>
-        </li>
       </ul>
-
       <!-- Donate button -->
       {% if campaign.active %}
         <a href="/donate?campaign_id={{ campaign.id }}" class="mdc-button mdc-button--raised">
           <span class="mdc-button__ripple"></span>
-          <i class="material-icons mdc-button__icon" aria-hidden="true"
-            >favorite</i
-          >
           <span class="mdc-button__label">Donate</span>
         </a>
       {% endif %}
     </div>
   </div>
+
 
   <!-- Donation history (bottom half of page) -->
   <div class="emblem-donation-history mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
