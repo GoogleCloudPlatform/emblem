@@ -20,10 +20,11 @@
 {% block materialio_scripts %}
 <script type="text/javascript" nonce="{{ g.csp_nonce }}">
   function initTextFields() {
-    const MDCTextField = mdc.textField.MDCTextField;
+    const selectElements = Array.from(document.querySelectorAll('.mdc-select'));
+    selectElements.map(elem => new mdc.select.MDCSelect(elem));
+    
     const elements = Array.from(document.querySelectorAll('.mdc-text-field'));
-
-    elements.map(elem => new MDCTextField(elem));
+    elements.map(elem => new mdc.textField.MDCTextField(elem));
   }
 
   window.addEventListener('load', () => {
@@ -35,16 +36,8 @@
 {% block content %}
 <div class="emblem-new-campaign mdc-layout-grid">
   <div class="mdc-layout-grid__inner">
-
-    <!-- Back button -->
-    <div class="emblem-back-button mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
-      <a href="/">
-        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Back to campaign list" title="Back to campaign list">highlight_off</button>
-      </a>
-    </div>
-
     <!-- Campaign form -->
-    <div class="emblem-new-campaign-form mdc-layout-grid__cell mdc-layout-grid__cell--span-10">
+    <div class="emblem-new-campaign-form mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
       <form method="POST">
         <!-- Campaign Name -->
         <label class="emblem-new-campaign-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
@@ -58,7 +51,7 @@
         <label class="emblem-new-campaign-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
           <span class="mdc-text-field__ripple"></span>
           <span class="mdc-floating-label" id="campaign-description-label">Campaign Description</span>
-          <textarea id="description" name="description" rows=8></textarea>
+          <input required type="text" id="description" name="description" class="mdc-text-field__input" aria-labelledby="description">
           <span class="mdc-line-ripple"></span>
         </label>
 
@@ -71,17 +64,31 @@
         </label>
 
         <!-- Causes list -->
-        <label class="emblem-new-campaign-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
-          <span class="mdc-text-field__ripple"></span>
-          <span class="mdc-floating-label" id="campaign-cause-label">Cause for Campaign</span>
-
-          <select name="cause" name="cause">
-            {% for cause in causes %}
-              <option value="{{ cause.id }}">{{ cause.name }}</option>"
-            {% endfor %}
-          </select>
-
-          <span class="mdc-line-ripple"></span>
+        <label class="emblem-new-campaign-input mdc-select mdc-select--filled">
+          <div class="mdc-select__anchor">
+            <span class="mdc-select__ripple"></span>
+            <span class="mdc-select__selected-text"></span>
+            <span class="mdc-select__dropdown-icon">
+              <svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5">
+                <polygon class="mdc-select__dropdown-icon-inactive" stroke="none" fill-rule="evenodd" points="7 10 12 15 17 10">
+                </polygon>
+                <polygon class="mdc-select__dropdown-icon-active" stroke="none" fill-rule="evenodd" points="7 15 12 10 17 15">
+                </polygon>
+              </svg>
+            </span>
+            <span class="mdc-floating-label">Cause for Campaign</span>
+            <span class="mdc-line-ripple"></span>
+          </div>
+          <div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth">
+            <ul class="mdc-list">
+              {% for cause in causes %}
+                <li class="mdc-list-item" data-value="{{ cause.id }}">
+                  <span class="mdc-list-item__ripple"></span>
+                  <span class="mdc-list-item__text">{{ cause.name }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
         </label>
 
         <!-- Amount (in USD) -->
@@ -99,15 +106,21 @@
           <input required type="text" id="managers" name="managers" class="mdc-text-field__input" aria-labelledby="managers">
           <span class="mdc-line-ripple"></span>
         </label>
-
-        <!-- Submit button -->
-        <button class="mdc-button mdc-button--raised" type="submit">
-          <span class="mdc-button__ripple"></span>
-          <i class="material-icons mdc-button__icon" aria-hidden="true"
-            >check_circle</i
-          >
-          <span class="mdc-button__label">Create</span>
-        </button>
+          
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+          <div class="emblem-action-buttons mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+            <!-- Submit button -->
+            <button class="mdc-button mdc-button--raised" type="submit">
+              <span class="mdc-button__ripple"></span>
+              <div class="mdc-button__label">Create</div>
+            </button>
+            <!-- Cancel button -->
+            <a href="/" class="mdc-button">
+              <span class="mdc-button__ripple"></span>
+              <span class="mdc-button__label">Cancel</span>
+            </a>
+          </div>
+        </div>
       </form>
     </div>
   </div>
