@@ -1,10 +1,12 @@
 variable "project_id" {
-  type = string
+  type        = string
+  description = "Project ID of project to deploy resources to."
 }
 
 variable "region" {
-  type    = string
-  default = "us-central1"
+  type        = string
+  description = "Region to deploy resources to."
+  default     = "us-central1"
 }
 
 variable "enable_apis" {
