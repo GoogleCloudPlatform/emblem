@@ -22,13 +22,14 @@ steps:
       - '-c'
       - |
         docker build -t \
-        ${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-runner/e2e-runner:${SHORT_SHA} \
+        ${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-runner/e2e-runner:${_IMAGE_TAG} \
         . 
 
 # Default to us-central1 
 substitutions:
   _REGION: us-central1
+  _IMAGE_TAG: latest
 
 # Store in Artifact Registry
 images:
-  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-runner/e2e-runner:latest'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-runner/e2e-runner:${_IMAGE_TAG}'
