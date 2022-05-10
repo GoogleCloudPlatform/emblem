@@ -1,3 +1,11 @@
+data "google_project" "app" {
+  project_id = var.project_id
+}
+
+data "google_project" "ops" {
+  project_id = var.ops_project_id
+}
+
 # The following will check if a app engine default service account exists
 # If it already does, Terraform will not create an Appengine App
 # This is a work around for Terraform being unable to truely destroy
@@ -17,14 +25,6 @@ resource "google_app_engine_application" "main" {
   ]
 }
 
-data "google_project" "app" {
-  project_id = var.project_id
-}
-
-data "google_project" "ops" {
-  project_id = var.ops_project_id
-}
-
 # TODO: narrow scope of IAM permission to only necessary service accounts rather than whole project
 resource "google_project_iam_member" "cloudbuild_role_service_account_user" {
   role    = "roles/iam.serviceAccountUser"
@@ -36,28 +36,6 @@ resource "google_project_iam_member" "cloudbuild_role_run_admin" {
   role    = "roles/run.admin"
   member  = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
   project = var.project_id
-}
-
-## Cloud Run service agent access to Artifact Registry (Content API).
-# TODO: Migrate resource over to Ops module
-resource "google_artifact_registry_repository_iam_member" "api_cloudrun_role_ar_reader" {
-  provider   = google-beta
-  project    = var.ops_project_id
-  location   = var.region
-  repository = "content-api" // this previously was contrived from ops output
-  role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:service-${data.google_project.app.number}@serverless-robot-prod.iam.gserviceaccount.com"
-}
-
-
-## Cloud Run service agent access to Artifact Registry (Website).
-resource "google_artifact_registry_repository_iam_member" "website_cloudrun_role_ar_reader" {
-  provider   = google-beta
-  project    = var.ops_project_id
-  location   = var.region
-  repository = "website" // this previously was contrived from ops output
-  role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:service-${data.google_project.app.number}@serverless-robot-prod.iam.gserviceaccount.com"
 }
 
 ###
@@ -72,4 +50,31 @@ resource "google_pubsub_topic" "canary" {
 resource "google_pubsub_topic" "deploy" {
   name    = "deploy-${var.project_id}"
   project = var.project_id
+}
+
+# Define user session storage bucket.
+# Objects created in this bucket represent a new user session.
+# A user may have more than one session, representing different authenticated applications/devices.
+resource "google_storage_bucket" "sessions" {
+  name                        = "${var.project_id}-sessions"
+  project                     = var.project_id
+  uniform_bucket_level_access = true
+  force_destroy               = true
+  location                    = var.region
+  # These buckets will contain end-user data, so periodic deletion is a best practice.
+  # See: https://cloud.google.com/storage/docs/lifecycle
+  lifecycle_rule {
+    condition {
+      age = var.session_bucket_ttl_days
+    }
+    action {
+      type = "Delete"
+    }
+  }
+}
+
+resource "google_storage_bucket_iam_member" "sessions-iam" {
+  bucket = google_storage_bucket.sessions.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.website_manager.email}"
 }
