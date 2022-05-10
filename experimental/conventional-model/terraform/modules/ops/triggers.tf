@@ -13,7 +13,7 @@ resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
   included_files = ["content-api/**"]
   substitutions = {
     _DIR             = "content-api"
-    _SERVICE_ACCOUNT = "restricted-test-identity@emblem-ops.iam.gserviceaccount.com"
+    _SERVICE_ACCOUNT = format("restricted-test-identity@%s.iam.gserviceaccount.com", var.project_id)
   }
   github {
     owner = var.repo_owner
