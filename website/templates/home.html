@@ -19,24 +19,11 @@
 {% block title %}View campaigns{% endblock %}
 
 {% block content %}
-<!-- Hero image -->
-<div class="emblem-unpadded-grid mdc-layout-grid">
-    <div class="mdc-layout-grid__inner">
-        <div class="emblem-hero-image mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-        </div>
-    </div>
-</div>
 
-<!-- Hero subtitle -->
 <div class="mdc-layout-grid">
     <div class="mdc-layout-grid__inner">
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-            Discover a giving campaign for your contribution!
-        </div>
-        <div class="emblem-align-right mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-            <!-- $1,234.00 contributed TODO: enhance API to support real value -->
-        </div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+            <h2>Discover a giving campaign!</h2>
             <!-- Create Campaign button -->
             <a href="/createCampaign" class="mdc-button mdc-button--raised">
                 <span class="mdc-button__ripple"></span>
@@ -49,34 +36,22 @@
 <div class="mdc-layout-grid">
     <div class="mdc-layout-grid__inner">
         {% for campaign in campaigns %}
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
             <a href="/viewCampaign?campaign_id={{ campaign.id }}">
                 <div class="emblem-campaign-card mdc-card mdc-card--outlined">
-                    <div class="mdc-list-group">
-                        <div class="mdc-list">
-                            <!-- Campaign name -->
-                            <div class="emblem-campaign-title mdc-list-item">
-                                <span class="mdc-list-item__text">
-                                    <span class="material-icons">favorite</span>
-                                    {{ campaign.name }}
-                                </span>
-                            </div>
-                            <!-- Campaign image -->
-                            <div class="emblem-campaign-image mdc-list-item" style="background-image: url({{ campaign.image_url }}); background-size: cover;"></div>
-                            <!-- Campaign description -->
-                            <div class="mdc-list-item">
-                                <span class="mdc-list-item__text">
-                                    {{ campaign.description }}
-                                </span>
-                            </div>
-                            <!-- Donate button -->
-                            <div class="emblem-campaign-donate mdc-list-item">
-                                <a class="mdc-list-item__text" href="/donate?campaign_id={{ campaign.id }}">
-                                    <span class="material-icons">card_giftcard</span>
-                                    DONATE
-                                </a>
-                            </div>
-                        </div>
+                    <!-- Campaign image -->
+                    <div class="emblem-campaign-image mdc-list-item" style="background-image: url({{ campaign.image_url }}); background-size: cover;"></div>
+                    <!-- Campaign name -->
+                    <div class="emblem-campaign-title mdc-list-item">
+                        <span class="mdc-list-item__text">
+                            {{ campaign.name }}
+                        </span>
+                    </div>
+                    <!-- Campaign description -->
+                    <div class="mdc-list-item">
+                        <span class="mdc-list-item__text">
+                            {{ campaign.description }}
+                        </span>
                     </div>
                 </div>
             </a>

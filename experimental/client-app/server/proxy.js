@@ -22,21 +22,11 @@ const app = express();
 
 const PORT = 3000;
 const HOST = 'localhost';
-// TODO: Make this configurable for dev/staging/prod
-const API_SERVICE_URL = 'https://api-pwrmtjf4hq-uc.a.run.app';
+const API_SERVICE_URL = 'YOUR API CONTAINER URL HERE';
 
 // Logging
 app.use(morgan('dev'));
 app.use(cors());
-
-// Auth
-app.use('', (req, res, next)=> {
-  if(req.headers.authorization) {
-    next();
-  } else {
-    res.sendStatus(403);
-  }
-});
 
 app.use('/campaigns', createProxyMiddleware({
   target: API_SERVICE_URL,
@@ -58,5 +48,6 @@ app.use('/viewCampaign?campaign_id=:campaignId', createProxyMiddleware({
 
 // Start proxy
 app.listen(PORT, HOST, () => {
+  /* eslint-disable-next-line no-console */
   console.log(`Starting Proxy at ${HOST}:${PORT}`);
 });

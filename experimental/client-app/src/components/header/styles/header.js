@@ -16,11 +16,11 @@ import { css } from 'lit';
 
 const headerStyles =  css`
       .cloudLogo {
-        height: 25px;
+        height: 20px;
       }
 
       .cymbalGivingLogo {
-        height: 100px;
+        height: 90px;
       }
 
       .headerContainer {
