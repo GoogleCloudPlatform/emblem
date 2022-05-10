@@ -61,4 +61,4 @@ Third, we expect our initial tests to help us _detect_ - but **not debug** - pro
 
 ### Revisiting this Decision
 
-We plan to revise this decision once the initial series of (system) tests is complete.
+We plan to continue using Playwright so long as it continues meeting our project's needs.
