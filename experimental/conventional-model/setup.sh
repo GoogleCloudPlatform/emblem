@@ -30,7 +30,7 @@ export TF_VAR_ops_project_id=${OPS_PROJECT_ID}
 
 terraform -chdir=${PROD_ENVIRONMENT_DIR} init  
 terraform -chdir=${PROD_ENVIRONMENT_DIR} apply
-exit
+
 # ## Build Containers ##
 
 # export REGION="us-central1"
@@ -51,8 +51,8 @@ exit
 
 # DEPLOY TRIGGERS TO OPS PROJECT
 
-export TF_VAR_project_id=${OPS_PROJECT}
+export TF_VAR_project_id=${OPS_PROJECT_ID}
 export TF_VAR_deploy_triggers="true"
 export TF_VAR_repo_name=${REPO_NAME}
 export TF_VAR_repo_owner=${REPO_OWNER}
-terraform -chdir=${OPS_ENVIRONMENT_DIR} plan
+terraform -chdir=${OPS_ENVIRONMENT_DIR} apply
