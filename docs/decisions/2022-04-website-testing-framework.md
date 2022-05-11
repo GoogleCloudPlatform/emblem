@@ -8,6 +8,7 @@
 ## Context & Problem Statement
 
 There are several web-testing frameworks we could choose from. We need to determine which is best for the Emblem website's specific needs.
+Because we're planning to transition from a server-side framework ([Flask](https://flask.palletsprojects.org)) to a client-side one ([Lit](https://lit.dev)), any testing framework we choose must support **both** serverside and client-side frontend frameworks.
 
 ## Considered Options
 
