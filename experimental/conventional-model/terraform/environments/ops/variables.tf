@@ -10,8 +10,10 @@ variable "region" {
 variable "repo_owner" {
   type        = string
   description = ""
+  default     = ""
 }
 variable "repo_name" {
   type        = string
   description = ""
+  default     = ""
 }
