@@ -13,7 +13,6 @@ export TF_VAR_project_id=${OPS_PROJECT_ID}
 terraform -chdir=${OPS_ENVIRONMENT_DIR} init
 terraform -chdir=${OPS_ENVIRONMENT_DIR} apply
 
-exit
 ## Staging Project ##
 
 STAGING_ENVIRONMENT_DIR=terraform/environments/staging
@@ -31,7 +30,7 @@ export TF_VAR_ops_project_id=${OPS_PROJECT_ID}
 
 terraform -chdir=${PROD_ENVIRONMENT_DIR} init  
 terraform -chdir=${PROD_ENVIRONMENT_DIR} apply
-
+exit
 # ## Build Containers ##
 
 # export REGION="us-central1"
