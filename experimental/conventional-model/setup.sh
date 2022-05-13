@@ -32,22 +32,21 @@ terraform -chdir=${PROD_ENVIRONMENT_DIR} init
 terraform -chdir=${PROD_ENVIRONMENT_DIR} apply
 
 # ## Build Containers ##
+cd ../../
+export REGION="us-central1"
+SHORT_SHA="setup"
+E2E_RUNNER_TAG="latest"
 
-# export REGION="us-central1"
-# SHORT_SHA="setup"
-# E2E_RUNNER_TAG="latest"
+gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
+--project="$OPS_PROJECT_ID" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
 
-# gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
-# --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
+--project="$OPS_PROJECT_ID" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
 
-# gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
-# --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+gcloud builds submit --config=ops/e2e-runner-build.cloudbuild.yaml \
+--project="$OPS_PROJECT_ID" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG"
 
-# gcloud builds submit --config=ops/e2e-runner-build.cloudbuild.yaml \
-# --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG"
-
-
-
+cd -
 
 # DEPLOY TRIGGERS TO OPS PROJECT
 
