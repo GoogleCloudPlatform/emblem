@@ -22,7 +22,7 @@ const app = express();
 
 const PORT = 3000;
 const HOST = 'localhost';
-const API_SERVICE_URL = 'YOUR API CONTAINER URL HERE';
+const API_SERVICE_URL = 'https://api-pwrmtjf4hq-uc.a.run.app';
 
 // Logging
 app.use(morgan('dev'));
