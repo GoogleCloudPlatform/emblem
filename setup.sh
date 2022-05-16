@@ -20,14 +20,14 @@
 set -eu
 
 # Check env variables are not empty strings
-if [[ -z "${PROD_PROJECT}" ]]; then
-    echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
+if [[ -z "${PROD_PROJECT_ID}" ]]; then
+    echo "Please set the $(tput bold)PROD_PROJECT_ID$(tput sgr0) variable"
     exit 1
-elif [[ -z "${STAGE_PROJECT}" ]]; then
-    echo "Please set the $(tput bold)STAGE_PROJECT$(tput sgr0) variable"
+elif [[ -z "${STAGING_PROJECT_ID}" ]]; then
+    echo "Please set the $(tput bold)STAGING_PROJECT_ID$(tput sgr0) variable"
     exit 1
-elif [[ -z "${OPS_PROJECT}" ]]; then
-    echo "Please set the $(tput bold)OPS_PROJECT$(tput sgr0) variable"
+elif [[ -z "${OPS_PROJECT_ID}" ]]; then
+    echo "Please set the $(tput bold)OPS_PROJECT_ID$(tput sgr0) variable"
     exit 1
 fi
 
@@ -41,7 +41,7 @@ fi
 pushd terraform/ops
 terraform init
 terraform apply --auto-approve \
-    -var google_ops_project_id="${OPS_PROJECT}" 
+    -var google_ops_project_id="${OPS_PROJECT_ID}" 
 popd
 
 
@@ -50,8 +50,8 @@ pushd terraform/app
 
 # Set Staging Variables
 cat > terraform.tfvars <<EOF
-google_ops_project_id = "${OPS_PROJECT}"
-google_project_id = "${STAGE_PROJECT}"
+google_ops_project_id = "${OPS_PROJECT_ID}"
+google_project_id = "${STAGING_PROJECT_ID}"
 EOF
 
 terraform init --backend-config "path=./stage.tfstate" -reconfigure 
@@ -63,7 +63,7 @@ terraform init --backend-config "path=./stage.tfstate" -reconfigure
 # Note: If AppEngine is in a different region than Cloud Run or in the wrong mode 
 # (Datastore vs Firestore), this could cause latency or query compatibility issues.
 
-terraform import module.application.google_app_engine_application.main "${STAGE_PROJECT}" 2>/dev/null || true
+terraform import module.application.google_app_engine_application.main "${STAGING_PROJECT_ID}" 2>/dev/null || true
 terraform apply --auto-approve 
 
 # Firestore requires App Engine for automatic provisioning.
@@ -75,15 +75,15 @@ terraform state rm module.application.google_app_engine_application.main || true
 
 
 ## Prod Project ##
-if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
+if [ "${PROD_PROJECT_ID}" != "${STAGING_PROJECT_ID}" ]; then 
 # Set Prod Variables
 cat > terraform.tfvars <<EOF
-google_ops_project_id = "${OPS_PROJECT}"
-google_project_id = "${PROD_PROJECT}"
+google_ops_project_id = "${OPS_PROJECT_ID}"
+google_project_id = "${PROD_PROJECT_ID}"
 EOF
 
 terraform init --backend-config "path=./prod.tfstate" -reconfigure
-terraform import module.application.google_app_engine_application.main "${PROD_PROJECT}" 2>/dev/null || true
+terraform import module.application.google_app_engine_application.main "${PROD_PROJECT_ID}" 2>/dev/null || true
 terraform apply --auto-approve 
 terraform state rm module.application.google_app_engine_application.main || true
 fi
@@ -101,13 +101,13 @@ E2E_RUNNER_TAG="latest"
 
 # Submit builds
 gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
---project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+--project="$OPS_PROJECT_ID" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
 
 gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
---project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+--project="$OPS_PROJECT_ID" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
 
 gcloud builds submit --config=ops/e2e-runner-build.cloudbuild.yaml \
---project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG"
+--project="$OPS_PROJECT_ID" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG"
 
 
 #################
@@ -115,22 +115,22 @@ gcloud builds submit --config=ops/e2e-runner-build.cloudbuild.yaml \
 #################
 
 # Only deploy to separate project for multi-project setups
-if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
+if [ "${PROD_PROJECT_ID}" != "${STAGING_PROJECT_ID}" ]; then 
 # Deploy API
 gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
---project "$PROD_PROJECT"  --service-account "api-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT_ID}/content-api/content-api:${SHORT_SHA}" \
+--project "$PROD_PROJECT_ID"  --service-account "api-manager@${PROD_PROJECT_ID}.iam.gserviceaccount.com" \
 --region "${REGION}" content-api
 
 
-PROD_API_URL=$(gcloud run services describe content-api --project ${PROD_PROJECT} --region ${REGION} --format "value(status.url)")
+PROD_API_URL=$(gcloud run services describe content-api --project ${PROD_PROJECT_ID} --region ${REGION} --format "value(status.url)")
 
-WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions"
+WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${PROD_PROJECT_ID}-sessions"
 WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${PROD_API_URL}"
 
 gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
---project "$PROD_PROJECT" --service-account "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com"  \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT_ID}/website/website:${SHORT_SHA}" \
+--project "$PROD_PROJECT_ID" --service-account "website-manager@${PROD_PROJECT_ID}.iam.gserviceaccount.com"  \
 --set-env-vars "$WEBSITE_VARS" --region "${REGION}" --tag "latest" \
 website
 fi
@@ -140,18 +140,18 @@ fi
 ##################
 
 gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
---project "$STAGE_PROJECT"  --service-account "api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"  \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT_ID}/content-api/content-api:${SHORT_SHA}" \
+--project "$STAGING_PROJECT_ID"  --service-account "api-manager@${STAGING_PROJECT_ID}.iam.gserviceaccount.com"  \
 --region "${REGION}" content-api
 
-STAGE_API_URL=$(gcloud run services describe content-api --project ${STAGE_PROJECT} --region ${REGION} --format "value(status.url)")
+STAGE_API_URL=$(gcloud run services describe content-api --project ${STAGING_PROJECT_ID} --region ${REGION} --format "value(status.url)")
 
-WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions"
+WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${STAGING_PROJECT_ID}-sessions"
 WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${STAGE_API_URL}"
 
 gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
---project "$STAGE_PROJECT" --service-account "website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+--image "${REGION}-docker.pkg.dev/${OPS_PROJECT_ID}/website/website:${SHORT_SHA}" \
+--project "$STAGING_PROJECT_ID" --service-account "website-manager@${STAGING_PROJECT_ID}.iam.gserviceaccount.com" \
 --set-env-vars "$WEBSITE_VARS" --region "${REGION}" --tag "latest" \
 website
 
@@ -166,9 +166,9 @@ if [[ ${auth_yesno} == "y" ]]; then
 else
     echo "Skipping end-user authentication configuration. You can configure it later by running:"
     echo ""
-    echo "  export $(tput bold)PROD_PROJECT$(tput sgr0)=$(tput setaf 6)${PROD_PROJECT}$(tput sgr0)"
-    echo "  export $(tput bold)STAGE_PROJECT$(tput sgr0)=$(tput setaf 6)${STAGE_PROJECT}$(tput sgr0)"
-    echo "  export $(tput bold)OPS_PROJECT$(tput sgr0)=$(tput setaf 6)${OPS_PROJECT}$(tput sgr0)"
+    echo "  export $(tput bold)PROD_PROJECT_ID$(tput sgr0)=$(tput setaf 6)${PROD_PROJECT_ID}$(tput sgr0)"
+    echo "  export $(tput bold)STAGING_PROJECT_ID$(tput sgr0)=$(tput setaf 6)${STAGING_PROJECT_ID}$(tput sgr0)"
+    echo "  export $(tput bold)OPS_PROJECT_ID$(tput sgr0)=$(tput setaf 6)${OPS_PROJECT_ID}$(tput sgr0)"
     echo "  $(tput setaf 6)sh scripts/configure_auth.sh$(tput sgr0)"
     echo ""
 fi
@@ -178,7 +178,7 @@ fi
 ################
 
 REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?\
-project=${OPS_PROJECT}"
+project=${OPS_PROJECT_ID}"
 echo "Connect your repos: ${REPO_CONNECT_URL}"
 python3 -m webbrowser ${REPO_CONNECT_URL}
 
@@ -208,7 +208,7 @@ done
 pushd terraform/ops/triggers
 # Set Trigger Variables
 cat > terraform.tfvars <<EOF
-google_ops_project_id = "${OPS_PROJECT}"
+google_ops_project_id = "${OPS_PROJECT_ID}"
 repo_owner = "${repo_owner}"
 repo_name = "${repo_name}"
 EOF
