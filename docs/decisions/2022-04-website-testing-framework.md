@@ -19,7 +19,7 @@ Because we're planning to transition from a server-side framework ([Flask](https
 
 ## Decision
 
-We settled on **Playwright**, as **Cypress**, **Puppeteer* and **Sauce Labs** all had drawbacks for our use case.
+We settled on **Playwright**, as **Cypress**, **Puppeteer** and **Sauce Labs** all had drawbacks for our use case.
 
 #### Cypress
 Cypress does not support tests that cover multiple different pages.
