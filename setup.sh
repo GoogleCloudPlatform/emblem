@@ -31,19 +31,15 @@ elif [[ -z "${OPS_PROJECT_ID}" ]]; then
     exit 1
 fi
 
-
-######################
-# Terraform Projects #
-######################
-
-
 ## Ops Project ##
-pushd terraform/ops
-terraform init
-terraform apply --auto-approve \
-    -var google_ops_project_id="${OPS_PROJECT_ID}" 
-popd
 
+ops_config_dir="experimental/conventional-model/terraform/environments/ops"
+terraform -chdir=$ops_config_dir init
+terraform -chdir=$ops_config_dir apply --auto-approve \
+    -var project_id="${OPS_PROJECT_ID}" -var repo_owner="" -var repo_name="" \
+    -var deploy_triggers=false
+
+exit
 
 ## Staging Project ##
 pushd terraform/app
@@ -205,17 +201,10 @@ done
 # Create Triggers #
 ###################
 
-pushd terraform/ops/triggers
-# Set Trigger Variables
-cat > terraform.tfvars <<EOF
-google_ops_project_id = "${OPS_PROJECT_ID}"
-repo_owner = "${repo_owner}"
-repo_name = "${repo_name}"
-EOF
-
-terraform init
-terraform apply --auto-approve
-popd
+terraform -chdir=$ops_config_dir init
+terraform -chdir=$ops_config_dir apply --auto-approve \
+    -var project_id="${OPS_PROJECT_ID}" -var repo_owner="${repo_owner}" -var repo_name="${repo_name}" \
+    -var deploy_triggers=true
 
 export GITHUB_URL="https://github.com/${repo_owner}/${repo_name}"
 sh ./scripts/pubsub_triggers.sh

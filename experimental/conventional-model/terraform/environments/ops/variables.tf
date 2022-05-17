@@ -15,3 +15,9 @@ variable "repo_name" {
   type        = string
   description = ""
 }
+
+variable "deploy_triggers" {
+  type        = bool
+  default     = false
+  description = "This value should only be changed to true after connecting a Github repository to your project."
+}
