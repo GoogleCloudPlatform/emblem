@@ -1,3 +1,5 @@
+# 🚧 THIS PROJECT IS IN ALPHA STAGE 🏗️
+
 # Emblem Giving: A Sample Application
 
 > This sample application is only for learning purposes.
@@ -10,8 +12,7 @@ Real financial transactions are not made, and the giving campaigns in the app ma
 
 ## Project Status
 
-* **Release Stage:** Internal Preview (pre-MVP)
-* **Work Pattern:** Active development, 2 week sprints
+* **Release Stage:** Alpha
 * **Self-service / Independent Setup:** Follow the instructions to set up Emblem by reading the [setup quickstart](./docs/tutorials/setup-quickstart.md), or by launching the [Interactive Walkthrough](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2FGoogleCloudPlatform%2Femblem&cloudshell_tutorial=docs%2Ftutorials%2Fsetup-walkthrough.md) on Cloud Shell.
 
 ## Learn About This Project
@@ -23,8 +24,6 @@ Real financial transactions are not made, and the giving campaigns in the app ma
 
 * Become a [CONTRIBUTOR](./CONTRIBUTING.md)!
 * Check out our shovel-ready [Good First Issues](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22good+first+issue%22) or go a bit deeper in [Help Wanted](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22)
-
-Googlers-only: Learn more about this project from the [pitch deck](https://docs.google.com/presentation/d/13F8Ns-mR6WG12C2ulI4dCIqjSUJgextiNxZA0I6wagw/edit)
 
 ---
 

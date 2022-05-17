@@ -101,26 +101,17 @@
       </div>
 
       <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-        <div class="emblem-donation-buttons mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
-
-          <!-- Cancel button -->
-          <a href="/viewCampaign?campaign_id={{ campaign.id }}" class="mdc-button mdc-button--raised">
-            <span class="mdc-button__ripple"></span>
-            <i class="material-icons mdc-button__icon" aria-hidden="true"
-              >close</i
-            >
-            <span class="mdc-button__label">Cancel</span>
-          </a>
-
+        <div class="emblem-action-buttons mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
           <!-- Donate button -->
           <button class="mdc-button mdc-button--raised" type="submit">
             <span class="mdc-button__ripple"></span>
-            <i class="material-icons mdc-button__icon" aria-hidden="true"
-              >favorite</i
-            >
             <span class="mdc-button__label">Donate</span>
           </button>
-
+          <!-- Cancel button -->
+          <a href="/viewCampaign?campaign_id={{ campaign.id }}" class="mdc-button">
+            <span class="mdc-button__ripple"></span>
+            <span class="mdc-button__label">Cancel</span>
+          </a>
         </div>
       </div>
     </div>
