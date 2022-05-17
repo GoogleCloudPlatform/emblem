@@ -1,0 +1,22 @@
+{
+  "name": "emblem-e2e-tests",
+  "version": "0.0.1",
+  "description": "End to end tests for the Emblem project",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/googlecloudplatform/emblem.git"
+  },
+  "author": "Google LLC",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/googlecloudplatform/emblem/issues"
+  },
+  "homepage": "https://github.com/googlecloudplatform/emblem#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.21.0"
+  }
+}

@@ -12,29 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { LitElement, html } from 'lit';
-import { connect } from 'pwa-helpers/connect-mixin.js';
-import shellStyles from './styles/shell.js';
-import CampaignList from './components/campaign/campaign-list.js';
-
-class Dashboard extends LitElement {
-  static styles = shellStyles;
-
-  constructor() {
-    super();
-  }
-
-  render() {
-    return html`
-      <div class="title">
-        Discover a cause or a campaign
-      </div>
-      <campaign-list></campaign-list>
-    `;
-  }
-}
-
-customElements.define('app-dashboard', Dashboard);
-
-export default Dashboard;
-
+export const getConfig = () => ({
+    NODE_ENV: '__env__',
+    API_URL: '__api_url__',
+    THEME: '__theme__'
+  });

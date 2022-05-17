@@ -13,8 +13,7 @@
 // limitations under the License.
 
 import { configureStore } from '@reduxjs/toolkit';
-import campaignReducer from './slices/campaign.js';
-import campaignListReducer from './slices/campaignList.js';
+import { campaignReducer, campaignListReducer } from './campaigns.js';
 
 export default configureStore({
   reducer: {

@@ -16,6 +16,12 @@ resource "google_project_service" "cloudbuild" {
   provider = google-beta
 }
 
+resource "google_project_service" "cloudscheduler" {
+  service  = "cloudscheduler.googleapis.com"
+  project  = data.google_project.main.project_id
+  provider = google
+}
+
 resource "google_project_service" "pubsub" {
   service  = "pubsub.googleapis.com"
   project  = data.google_project.main.project_id
@@ -51,6 +57,33 @@ resource "google_project_iam_member" "pubsub_publisher_iam_member" {
   ]
 }
 
+# This topic is published to once a day via Cloud Scheduler
+# Its purpose is to trigger "nightly" builds
+resource "google_pubsub_topic" "nightly" {
+  name     = "nightly_builds"
+  project  = data.google_project.main.project_id
+  provider = google
+}
+
+resource "google_cloud_scheduler_job" "nightly_schedule" {
+  name        = var.nightly_build_topic
+  description = "This job runs all nightly builds"
+  schedule    = "*/2 * * * *"
+
+  pubsub_target {
+    topic_name = google_pubsub_topic.nightly.id
+    data       = base64encode("not empty")
+  }
+
+  project  = data.google_project.main.project_id
+  provider = google
+
+  depends_on = [
+    google_project_service.cloudscheduler,
+    google_pubsub_topic.nightly
+  ]
+}
+
 ###
 # Container Hosting
 ##
@@ -83,6 +116,19 @@ resource "google_artifact_registry_repository" "api_docker" {
   format        = "DOCKER"
   location      = var.region
   repository_id = "content-api"
+  project       = data.google_project.main.project_id
+  provider      = google-beta
+
+  depends_on = [
+    # Need to ensure Artifact Registry API is enabled first.
+    time_sleep.wait_for_artifactregistry
+  ]
+}
+
+resource "google_artifact_registry_repository" "e2e_runner_docker" {
+  format        = "DOCKER"
+  location      = var.region
+  repository_id = "e2e-runner"
   project       = data.google_project.main.project_id
   provider      = google-beta
 
