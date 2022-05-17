@@ -19,22 +19,21 @@ changelog:
     labels:
       - ignore-for-release
   categories:
-    - title: Breaking Changes 🛠
+    - title: 'Breaking Changes 🛠'
       labels:
-        - Semver-Major
-        - breaking
+        - 'semver: major'
     - title: Website 🌸
       labels:
         - 'component: website'
-    - title: Content API 🔌
+    - title: 'Content API 🔌'
       labels:
         - 'component: content-api'
-    - title: Software Delivery 🚀
+    - title: 'Software Delivery 🚀'
       labels:
         - 'component: delivery'
-    - title: Demo Magic ✨
+    - title: 'Demo Magic ✨'
       labels:
         - 'component: demo services'
-    - title: Other Changes 🖋
+    - title: 'Other Changes 🖋'
       labels:
-        - "*"
+        - '*'
