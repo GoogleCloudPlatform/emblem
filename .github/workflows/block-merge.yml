@@ -12,8 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Adds a failing check to a PR based on labels:
+# - 'do not merge'
+# - includes 'needs'
+#
+# This allows us to add labels such as 'needs tests' or 'needs decision records'
+# that will be enforced by GitHub.
+#
 # Adapted from https://github.com/cclauss/autoblack
-
 name: Block Merge
 on:
   pull_request:
