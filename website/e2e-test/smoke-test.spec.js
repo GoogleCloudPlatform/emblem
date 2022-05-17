@@ -16,7 +16,7 @@ const { test, expect } = require('@playwright/test');
 
 const {EMBLEM_URL} = process.env;
 
-test('Renders homepage', async ({ page }) => {
+const assertUrlLoads = async (page, url) => {
   // Any browser errors should cause a test failure
   page.on("console", (message) => {
     if (message.type() === "error") {
@@ -25,6 +25,10 @@ test('Renders homepage', async ({ page }) => {
   })
 
   // Assert the target page loads successfully
-  const response = await page.goto(EMBLEM_URL, 'networkidle');
-  await expect(response.status()).toBe(200)
+  const response = await page.goto(url, 'networkidle');
+  return expect(response.status()).toBe(200)
+}
+
+test('Renders homepage', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL);
 });
