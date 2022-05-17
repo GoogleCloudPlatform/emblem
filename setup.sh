@@ -97,6 +97,7 @@ popd
 
 export REGION="us-central1"
 SHORT_SHA="setup"
+E2E_RUNNER_TAG="latest"
 
 # Submit builds
 gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
@@ -104,6 +105,9 @@ gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
 
 gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
 --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+
+gcloud builds submit --config=ops/e2e-runner-build.cloudbuild.yaml \
+--project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG"
 
 
 #################
@@ -214,4 +218,4 @@ terraform apply --auto-approve
 popd
 
 export GITHUB_URL="https://github.com/${repo_owner}/${repo_name}"
-sh ./scripts/pubsub_triggers.sh 
+sh ./scripts/pubsub_triggers.sh

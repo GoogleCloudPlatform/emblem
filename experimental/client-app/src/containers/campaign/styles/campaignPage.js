@@ -18,7 +18,8 @@ import { css } from 'lit';
 const campaignPage =  css`
     .leftPanel,
     .rightPanel {
-      width: 50%;
+      width: inherit;
+      max-width: 50%;
     }
 
     .about, 
@@ -40,7 +41,7 @@ const campaignPage =  css`
     .campaignContainer {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       margin: 30px auto;
       font-family: "Google Sans";
       width: 100%;
