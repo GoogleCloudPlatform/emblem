@@ -15,13 +15,13 @@
 name: Auto Label
 on:
   pull_request_target:
-    types: [ opened, edited ]
+    types: [ opened, reopened, synchronized, edited ]
 
 # Add labels to Pull Requests
 permissions:
   issues: write
   pull-requests: write
-
+  
 jobs:
   conventional-release:
     runs-on: ubuntu-latest
@@ -33,3 +33,13 @@ jobs:
             feat: 'type: feature request'
             fix: 'type: bug'
             breaking: 'semver: major'
+
+  label-changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+    - uses: actions/labeler@v4
+      with:
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
