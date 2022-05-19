@@ -17,6 +17,15 @@
 # This will require 3 projects, for ops, staging, and prod
 # To auto-create the projects, run clean_project_setup.sh
 
+# Variable list
+#   PROD_PROJECT            GCP Project ID of the production project
+#   STAGE_PROJECT           GCP Project ID of the staging project
+#   OPS_PROJECT             GCP Project ID of the operations project
+#   SKIP_REPO_CONNECTION    If set, don't prompt for repo connection + custom repo details
+#   SKIP_AUTH               If set, don't set up auth
+#   REPO_OWNER              GitHub user/organization name (default: GoogleCloudPlatform)
+#   REPO_NAME               GitHub repo name (default: emblem)
+
 set -eu
 
 # Check env variables are not empty strings
@@ -204,23 +213,23 @@ if [[ -z "${SKIP_REPO_CONNECTION}" ]]; then
         fi
 
     done
-fi
 
-###################
-# Create Triggers #
-###################
+    ###################
+    # Create Triggers #
+    ###################
 
-pushd terraform/ops/triggers
-# Set Trigger Variables
-cat > terraform.tfvars <<EOF
+    pushd terraform/ops/triggers
+    # Set Trigger Variables
+    cat > terraform.tfvars <<EOF
 google_ops_project_id = "${OPS_PROJECT}"
 repo_owner = "${repo_owner}"
 repo_name = "${repo_name}"
 EOF
 
-terraform init
-terraform apply --auto-approve
-popd
+    terraform init
+    terraform apply --auto-approve
+    popd
 
-export GITHUB_URL="https://github.com/${repo_owner}/${repo_name}"
-sh ./scripts/pubsub_triggers.sh
+    export GITHUB_URL="https://github.com/${repo_owner}/${repo_name}"
+    sh ./scripts/pubsub_triggers.sh
+fi
