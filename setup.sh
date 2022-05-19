@@ -21,7 +21,7 @@
 #   PROD_PROJECT            GCP Project ID of the production project
 #   STAGE_PROJECT           GCP Project ID of the staging project
 #   OPS_PROJECT             GCP Project ID of the operations project
-#   SKIP_REPO_CONNECTION    If set, don't prompt for repo connection + custom repo details
+#   SKIP_TRIGGERS           If set, don't set up build triggers
 #   SKIP_AUTH               If set, don't set up auth
 #   REPO_OWNER              GitHub user/organization name (default: GoogleCloudPlatform)
 #   REPO_NAME               GitHub repo name (default: emblem)
@@ -188,7 +188,7 @@ fi
 # Set up CI/CD #
 ################
 
-if [[ -z "${SKIP_REPO_CONNECTION}" ]]; then
+if [[ -z "${SKIP_TRIGGERS}" ]]; then
     REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?\
     project=${OPS_PROJECT}"
     echo "Connect your repos: ${REPO_CONNECT_URL}"
