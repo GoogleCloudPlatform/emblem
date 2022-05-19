@@ -158,48 +158,53 @@ website
 ###############
 # Set up auth #
 ###############
-echo ""
-read -p "Would you like to configure $(tput bold)$(tput setaf 3)end-user authentication?$(tput sgr0) (y/n) " auth_yesno
+if [[ -z "${SKIP_AUTH}" ]]; then
+    echo ""
+    read -p "Would you like to configure $(tput bold)$(tput setaf 3)end-user authentication?$(tput sgr0) (y/n) " auth_yesno
 
-if [[ ${auth_yesno} == "y" ]]; then
-    sh ./scripts/configure_auth.sh
-else
-    echo "Skipping end-user authentication configuration. You can configure it later by running:"
-    echo ""
-    echo "  export $(tput bold)PROD_PROJECT$(tput sgr0)=$(tput setaf 6)${PROD_PROJECT}$(tput sgr0)"
-    echo "  export $(tput bold)STAGE_PROJECT$(tput sgr0)=$(tput setaf 6)${STAGE_PROJECT}$(tput sgr0)"
-    echo "  export $(tput bold)OPS_PROJECT$(tput sgr0)=$(tput setaf 6)${OPS_PROJECT}$(tput sgr0)"
-    echo "  $(tput setaf 6)sh scripts/configure_auth.sh$(tput sgr0)"
-    echo ""
+    if [[ ${auth_yesno} == "y" ]]; then
+        sh ./scripts/configure_auth.sh
+    else
+        echo "Skipping end-user authentication configuration. You can configure it later by running:"
+        echo ""
+        echo "  export $(tput bold)PROD_PROJECT$(tput sgr0)=$(tput setaf 6)${PROD_PROJECT}$(tput sgr0)"
+        echo "  export $(tput bold)STAGE_PROJECT$(tput sgr0)=$(tput setaf 6)${STAGE_PROJECT}$(tput sgr0)"
+        echo "  export $(tput bold)OPS_PROJECT$(tput sgr0)=$(tput setaf 6)${OPS_PROJECT}$(tput sgr0)"
+        echo "  $(tput setaf 6)sh scripts/configure_auth.sh$(tput sgr0)"
+        echo ""
+    fi
 fi
 
 ################
 # Set up CI/CD #
 ################
 
-REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?\
-project=${OPS_PROJECT}"
-echo "Connect your repos: ${REPO_CONNECT_URL}"
-python3 -m webbrowser ${REPO_CONNECT_URL}
+if [[ -z "${SKIP_REPO_CONNECTION}" ]]; then
+    REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?\
+    project=${OPS_PROJECT}"
+    echo "Connect your repos: ${REPO_CONNECT_URL}"
 
-read -p "Once your repo is connected, please continue by typing any key."
+    python3 -m webbrowser ${REPO_CONNECT_URL}
 
-continue=1
-while [[ ${continue} -gt 0 ]]
-do
+    read -p "Once your repo is connected, please continue by typing any key."
 
-read -p "Please input the repo owner [GoogleCloudPlatform]: " repo_owner
-repo_owner=${repo_owner:-GoogleCloudPlatform}
-read -p "Please input the repo name [emblem]: " repo_name
-repo_name=${repo_name:-emblem}
+    continue=1
+    while [[ ${continue} -gt 0 ]]
+    do
 
-read -p "Is this the correct repo: ${repo_owner}/${repo_name}? (y/n) " yesno
+        read -p "Please input the repo owner [GoogleCloudPlatform]: " repo_owner
+        repo_owner=${repo_owner:-GoogleCloudPlatform}
+        read -p "Please input the repo name [emblem]: " repo_name
+        repo_name=${repo_name:-emblem}
 
-if [[ ${yesno} == "y" ]]
-then continue=0
+        read -p "Is this the correct repo: ${repo_owner}/${repo_name}? (y/n) " yesno
+
+        if [[ ${yesno} == "y" ]]
+            then continue=0
+        fi
+
+    done
 fi
-
-done
 
 ###################
 # Create Triggers #
