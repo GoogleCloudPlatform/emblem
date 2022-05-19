@@ -103,10 +103,13 @@ else
     echo "  Visit this URL in the Cloud Console: $(tput bold)${SECRETS_URL}$(tput sgr0)"
 fi
 echo ""
-echo "  Open the $(tput bold)client_id_secret$(tput sgr0) and click +NEW VERSION. "
+echo "  Create a secret by clicking +CREATE SECRET and name it $(tput bold)client_id_secret$(tput sgr0)."
+echo "  If the secret already exists, open $(tput bold)client_id_secret$(tput sgr0) and click +NEW VERSION. "
 echo "  In the $(tput bold)Secret value$(tput sgr0) field, enter the $(tput bold)client ID$(tput sgr0) from the previous step. "
 echo "  Click $(tput bold)Add new version$(tput sgr0)."
+echo "                                                "
 echo "  Repeat the steps above for $(tput bold)client_secret_secret$(tput sgr0)."
+echo "  In the $(tput bold)Secret value$(tput sgr0) field, enter the $(tput bold)client secret$(tput sgr0) from the previous step. "
 echo ""
 if [[ $CLOUD_SHELL ]]; then
     echo ""

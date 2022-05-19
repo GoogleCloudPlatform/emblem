@@ -57,8 +57,7 @@ the first approver:
     `active` of type boolean, and value true.
     - Click *Save*
 
-The person with this email address will be able to perform
-all API operations as an Approver.
+The person with this email address will be able to perform all API operations as an Approver.
 
 ### Deploy the API server to Cloud Run
 

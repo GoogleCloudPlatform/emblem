@@ -63,9 +63,31 @@ The `EMBLEM_API_URL` value will be determined by where you host the Content API.
 
 Congratulations! You are now ready to run the Emblem web app.
 
-### Running
+### Run flask app locally
 
 To run the website locally, use the `flask run` command. By default, the website will run on port `8080`.
+
+### Deploy the website container to Cloud Run
+
+1. Navigate to the directory `website/`.
+2. Copy the `client-libs/` directory located in root folder
+```
+cp -rf ../client-libs/ .
+```
+3. Create an environment variable that contains your API server url and your Emblem session bucket name.
+```
+export SITE_VARS="EMBLEM_API_URL=$EMBLEM_API_URL, EMBLEM_SESSION_BUCKET=${EMBLEM_SESSION_BUCKET}"
+```
+4. Build an image with Cloud Build
+```
+gcloud builds submit . --tag=gcr.io/$PROJECT_ID/website
+```
+5. Deploy to Cloud Run
+```
+gcloud run deploy --image=gcr.io/$PROJECT_ID/website --set-env-vars "$SITE_VARS" website
+```
+
+Navigate to the URI provided upon successful deployment.
 
 ## Seed Database
 To mimic a real-world production instance, you can deploy the [Content API](../content-api/README.md) and seed the Firestore database with sample data. Add fake campaigns, causes, donors, and donations by running the [`seed_database`](../content-api/data/seed_database.py) script:
