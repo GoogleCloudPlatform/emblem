@@ -32,3 +32,21 @@ const assertUrlLoads = async (page, url) => {
 test('Renders homepage', async ({ page }) => {
   await assertUrlLoads(page, EMBLEM_URL);
 });
+
+test('Renders login', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL + '/login');
+});
+
+test('Renders logout', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL + '/logout');
+});
+
+test('Renders viewCampaign', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL + '/viewCampaign?campaign_id=Cxzf0ReJyJzMXwmMsfJx');
+});
+
+test('Renders donateCampaign', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL + '/donate?campaign_id=Cxzf0ReJyJzMXwmMsfJx');
+});
+
+
