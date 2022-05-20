@@ -41,12 +41,26 @@ test('Renders logout', async ({ page }) => {
   await assertUrlLoads(page, EMBLEM_URL + '/logout');
 });
 
-test('Renders viewCampaign', async ({ page }) => {
-  await assertUrlLoads(page, EMBLEM_URL + '/viewCampaign?campaign_id=Cxzf0ReJyJzMXwmMsfJx');
+test('Renders donate', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL + '/donate?campaign_id=59d32e9805fc4d3388db');
 });
 
-test('Renders donateCampaign', async ({ page }) => {
-  await assertUrlLoads(page, EMBLEM_URL + '/donate?campaign_id=Cxzf0ReJyJzMXwmMsfJx');
+test('Renders viewCampaign', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL + '/viewCampaign?campaign_id=59d32e9805fc4d3388db');
 });
+
+test('Renders createCampaign', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL + '/createCampaign');
+});
+
+test('Renders viewDonation', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL + '/viewDonation?donation_id=f5ea984abf29497bbed7');
+});
+
+// robots.txt - not working right now
+// test('Renders viewDonation', async ({ page }) => {
+//   await assertUrlLoads(page, EMBLEM_URL + '/robots.txt');
+// });
+
 
 
