@@ -28,7 +28,9 @@ class Header extends LitElement {
   static styles = headerStyles;
   
   render() {
-    const { FLASK } = getConfig();
+    const { FLASK, ...rest } = getConfig();
+    console.log(rest);
+
     return html`
       <div class="headerContainer">
         ${this.theme === 'cymbal'
@@ -43,10 +45,10 @@ class Header extends LitElement {
           <mwc-icon-button icon="help_outline" slot="actionItems"></mwc-icon-button>
           <mwc-icon-button icon="notifications" slot="actionItems"></mwc-icon-button>
           <mwc-icon-button icon="account_circle" slot="actionItems"></mwc-icon-button>
-          <a href=${`${FLASK}/login`}>
+          <a href=${`https://website-budpaheqja-wl.a.run.app/login`}>
             <mwc-icon-button icon="person_outline" slot="actionItems"></mwc-icon-button>
           </a>
-          <a href=${`${FLASK}/logout`}>
+          <a href=${`https://website-budpaheqja-wl.a.run.app/logout`}>
             <mwc-icon-button icon="logout" slot="actionItems"></mwc-icon-button>
           </a>
         </div>

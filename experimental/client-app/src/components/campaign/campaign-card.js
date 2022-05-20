@@ -31,7 +31,7 @@ class CampaignCard extends LitElement {
     
     return html`<div class="card">
       ${this.item && html`
-        <div class="cardImage" style="background-image:url(${this.item.image_url}); background-color: lightgray; background-size: cover; height: 150px;"></div>
+        <div class="cardImage" style="background-image:url(${this.item.imageUrl}); background-color: lightgray; background-size: cover; height: 150px;"></div>
         <div class="cardWrapper">
           <div class="cardContent">
             <div class="title">${this.item.name}</div>
