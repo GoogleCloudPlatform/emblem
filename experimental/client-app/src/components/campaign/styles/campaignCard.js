@@ -22,7 +22,8 @@ const campaignStyles =  css`
       margin: 10px;
       border-radius: 10px;
       font-size: 16px;
-      width: 450px;
+      max-width: 450px;
+      min-width: 400px;
       overflow: hidden;
     }
 
@@ -50,6 +51,7 @@ const campaignStyles =  css`
       width: 100%;
     }
 
+    
     .button {
       cursor: pointer;
       background: white;
@@ -58,20 +60,15 @@ const campaignStyles =  css`
       padding: 20px;
       box-shadow: 0 1px 2px #ccc;
       color: #2C67FF;
+      text-decoration: none;
       font-size: 16px;
       font-family: 'Google Sans';
     }
 
     .fillButton {
-      cursor: pointer;
-      color: white;
-      background: #2C67FF;
-      border-radius: 50px;
+      color: #fff !important;
+      background: #2C67FF !important;
       border: 2px solid #2C67FF;
-      padding: 20px;
-      box-shadow: 0 1px 2px #ccc;
-      font-size: 16px;
-      font-family: 'Google Sans';
     }
 `;
 /* stylelint-enable font-family-no-missing-generic-family-keyword */

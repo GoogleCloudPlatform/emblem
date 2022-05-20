@@ -22,13 +22,19 @@ const cloudLogo = new URL('../../../assets/google-cloud-logo.png', import.meta.u
 const cymbalGivingLogo = new URL('../../../assets/cymbal-giving-logo.png', import.meta.url).href;
 
 class Header extends LitElement {
+  static properties = {
+    theme: { type: String },
+  };
   static styles = headerStyles;
-
+  
   render() {
     const { FLASK } = getConfig();
     return html`
       <div class="headerContainer">
-        <img class="cymbalGivingLogo" src=${cymbalGivingLogo}></img>
+        ${this.theme === 'cymbal'
+          ? html`<img class="cymbalGivingLogo" src=${cymbalGivingLogo}></img>` 
+          : html`<div>Emblem Giving</div>`
+        }
         <div class="headerWrapper">
           <div class="cloudLogoWrapper">
             <p>Powered by</p>
@@ -38,7 +44,7 @@ class Header extends LitElement {
           <mwc-icon-button icon="notifications" slot="actionItems"></mwc-icon-button>
           <mwc-icon-button icon="account_circle" slot="actionItems"></mwc-icon-button>
           <a href=${`${FLASK}/login`}>
-            <mwc-icon-button icon="login" slot="actionItems"></mwc-icon-button>
+            <mwc-icon-button icon="person_outline" slot="actionItems"></mwc-icon-button>
           </a>
           <a href=${`${FLASK}/logout`}>
             <mwc-icon-button icon="logout" slot="actionItems"></mwc-icon-button>

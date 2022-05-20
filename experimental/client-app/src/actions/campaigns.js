@@ -22,7 +22,6 @@ export const fetchCampaign = createAsyncThunk('fetchCampaign', async (campaignId
   let campaign;
   const url = isFlaskProxy ? `${developmentUrl}/get_campaign?campaign_id=${campaignId}` : `${developmentUrl}/campaigns/${campaignId}`;
 
-  console.log(url);
   try {
     const response = await fetch(url);
     campaign = await response.json();
@@ -35,7 +34,7 @@ export const fetchCampaign = createAsyncThunk('fetchCampaign', async (campaignId
 export const fetchCampaignList = createAsyncThunk('fetchCampaignList', async () => {
   let campaigns;
   try {
-    const response = await fetch(`${developmentUrl}/campaigns`, {headers: {'access-control-allow-origin': '*'}});
+    const response = await fetch(`${developmentUrl}/campaigns`);
     campaigns = await response.json();
   } catch(e) {
     console.error(e);

@@ -22,8 +22,8 @@ const app = express();
 
 const PORT = 3000;
 const HOST = 'localhost';
-// TODO: Make this configurable for dev/staging/prod
-const API_SERVICE_URL = 'YOUR_API_CONTAINER_URL
+// TODO: Remove hardcode & make dynamic
+const API_SERVICE_URL = 'https://api-pwrmtjf4hq-uc.a.run.app';
 
 // Logging
 app.use(morgan('dev'));

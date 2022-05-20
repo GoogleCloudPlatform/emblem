@@ -44,6 +44,12 @@ def new_donation():
 
 @donations_bp.route("/donate", methods=["POST"])
 def record_donation():
+    @after_this_request
+    # Force request to be traced
+    def add_header(response):
+        response.headers.add("X-Cloud-Trace-Context", "TRACE_ID/SPAN_ID;o=TRACE_TRUE")
+        return response
+
     session_data = g.session_data
 
     if session_data is None:

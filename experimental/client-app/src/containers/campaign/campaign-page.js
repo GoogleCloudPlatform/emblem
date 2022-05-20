@@ -104,7 +104,7 @@ class CampaignPage extends connect(store)(LitElement) {
               </div>
             </div>
           </div>`
-        ): 'loading...'}
+        ): html`<div>loading...</div>`}
       </div>
     `;
   }

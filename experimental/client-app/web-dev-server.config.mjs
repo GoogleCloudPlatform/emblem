@@ -19,11 +19,11 @@ const replace = fromRollup(rollupReplace);
 const hmr = process.argv.includes('--hmr');
 const env = process.env.NODE_ENV;
 const isFlaskProxy = process.env.FLASK_PROXY;
+const theme = process.env.THEME;
 
 export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
   open: '/',
   watch: !hmr,
-  /** Resolve bare module imports */
   nodeResolve: {
     exportConditions: ['browser', 'development']
   },
