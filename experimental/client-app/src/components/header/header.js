@@ -28,9 +28,10 @@ class Header extends LitElement {
   static styles = headerStyles;
   
   render() {
-    const { FLASK, ...rest } = getConfig();
-    console.log(rest);
+    const { API_URL } = getConfig();
 
+    const sessionId = document.cookie.match(/session_id=[^;]+/);
+    
     return html`
       <div class="headerContainer">
         ${this.theme === 'cymbal'
@@ -45,12 +46,14 @@ class Header extends LitElement {
           <mwc-icon-button icon="help_outline" slot="actionItems"></mwc-icon-button>
           <mwc-icon-button icon="notifications" slot="actionItems"></mwc-icon-button>
           <mwc-icon-button icon="account_circle" slot="actionItems"></mwc-icon-button>
-          <a href=${`https://website-budpaheqja-wl.a.run.app/login`}>
-            <mwc-icon-button icon="person_outline" slot="actionItems"></mwc-icon-button>
-          </a>
-          <a href=${`https://website-budpaheqja-wl.a.run.app/logout`}>
-            <mwc-icon-button icon="logout" slot="actionItems"></mwc-icon-button>
-          </a>
+          ${sessionId
+            ? html`<a href=${`/logout`}>
+                <mwc-icon-button icon="logout" slot="actionItems"></mwc-icon-button>
+              </a>`
+            : html`<a href=${`/login`}>
+                <mwc-icon-button icon="person_outline" slot="actionItems"></mwc-icon-button>
+              </a>`
+          }
         </div>
       </div>
       <div class="banner">

@@ -14,7 +14,7 @@
     "analyze": "cem analyze --litelement",
     "lint:css": "stylelint \"src/**/*.js\"",
     "server": "node server/proxy.js",
-    "start": "THEME=cymbal NODE_ENV=development web-dev-server",
+    "start": "FLASK_PROXY=true THEME=cymbal NODE_ENV=development web-dev-server",
     "dev": "run-p server start"
   },
   "dependencies": {

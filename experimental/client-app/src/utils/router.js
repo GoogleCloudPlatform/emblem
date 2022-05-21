@@ -30,6 +30,24 @@ export const initRouter = () => {
       }
     },
     {
+      path: 'login',
+      component: 'app-dashboard',
+      action: async () => {
+      }
+    },
+    {
+      path: 'callback',
+      component: 'app-dashboard',
+      action: async () => {
+      }
+    },
+    {
+      path: 'logout',
+      component: 'app-dashboard',
+      action: async () => {
+      }
+    },
+    {
       path: '(.*)',
       component: 'app-dashboard'
     }
