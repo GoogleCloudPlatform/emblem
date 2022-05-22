@@ -12,17 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// See https://github.com/GoogleCloudPlatform/emblem/issues/389
-
 const { test, expect } = require('@playwright/test');
 
 const {EMBLEM_URL} = process.env;
 
 const CAMPAIGN_ID = '59d32e9805fc4d3388db';
-
 const DONATION_ID = 'f5ea984abf29497bbed7';
-
-
 
 const assertUrlLoads = async (page, url) => {
   // Any browser errors should cause a test failure
@@ -66,7 +61,9 @@ test('Renders viewDonation', async ({ page }) => {
 });
 
 // robots.txt - not working right now
-// test('Renders viewDonation', async ({ page }) => {
+// See https://github.com/GoogleCloudPlatform/emblem/issues/389
+//
+// test('Renders robots.txt', async ({ page }) => {
 //   await assertUrlLoads(page, EMBLEM_URL + '/robots.txt');
 // });
 
