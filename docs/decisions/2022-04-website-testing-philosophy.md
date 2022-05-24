@@ -43,9 +43,9 @@ The Emblem Website can have as many of each test type as we'd like it to. Our on
 
 ## Decisions
 
-For **Public Preview**, we should focus primarily on _a single test type_ to minimize time-to-value.
+To minimize time-to-value, we should focus primarily on _a single test type_.
 
-To maximize our initial return on investment, our team decided to focus on **End-to-End (E2E) tests** prior to Public Preview.
+To maximize the comprehensiveness of our tests (and in turn, our initial return on investment), our team decided to focus on **End-to-End (E2E) tests**.
 
 These tests are the quickest path to ensuring the website works _mostly_ as expected.
 
@@ -58,7 +58,3 @@ Second, we don't expect our **initial** tests to simplify the contribution proce
 Third, we expect our initial tests to help us _detect_ - but **not debug** - problems.
 
 > The second and third issues can be solved by adding more **unit tests** and **integration tests** respectively. Those are things we may investigate later when we have more time.
-
-### Revisiting this Decision
-
-We plan to continue using Playwright so long as it continues meeting our project's needs.
