@@ -86,9 +86,10 @@ resource "google_app_engine_application" "main" {
 # Objects created in this bucket represent a new user session.
 # A user may have more than one session, representing different authenticated applications/devices.
 resource "google_storage_bucket" "sessions" {
-  name          = "${data.google_project.main.project_id}-sessions"
-  force_destroy = true
-  location      = var.region
+  name                        = "${data.google_project.main.project_id}-sessions"
+  force_destroy               = true
+  uniform_bucket_level_access = true
+  location                    = var.region
 
   # Delete files after configured time.
   # (These buckets will contain end-user data, so periodic deletion is a best practice.)
