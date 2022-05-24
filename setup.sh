@@ -167,7 +167,7 @@ website
 ###############
 # Set up auth #
 ###############
-if [[ -z "${SKIP_AUTH}" ]]; then
+if [[ -z "$SKIP_AUTH" ]]; then
     echo ""
     read -p "Would you like to configure $(tput bold)$(tput setaf 3)end-user authentication?$(tput sgr0) (y/n) " auth_yesno
 
@@ -188,7 +188,7 @@ fi
 # Set up CI/CD #
 ################
 
-if [[ -z "${SKIP_TRIGGERS}" ]]; then
+if [[ -z "$SKIP_TRIGGERS" ]]; then
     REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?\
     project=${OPS_PROJECT}"
     echo "Connect your repos: ${REPO_CONNECT_URL}"
