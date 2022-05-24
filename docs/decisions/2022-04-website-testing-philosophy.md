@@ -43,7 +43,7 @@ The Emblem Website can have as many of each test type as we'd like it to. Our on
 
 ## Decisions
 
-To minimize time-to-value, we should focus primarily on _a single test type_.
+To minimize "time-to-value" of writing tests, we should focus primarily on _a single test type_.
 
 To maximize the comprehensiveness of our tests (and in turn, our initial return on investment), our team decided to focus on **End-to-End (E2E) tests**.
 
