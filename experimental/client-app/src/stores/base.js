@@ -14,8 +14,13 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import { campaignReducer, campaignListReducer } from './campaigns.js';
+import authMiddleware from '../middleware/auth.js';
+import loggerMiddleware from '../middleware/logger.js';
 
 export default configureStore({
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware().concat([loggerMiddleware, authMiddleware]);
+  },
   reducer: {
     campaign: campaignReducer,
     campaignList: campaignListReducer

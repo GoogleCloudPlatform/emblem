@@ -19,7 +19,6 @@ const replace = fromRollup(rollupReplace);
 const hmr = process.argv.includes('--hmr');
 const env = process.env.NODE_ENV;
 const theme = process.env.THEME;
-const isFlaskProxy = process.env.FLASK_PROXY;
 
 export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
   open: '/',
@@ -33,8 +32,10 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
       preventAssignment: false,
       '__env__': env || 'development',
       '__theme__': theme || 'default', // one of cymbal or default
-      '__flask_proxy__': isFlaskProxy,
-      '__api_url__': 'https://content-api-c55u7v66jq-uc.a.run.app'
+      '__api_url__': process.env.API_URL,
+      '__client_id__': process.env.CLIENT_ID,
+      '__client_secret__': process.env.CLIENT_SECRET,
+      '__redirect_uri__': process.env.REDIRECT_URI
     }),
   ]
 });

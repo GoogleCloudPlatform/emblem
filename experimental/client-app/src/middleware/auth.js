@@ -12,11 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export const getConfig = () => ({
-  NODE_ENV: '__env__',
-  API_URL: '__api_url__',
-  THEME: '__theme__',
-  REDIRECT_URI: '__redirect_uri__',
-  AUTH_CLIENT_ID: '__client_id__',
-  AUTH_CLIENT_SECRET: '__client_secret__'
-});
+const checkUserAuthentication = store => next => action => {
+  
+  return next(action);
+}
+
+export default checkUserAuthentication;

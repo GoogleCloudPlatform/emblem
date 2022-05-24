@@ -45,19 +45,18 @@ class Header extends LitElement {
           </div>
           <mwc-icon-button icon="help_outline" slot="actionItems"></mwc-icon-button>
           <mwc-icon-button icon="notifications" slot="actionItems"></mwc-icon-button>
-          <mwc-icon-button icon="account_circle" slot="actionItems"></mwc-icon-button>
           ${sessionId
-            ? html`<a href=${`/logout`}>
-                <mwc-icon-button icon="logout" slot="actionItems"></mwc-icon-button>
+            ? html`<a href=${`/auth/logout`}>
+                <mwc-icon-button icon="logout" slot="actionItems" class="login"></mwc-icon-button>
               </a>`
-            : html`<a href=${`/login`}>
-                <mwc-icon-button icon="person_outline" slot="actionItems"></mwc-icon-button>
+            : html`<a href=${`/auth/login`}>
+                <mwc-icon-button icon="person_outline" slot="actionItems" class="logout"></mwc-icon-button>
               </a>`
           }
         </div>
       </div>
       <div class="banner">
-        This website is hosted for demo purposes only. No money will be moved by exploring these features. This is not a Google product. © 2021 Google Inc
+        This website is hosted for demo purposes only. No money will be moved by exploring these features. This is not a Google product. © 2022 Google Inc
       </div>
     `;
   }

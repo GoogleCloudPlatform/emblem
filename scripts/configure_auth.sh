@@ -29,8 +29,11 @@ elif [[ -z "${OPS_PROJECT}" ]]; then
 fi
 
 # Declare variables (calculated from env-var inputs)
-PROD_WEBSITE_URL=$(gcloud run services describe website --project ${PROD_PROJECT} --format "value(status.address.url)")
-STAGE_WEBSITE_URL=$(gcloud run services describe website --project ${STAGE_PROJECT} --format "value(status.address.url)")
+PROD_WEBSITE_URL=$(gcloud run services describe lit-website --project ${PROD_PROJECT} --format "value(status.address.url)")
+STAGE_WEBSITE_URL=$(gcloud run services describe lit-website --project ${STAGE_PROJECT} --format "value(status.address.url)")
+
+PROD_API_URL=$(gcloud run services describe content-api --project ${PROD_PROJECT} --format "value(status.url)")
+STAGE_API_URL=$(gcloud run services describe content-api --project ${STAGE_PROJECT} --format "value(status.url)")
 
 PROD_CALLBACK_URL="${PROD_WEBSITE_URL}/callback"
 STAGE_CALLBACK_URL="${STAGE_WEBSITE_URL}/callback"
@@ -125,11 +128,11 @@ AUTH_SECRETS="${AUTH_SECRETS},CLIENT_SECRET=projects/${OPS_PROJECT_NUMBER}/secre
 #       using env vars, for things like custom domains and load balancers.
 #       See https://github.com/GoogleCloudPlatform/emblem/issues/277
 
-gcloud beta run services update website \
-    --update-env-vars "REDIRECT_URI=${STAGE_CALLBACK_URL}" \
+gcloud beta run services update lit-website \
+    --update-env-vars "REDIRECT_URI=${STAGE_CALLBACK_URL},API_URL=${STAGE_API_URL}" \
     --update-secrets "${AUTH_SECRETS}" \
     --project "$STAGE_PROJECT"
-gcloud beta run services update website \
-    --update-env-vars "REDIRECT_URI=${PROD_CALLBACK_URL}" \
+gcloud beta run services update lit-website \
+    --update-env-vars "REDIRECT_URI=${PROD_CALLBACK_URL},API_URL=${PROD_API_URL}" \
     --update-secrets "${AUTH_SECRETS}" \
     --project "$PROD_PROJECT"

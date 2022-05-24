@@ -13,9 +13,7 @@
     "start:build": " web-dev-server --root-dir dist --app-index index.html --open",
     "analyze": "cem analyze --litelement",
     "lint:css": "stylelint \"src/**/*.js\"",
-    "server": "node server/proxy.js",
-    "start": "FLASK_PROXY=true THEME=cymbal NODE_ENV=development web-dev-server",
-    "dev": "run-p server start"
+    "start": "THEME=cymbal NODE_ENV=development web-dev-server"
   },
   "dependencies": {
     "@material/mwc-button": "^0.25.3",
@@ -47,7 +45,6 @@
     "eslint-config-prettier": "^8.3.0",
     "husky": "^4.3.8",
     "lint-staged": "^10.5.4",
-    "npm-run-all": "^4.1.5",
     "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.67.3",
