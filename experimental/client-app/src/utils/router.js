@@ -38,13 +38,6 @@ export const initRouter = () => {
       }
     },
     {
-      path: '/callback',
-      component: 'app-dashboard',
-      action: async ({ params }) => {
-        auth.callback(params);
-      }
-    },
-    {
       path: '(.*)',
       component: 'app-dashboard'
     }
