@@ -88,8 +88,11 @@ resource "google_app_engine_application" "main" {
 resource "google_storage_bucket" "sessions" {
   name                        = "${data.google_project.main.project_id}-sessions"
   force_destroy               = true
-  uniform_bucket_level_access = true
   location                    = var.region
+  
+  # Enable uniform bucket-level access to prevent overly lenient per-file permissions
+  # (Also, some GCP organization policies require this as a security measure.)
+  uniform_bucket_level_access = true
 
   # Delete files after configured time.
   # (These buckets will contain end-user data, so periodic deletion is a best practice.)
