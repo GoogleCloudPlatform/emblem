@@ -21,6 +21,7 @@ on:
 permissions:
   issues: write
   pull-requests: write
+
 jobs:
   conventional-release:
     runs-on: ubuntu-latest
@@ -28,10 +29,7 @@ jobs:
       - name: Conventional Release Labels
         uses: bcoe/conventional-release-labels@v1
         with:
-          type_labels:
-            feat: 'type: feature request'
-            fix: 'type: bug'
-            breaking: 'semver: major'
+          type_labels: '{"feat": "type: feature request", "fix": "type: bug", "breaking": "semver: major"}'
 
   label-changes:
     runs-on: ubuntu-latest
