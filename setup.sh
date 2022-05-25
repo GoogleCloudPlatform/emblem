@@ -26,6 +26,9 @@
 #   REPO_OWNER              GitHub user/organization name (default: GoogleCloudPlatform)
 #   REPO_NAME               GitHub repo name (default: emblem)
 
+SKIP_TRIGGERS=${SKIP_TRIGGERS:-}
+SKIP_AUTH=${SKIP_AUTH:-}
+
 set -eu
 
 # Check env variables are not empty strings
