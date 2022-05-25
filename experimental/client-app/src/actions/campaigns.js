@@ -19,7 +19,7 @@ const developmentUrl = getConfig().API_URL;
 
 export const fetchCampaign = createAsyncThunk('fetchCampaign', async (campaignId) => {
   let campaign;
-  const url = `${developmentUrl}/get_campaign?campaign_id=${campaignId}`;
+  const url = `${developmentUrl}/campaigns/${campaignId}`;
 
   try {
     const response = await fetch(url);
