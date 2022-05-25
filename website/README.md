@@ -52,6 +52,7 @@ To configure the app, set the following environment variables:
 | ----------------------- | --------------------------------------------------------- |
 | `CLIENT_ID`             | The client ID of your OAuth 2.0 client.               |
 | `CLIENT_SECRET`         | The client secret of your OAuth 2.0 client.           |
+| `REDIRECT_URI`          | The redirect_uri authorized for your OAuth 2 client   |
 | `EMBLEM_API_URL`        | A URL pointing to your instance of the Emblem Content API |
 | `EMBLEM_SESSION_BUCKET` | The name of your [Cloud Storage bucket](https://cloud.google.com/storage/docs/key-terms#buckets). |
 
