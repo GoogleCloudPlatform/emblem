@@ -139,7 +139,7 @@ identity token needed to authenticate API requests. The test suite
 authenticates every request using these credentials. We will
 create a test account and use its credentials for testing.
 
-Authenticated requests require a account that can be authenticated
+Authenticated requests require an account that can be authenticated
 by the Google Identity Platform. Any service account can be
 used; it does not have to be a user or service account with
 permission in any specific project.
