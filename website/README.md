@@ -32,7 +32,7 @@ To enable end-user authentication within the application, see the [Website compo
 ### Configuration
 To configure the Emblem website, see the [Website component's detailed documentation](../docs/website.md#configuration).
 
-### Run flask app locally
+### Running the Flask app locally
 
 To run the website locally, use the `flask run` command. By default, the website will run on port `8080`.
 
