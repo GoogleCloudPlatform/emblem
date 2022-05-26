@@ -57,6 +57,8 @@ export const callback = async(params) => {
         let token = response?.['id_token'];
         let refresh_token = response?.['refresh_token'];
 
+        // TODO: This needs to be a server side session object
+        // Do not store this in the browser
         setCookie('session_id', {
             "id_token": token,
             "refresh_token": refresh_token,
