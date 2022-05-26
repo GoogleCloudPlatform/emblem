@@ -12,8 +12,11 @@
     ```
     export EMBLEM_URL="https://website-<HASH>.<REGION_ABBR>.a.run.app
     ```
-3. To run the **smoke** tests alone, use the following command:
+
+# Running tests
+To run the **smoke** tests alone, use the following command:
     ```
     npx playwright test smoke-test.spec.js
     ```
-    
+
+**Note:** the system tests are [currently a _work in progress_](https://github.com/GoogleCloudPlatform/emblem/issues/410).
