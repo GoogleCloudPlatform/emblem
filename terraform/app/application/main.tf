@@ -90,6 +90,10 @@ resource "google_storage_bucket" "sessions" {
   force_destroy = true
   location      = var.region
 
+  # Enable uniform bucket-level access to prevent overly lenient per-file permissions
+  # (Also, some GCP organization policies require this as a security measure.)
+  uniform_bucket_level_access = true
+
   # Delete files after configured time.
   # (These buckets will contain end-user data, so periodic deletion is a best practice.)
   # https://cloud.google.com/storage/docs/lifecycle
