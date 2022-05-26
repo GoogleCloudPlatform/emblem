@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2021 Google LLC
+# Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,6 +12,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+REGION="${REGION:-us-central1}"
+
+# Check env variables are not empty strings
+if [[ -z "${PROD_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
+    exit 1
+elif [[ -z "${STAGE_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)STAGE_PROJECT$(tput sgr0) variable"
+    exit 1
+elif [[ -z "${OPS_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)OPS_PROJECT$(tput sgr0) variable"
+    exit 1
+fi
 
 #########################################
 #   This script deletes resources not   #
@@ -77,6 +91,32 @@ gcloud scheduler jobs delete nightly-builds \
     -q \
     || true
 
+# Remove existing Terraform state (Part 1)
+pushd "terraform/ops"
+terraform init
+terraform apply \
+    -destroy --auto-approve \
+    -var google_ops_project_id="${OPS_PROJECT}" \
+    || true
+popd
+
+# Remove existing Terraform state (Part 2)
+APP_PROJECTS=(
+    "${STAGE_PROJECT}",
+    "${PROD_PROJECT}"
+)
+
+pushd terraform/app
+for proj in ${APP_PROJECTS[@]}; do
+    terraform init
+    terraform apply \
+        -destroy --auto-approve \
+        -var google_ops_project_id="${OPS_PROJECT}" \
+        -var google_project_id="${proj}" \
+        || true
+done
+popd
+
 echo "###################################################"
-echo "#                   End cleanup                   #"
+echo "#               End clean-up script               #"
 echo "###################################################"
