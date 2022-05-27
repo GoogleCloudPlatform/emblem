@@ -16,6 +16,28 @@ To deploy the Emblem Website manually, either launch the [Quickstart](#quickstar
 
 ## Detailed Setup Guide
 
+### Deploy the website container to Cloud Run
+
+1. Navigate to the directory `website/`.
+2. Copy the `client-libs/` directory located in root folder
+```
+cp -rf ../client-libs/ .
+```
+3. Create an environment variable that contains your API server url and your Emblem session bucket name.
+```
+export SITE_VARS="EMBLEM_API_URL=$EMBLEM_API_URL, EMBLEM_SESSION_BUCKET=${EMBLEM_SESSION_BUCKET}"
+```
+4. Build an image with Cloud Build
+```
+gcloud builds submit . --tag=gcr.io/$PROJECT_ID/website
+```
+5. Deploy to Cloud Run
+```
+gcloud run deploy --image=gcr.io/$PROJECT_ID/website --set-env-vars "$SITE_VARS" website
+```
+
+Navigate to the URI provided upon successful deployment.
+
 ### Setting up authentication
 >**Note:** end-user authentication is required to access some - _but not all_ - application pages.
 
