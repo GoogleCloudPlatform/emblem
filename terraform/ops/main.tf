@@ -22,6 +22,13 @@ resource "google_project_service" "cloudscheduler" {
   provider = google
 }
 
+resource "google_project_service" "iam" {
+  service = "iam.googleapis.com"
+  project = data.google_project.main.project_id
+  # Artifact Registry is only available in the Beta provider.
+  provider = google-beta
+}
+
 resource "google_project_service" "pubsub" {
   service  = "pubsub.googleapis.com"
   project  = data.google_project.main.project_id
