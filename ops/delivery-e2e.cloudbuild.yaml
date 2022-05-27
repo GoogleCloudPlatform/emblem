@@ -19,7 +19,6 @@ steps:
     entrypoint: /bin/bash
     args:
       - ./cleanup.sh
-    dir: 'terraform'
     env:
       - "EMBLEM_BILLING_ACCOUNT=${_EMBLEM_BILLING_ACCOUNT}"
       - "EMBLEM_ORGANIZATION=${_EMBLEM_ORGANIZATION}"
