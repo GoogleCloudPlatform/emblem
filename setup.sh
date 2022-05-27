@@ -23,11 +23,13 @@
 #   OPS_PROJECT             GCP Project ID of the operations project
 #   SKIP_TRIGGERS           If set, don't set up build triggers
 #   SKIP_AUTH               If set, don't set up auth
+#   IMPORT_IAM              If set, import existing IAM resources instead of creating new ones
 #   REPO_OWNER              GitHub user/organization name (default: GoogleCloudPlatform)
 #   REPO_NAME               GitHub repo name (default: emblem)
 
 SKIP_TRIGGERS=${SKIP_TRIGGERS:-}
 SKIP_AUTH=${SKIP_AUTH:-}
+IMPORT_IAM=${IMPORT_IAM:-}
 
 set -eu
 
@@ -52,6 +54,13 @@ fi
 ## Ops Project ##
 pushd terraform/ops
 terraform init
+
+# Import existing IAM resources
+# (rather than creating them programmatically)
+if [[ -n "${IMPORT_IAM}" ]]; then
+    terraform import google_project_iam_member.pubsub_publisher_iam_member "${OPS_PROJECT}"
+fi
+
 terraform apply --auto-approve \
     -var google_ops_project_id="${OPS_PROJECT}" 
 popd
@@ -76,6 +85,16 @@ terraform init --backend-config "path=./stage.tfstate" -reconfigure
 # (Datastore vs Firestore), this could cause latency or query compatibility issues.
 
 terraform import module.application.google_app_engine_application.main "${STAGE_PROJECT}" 2>/dev/null || true
+
+# Import existing IAM resources
+# (rather than creating them programmatically)
+if [[ -n "${IMPORT_IAM}" ]]; then
+    terraform import module.application.google_project_iam_member.cloudbuild_role_run_service_account_user "${STAGE_PROJECT}"
+    terraform import module.application.google_project_iam_member.cloudbuild_role_run_service_account_user "${OPS_PROJECT}"
+    terraform import module.application.google_project_iam_member.cloudbuild_role_run_admin "${STAGE_PROJECT}"
+    terraform import module.application.google_project_iam_member.cloudbuild_role_run_admin "${OPS_PROJECT}"
+fi
+
 terraform apply --auto-approve 
 
 # Firestore requires App Engine for automatic provisioning.
