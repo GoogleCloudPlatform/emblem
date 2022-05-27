@@ -34,6 +34,13 @@ resource "google_project_service" "pubsub" {
   disable_dependent_services = true
 }
 
+resource "google_project_service" "resourcemanager" {
+  service = "cloudresourcemanager.googleapis.com"
+  project = data.google_project.main.project_id
+  # Artifact Registry is only available in the Beta provider.
+  provider = google-beta
+}
+
 ###
 # Pub/Sub Topics
 ###
