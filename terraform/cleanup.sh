@@ -13,6 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+REGION="${REGION:-us-central1}"
+
+# Check env variables are not empty strings
+if [[ -z "${PROD_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
+    exit 1
+elif [[ -z "${STAGE_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)STAGE_PROJECT$(tput sgr0) variable"
+    exit 1
+elif [[ -z "${OPS_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)OPS_PROJECT$(tput sgr0) variable"
+    exit 1
+fi
+
 #########################################
 #   This script deletes resources not   #
 # deleted by `terraform apply -destroy` #
@@ -76,6 +90,32 @@ gcloud scheduler jobs delete nightly-builds \
     --location "$REGION" \
     -q \
     || true
+
+# Remove existing Terraform state (Part 1)
+pushd "terraform/ops"
+terraform init
+terraform apply \
+    -destroy --auto-approve \
+    -var google_ops_project_id="${OPS_PROJECT}" \
+    || true
+popd
+
+# Remove existing Terraform state (Part 2)
+APP_PROJECTS=(
+    "${STAGE_PROJECT}",
+    "${PROD_PROJECT}"
+)
+
+pushd terraform/app
+for proj in ${APP_PROJECTS[@]}; do
+    terraform init
+    terraform apply \
+        -destroy --auto-approve \
+        -var google_ops_project_id="${OPS_PROJECT}" \
+        -var google_project_id="${proj}" \
+        || true
+done
+popd
 
 echo "###################################################"
 echo "#                   End cleanup                   #"
