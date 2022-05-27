@@ -92,7 +92,7 @@ gcloud scheduler jobs delete nightly-builds \
     || true
 
 # Remove existing Terraform state (Part 1)
-pushd "terraform/ops"
+pushd terraform/ops
 terraform init
 terraform apply \
     -destroy --auto-approve \
