@@ -16,7 +16,10 @@ const { test, expect } = require('@playwright/test');
 
 const {EMBLEM_URL} = process.env;
 
-test('Renders homepage', async ({ page }) => {
+const CAMPAIGN_ID = '59d32e9805fc4d3388db';
+const DONATION_ID = 'f5ea984abf29497bbed7';
+
+const assertUrlLoads = async (page, url) => {
   // Any browser errors should cause a test failure
   page.on("console", (message) => {
     if (message.type() === "error") {
@@ -25,6 +28,44 @@ test('Renders homepage', async ({ page }) => {
   })
 
   // Assert the target page loads successfully
-  const response = await page.goto(EMBLEM_URL, 'networkidle');
-  await expect(response.status()).toBe(200)
+  const response = await page.goto(url, 'networkidle');
+  return expect(response.status()).toBe(200)
+}
+
+test('Renders homepage', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL);
 });
+
+test('Renders login', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL + '/login');
+});
+
+test('Renders logout', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL + '/logout');
+});
+
+test('Renders donate', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL + `/donate?campaign_id=${CAMPAIGN_ID}`);
+});
+
+test('Renders viewCampaign', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL + `/viewCampaign?campaign_id=${CAMPAIGN_ID}`);
+});
+
+test('Renders createCampaign', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL + '/createCampaign');
+});
+
+test('Renders viewDonation', async ({ page }) => {
+  await assertUrlLoads(page, EMBLEM_URL + `/viewDonation?donation_id=${DONATION_ID}`);
+});
+
+// robots.txt - not working right now
+// See https://github.com/GoogleCloudPlatform/emblem/issues/389
+//
+// test('Renders robots.txt', async ({ page }) => {
+//   await assertUrlLoads(page, EMBLEM_URL + '/robots.txt');
+// });
+
+
+
