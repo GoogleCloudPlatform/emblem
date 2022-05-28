@@ -126,9 +126,7 @@ if [[ -z "$SKIP_TRIGGERS" ]]; then
     export TF_VAR_repo_name=${REPO_NAME}
     export TF_VAR_repo_owner=${REPO_OWNER}
     terraform -chdir=${OPS_ENVIRONMENT_DIR} apply
-    terraform -chdir=${OPS_ENVIRONMENT_DIR} apply
-
 fi
 
-TODO: Add pubsub_triggers.sh
-TODO: Add auth setup
+# TODO: Add pubsub_triggers.sh
+# TODO: Add auth setup
