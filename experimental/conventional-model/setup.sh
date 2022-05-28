@@ -130,3 +130,6 @@ if [[ -z "$SKIP_TRIGGERS" ]]; then
     terraform -chdir=${OPS_ENVIRONMENT_DIR} apply
 
 fi
+
+TODO: Add pubsub_triggers.sh
+TODO: Add auth setup
