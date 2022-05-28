@@ -41,6 +41,9 @@ resource "google_artifact_registry_repository_iam_member" "api_cloudrun_role_ar_
   repository = "content-api" // this previously was contrived from ops output
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:service-${data.google_project.app.number}@serverless-robot-prod.iam.gserviceaccount.com"
+  depends_on = [
+    google_project_service.emblem_app_services
+  ]
 }
 
 
@@ -52,4 +55,7 @@ resource "google_artifact_registry_repository_iam_member" "website_cloudrun_role
   repository = "website" // this previously was contrived from ops output
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:service-${data.google_project.app.number}@serverless-robot-prod.iam.gserviceaccount.com"
+  depends_on = [
+    google_project_service.emblem_app_services
+  ]
 }
