@@ -58,7 +58,10 @@ terraform init
 # Import existing IAM resources
 # (rather than creating them programmatically)
 if [[ -n "${IMPORT_IAM}" ]]; then
-    terraform import google_project_iam_member.pubsub_publisher_iam_member "${OPS_PROJECT}"
+    terraform import \
+        google_project_iam_member.pubsub_publisher_iam_member \
+        -var google_ops_project_id="${OPS_PROJECT}" \
+        "${OPS_PROJECT}"
 fi
 
 terraform apply --auto-approve \
