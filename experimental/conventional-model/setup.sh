@@ -1,26 +1,41 @@
+#!/bin/bash
+# Copyright 2021 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 set -eu
 
-# Required Environment variables:
-# OPS_PROJECT_ID
-# STAGING_PROJECT_ID
-# REPO_NAME
-# REPO_OWNER
+# Variable list
+#   PROD_PROJECT_ID         GCP Project ID of the production project
+#   STAGING_PROJECT_ID           GCP Project ID of the staging project
+#   OPS_PROJECT_ID             GCP Project ID of the operations project
+#   SKIP_TRIGGERS           If set, don't set up build triggers
 
 ## Ops Project (minus triggers) ##
 
 OPS_ENVIRONMENT_DIR=terraform/environments/ops
 export TF_VAR_project_id=${OPS_PROJECT_ID}
 terraform -chdir=${OPS_ENVIRONMENT_DIR} init
-terraform -chdir=${OPS_ENVIRONMENT_DIR} plan
+terraform -chdir=${OPS_ENVIRONMENT_DIR} apply
 
-# ## Staging Project ##
+## Staging Project ##
 
 STAGING_ENVIRONMENT_DIR=terraform/environments/staging
 export TF_VAR_project_id=${STAGING_PROJECT_ID}
 export TF_VAR_ops_project_id=${OPS_PROJECT_ID}
 
 terraform -chdir=${STAGING_ENVIRONMENT_DIR} init  
-terraform -chdir=${STAGING_ENVIRONMENT_DIR} plan
+terraform -chdir=${STAGING_ENVIRONMENT_DIR} apply
 
 ## Prod Project ##
 
@@ -29,7 +44,7 @@ export TF_VAR_project_id=${PROD_PROJECT_ID}
 export TF_VAR_ops_project_id=${OPS_PROJECT_ID}
 
 terraform -chdir=${PROD_ENVIRONMENT_DIR} init  
-terraform -chdir=${PROD_ENVIRONMENT_DIR} plan
+terraform -chdir=${PROD_ENVIRONMENT_DIR} apply
 
 ## Build Containers ##
 
@@ -86,8 +101,32 @@ website
 
 ## Deploy Triggers to Ops Project ##
 
-export TF_VAR_project_id=${OPS_PROJECT_ID}
-export TF_VAR_deploy_triggers="true"
-export TF_VAR_repo_name=${REPO_NAME}
-export TF_VAR_repo_owner=${REPO_OWNER}
-terraform -chdir=${OPS_ENVIRONMENT_DIR} apply
+if [[ -z "$SKIP_TRIGGERS" ]]; then
+    REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?\project=${OPS_PROJECT_ID}"
+    echo "Connect your repos: ${REPO_CONNECT_URL}"
+    read -p "Once your repo is connected, please continue by typing any key."
+    continue=1
+    while [[ ${continue} -gt 0 ]]
+    do
+
+        read -p "Please input the repo owner [GoogleCloudPlatform]: " REPO_OWNER
+        repo_owner=${repo_owner:-GoogleCloudPlatform}
+        read -p "Please input the repo name [emblem]: " REPO_NAME
+        repo_name=${repo_name:-emblem}
+
+        read -p "Is this the correct repo: ${REPO_OWNER}/${REPO_NAME}? (y/n) " yesno
+
+        if [[ ${yesno} == "y" ]]
+            then continue=0
+        fi
+
+    done
+
+    export TF_VAR_project_id=${OPS_PROJECT_ID}
+    export TF_VAR_deploy_triggers="true"
+    export TF_VAR_repo_name=${REPO_NAME}
+    export TF_VAR_repo_owner=${REPO_OWNER}
+    terraform -chdir=${OPS_ENVIRONMENT_DIR} apply
+    terraform -chdir=${OPS_ENVIRONMENT_DIR} apply
+
+fi
