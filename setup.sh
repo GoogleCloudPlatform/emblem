@@ -60,7 +60,6 @@ terraform init -var google_ops_project_id="${OPS_PROJECT}"
 if [[ -n "${IMPORT_IAM}" ]]; then
     terraform import \
         google_project_iam_member.pubsub_publisher_iam_member \
-        -var google_ops_project_id="${OPS_PROJECT}" \
         "${OPS_PROJECT}"
 fi
 
