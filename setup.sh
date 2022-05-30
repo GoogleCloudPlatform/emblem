@@ -53,7 +53,7 @@ fi
 
 ## Ops Project ##
 pushd terraform/ops
-terraform init
+terraform init -var google_ops_project_id="${OPS_PROJECT}"
 
 # Import existing IAM resources
 # (rather than creating them programmatically)
