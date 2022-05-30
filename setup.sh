@@ -98,7 +98,8 @@ if [[ -n "${IMPORT_IAM}" ]]; then
     terraform import module.application.google_project_iam_member.cloudbuild_role_run_admin "${OPS_PROJECT}"
 fi
 
-terraform apply --auto-approve 
+terraform apply --auto-approve \
+    -var google_ops_project_id="${OPS_PROJECT}"
 
 # Firestore requires App Engine for automatic provisioning.
 # App Engine is not compatible with terraform destroy.
