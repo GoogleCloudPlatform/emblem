@@ -90,10 +90,7 @@ terraform init --backend-config "path=./stage.tfstate" -reconfigure
 # Note: If AppEngine is in a different region than Cloud Run or in the wrong mode 
 # (Datastore vs Firestore), this could cause latency or query compatibility issues.
 
-terraform import \
-    module.application.google_app_engine_application.main \
-    "${PROD_PROJECT}" \
-    2>/dev/null || true
+
 terraform import \
     module.application.google_app_engine_application.main \
     "${STAGE_PROJECT}" \
@@ -102,9 +99,6 @@ terraform import \
 # Import existing IAM resources
 # (rather than creating them programmatically)
 if [[ -n "${IMPORT_IAM}" ]]; then
-    terraform import \
-        google_project_iam_member.cloudbuild_role_run_admin \
-        "${PROD_PROJECT} roles/run.admin serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
     terraform import \
         google_project_iam_member.cloudbuild_role_run_admin \
         "${STAGE_PROJECT} roles/run.admin serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
@@ -130,8 +124,21 @@ google_project_id = "${PROD_PROJECT}"
 EOF
 
 terraform init --backend-config "path=./prod.tfstate" -reconfigure
-terraform import module.application.google_app_engine_application.main "${PROD_PROJECT}" 2>/dev/null || true
-terraform apply --auto-approve 
+terraform import \
+    module.application.google_app_engine_application.main \
+    "${STAGE_PROJECT}" \
+    2>/dev/null || true
+
+# Import existing IAM resources
+# (rather than creating them programmatically)
+if [[ -n "${IMPORT_IAM}" ]]; then
+    terraform import \
+        google_project_iam_member.cloudbuild_role_run_admin \
+        "${STAGE_PROJECT} roles/run.admin serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+fi
+
+terraform apply --auto-approve \
+    -var google_ops_project_id="${OPS_PROJECT}"
 terraform state rm module.application.google_app_engine_application.main || true
 fi
     
