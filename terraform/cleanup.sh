@@ -108,6 +108,11 @@ APP_PROJECTS=(
 
 pushd terraform/app
 for proj in ${APP_PROJECTS[@]}; do
+    cat > terraform.tfvars <<EOF
+google_ops_project_id = "${OPS_PROJECT}"
+google_project_id = "${STAGE_PROJECT}"
+EOF
+
     terraform init
     terraform apply \
         -destroy --auto-approve \
