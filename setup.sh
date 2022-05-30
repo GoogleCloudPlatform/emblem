@@ -45,6 +45,9 @@ elif [[ -z "${OPS_PROJECT}" ]]; then
     exit 1
 fi
 
+PROD_PROJECT_NUMBER="$(gcloud projects describe $PROD_PROJECT --format 'value(projectNumber)')"
+STAGE_PROJECT_NUMBER="$(gcloud projects describe $STAGE_PROJECT --format 'value(projectNumber)')"
+OPS_PROJECT_NUMBER="$(gcloud projects describe $OPS_PROJECT --format 'value(projectNumber)')"
 
 ######################
 # Terraform Projects #
@@ -59,9 +62,9 @@ terraform init -var google_ops_project_id="${OPS_PROJECT}"
 # (rather than creating them programmatically)
 if [[ -n "${IMPORT_IAM}" ]]; then
     terraform import \
-        google_project_iam_member.pubsub_publisher_iam_member \
         -var google_ops_project_id="${OPS_PROJECT}" \
-        "${OPS_PROJECT}"
+        google_project_iam_member.pubsub_publisher_iam_member \
+        "${OPS_PROJECT} roles/pubsub.publisher serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
 fi
 
 terraform apply --auto-approve \
