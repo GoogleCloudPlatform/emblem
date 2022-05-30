@@ -95,8 +95,12 @@ terraform import module.application.google_app_engine_application.main "${STAGE_
 # Import existing IAM resources
 # (rather than creating them programmatically)
 if [[ -n "${IMPORT_IAM}" ]]; then
-    terraform import module.application.google_project_iam_member.cloudbuild_role_run_admin "${STAGE_PROJECT}"
-    terraform import module.application.google_project_iam_member.cloudbuild_role_run_admin "${OPS_PROJECT}"
+    terraform import \
+        module.application.google_project_iam_member.cloudbuild_role_run_admin \
+        "${PROD_PROJECT} roles/run.admin serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+    terraform import \
+        module.application.google_project_iam_member.cloudbuild_role_run_admin \
+        "${STAGE_PROJECT} roles/run.admin serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
 fi
 
 terraform apply --auto-approve \
