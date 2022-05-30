@@ -9,6 +9,13 @@ resource "google_project_service" "artifactregistry" {
   provider = google-beta
 }
 
+resource "google_project_service" "appengine" {
+  service = "appengine.googleapis.com"
+  project = data.google_project.main.project_id
+  # Artifact Registry is only available in the Beta provider.
+  provider = google-beta
+}
+
 resource "google_project_service" "cloudbuild" {
   service = "cloudbuild.googleapis.com"
   project = data.google_project.main.project_id
