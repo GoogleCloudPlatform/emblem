@@ -43,6 +43,19 @@ gcloud pubsub topics delete gcr \
 gcloud pubsub topics delete nightly_builds \
     --project "$OPS_PROJECT" \
     || true
+gcloud pubsub topics delete "canary-${PROD_PROJECT}" \
+    --project "$OPS_PROJECT" \
+    || true
+gcloud pubsub topics delete "deploy-${PROD_PROJECT}" \
+    --project "$OPS_PROJECT" \
+    || true
+
+gcloud pubsub topics delete "canary-${STAGE_PROJECT}" \
+    --project "$OPS_PROJECT" \
+    || true
+gcloud pubsub topics delete "deploy-${STAGE_PROJECT}" \
+    --project "$OPS_PROJECT" \
+    || true
 
 gcloud pubsub topics delete "canary-${PROD_PROJECT}" \
     --project "$OPS_PROJECT" \
