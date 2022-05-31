@@ -49,6 +49,8 @@ PROD_PROJECT_NUMBER="$(gcloud projects describe $PROD_PROJECT --format 'value(pr
 STAGE_PROJECT_NUMBER="$(gcloud projects describe $STAGE_PROJECT --format 'value(projectNumber)')"
 OPS_PROJECT_NUMBER="$(gcloud projects describe $OPS_PROJECT --format 'value(projectNumber)')"
 
+CBSA_SA="serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+
 ######################
 # Terraform Projects #
 ######################
@@ -65,7 +67,7 @@ if [[ -n "${IMPORT_IAM}" ]]; then
     terraform import \
         -var google_ops_project_id="${OPS_PROJECT}" \
         google_project_iam_member.pubsub_publisher_iam_member \
-        "${OPS_PROJECT} roles/pubsub.publisher serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+        "${OPS_PROJECT} roles/pubsub.publisher ${CBSA_SA}"
 fi
 
 terraform apply --auto-approve \
@@ -103,10 +105,10 @@ terraform import \
 if [[ -n "${IMPORT_IAM}" ]]; then
     terraform import \
         google_project_iam_member.cloudbuild_role_run_admin \
-        "${STAGE_PROJECT} roles/run.admin serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+        "${STAGE_PROJECT} roles/run.admin ${CBSA_SA}"
     terraform import \
         google_project_iam_member.cloudbuild_role_service_account_user \
-        "${STAGE_PROJECT} roles/iam.serviceAccountUser serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+        "${STAGE_PROJECT} roles/iam.serviceAccountUser ${CBSA_SA}"
     terraform import \
         module.application.google_service_account.cloud_run_manager \
         "projects/${STAGE_PROJECT}/serviceAccounts/cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"
@@ -121,7 +123,7 @@ if [[ -n "${IMPORT_IAM}" ]]; then
         "${STAGE_PROJECT}/${STAGE_PROJECT}-sessions"
     terraform import \
         module.application.google_storage_bucket_iam_member \
-        "b/${STAGE_PROJECT}-sessions roles/storage.objectAdmin"
+        "b/${STAGE_PROJECT}-sessions roles/storage.objectAdmin ${CBSA_SA}"
 fi
 
 terraform apply --auto-approve \
@@ -157,10 +159,10 @@ terraform import \
 if [[ -n "${IMPORT_IAM}" ]]; then
     terraform import \
         google_project_iam_member.cloudbuild_role_run_admin \
-        "${PROD_PROJECT} roles/run.admin serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+        "${PROD_PROJECT} roles/run.admin ${CBSA_SA}"
     terraform import \
         google_project_iam_member.cloudbuild_role_service_account_user \
-        "${PROD_PROJECT} roles/iam.serviceAccountUser serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+        "${PROD_PROJECT} roles/iam.serviceAccountUser ${CBSA_SA}"
     terraform import \
         module.application.google_service_account.cloud_run_manager \
         "projects/${PROD_PROJECT}/serviceAccounts/cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com"
@@ -175,7 +177,7 @@ if [[ -n "${IMPORT_IAM}" ]]; then
         "${PROD_PROJECT}/${PROD_PROJECT}-sessions"
     terraform import \
         module.application.google_storage_bucket_iam_member \
-        "b/${PROD_PROJECT}-sessions roles/storage.objectAdmin"
+        "b/${PROD_PROJECT}-sessions roles/storage.objectAdmin ${CBSA_SA}"
 fi
 
 terraform apply --auto-approve \
