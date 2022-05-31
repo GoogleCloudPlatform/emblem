@@ -106,8 +106,14 @@ if [[ -n "${IMPORT_IAM}" ]]; then
         google_project_iam_member.cloudbuild_role_service_account_user \
         "${STAGE_PROJECT} roles/iam.serviceAccountUser serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
     terraform import \
-        module.application.google_service_account.website_manager \
+        module.application.google_service_account.cloud_run_manager \
         "projects/${STAGE_PROJECT}/serviceAccounts/cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"
+    terraform import \
+        module.application.google_service_account.website_manager \
+        "projects/${STAGE_PROJECT}/serviceAccounts/website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"
+    terraform import \
+        module.application.google_service_account.api_manager \
+        "projects/${STAGE_PROJECT}/serviceAccounts/api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"
 fi
 
 terraform apply --auto-approve \
@@ -147,8 +153,14 @@ if [[ -n "${IMPORT_IAM}" ]]; then
         google_project_iam_member.cloudbuild_role_service_account_user \
         "${PROD_PROJECT} roles/iam.serviceAccountUser serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
     terraform import \
+        module.application.google_service_account.cloud_run_manager \
+        "projects/${PROD_PROJECT}/serviceAccounts/cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com"
+    terraform import \
         module.application.google_service_account.website_manager \
-        "projects/${PROD_PROJECT}/serviceAccounts/cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"
+        "projects/${PROD_PROJECT}/serviceAccounts/website-manager@${PROD_PROJECT}.iam.gserviceaccount.com"
+    terraform import \
+        module.application.google_service_account.api_manager \
+        "projects/${PROD_PROJECT}/serviceAccounts/api-manager@${PROD_PROJECT}.iam.gserviceaccount.com"
 fi
 
 terraform apply --auto-approve \
