@@ -114,6 +114,9 @@ if [[ -n "${IMPORT_IAM}" ]]; then
     terraform import \
         module.application.google_service_account.api_manager \
         "projects/${STAGE_PROJECT}/serviceAccounts/api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"
+    terraform import \
+        module.application.google_storage_bucket.sessions \
+        "$[STAGE_PROJECT}/sessions"
 fi
 
 terraform apply --auto-approve \
@@ -161,6 +164,9 @@ if [[ -n "${IMPORT_IAM}" ]]; then
     terraform import \
         module.application.google_service_account.api_manager \
         "projects/${PROD_PROJECT}/serviceAccounts/api-manager@${PROD_PROJECT}.iam.gserviceaccount.com"
+    terraform import \
+        module.application.google_storage_bucket.sessions \
+        "$[PROD_PROJECT}/sessions"
 fi
 
 terraform apply --auto-approve \
