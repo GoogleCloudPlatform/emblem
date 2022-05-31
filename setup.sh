@@ -104,7 +104,7 @@ if [[ -n "${IMPORT_IAM}" ]]; then
         "${STAGE_PROJECT} roles/run.admin serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
     terraform import \
         module.application.google_service_account.website_manager \
-        "projects/${STAGE_PROJECT}/serviceAccounts/cloud-run-manager@${STAGE_PROJECT}.gserviceaccount.com"
+        "projects/${STAGE_PROJECT}/serviceAccounts/cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"
 fi
 
 terraform apply --auto-approve \
@@ -142,7 +142,7 @@ if [[ -n "${IMPORT_IAM}" ]]; then
         "${PROD_PROJECT} roles/run.admin serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
     terraform import \
         module.application.google_service_account.website_manager \
-        "projects/${PROD_PROJECT}/serviceAccounts/cloud-run-manager@${STAGE_PROJECT}.gserviceaccount.com"
+        "projects/${PROD_PROJECT}/serviceAccounts/cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"
 fi
 
 terraform apply --auto-approve \
