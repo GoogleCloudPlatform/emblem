@@ -123,7 +123,7 @@ if [[ -n "${IMPORT_IAM}" ]]; then
         "${STAGE_PROJECT}/${STAGE_PROJECT}-sessions"
     terraform import \
         module.application.google_storage_bucket_iam_member.sessions-iam \
-        "${STAGE_PROJECT}-sessions roles/storage.objectAdmin serviceAccount:website-manager@${PROD_PROJECT}.iam.gserviceaccount.com"
+        "${STAGE_PROJECT}-sessions roles/storage.objectAdmin serviceAccount:website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"
 fi
 
 terraform apply --auto-approve \
