@@ -122,7 +122,7 @@ if [[ -n "${IMPORT_IAM}" ]]; then
         module.application.google_storage_bucket.sessions \
         "${STAGE_PROJECT}/${STAGE_PROJECT}-sessions"
     terraform import \
-        module.application.google_storage_bucket_iam_member \
+        module.application.google_storage_bucket_iam_member.sessions-iam \
         "b/${STAGE_PROJECT}-sessions roles/storage.objectAdmin ${CBSA_SA}"
 fi
 
@@ -176,7 +176,7 @@ if [[ -n "${IMPORT_IAM}" ]]; then
         module.application.google_storage_bucket.sessions \
         "${PROD_PROJECT}/${PROD_PROJECT}-sessions"
     terraform import \
-        module.application.google_storage_bucket_iam_member \
+        module.application.google_storage_bucket_iam_member.sessions-iam \
         "b/${PROD_PROJECT}-sessions roles/storage.objectAdmin ${CBSA_SA}"
 fi
 
