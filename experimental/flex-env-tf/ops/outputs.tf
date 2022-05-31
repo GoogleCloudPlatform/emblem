@@ -9,6 +9,8 @@ output "artifact_registry" {
   value = {
     "api"     = google_artifact_registry_repository.api_docker.name
     "website" = google_artifact_registry_repository.website_docker.name
+    "e2e-runner"   = google_artifact_registry_repository.e2e_runner_docker.name
+    "e2e-deployer" = google_artifact_registry_repository.e2e_deployer_docker.name
   }
   description = "Application Artifact Registries"
 }

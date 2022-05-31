@@ -68,6 +68,11 @@ gcloud artifacts repositories delete e2e-runner \
     --location "$REGION" \
     -q \
     || true
+gcloud artifacts repositories delete e2e-deployer \
+    --project "$OPS_PROJECT" \
+    --location "$REGION" \
+    -q \
+    || true
 
 # Service accounts
 gcloud iam service-accounts delete \
