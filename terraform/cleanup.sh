@@ -115,7 +115,7 @@ popd
 
 # Remove existing Terraform state (Part 2)
 APP_PROJECTS=(
-    "${STAGE_PROJECT}",
+    "${STAGE_PROJECT}"
     "${PROD_PROJECT}"
 )
 
