@@ -103,6 +103,9 @@ if [[ -n "${IMPORT_IAM}" ]]; then
         google_project_iam_member.cloudbuild_role_run_admin \
         "${STAGE_PROJECT} roles/run.admin serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
     terraform import \
+        google_project_iam_member.cloudbuild_role_run_admin \
+        "${STAGE_PROJECT} roles/iam.serviceAccountUser serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+    terraform import \
         module.application.google_service_account.website_manager \
         "projects/${STAGE_PROJECT}/serviceAccounts/cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"
 fi
@@ -140,6 +143,9 @@ if [[ -n "${IMPORT_IAM}" ]]; then
     terraform import \
         google_project_iam_member.cloudbuild_role_run_admin \
         "${PROD_PROJECT} roles/run.admin serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+    terraform import \
+        google_project_iam_member.cloudbuild_role_run_admin \
+        "${PROD_PROJECT} roles/iam.serviceAccountUser serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
     terraform import \
         module.application.google_service_account.website_manager \
         "projects/${PROD_PROJECT}/serviceAccounts/cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"
