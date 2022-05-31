@@ -102,6 +102,9 @@ if [[ -n "${IMPORT_IAM}" ]]; then
     terraform import \
         google_project_iam_member.cloudbuild_role_run_admin \
         "${STAGE_PROJECT} roles/run.admin serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+    terraform import \
+        google_service_account.website_manager \
+        "projects/${STAGE_PROJECT}/serviceAccounts/cloud-run-manager@${STAGE_PROJECT}.gserviceaccount.com"
 fi
 
 terraform apply --auto-approve \
@@ -115,7 +118,9 @@ terraform apply --auto-approve \
 terraform state rm module.application.google_app_engine_application.main || true
 
 
+##################
 ## Prod Project ##
+##################
 if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
 # Set Prod Variables
 cat > terraform.tfvars <<EOF
@@ -126,7 +131,7 @@ EOF
 terraform init --backend-config "path=./prod.tfstate" -reconfigure
 terraform import \
     module.application.google_app_engine_application.main \
-    "${STAGE_PROJECT}" \
+    "${PROD_PROJECT}" \
     2>/dev/null || true
 
 # Import existing IAM resources
@@ -134,7 +139,10 @@ terraform import \
 if [[ -n "${IMPORT_IAM}" ]]; then
     terraform import \
         google_project_iam_member.cloudbuild_role_run_admin \
-        "${STAGE_PROJECT} roles/run.admin serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+        "${PROD_PROJECT} roles/run.admin serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+    terraform import \
+        google_service_account.website_manager \
+        "projects/${PROD_PROJECT}/serviceAccounts/cloud-run-manager@${STAGE_PROJECT}.gserviceaccount.com"
 fi
 
 terraform apply --auto-approve \
