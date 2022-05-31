@@ -119,6 +119,9 @@ if [[ -n "${IMPORT_IAM}" ]]; then
     terraform import \
         module.application.google_storage_bucket.sessions \
         "${STAGE_PROJECT}/${STAGE_PROJECT}-sessions"
+    terraform import \
+        module.application.google_storage_bucket_iam_member \
+        "b/${STAGE_PROJECT}-sessions roles/storage.objectAdmin"
 fi
 
 terraform apply --auto-approve \
@@ -170,6 +173,9 @@ if [[ -n "${IMPORT_IAM}" ]]; then
     terraform import \
         module.application.google_storage_bucket.sessions \
         "${PROD_PROJECT}/${PROD_PROJECT}-sessions"
+    terraform import \
+        module.application.google_storage_bucket_iam_member \
+        "b/${PROD_PROJECT}-sessions roles/storage.objectAdmin"
 fi
 
 terraform apply --auto-approve \
