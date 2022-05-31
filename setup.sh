@@ -31,7 +31,7 @@ SKIP_TRIGGERS=${SKIP_TRIGGERS:-}
 SKIP_AUTH=${SKIP_AUTH:-}
 IMPORT_IAM=${IMPORT_IAM:-}
 
-set -eu
+set -eux
 
 # Check env variables are not empty strings
 if [[ -z "${PROD_PROJECT}" ]]; then
