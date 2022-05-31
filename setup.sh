@@ -96,7 +96,7 @@ terraform init --backend-config "path=./stage.tfstate" -reconfigure
 terraform import \
     module.application.google_app_engine_application.main \
     "${STAGE_PROJECT}" \
-    2>/dev/null || true
+    || true
 
 # Import existing IAM resources
 # (rather than creating them programmatically)
@@ -150,7 +150,7 @@ terraform init --backend-config "path=./prod.tfstate" -reconfigure
 terraform import \
     module.application.google_app_engine_application.main \
     "${PROD_PROJECT}" \
-    2>/dev/null || true
+    || true
 
 # Import existing IAM resources
 # (rather than creating them programmatically)
