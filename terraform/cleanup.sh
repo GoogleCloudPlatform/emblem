@@ -13,6 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+REGION="${REGION:-us-central1}"
+
+# Check env variables are not empty strings
+if [[ -z "${PROD_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
+    exit 1
+elif [[ -z "${STAGE_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)STAGE_PROJECT$(tput sgr0) variable"
+    exit 1
+elif [[ -z "${OPS_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)OPS_PROJECT$(tput sgr0) variable"
+    exit 1
+fi
+
 #########################################
 #   This script deletes resources not   #
 # deleted by `terraform apply -destroy` #
@@ -24,58 +38,84 @@ echo "###################################################"
 
 # Pub/Sub topics
 gcloud pubsub topics delete gcr \
-    --project ${OPS_PROJECT} \
+    --project "$OPS_PROJECT" \
     || true
 gcloud pubsub topics delete nightly_builds \
-    --project ${OPS_PROJECT} \
+    --project "$OPS_PROJECT" \
     || true
 
 # Artifact Registry repositories
 gcloud artifacts repositories delete website \
-    --project ${OPS_PROJECT} \
-    --location ${REGION} \
+    --project "$OPS_PROJECT" \
+    --location "$REGION" \
     -q \
     || true
 gcloud artifacts repositories delete content-api \
-    --project ${OPS_PROJECT} \
-    --location ${REGION} \
+    --project "$OPS_PROJECT" \
+    --location "$REGION" \
     -q \
     || true
 gcloud artifacts repositories delete e2e-runner \
-    --project ${OPS_PROJECT} \
-    --location ${REGION} \
+    --project "$OPS_PROJECT" \
+    --location "$REGION" \
     -q \
     || true
 
 # Service accounts
 gcloud iam service-accounts delete \
-    website-test-user@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --project ${OPS_PROJECT} \
+    "website-test-user@${OPS_PROJECT}.iam.gserviceaccount.com" \
+    --project "$OPS_PROJECT" \
     -q \
     || true
 gcloud iam service-accounts delete \
-    website-test-approver@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --project ${OPS_PROJECT} \
+    "website-test-approver@${OPS_PROJECT}.iam.gserviceaccount.com" \
+    --project "$OPS_PROJECT" \
     -q \
     || true
 
 # Secrets
 # (QUESTION: this will brick auth; **should** we delete these?)
 gcloud secrets delete client_id_secret \
-    --project ${OPS_PROJECT} \
+    --project "$OPS_PROJECT" \
     -q \
     || true
 gcloud secrets delete client_secret_secret \
-    --project ${OPS_PROJECT} \
+    --project "$OPS_PROJECT" \
     -q \
     || true
 
 # Cloud Scheduler jobs
 gcloud scheduler jobs delete nightly-builds \
-    --project ${OPS_PROJECT} \
-    --location ${REGION} \
+    --project "$OPS_PROJECT" \
+    --location "$REGION" \
     -q \
     || true
+
+# Remove existing Terraform state (Part 1)
+pushd "terraform/ops"
+terraform init
+terraform apply \
+    -destroy --auto-approve \
+    -var google_ops_project_id="${OPS_PROJECT}" \
+    || true
+popd
+
+# Remove existing Terraform state (Part 2)
+APP_PROJECTS=(
+    "${STAGE_PROJECT}",
+    "${PROD_PROJECT}"
+)
+
+pushd terraform/app
+for proj in ${APP_PROJECTS[@]}; do
+    terraform init
+    terraform apply \
+        -destroy --auto-approve \
+        -var google_ops_project_id="${OPS_PROJECT}" \
+        -var google_project_id="${proj}" \
+        || true
+done
+popd
 
 echo "###################################################"
 echo "#                   End cleanup                   #"
