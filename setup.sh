@@ -51,7 +51,7 @@ fi
 
 ## Ops Project ##
 pushd terraform/ops
-terraform init
+terraform init -var google_ops_project_id="${OPS_PROJECT}"
 terraform apply --auto-approve \
     -var google_ops_project_id="${OPS_PROJECT}" 
 popd
