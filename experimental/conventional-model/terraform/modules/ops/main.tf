@@ -60,7 +60,7 @@ resource "google_artifact_registry_repository" "api_docker" {
   ]
 }
 
-resource "google_artifact_registry_repository" "e2e_runner_docker" {
+resource "google_artifact_registry_repository" "e2e_testing_docker" {
   format        = "DOCKER"
   location      = var.region
   repository_id = "e2e-runner"
@@ -75,7 +75,7 @@ resource "google_artifact_registry_repository" "e2e_runner_docker" {
 resource "google_artifact_registry_repository" "e2e_deployer_docker" {
   format        = "DOCKER"
   location      = var.region
-  repository_id = "e2e-deployer"
+  repository_id = "e2e-testing"
   project       = data.google_project.main.project_id
   provider      = google-beta
 
