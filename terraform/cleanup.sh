@@ -43,6 +43,19 @@ gcloud pubsub topics delete gcr \
 gcloud pubsub topics delete nightly_builds \
     --project "$OPS_PROJECT" \
     || true
+gcloud pubsub topics delete "canary-${PROD_PROJECT}" \
+    --project "$OPS_PROJECT" \
+    || true
+gcloud pubsub topics delete "deploy-${PROD_PROJECT}" \
+    --project "$OPS_PROJECT" \
+    || true
+
+gcloud pubsub topics delete "canary-${STAGE_PROJECT}" \
+    --project "$OPS_PROJECT" \
+    || true
+gcloud pubsub topics delete "deploy-${STAGE_PROJECT}" \
+    --project "$OPS_PROJECT" \
+    || true
 
 # Artifact Registry repositories
 gcloud artifacts repositories delete website \
@@ -102,7 +115,7 @@ popd
 
 # Remove existing Terraform state (Part 2)
 APP_PROJECTS=(
-    "${STAGE_PROJECT}",
+    "${STAGE_PROJECT}"
     "${PROD_PROJECT}"
 )
 
