@@ -43,12 +43,6 @@ elif [[ -z "${OPS_PROJECT}" ]]; then
     exit 1
 fi
 
-PROD_PROJECT_NUMBER="$(gcloud projects describe $PROD_PROJECT --format 'value(projectNumber)')"
-STAGE_PROJECT_NUMBER="$(gcloud projects describe $STAGE_PROJECT --format 'value(projectNumber)')"
-OPS_PROJECT_NUMBER="$(gcloud projects describe $OPS_PROJECT --format 'value(projectNumber)')"
-
-CBSA_SA="serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
-
 ######################
 # Terraform Projects #
 ######################
