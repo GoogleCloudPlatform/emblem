@@ -31,9 +31,21 @@ This was largely due to organization-level constraints that make it difficult (i
 
 ### Expected Consequences
 
+#### Flakiness
 This may cause a higher degree of CI pipeline flakiness, in both directions.
 * **False passes** may occur if tests depend on GCP resources within a project that are undeclared in Terraform.
 * **False failures** may occur if the project's previous state breaks our tools'/Terraform's attempts at automated state management.
+
+#### Nightly builds only
+In our experience as a team, we've found that managing pools of long-lived GCP projects can be complicated.
+
+Without pooling or ephemeral project creation, there's no way to parallelize multiple `presubmit` builds.
+
+Thus, we decided to avoid `presubmit` builds for Delivery testing and use `nightly` builds instead.
+
+### Revision Criteria
+
+At the time of writing, the main reason to revise this decision would be if we decide that **Delivery tests should be ran as `presubmit`s**.
 
 ## Links
 
