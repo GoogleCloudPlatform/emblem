@@ -29,7 +29,13 @@
 SKIP_TRIGGERS=${SKIP_TRIGGERS:-}
 SKIP_AUTH=${SKIP_AUTH:-}
 
-set -eu
+PROD_PROJECT_NUMBER="$(gcloud projects describe $PROD_PROJECT --format 'value(projectNumber)')"
+STAGE_PROJECT_NUMBER="$(gcloud projects describe $STAGE_PROJECT --format 'value(projectNumber)')"
+OPS_PROJECT_NUMBER="$(gcloud projects describe $OPS_PROJECT --format 'value(projectNumber)')"
+
+CBSA_SA="serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+
+set -eux
 
 # Check env variables are not empty strings
 if [[ -z "${PROD_PROJECT}" ]]; then
