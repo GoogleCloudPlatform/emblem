@@ -130,12 +130,6 @@ gcloud secrets delete client_secret_secret \
     -q \
     || true
 
-# Cloud Storage buckets for session data
-# (QUESTION: these are supposed to be **temporary**, right? )
-# (          If not, maybe we shouldn't delete them         )
-gsutil rm -r "gs://${PROD_PROJECT}-sessions" || true
-gsutil rm -r "gs://${STAGE_PROJECT}-sessions" || true
-
 # Cloud Scheduler jobs
 gcloud scheduler jobs delete nightly-builds \
     --project "$OPS_PROJECT" \

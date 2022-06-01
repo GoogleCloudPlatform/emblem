@@ -94,11 +94,14 @@ terraform init --backend-config "path=./stage.tfstate" -reconfigure
 # Note: If AppEngine is in a different region than Cloud Run or in the wrong mode 
 # (Datastore vs Firestore), this could cause latency or query compatibility issues.
 
-
 terraform import \
     module.application.google_app_engine_application.main \
     "${STAGE_PROJECT}" \
     || true
+
+terraform import \
+    module.application.google_storage_bucket.sessions \
+    "${STAGE_PROJECT}-sessions"
 
 # Import existing IAM resources
 # (rather than creating them programmatically)
@@ -153,6 +156,10 @@ terraform import \
     module.application.google_app_engine_application.main \
     "${PROD_PROJECT}" \
     || true
+
+terraform import \
+    module.application.google_storage_bucket.sessions \
+    "${PROD_PROJECT}-sessions"
 
 # Import existing IAM resources
 # (rather than creating them programmatically)
