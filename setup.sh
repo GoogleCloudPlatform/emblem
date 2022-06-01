@@ -76,6 +76,15 @@ terraform init --backend-config "path=./stage.tfstate" -reconfigure
 # (Datastore vs Firestore), this could cause latency or query compatibility issues.
 
 terraform import module.application.google_app_engine_application.main "${STAGE_PROJECT}" 2>/dev/null || true
+
+# Import the session data bucket
+#
+# This bucket should already exist in the project.
+# If it doesn't, use the following command to create it:
+#
+#     gsutil mb "gs://${STAGE_PROJECT}-sessions"
+terraform import module.application.google_storage_bucket.sessions "${STAGE_PROJECT}-sessions"
+
 terraform apply --auto-approve 
 
 # Firestore requires App Engine for automatic provisioning.
@@ -96,6 +105,7 @@ EOF
 
 terraform init --backend-config "path=./prod.tfstate" -reconfigure
 terraform import module.application.google_app_engine_application.main "${PROD_PROJECT}" 2>/dev/null || true
+terraform import module.application.google_storage_bucket.sessions "${PROD_PROJECT}-sessions"
 terraform apply --auto-approve 
 terraform state rm module.application.google_app_engine_application.main || true
 fi
