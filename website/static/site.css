@@ -243,6 +243,16 @@ img.emblem-avatar {
   padding-top: 5px;
 }
 
+select.emblem-new-campaign-input {
+  padding: 15px;
+  border: none;
+  border-bottom: 1px solid #757575;
+  color: #505050;
+  font-size: 15px;
+  outline-width: 0;
+  appearance: inherit;
+}
+
 .emblem-new-campaign-input {
   display: flex;
   align-items: center;
