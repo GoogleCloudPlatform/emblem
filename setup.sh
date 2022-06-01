@@ -75,17 +75,17 @@ terraform init --backend-config "path=./stage.tfstate" -reconfigure
 # Note: If AppEngine is in a different region than Cloud Run or in the wrong mode 
 # (Datastore vs Firestore), this could cause latency or query compatibility issues.
 
-terraform import \
-    module.application.google_app_engine_application.main \
-    "${STAGE_PROJECT}" \
-    || true
+terraform import module.application.google_app_engine_application.main "${STAGE_PROJECT}" 2>/dev/null || true
 
-terraform import \
-    module.application.google_storage_bucket.sessions \
-    "${STAGE_PROJECT}-sessions"
+# Import the session data bucket
+#
+# This bucket should already exist in the project.
+# If it doesn't, use the following command to create it:
+#
+#     gsutil mb "gs://${STAGE_PROJECT}-sessions"
+terraform import module.application.google_storage_bucket.sessions "${STAGE_PROJECT}-sessions"
 
-terraform apply --auto-approve \
-    -var google_ops_project_id="${OPS_PROJECT}"
+terraform apply --auto-approve -var google_ops_project_id="${OPS_PROJECT}"
 
 # Firestore requires App Engine for automatic provisioning.
 # App Engine is not compatible with terraform destroy.
@@ -106,17 +106,9 @@ google_project_id = "${PROD_PROJECT}"
 EOF
 
 terraform init --backend-config "path=./prod.tfstate" -reconfigure
-terraform import \
-    module.application.google_app_engine_application.main \
-    "${PROD_PROJECT}" \
-    || true
-
-terraform import \
-    module.application.google_storage_bucket.sessions \
-    "${PROD_PROJECT}-sessions"
-
-terraform apply --auto-approve \
-    -var google_ops_project_id="${OPS_PROJECT}"
+terraform import module.application.google_app_engine_application.main "${PROD_PROJECT}" 2>/dev/null || true
+terraform import module.application.google_storage_bucket.sessions "${PROD_PROJECT}-sessions"
+terraform apply --auto-approve -var google_ops_project_id="${OPS_PROJECT}"
 terraform state rm module.application.google_app_engine_application.main || true
 fi
     
