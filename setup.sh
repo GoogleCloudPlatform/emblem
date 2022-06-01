@@ -85,7 +85,7 @@ terraform import module.application.google_app_engine_application.main "${STAGE_
 #     gsutil mb "gs://${STAGE_PROJECT}-sessions"
 terraform import module.application.google_storage_bucket.sessions "${STAGE_PROJECT}-sessions"
 
-terraform apply --auto-approve 
+terraform apply --auto-approve -var google_ops_project_id="${OPS_PROJECT}"
 
 # Firestore requires App Engine for automatic provisioning.
 # App Engine is not compatible with terraform destroy.
@@ -106,7 +106,7 @@ EOF
 terraform init --backend-config "path=./prod.tfstate" -reconfigure
 terraform import module.application.google_app_engine_application.main "${PROD_PROJECT}" 2>/dev/null || true
 terraform import module.application.google_storage_bucket.sessions "${PROD_PROJECT}-sessions"
-terraform apply --auto-approve 
+terraform apply --auto-approve -var google_ops_project_id="${OPS_PROJECT}"
 terraform state rm module.application.google_app_engine_application.main || true
 fi
     
