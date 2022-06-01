@@ -56,7 +56,6 @@ CBSA_SA="serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
 
 ## Ops Project ##
 pushd terraform/ops
-echo '>>>> DBG 1'
 terraform init -var google_ops_project_id="${OPS_PROJECT}"
 
 terraform apply --auto-approve \
@@ -73,7 +72,6 @@ google_ops_project_id = "${OPS_PROJECT}"
 google_project_id = "${STAGE_PROJECT}"
 EOF
 
-echo '>>>> DBG 2'
 terraform init --backend-config "path=./stage.tfstate" -reconfigure 
 # Import App Engine if it already exists in the project. 
 # App Engine cannot be deleted so running terraform in a project with 
@@ -113,7 +111,6 @@ google_ops_project_id = "${OPS_PROJECT}"
 google_project_id = "${PROD_PROJECT}"
 EOF
 
-echo '>>>> DBG 3'
 terraform init --backend-config "path=./prod.tfstate" -reconfigure
 terraform import \
     module.application.google_app_engine_application.main \
@@ -258,7 +255,6 @@ repo_owner = "${repo_owner}"
 repo_name = "${repo_name}"
 EOF
 
-    echo '>>>> DBG 4'
     terraform init
     terraform apply --auto-approve
     popd
