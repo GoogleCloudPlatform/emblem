@@ -63,12 +63,7 @@ gcloud artifacts repositories delete content-api \
     --location "$REGION" \
     -q \
     || true
-gcloud artifacts repositories delete e2e-runner \
-    --project "$OPS_PROJECT" \
-    --location "$REGION" \
-    -q \
-    || true
-gcloud artifacts repositories delete e2e-deployer \
+gcloud artifacts repositories delete e2e-testing \
     --project "$OPS_PROJECT" \
     --location "$REGION" \
     -q \
