@@ -86,6 +86,39 @@ gcloud iam service-accounts delete \
     -q \
     || true
 
+gcloud iam service-accounts delete \
+    "cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+    --project "$STAGE_PROJECT" \
+    -q \
+    || true
+gcloud iam service-accounts delete \
+    "website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+    --project "$STAGE_PROJECT" \
+    -q \
+    || true
+gcloud iam service-accounts delete \
+    "api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+    --project "$STAGE_PROJECT" \
+    -q \
+    || true
+
+gcloud iam service-accounts delete \
+    "cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
+    --project "$PROD_PROJECT" \
+    -q \
+    || true
+gcloud iam service-accounts delete \
+    "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
+    --project "$PROD_PROJECT" \
+    -q \
+    || true
+gcloud iam service-accounts delete \
+    "api-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
+    --project "$PROD_PROJECT" \
+    -q \
+    || true
+
+
 # Secrets
 # (QUESTION: this will brick auth; **should** we delete these?)
 gcloud secrets delete client_id_secret \
