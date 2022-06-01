@@ -104,6 +104,10 @@ gcloud scheduler jobs delete nightly-builds \
     -q \
     || true
 
+# Cloud Storage buckets (for session data)
+gsutil rm -r "gs://${PROD_PROJECT}-sessions" || true
+gsutil rm -r "gs://${STAGE_PROJECT}-sessions" || true
+
 # Remove existing Terraform state (Part 1)
 pushd "terraform/ops"
 terraform init
