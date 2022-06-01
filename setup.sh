@@ -23,13 +23,11 @@
 #   OPS_PROJECT             GCP Project ID of the operations project
 #   SKIP_TRIGGERS           If set, don't set up build triggers
 #   SKIP_AUTH               If set, don't set up auth
-#   IMPORT_IAM              If set, import existing IAM resources instead of creating new ones
 #   REPO_OWNER              GitHub user/organization name (default: GoogleCloudPlatform)
 #   REPO_NAME               GitHub repo name (default: emblem)
 
 SKIP_TRIGGERS=${SKIP_TRIGGERS:-}
 SKIP_AUTH=${SKIP_AUTH:-}
-IMPORT_IAM=${IMPORT_IAM:-}
 
 set -eux
 
@@ -103,32 +101,6 @@ terraform import \
     module.application.google_storage_bucket.sessions \
     "${STAGE_PROJECT}-sessions"
 
-# Import existing IAM resources
-# (rather than creating them programmatically)
-if [[ -n "${IMPORT_IAM}" ]]; then
-    terraform import \
-        google_project_iam_member.cloudbuild_role_run_admin \
-        "${STAGE_PROJECT} roles/run.admin ${CBSA_SA}"
-    terraform import \
-        google_project_iam_member.cloudbuild_role_service_account_user \
-        "${STAGE_PROJECT} roles/iam.serviceAccountUser ${CBSA_SA}"
-    terraform import \
-        module.application.google_service_account.cloud_run_manager \
-        "projects/${STAGE_PROJECT}/serviceAccounts/cloud-run-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"
-    terraform import \
-        module.application.google_service_account.website_manager \
-        "projects/${STAGE_PROJECT}/serviceAccounts/website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"
-    terraform import \
-        module.application.google_service_account.api_manager \
-        "projects/${STAGE_PROJECT}/serviceAccounts/api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"
-    terraform import \
-        module.application.google_storage_bucket.sessions \
-        "${STAGE_PROJECT}/${STAGE_PROJECT}-sessions"
-    terraform import \
-        module.application.google_storage_bucket_iam_member.sessions-iam \
-        "${STAGE_PROJECT}-sessions roles/storage.objectAdmin serviceAccount:website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"
-fi
-
 terraform apply --auto-approve \
     -var google_ops_project_id="${OPS_PROJECT}"
 
@@ -160,32 +132,6 @@ terraform import \
 terraform import \
     module.application.google_storage_bucket.sessions \
     "${PROD_PROJECT}-sessions"
-
-# Import existing IAM resources
-# (rather than creating them programmatically)
-if [[ -n "${IMPORT_IAM}" ]]; then
-    terraform import \
-        google_project_iam_member.cloudbuild_role_run_admin \
-        "${PROD_PROJECT} roles/run.admin ${CBSA_SA}"
-    terraform import \
-        google_project_iam_member.cloudbuild_role_service_account_user \
-        "${PROD_PROJECT} roles/iam.serviceAccountUser ${CBSA_SA}"
-    terraform import \
-        module.application.google_service_account.cloud_run_manager \
-        "projects/${PROD_PROJECT}/serviceAccounts/cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com"
-    terraform import \
-        module.application.google_service_account.website_manager \
-        "projects/${PROD_PROJECT}/serviceAccounts/website-manager@${PROD_PROJECT}.iam.gserviceaccount.com"
-    terraform import \
-        module.application.google_service_account.api_manager \
-        "projects/${PROD_PROJECT}/serviceAccounts/api-manager@${PROD_PROJECT}.iam.gserviceaccount.com"
-    terraform import \
-        module.application.google_storage_bucket.sessions \
-        "${PROD_PROJECT}/${PROD_PROJECT}-sessions"
-    terraform import \
-        module.application.google_storage_bucket_iam_member.sessions-iam \
-        "${PROD_PROJECT}-sessions roles/storage.objectAdmin serviceAccount:website-manager@${PROD_PROJECT}.iam.gserviceaccount.com"
-fi
 
 terraform apply --auto-approve \
     -var google_ops_project_id="${OPS_PROJECT}"
