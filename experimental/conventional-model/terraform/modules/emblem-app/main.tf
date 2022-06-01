@@ -25,19 +25,6 @@ resource "google_app_engine_application" "main" {
   ]
 }
 
-# TODO: narrow scope of IAM permission to only necessary service accounts rather than whole project
-resource "google_project_iam_member" "cloudbuild_role_service_account_user" {
-  role    = "roles/iam.serviceAccountUser"
-  member  = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
-  project = var.project_id
-}
-
-resource "google_project_iam_member" "cloudbuild_role_run_admin" {
-  role    = "roles/run.admin"
-  member  = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
-  project = var.project_id
-}
-
 ###
 # Pipeline Orchestration
 ###

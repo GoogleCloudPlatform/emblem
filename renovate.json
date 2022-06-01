@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "rangeStrategy": "pin",
+  "packageRules": [
+    {
+      "paths": [
+        "client-libs/"
+      ],
+      "rangeStrategy": "replace"
+    },
+    {
+      "paths": [
+        "experimental/"
+      ],
+      "rangeStrategy": "bump"
+    }
+  ]
+}
