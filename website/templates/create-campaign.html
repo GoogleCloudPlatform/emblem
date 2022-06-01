@@ -63,34 +63,6 @@
           <span class="mdc-line-ripple"></span>
         </label>
 
-        <!-- Causes list -->
-        <label class="emblem-new-campaign-input mdc-select mdc-select--filled">
-          <div class="mdc-select__anchor">
-            <span class="mdc-select__ripple"></span>
-            <span class="mdc-select__selected-text"></span>
-            <span class="mdc-select__dropdown-icon">
-              <svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5">
-                <polygon class="mdc-select__dropdown-icon-inactive" stroke="none" fill-rule="evenodd" points="7 10 12 15 17 10">
-                </polygon>
-                <polygon class="mdc-select__dropdown-icon-active" stroke="none" fill-rule="evenodd" points="7 15 12 10 17 15">
-                </polygon>
-              </svg>
-            </span>
-            <span class="mdc-floating-label">Cause for Campaign</span>
-            <span class="mdc-line-ripple"></span>
-          </div>
-          <div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth">
-            <ul class="mdc-list">
-              {% for cause in causes %}
-                <li class="mdc-list-item" data-value="{{ cause.id }}">
-                  <span class="mdc-list-item__ripple"></span>
-                  <span class="mdc-list-item__text">{{ cause.name }}</span>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
-        </label>
-
         <!-- Amount (in USD) -->
         <label class="emblem-new-campaign-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
           <span class="mdc-text-field__ripple"></span>
@@ -106,7 +78,17 @@
           <input required type="text" id="managers" name="managers" class="mdc-text-field__input" aria-labelledby="managers">
           <span class="mdc-line-ripple"></span>
         </label>
-          
+        
+        <!-- Causes list -->
+        <select id="cause" name="cause" class="emblem-new-campaign-input mdc-text-field mdc-text-field--filled mdc-text-field--label-floating">
+          {% for cause in causes %}
+          <option class="mdc-list-item" value="{{ cause.name }}" data-value="{{ cause.id }}">
+            <span class="mdc-list-item__ripple"></span>
+            <span class="mdc-list-item__text">{{ cause.name }}</span>
+          </option>
+          {% endfor %}
+        </select>
+
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
           <div class="emblem-action-buttons mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
             <!-- Submit button -->

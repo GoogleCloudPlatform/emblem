@@ -118,7 +118,6 @@ gcloud iam service-accounts delete \
     -q \
     || true
 
-
 # Secrets
 # (QUESTION: this will brick auth; **should** we delete these?)
 gcloud secrets delete client_id_secret \
