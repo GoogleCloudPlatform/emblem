@@ -2,4 +2,4 @@ flask==2.1.2
 google-cloud-firestore==2.5.2
 gunicorn==20.1.0
 google.auth==1.35.0
-requests==2.26.0
+requests==2.27.1
