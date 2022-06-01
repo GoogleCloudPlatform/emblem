@@ -76,8 +76,6 @@ resource "google_artifact_registry_repository" "e2e_runner_docker" {
 # Secret Manager
 ###
 
-
-
 # OAuth 2.0 secrets
 # These secret resources are REQUIRED, but configuring them is OPTIONAL.
 # To avoid leaking secret data, we set their values directly with `gcloud`.
