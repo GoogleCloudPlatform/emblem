@@ -136,6 +136,7 @@ resource "google_cloud_scheduler_job" "nightly_schedule" {
   project     = var.project_id
   name        = "nightly-builds"
   description = "This job runs all nightly builds"
+  region      = var.region
   schedule    = "*/2 * * * *"
   pubsub_target {
     topic_name = google_pubsub_topic.nightly.id
