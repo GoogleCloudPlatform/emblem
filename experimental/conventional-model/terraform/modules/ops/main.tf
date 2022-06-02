@@ -124,3 +124,25 @@ resource "google_service_account" "website_test_approver" {
   account_id   = "website-test-approver"
   display_name = "Website Test Approver"
 }
+
+# This topic is published to once a day via Cloud Scheduler
+# Its purpose is to trigger "nightly" builds
+resource "google_pubsub_topic" "nightly" {
+  name    = "nightly-builds"
+  project = var.project_id
+}
+
+resource "google_cloud_scheduler_job" "nightly_schedule" {
+  project     = var.project_id
+  name        = "nightly-builds"
+  description = "This job runs all nightly builds"
+  region      = var.region
+  schedule    = "*/2 * * * *"
+  pubsub_target {
+    topic_name = google_pubsub_topic.nightly.id
+    data       = base64encode("not empty")
+  }
+  depends_on = [
+    google_pubsub_topic.nightly
+  ]
+}

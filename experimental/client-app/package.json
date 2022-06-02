@@ -28,7 +28,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.3",
     "http-proxy-middleware": "^2.0.6",
-    "lit": "^2.0.2",
+    "lit": "^2.2.5",
     "morgan": "^1.10.0",
     "pwa-helpers": "^0.9.1"
   },
@@ -51,7 +51,7 @@
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.67.3",
-    "stylelint": "^14.6.0",
+    "stylelint": "^14.8.5",
     "stylelint-config-recommended": "^7.0.0",
     "stylelint-config-styled-components": "^0.1.1",
     "stylelint-processor-styled-components": "^1.10.0"
