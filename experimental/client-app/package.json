@@ -33,7 +33,7 @@
     "pwa-helpers": "^0.9.1"
   },
   "devDependencies": {
-    "@open-wc/eslint-config": "^4.3.0",
+    "@open-wc/eslint-config": "^7.0.0",
     "@open-wc/testing": "next",
     "@rollup/plugin-commonjs": "^21.1.0",
     "@rollup/plugin-image": "^2.1.1",
