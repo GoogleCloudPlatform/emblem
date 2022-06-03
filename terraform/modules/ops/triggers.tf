@@ -110,6 +110,10 @@ resource "google_cloudbuild_trigger" "e2e_runner_push_to_main_build_trigger" {
   }
 }
 
+# TODO: Terraform will always think these resources will change due to 
+# the filename parameter, which is not required, but still populated by
+# the API.  Investigate work-around.
+
 resource "google_cloudbuild_trigger" "e2e_runner_nightly_build_trigger" {
   project = var.project_id
   count   = var.deploy_triggers ? 1 : 0
@@ -129,4 +133,12 @@ resource "google_cloudbuild_trigger" "e2e_runner_nightly_build_trigger" {
     path      = "ops/e2e-runner-build.cloudbuild.yaml"
     repo_type = "GITHUB"
   }
+}
+
+module "environment_build_triggers" {
+  source                  = "./environment-build-triggers"
+  count                   = 0 # disable until fully integrated from ops/pubsub_triggers.sh
+  project_id              = var.project_id
+  environment_project_ids = var.environment_project_ids
+  github_url = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
 }
