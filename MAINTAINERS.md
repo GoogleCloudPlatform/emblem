@@ -22,4 +22,6 @@ We manage project requirements as issues of the "User Journey" type. Once a User
 
 Our top priority for automated testing is end-to-end tests that prove user journey requirements are met. If those tests fail the user journey should be (re-)opened.
 
-Be generous in reference user journeys from other issues and PRs. One of the roles of the User Journey is to serve as a landing page for learners to explore what was involved in satisfying a requirement.
+Be generous in referencing user journeys from issues, PRs, and code.
+The User Journey serves as a "landing page" for learners to explore how a set of
+requirements can be met.

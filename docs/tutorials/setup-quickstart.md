@@ -1,4 +1,5 @@
 # Emblem Quickstart
+<!-- This is a general tutorial that can be used in Cloud Shell or locally. -->
 
 ## Introduction
 
