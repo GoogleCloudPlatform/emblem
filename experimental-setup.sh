@@ -17,10 +17,12 @@ set -eu
 
 # Variable list
 #   PROD_PROJECT_ID         GCP Project ID of the production project
-#   STAGING_PROJECT_ID           GCP Project ID of the staging project
-#   OPS_PROJECT_ID             GCP Project ID of the operations project
+#   STAGING_PROJECT_ID      GCP Project ID of the staging project
+#   OPS_PROJECT_ID          GCP Project ID of the operations project
 #   SKIP_TRIGGERS           If set, don't set up build triggers
 #   SKIP_AUTH               If set, do not prompt to set up auth
+
+export SKIP_TRIGGERS="true" # Force SKIP_TRIGGERS until fully integrated into Terraform ops module
 
 ## Ops Project (minus triggers) ##
 
