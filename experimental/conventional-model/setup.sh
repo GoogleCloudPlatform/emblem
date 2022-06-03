@@ -20,6 +20,7 @@ set -eu
 #   STAGING_PROJECT_ID           GCP Project ID of the staging project
 #   OPS_PROJECT_ID             GCP Project ID of the operations project
 #   SKIP_TRIGGERS           If set, don't set up build triggers
+#   SKIP_AUTH               If set, do not prompt to set up auth
 
 ## Ops Project (minus triggers) ##
 
@@ -129,4 +130,22 @@ if [[ -z "$SKIP_TRIGGERS" ]]; then
 fi
 
 # TODO: Add pubsub_triggers.sh
-# TODO: Add auth setup
+
+## Set up auth ##
+
+if [[ -z "$SKIP_AUTH" ]]; then
+    echo ""
+    read -p "Would you like to configure $(tput bold)$(tput setaf 3)end-user authentication?$(tput sgr0) (y/n) " auth_yesno
+
+    if [[ ${auth_yesno} == "y" ]]; then
+        sh ./scripts/configure_auth.sh
+    else
+        echo "Skipping end-user authentication configuration. You can configure it later by running:"
+        echo ""
+        echo "  export $(tput bold)PROD_PROJECT$(tput sgr0)=$(tput setaf 6)${PROD_PROJECT}$(tput sgr0)"
+        echo "  export $(tput bold)STAGING_PROJECT$(tput sgr0)=$(tput setaf 6)${STAGING_PROJECT}$(tput sgr0)"
+        echo "  export $(tput bold)OPS_PROJECT$(tput sgr0)=$(tput setaf 6)${OPS_PROJECT}$(tput sgr0)"
+        echo "  $(tput setaf 6)sh scripts/configure_auth.sh$(tput sgr0)"
+        echo ""
+    fi
+fi
