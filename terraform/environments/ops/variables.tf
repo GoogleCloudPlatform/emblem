@@ -10,9 +10,9 @@ variable "region" {
 }
 
 variable "deploy_triggers" {
-  type = bool
-  default = false
-  description = ""  
+  type        = bool
+  default     = false
+  description = ""
 }
 
 variable "repo_owner" {
@@ -28,6 +28,6 @@ variable "repo_name" {
 }
 
 variable "environment_project_ids" {
-  type = map(string)
+  type        = map(string)
   description = "Map containing environment names and project IDs"
 }
