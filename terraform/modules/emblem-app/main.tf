@@ -44,12 +44,12 @@ resource "google_project_iam_member" "cloudbuild_role_run_admin" {
 
 resource "google_pubsub_topic" "canary" {
   name    = "canary-${var.project_id}"
-  project = var.project_id
+  project = var.ops_project_id
 }
 
 resource "google_pubsub_topic" "deploy" {
   name    = "deploy-${var.project_id}"
-  project = var.project_id
+  project = var.ops_project_id
 }
 
 # Define user session storage bucket.
