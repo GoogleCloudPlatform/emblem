@@ -34,6 +34,13 @@ resource "time_sleep" "wait_for_artifactregistry" {
   ]
 }
 
+resource "time_sleep" "wait_for_cloud_scheduler" {
+  create_duration = "20s"
+  depends_on = [
+    google_project_service.emblem_ops_services
+  ]
+}
+
 resource "google_artifact_registry_repository" "website_docker" {
   format        = "DOCKER"
   location      = var.region
@@ -143,6 +150,7 @@ resource "google_cloud_scheduler_job" "nightly_schedule" {
     data       = base64encode("not empty")
   }
   depends_on = [
-    google_pubsub_topic.nightly
+    google_pubsub_topic.nightly,
+    time_sleep.wait_for_artifactregistry
   ]
 }
