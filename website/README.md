@@ -4,4 +4,4 @@
 
 The Emblem Website is responsible the user interface of the application.
 
-For more, see the [Website documentation](../docs/website.md).
+For more information, see the [Website documentation](../docs/website.md).
