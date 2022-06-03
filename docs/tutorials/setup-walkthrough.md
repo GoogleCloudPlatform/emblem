@@ -1,4 +1,5 @@
-# Emblem Quickstart
+# Emblem Walkthrough
+<!-- This is an interactive walkthrough for use in Cloud Console. -->
 
 ## Introduction
 
@@ -35,7 +36,7 @@ unset GOOGLE_APPLICATION_CREDENTIALS
 
 ## Set projects
 
-Emblem uses three projects: `prod`, `stage`, and `ops`. 
+Emblem uses three projects: `prod`, `stage`, and `ops`.
 
 You can use existing Google Cloud projects or create new projects. Choose either **Select existing projects** or **Create new projects** below and follow the instructions.
 
