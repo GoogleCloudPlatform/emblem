@@ -26,8 +26,9 @@ set -eu
 
 OPS_ENVIRONMENT_DIR=terraform/environments/ops
 export TF_VAR_project_id=${OPS_PROJECT_ID}
+export TF_VAR_environment_project_ids="{\"prod\" = \"${PROD_PROJECT_ID}\", \"staging\" = \"${STAGING_PROJECT_ID}\"}"
 terraform -chdir=${OPS_ENVIRONMENT_DIR} init
-terraform -chdir=${OPS_ENVIRONMENT_DIR} apply
+terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
 
 ## Staging Project ##
 
@@ -36,7 +37,7 @@ export TF_VAR_project_id=${STAGING_PROJECT_ID}
 export TF_VAR_ops_project_id=${OPS_PROJECT_ID}
 
 terraform -chdir=${STAGING_ENVIRONMENT_DIR} init
-terraform -chdir=${STAGING_ENVIRONMENT_DIR} apply
+terraform -chdir=${STAGING_ENVIRONMENT_DIR} apply --auto-approve
 
 ## Prod Project ##
 
@@ -45,7 +46,7 @@ export TF_VAR_project_id=${PROD_PROJECT_ID}
 export TF_VAR_ops_project_id=${OPS_PROJECT_ID}
 
 terraform -chdir=${PROD_ENVIRONMENT_DIR} init
-terraform -chdir=${PROD_ENVIRONMENT_DIR} apply
+terraform -chdir=${PROD_ENVIRONMENT_DIR} apply --auto-approve
 
 ## Build Containers ##
 
