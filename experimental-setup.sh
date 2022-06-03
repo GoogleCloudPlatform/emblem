@@ -124,10 +124,15 @@ if [[ -z "$SKIP_TRIGGERS" ]]; then
     export TF_VAR_deploy_triggers="true"
     export TF_VAR_repo_name=${REPO_NAME}
     export TF_VAR_repo_owner=${REPO_OWNER}
-    terraform -chdir=${OPS_ENVIRONMENT_DIR} apply
+    terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
+    # Call via shell until Terraform integration
+    # Setting legacy env variables
+    export GITHUB_URL=https://github.com/$REPO_OWNER/$REPO_NAME
+    export STAGE_PROJECT=$STAGING_PROJECT_ID
+    export OPS_PROJECT=$OPS_PROJECT_ID
+    export PROD_PROJECT=$PROD_PROJECT_ID
+    sh ./scripts/pubsub_triggers.sh
 fi
-
-# TODO: Add pubsub_triggers.sh
 
 ## Set up auth ##
 
@@ -140,9 +145,9 @@ if [[ -z "$SKIP_AUTH" ]]; then
     else
         echo "Skipping end-user authentication configuration. You can configure it later by running:"
         echo ""
-        echo "  export $(tput bold)PROD_PROJECT$(tput sgr0)=$(tput setaf 6)${PROD_PROJECT}$(tput sgr0)"
-        echo "  export $(tput bold)STAGING_PROJECT$(tput sgr0)=$(tput setaf 6)${STAGING_PROJECT}$(tput sgr0)"
-        echo "  export $(tput bold)OPS_PROJECT$(tput sgr0)=$(tput setaf 6)${OPS_PROJECT}$(tput sgr0)"
+        echo "  export $(tput bold)PROD_PROJECT$(tput sgr0)=$(tput setaf 6)${PROD_PROJECT_ID}$(tput sgr0)"
+        echo "  export $(tput bold)STAGING_PROJECT$(tput sgr0)=$(tput setaf 6)${STAGING_PROJECT_ID}$(tput sgr0)"
+        echo "  export $(tput bold)OPS_PROJECT$(tput sgr0)=$(tput setaf 6)${OPS_PROJECT_ID}$(tput sgr0)"
         echo "  $(tput setaf 6)sh scripts/configure_auth.sh$(tput sgr0)"
         echo ""
     fi
