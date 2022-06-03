@@ -35,7 +35,7 @@ resource "time_sleep" "wait_for_artifactregistry" {
 }
 
 resource "time_sleep" "wait_for_cloud_scheduler" {
-  create_duration = "20s"
+  create_duration = "40s"
   depends_on = [
     google_project_service.emblem_ops_services
   ]
