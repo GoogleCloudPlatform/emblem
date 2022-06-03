@@ -100,6 +100,11 @@ gcloud run deploy --allow-unauthenticated \
 
 ## Deploy Triggers to Ops Project ##
 
+### Set legacy env variables
+export STAGE_PROJECT=$STAGING_PROJECT_ID
+export OPS_PROJECT=$OPS_PROJECT_ID
+export PROD_PROJECT=$PROD_PROJECT_ID
+
 if [[ -z "$SKIP_TRIGGERS" ]]; then
     REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?project=${OPS_PROJECT_ID}"
     echo "Connect your repos: ${REPO_CONNECT_URL}"
@@ -125,12 +130,9 @@ if [[ -z "$SKIP_TRIGGERS" ]]; then
     export TF_VAR_repo_name=${REPO_NAME}
     export TF_VAR_repo_owner=${REPO_OWNER}
     terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
+    
     # Call via shell until Terraform integration
-    # Setting legacy env variables
     export GITHUB_URL=https://github.com/$REPO_OWNER/$REPO_NAME
-    export STAGE_PROJECT=$STAGING_PROJECT_ID
-    export OPS_PROJECT=$OPS_PROJECT_ID
-    export PROD_PROJECT=$PROD_PROJECT_ID
     sh ./scripts/pubsub_triggers.sh
 fi
 
