@@ -6,7 +6,8 @@
 
 Emblem Giving demonstrates a complex, end-to-end serverless architecture. It showcases continuous delivery and trouble recovery wrapped up in a donation sample app.
 
-Real financial transactions are not made, and the giving campaigns in the app may not be real.
+Real financial transactions are not made. The giving campaigns in the app
+are not real.
 
 ![Emblem architecture diagram](./docs/images/emblem-simplified.png)
 
