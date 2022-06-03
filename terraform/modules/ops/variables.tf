@@ -32,3 +32,8 @@ variable "deploy_triggers" {
   default     = false
   description = "This value should only be changed to true after connecting a Github repository to your project."
 }
+
+variable "environment_project_ids" {
+  type = map(string)
+  description = "Map containing environment names and project IDs"
+}
