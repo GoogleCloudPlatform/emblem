@@ -41,7 +41,7 @@ Learn how to run the website by following an interactive tutorial on Cloud Shell
 1. Create an environment variable that contains your API server url and your Emblem session bucket name.
 
     ```sh
-    export SITE_VARS="EMBLEM_API_URL=$EMBLEM_API_URL, EMBLEM_SESSION_BUCKET=${EMBLEM_SESSION_BUCKET}"
+    export SITE_VARS="EMBLEM_API_URL=$EMBLEM_API_URL, EMBLEM_SESSION_BUCKET=$EMBLEM_SESSION_BUCKET"
     ```
 
 1. Build an image with Cloud Build
