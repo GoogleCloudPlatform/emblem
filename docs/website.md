@@ -2,7 +2,7 @@
 
 ![Emblem Application architecture diagram](../docs/images/application.png)
 
-The Emblem Website code lives in it's own [directory](https://github.com/GoogleCloudPlatform/emblem/tree/main/website).
+The Emblem Website code lives in its own [directory](https://github.com/GoogleCloudPlatform/emblem/tree/main/website).
 
 ## Design
 
