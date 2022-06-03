@@ -2,7 +2,8 @@ locals {
   services = var.enable_apis ? [
     "cloudbuild.googleapis.com",
     "pubsub.googleapis.com",
-    "secretmanager.googleapis.com"
+    "secretmanager.googleapis.com",
+    "cloudscheduler.googleapis.com"
   ] : []
   # Artifact registry service only available in Google beta provider
   beta_services = var.enable_apis ? [
