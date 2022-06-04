@@ -30,6 +30,7 @@ steps:
       - "OPS_PROJECT=${_OPS_PROJECT}"
 
   # Deploy a new Emblem instance
+  # TODO: make `*_PROJECT` and `*_PROJECT_ID` consistent
   - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-deployer/e2e-deployer:${_E2E_DEPLOYER_SHA}'
     entrypoint: /bin/bash
     args:
@@ -40,9 +41,9 @@ steps:
       - "PROJECT_NUMBER=$PROJECT_NUMBER"
 
       # Project IDs
-      - "PROD_PROJECT=${_PROD_PROJECT}"
-      - "STAGE_PROJECT=${_STAGE_PROJECT}"
-      - "OPS_PROJECT=${_OPS_PROJECT}"
+      - "PROD_PROJECT_ID=${_PROD_PROJECT}"
+      - "STAGE_PROJECT_ID=${_STAGE_PROJECT}"
+      - "OPS_PROJECT_ID=${_OPS_PROJECT}"
 
       # Step-skipping
       - "SKIP_TRIGGERS=true"
