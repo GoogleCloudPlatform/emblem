@@ -135,11 +135,11 @@ resource "google_cloudbuild_trigger" "e2e_runner_nightly_build_trigger" {
   }
 }
 
-# TODO: Cleanup/remove from ops module and move to emblem-app module
-module "environment_build_triggers" {
-  source                  = "./environment-build-triggers"
-  count                   = 0 # disable until fully integrated from ops/pubsub_triggers.sh
-  project_id              = var.project_id
-  environment_project_ids = var.environment_project_ids
-  github_url              = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
-}
+# # TODO: Cleanup/remove from ops module and move to emblem-app module
+# module "environment_build_triggers" {
+#   source                  = "./environment-build-triggers"
+#   count                   = 0 # disable until fully integrated from ops/pubsub_triggers.sh
+#   project_id              = var.project_id
+#   environment_project_ids = var.environment_project_ids
+#   github_url              = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
+# }
