@@ -42,7 +42,7 @@ steps:
 
       # Project IDs
       - "PROD_PROJECT_ID=${_PROD_PROJECT}"
-      - "STAGE_PROJECT_ID=${_STAGE_PROJECT}"
+      - "STAGING_PROJECT_ID=${_STAGE_PROJECT}"
       - "OPS_PROJECT_ID=${_OPS_PROJECT}"
 
       # Step-skipping
