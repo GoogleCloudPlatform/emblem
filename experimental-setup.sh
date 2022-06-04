@@ -39,6 +39,8 @@ export TF_VAR_project_id=${STAGING_PROJECT_ID}
 export TF_VAR_ops_project_id=${OPS_PROJECT_ID}
 
 terraform -chdir=${STAGING_ENVIRONMENT_DIR} init
+terraform -chdir=${STAGING_ENVIRONMENT_DIR} import \
+    module.emblem_staging.google_storage_bucket.sessions "${STAGING_PROJECT_ID}-sessions"
 terraform -chdir=${STAGING_ENVIRONMENT_DIR} apply --auto-approve
 
 ## Prod Project ##
@@ -48,6 +50,8 @@ export TF_VAR_project_id=${PROD_PROJECT_ID}
 export TF_VAR_ops_project_id=${OPS_PROJECT_ID}
 
 terraform -chdir=${PROD_ENVIRONMENT_DIR} init
+terraform -chdir=${PROD_ENVIRONMENT_DIR} import \
+    module.emblem_prod.google_storage_bucket.sessions "${PROD_PROJECT_ID}-sessions"
 terraform -chdir=${PROD_ENVIRONMENT_DIR} apply --auto-approve
 
 ## Build Containers ##
