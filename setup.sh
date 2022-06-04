@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -eu
+set -eux
 
 # Should this script error, print out the line that was responsible
 _error_report() {
@@ -223,13 +223,13 @@ gcloud run deploy content-api \
     --project "${STAGE_PROJECT}" \
     --region "${REGION}" 
 
-STAGING_API_URL=$(gcloud run services describe content-api --project "${STAGE_PROJECT}" --region ${REGION} --format 'value(status.url)')
+STAGE_API_URL=$(gcloud run services describe content-api --project "${STAGE_PROJECT}" --region ${REGION} --format 'value(status.url)')
 gcloud run deploy website \
     --allow-unauthenticated \
     --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
     --service-account "website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
     --update-env-vars "EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions" \
-    --update-env-vars "EMBLEM_API_URL=${STAGING_API_URL}" \
+    --update-env-vars "EMBLEM_API_URL=${STAGE_API_URL}" \
     --project "${STAGE_PROJECT}" \
     --region "${REGION}" \
     --tag "latest"

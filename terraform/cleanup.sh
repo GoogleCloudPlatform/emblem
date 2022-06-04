@@ -40,7 +40,7 @@ echo "###################################################"
 gcloud pubsub topics delete gcr \
     --project "$OPS_PROJECT" \
     || true
-gcloud pubsub topics delete nightly_builds \
+gcloud pubsub topics delete nightly-builds \
     --project "$OPS_PROJECT" \
     || true
 gcloud pubsub topics delete "canary-${PROD_PROJECT}" \
