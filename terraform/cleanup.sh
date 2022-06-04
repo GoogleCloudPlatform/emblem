@@ -155,7 +155,7 @@ pushd terraform/app
 for proj in ${APP_PROJECTS[@]}; do
     cat > terraform.tfvars <<EOF
 google_ops_project_id = "${OPS_PROJECT}"
-google_project_id = "${STAGE_PROJECT}"
+google_project_id = "${proj}"
 EOF
 
     terraform init

@@ -28,9 +28,16 @@ resource "google_project_iam_member" "pubsub_publisher_iam_member" {
 # For more information, see this GitHub issue:
 # https://github.com/hashicorp/terraform-provider-google/issues/11020
 resource "time_sleep" "wait_for_artifactregistry" {
-  create_duration = "20s"
+  create_duration = "40s"
   depends_on = [
     google_project_service.emblem_ops_beta_services
+  ]
+}
+
+resource "time_sleep" "wait_for_cloud_scheduler" {
+  create_duration = "40s"
+  depends_on = [
+    google_project_service.emblem_ops_services
   ]
 }
 
@@ -143,6 +150,7 @@ resource "google_cloud_scheduler_job" "nightly_schedule" {
     data       = base64encode("not empty")
   }
   depends_on = [
-    google_pubsub_topic.nightly
+    google_pubsub_topic.nightly,
+    time_sleep.wait_for_artifactregistry
   ]
 }

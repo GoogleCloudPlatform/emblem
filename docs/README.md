@@ -10,7 +10,7 @@ Read on if you want to explore your own Emblem instance, contribute to the proje
 
 <!-- TODO: Move documentation to ./docs -->
 * [Content API](./content-api.md)
-* [Website README](../website/README.md)
+* [Website README](./website.md)
 
 ### Interactive Tutorials
 
