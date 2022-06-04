@@ -46,14 +46,16 @@ resource "google_cloudbuild_trigger" "api_push_to_main_build_trigger" {
   ]
 }
 
-resource "google_cloudbuild_trigger" "website_unit_tests_build_trigger" {
+resource "google_cloudbuild_trigger" "website_system_tests_build_trigger" {
   project        = var.project_id
   count          = var.deploy_triggers ? 1 : 0
-  name           = "website-unit-tests"
-  filename       = "ops/unit-tests.cloudbuild.yaml"
+  name           = "website-system-tests"
+  filename       = "ops/web-e2e.cloudbuild.yaml"
   included_files = ["website/**"]
   substitutions = {
-    _DIR = "website"
+    _DIR        = "website"
+    _EMBLEM_URL = "http://localhost:8080"
+    _PROJECT    = data.google_project.target_project.project_id
   }
   github {
     owner = var.repo_owner
