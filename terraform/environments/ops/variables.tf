@@ -27,7 +27,3 @@ variable "repo_name" {
   default     = ""
 }
 
-variable "environment_project_ids" {
-  type        = map(string)
-  description = "Map containing environment names and project IDs"
-}
