@@ -33,7 +33,7 @@ steps:
   - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-deployer/e2e-deployer:${_E2E_DEPLOYER_SHA}'
     entrypoint: /bin/bash
     args:
-      - ./setup.sh
+      - ./experimental-setup.sh
     env:
       - "EMBLEM_BILLING_ACCOUNT=${_EMBLEM_BILLING_ACCOUNT}"
       - "EMBLEM_ORGANIZATION=${_EMBLEM_ORGANIZATION}"
