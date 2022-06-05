@@ -1,0 +1,42 @@
+# Copyright 2022 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the 'License');
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an 'AS IS' BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Auto Label
+on:
+  pull_request_target:
+    types: [ opened, reopened, synchronized, edited ]
+
+# Add labels to Pull Requests
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  conventional-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Conventional Release Labels
+        uses: bcoe/conventional-release-labels@v1
+        with:
+          type_labels: '{"feat": "type: feature request", "fix": "type: bug", "breaking": "semver: major"}'
+
+  label-changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+    - uses: actions/labeler@v4
+      with:
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
