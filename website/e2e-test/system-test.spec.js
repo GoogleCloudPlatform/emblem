@@ -28,9 +28,9 @@ test('Lists Campaigns', async ({ page }) => {
 
   const titleSelector = `.emblem-campaign-title:has-text("${name}")`;
   const title = page.locator(titleSelector).nth(0);
-  await expect(title).isVisible();
+  await expect(title).toHaveCount(1);
 
   const cardSelector = `.emblem-campaign-card:has-text("${description}")`;
   const card = page.locator(cardSelector).nth(0);
-  await expect(card).isVisible();
+  await expect(card).toHaveCount(1);
 });
