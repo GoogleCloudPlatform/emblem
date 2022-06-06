@@ -51,7 +51,10 @@ resource "google_cloudbuild_trigger" "website_system_tests_build_trigger" {
   count          = var.deploy_triggers ? 1 : 0
   name           = "website-system-tests"
   filename       = "ops/web-e2e.cloudbuild.yaml"
-  included_files = ["website/**"]
+  included_files = [
+    "website/**",
+    "ops/web-e2e.cloudbuild.yaml"
+  ]
   substitutions = {
     _DIR        = "website"
     _EMBLEM_URL = "http://localhost:8080"
