@@ -47,10 +47,10 @@ resource "google_cloudbuild_trigger" "api_push_to_main_build_trigger" {
 }
 
 resource "google_cloudbuild_trigger" "website_system_tests_build_trigger" {
-  project        = var.project_id
-  count          = var.deploy_triggers ? 1 : 0
-  name           = "website-system-tests"
-  filename       = "ops/web-e2e.cloudbuild.yaml"
+  project  = var.project_id
+  count    = var.deploy_triggers ? 1 : 0
+  name     = "website-system-tests"
+  filename = "ops/web-e2e.cloudbuild.yaml"
   included_files = [
     "website/**",
     "ops/web-e2e.cloudbuild.yaml"
