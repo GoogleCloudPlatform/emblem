@@ -15,7 +15,7 @@
 
 steps:
   # Clean up any old Emblem instance cruft.
-  - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-deployer/e2e-deployer:${_E2E_DEPLOYER_SHA}'
+  - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-testing/deployer:${_E2E_DEPLOYER_SHA}'
     entrypoint: /bin/bash
     args:
       - ./terraform/cleanup.sh
@@ -30,7 +30,7 @@ steps:
       - "OPS_PROJECT=${_OPS_PROJECT}"
 
   # Deploy a new Emblem instance
-  - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-deployer/e2e-deployer:${_E2E_DEPLOYER_SHA}'
+  - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-testing/deployer:${_E2E_DEPLOYER_SHA}'
     entrypoint: /bin/bash
     args:
       - ./setup.sh
