@@ -14,17 +14,13 @@
 
 from google.cloud import firestore
 
-import os
 import json
-
-
-project = os.getenv("PROJECT_ID")
-
 
 def seed_database(content):
 
-    client = firestore.Client(project)
-    print("Adding content to the database, this may take a few minutes...")
+    client = firestore.Client()
+    print ("Seeding data into Google Cloud Project '{}'.".format(client.project))
+    print("This may take a few minutes...")
     for item in content:
         doc_ref = client.collection(item["collection"]).document(item["id"])
         try:
