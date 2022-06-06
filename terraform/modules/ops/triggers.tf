@@ -1,18 +1,19 @@
-data "terraform_remote_state" "ops" {
-  backend = "local"
-  config = {
-    path = "../terraform.tfstate"
-  }
+resource "time_sleep" "wait_for_cloud_build_service" {
+  create_duration = "20s"
+  depends_on = [
+    google_project_service.emblem_ops_services
+  ]
 }
 
 resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
-  project        = var.google_ops_project_id
+  project        = var.project_id
+  count          = var.deploy_triggers ? 1 : 0
   name           = "api-unit-tests"
   filename       = "ops/unit-tests.cloudbuild.yaml"
   included_files = ["content-api/**"]
   substitutions = {
     _DIR             = "content-api"
-    _SERVICE_ACCOUNT = "restricted-test-identity@emblem-ops.iam.gserviceaccount.com"
+    _SERVICE_ACCOUNT = format("restricted-test-identity@%s.iam.gserviceaccount.com", var.project_id)
   }
   github {
     owner = var.repo_owner
@@ -22,10 +23,14 @@ resource "google_cloudbuild_trigger" "api_unit_tests_build_trigger" {
       comment_control = "COMMENTS_ENABLED_FOR_EXTERNAL_CONTRIBUTORS_ONLY"
     }
   }
+  depends_on = [
+    time_sleep.wait_for_cloud_build_service
+  ]
 }
 
 resource "google_cloudbuild_trigger" "api_push_to_main_build_trigger" {
-  project        = var.google_ops_project_id
+  project        = var.project_id
+  count          = var.deploy_triggers ? 1 : 0
   name           = "api-push-to-main"
   filename       = "ops/api-build.cloudbuild.yaml"
   included_files = ["content-api/**"]
@@ -36,15 +41,24 @@ resource "google_cloudbuild_trigger" "api_push_to_main_build_trigger" {
       branch = "^main$"
     }
   }
+  depends_on = [
+    time_sleep.wait_for_cloud_build_service
+  ]
 }
 
-resource "google_cloudbuild_trigger" "website_unit_tests_build_trigger" {
-  project        = var.google_ops_project_id
-  name           = "website-unit-tests"
-  filename       = "ops/unit-tests.cloudbuild.yaml"
-  included_files = ["website/**"]
+resource "google_cloudbuild_trigger" "website_system_tests_build_trigger" {
+  project  = var.project_id
+  count    = var.deploy_triggers ? 1 : 0
+  name     = "website-system-tests"
+  filename = "ops/web-e2e.cloudbuild.yaml"
+  included_files = [
+    "website/**",
+    "ops/web-e2e.cloudbuild.yaml"
+  ]
   substitutions = {
-    _DIR = "website"
+    _DIR        = "website"
+    _EMBLEM_URL = "http://localhost:8080"
+    _PROJECT    = data.google_project.target_project.project_id
   }
   github {
     owner = var.repo_owner
@@ -54,10 +68,14 @@ resource "google_cloudbuild_trigger" "website_unit_tests_build_trigger" {
       comment_control = "COMMENTS_ENABLED_FOR_EXTERNAL_CONTRIBUTORS_ONLY"
     }
   }
+  depends_on = [
+    time_sleep.wait_for_cloud_build_service
+  ]
 }
 
 resource "google_cloudbuild_trigger" "web_push_to_main_build_trigger" {
-  project  = var.google_ops_project_id
+  project  = var.project_id
+  count    = var.deploy_triggers ? 1 : 0
   name     = "web-push-to-main"
   filename = "ops/web-build.cloudbuild.yaml"
   included_files = [
@@ -72,10 +90,14 @@ resource "google_cloudbuild_trigger" "web_push_to_main_build_trigger" {
       branch = "^main$"
     }
   }
+  depends_on = [
+    time_sleep.wait_for_cloud_build_service
+  ]
 }
 
 resource "google_cloudbuild_trigger" "e2e_runner_push_to_main_build_trigger" {
-  project  = var.google_ops_project_id
+  project  = var.project_id
+  count    = var.deploy_triggers ? 1 : 0
   name     = "e2e-runner-push-to-main"
   filename = "ops/e2e-runner-build.cloudbuild.yaml"
   included_files = [
@@ -93,12 +115,17 @@ resource "google_cloudbuild_trigger" "e2e_runner_push_to_main_build_trigger" {
   }
 }
 
+# TODO: Terraform will always think these resources will change due to 
+# the filename parameter, which is not required, but still populated by
+# the API.  Investigate work-around.
+
 resource "google_cloudbuild_trigger" "e2e_runner_nightly_build_trigger" {
-  project = var.google_ops_project_id
+  project = var.project_id
+  count   = var.deploy_triggers ? 1 : 0
   name    = "e2e-runner-nightly"
 
   pubsub_config {
-    topic = "projects/${var.google_ops_project_id}/topics/${var.nightly_build_topic}"
+    topic = google_pubsub_topic.nightly.id
   }
 
   source_to_build {
@@ -112,3 +139,12 @@ resource "google_cloudbuild_trigger" "e2e_runner_nightly_build_trigger" {
     repo_type = "GITHUB"
   }
 }
+
+# # TODO: Cleanup/remove from ops module and move to emblem-app module
+# module "environment_build_triggers" {
+#   source                  = "./environment-build-triggers"
+#   count                   = 0 # disable until fully integrated from ops/pubsub_triggers.sh
+#   project_id              = var.project_id
+#   environment_project_ids = var.environment_project_ids
+#   github_url              = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
+# }

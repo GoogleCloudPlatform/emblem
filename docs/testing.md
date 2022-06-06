@@ -36,7 +36,7 @@ This guide assumes you have a working instance of Emblem.
 
 ## API Testing
 
-See [Content API: Running Local Tests](docs/content-api.md#running-local-tests).
+See [Content API: Running Local Tests](content-api.md#running-local-tests).
 
 To run the tests remotely via the Cloud Build configuration:
 
