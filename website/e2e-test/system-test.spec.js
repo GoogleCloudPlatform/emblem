@@ -26,9 +26,11 @@ test('Lists Campaigns', async ({ page }) => {
 
   await page.goto(EMBLEM_URL);
 
-  const title = page.locator('.emblem-campaign-title').nth(0);
-  await expect(title).toContainText(name);
+  const titleSelector = `.emblem-campaign-title:has-text("${name}")`
+  const title = page.locator(titleSelector);
+  await expect(title).toBeTruthy();
 
-  const card = page.locator('.emblem-campaign-card').nth(0);
-  await expect(card).toContainText(description);
+  const cardSelector = `.emblem-campaign-card:has-text("${description}")`;
+  const card = page.locator(cardSelector);
+  await expect(card).toBeTruthy();
 });
