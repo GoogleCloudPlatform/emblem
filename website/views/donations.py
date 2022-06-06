@@ -14,7 +14,7 @@
 
 
 import os
-from flask import Blueprint, g, redirect, request, render_template
+from flask import after_this_request, Blueprint, g, redirect, request, render_template
 
 from middleware import session
 from middleware.logging import log
