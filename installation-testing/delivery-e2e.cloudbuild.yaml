@@ -23,9 +23,9 @@ steps:
       - "PROJECT_NUMBER=$PROJECT_NUMBER"
 
       # Project IDs
-      - "PROD_PROJECT=${_PROD_PROJECT}"
-      - "STAGE_PROJECT=${_STAGE_PROJECT}"
-      - "OPS_PROJECT=${_OPS_PROJECT}"
+      - "PROD_PROJECT=${_DELIVERY_TEST_PROJECT}"
+      - "STAGE_PROJECT=${_DELIVERY_TEST_PROJECT}"
+      - "OPS_PROJECT=${_DELIVERY_TEST_PROJECT}"
 
   # Deploy a new Emblem instance
   - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-testing/deployer:${_E2E_DEPLOYER_SHA}'
@@ -35,10 +35,13 @@ steps:
     env:
       - "PROJECT_NUMBER=$PROJECT_NUMBER"
 
-      # Project IDs
-      - "PROD_PROJECT=${_PROD_PROJECT}"
-      - "STAGE_PROJECT=${_STAGE_PROJECT}"
-      - "OPS_PROJECT=${_OPS_PROJECT}"
+      # Specify project IDs
+      #
+      # This build combines `prod`, `stage`, and
+      # `ops` environments into one GCP project.
+      - "PROD_PROJECT=${_DELIVERY_TEST_PROJECT}"
+      - "STAGE_PROJECT=${_DELIVERY_TEST_PROJECT}"
+      - "OPS_PROJECT=${_DELIVERY_TEST_PROJECT}"
 
       # Step-skipping
       - "SKIP_TRIGGERS=true"
