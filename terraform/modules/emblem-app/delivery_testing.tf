@@ -82,19 +82,14 @@ resource "google_project_iam_member" "delivery_run_admin_granting" {
   }
 }
 
-resource "google_project_iam_member" "delivery_storage_admin" {
+resource "google_storage_bucket_iam_member" "delivery_storage_admin" {
   project  = var.project_id
   provider = google
   role     = "roles/storage.admin"
   member   = "serviceAccount:${data.google_project.target_project.number}@cloudbuild.gserviceaccount.com"
+  bucket   = google_storage_bucket.sessions.name
 
   depends_on = [
     google_project_service.emblem_ops_services
   ]
-
-  condition {
-    title       = "Sessions bucket only"
-    description = "Only allow access to the Sessions bucket"
-    expression  = "resource.type == 'storage.googleapis.com/Bucket' && resource.name.endsWith('sessions')"
-  }
 }
