@@ -44,23 +44,24 @@ export REGION="us-central1"
 
 if [[ -z "$SKIP_TERRAFORM" ]]; then
 
-## Staging Project ##
-STAGE_ENVIRONMENT_DIR=terraform/environments/staging
-export TF_VAR_project_id=${STAGE_PROJECT}
-export TF_VAR_ops_project_id=${OPS_PROJECT}
-terraform -chdir=${STAGE_ENVIRONMENT_DIR} init
-terraform -chdir=${STAGE_ENVIRONMENT_DIR} import \
-    module.emblem_staging.google_storage_bucket.sessions \
-    "${STAGE_PROJECT}-sessions" || true
-
-## Prod Project ##
-# Only deploy to separate project for multi-project setups
-if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
-    PROD_ENVIRONMENT_DIR=terraform/environments/prod
-    export TF_VAR_project_id=${PROD_PROJECT}
+    ## Staging Project ##
+    STAGE_ENVIRONMENT_DIR=terraform/environments/staging
+    export TF_VAR_project_id=${STAGE_PROJECT}
     export TF_VAR_ops_project_id=${OPS_PROJECT}
-    terraform -chdir=${PROD_ENVIRONMENT_DIR} init
-    terraform -chdir=${PROD_ENVIRONMENT_DIR} import \
-        module.emblem_prod.google_storage_bucket.sessions \
-        "${PROD_PROJECT}-sessions" || true
+    terraform -chdir=${STAGE_ENVIRONMENT_DIR} init
+    terraform -chdir=${STAGE_ENVIRONMENT_DIR} import \
+        module.emblem_staging.google_storage_bucket.sessions \
+        "${STAGE_PROJECT}-sessions" || true
+
+    ## Prod Project ##
+    # Only deploy to separate project for multi-project setups
+    if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
+        PROD_ENVIRONMENT_DIR=terraform/environments/prod
+        export TF_VAR_project_id=${PROD_PROJECT}
+        export TF_VAR_ops_project_id=${OPS_PROJECT}
+        terraform -chdir=${PROD_ENVIRONMENT_DIR} init
+        terraform -chdir=${PROD_ENVIRONMENT_DIR} import \
+            module.emblem_prod.google_storage_bucket.sessions \
+            "${PROD_PROJECT}-sessions" || true
+    fi
 fi
