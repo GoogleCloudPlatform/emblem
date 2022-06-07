@@ -19,6 +19,12 @@ resource "google_service_account" "api_manager" {
   display_name = "api-manager"
 }
 
+resource "google_project_iam_member" "project" {
+  project = var.project_id
+  role    = "roles/datastore.user"
+  member  = "serviceAccount:${google_service_account.api_manager.email}"
+}
+
 resource "google_secret_manager_secret_iam_member" "secret_access_iam_client_id" {
   project   = var.ops_project_id
   secret_id = "client_id_secret" // this previously was contrived from ops remote state
