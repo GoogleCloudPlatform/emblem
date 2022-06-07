@@ -16,10 +16,11 @@ from google.cloud import firestore
 
 import json
 
+
 def seed_database(content):
 
     client = firestore.Client()
-    print ("Seeding data into Google Cloud Project '{}'.".format(client.project))
+    print("Seeding data into Google Cloud Project '{}'.".format(client.project))
     print("This may take a few minutes...")
     for item in content:
         doc_ref = client.collection(item["collection"]).document(item["id"])

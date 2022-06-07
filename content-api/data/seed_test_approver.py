@@ -19,7 +19,7 @@ from google.cloud import firestore
 
 def seed_approver(email):
     client = firestore.Client()
-    print ("Seeding data into Google Cloud Project '{}'.".format(client.project))
+    print("Seeding data into Google Cloud Project '{}'.".format(client.project))
 
     approver = {
         "kind": "approvers",
@@ -30,7 +30,6 @@ def seed_approver(email):
 
     doc_ref = client.collection("approvers").document()
     doc_ref.set(approver)
-    
 
 
 parser = argparse.ArgumentParser(description='Seed a test "approver" resource')
