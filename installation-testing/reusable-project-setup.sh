@@ -25,7 +25,6 @@ trap '_error_report $LINENO' ERR
 # Variable list
 #   PROD_PROJECT            GCP Project ID of the production project
 #   STAGE_PROJECT           GCP Project ID of the staging project
-#   OPS_PROJECT             GCP Project ID of the operations project
 #   SKIP_TERRAFORM          If set, don't set up infrastructure
 
 # Default to empty, avoiding unbound variable errors.
@@ -38,21 +37,12 @@ if [[ -z "${PROD_PROJECT}" ]]; then
 elif [[ -z "${STAGE_PROJECT}" ]]; then
     echo "Please set the $(tput bold)STAGE_PROJECT$(tput sgr0) variable"
     exit 1
-elif [[ -z "${OPS_PROJECT}" ]]; then
-    echo "Please set the $(tput bold)OPS_PROJECT$(tput sgr0) variable"
-    exit 1
 fi
 
 ## Initialize Variables ##
 export REGION="us-central1"
 
 if [[ -z "$SKIP_TERRAFORM" ]]; then
-
-## Ops Project ##
-OPS_ENVIRONMENT_DIR=terraform/environments/ops
-export TF_VAR_project_id=${OPS_PROJECT}
-terraform -chdir=${OPS_ENVIRONMENT_DIR} init
-terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
 
 ## Staging Project ##
 STAGE_ENVIRONMENT_DIR=terraform/environments/staging
