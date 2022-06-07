@@ -74,7 +74,7 @@ resource "google_storage_bucket" "sessions" {
 
   # Allow Terraform runs to opt-out of creating this bucket.
   # (This is necessary for some of Emblem's automated tests.)
-  count = variable.deploy_session_bucket ? 1 : 0
+  count = var.deploy_session_bucket ? 1 : 0
 }
 
 resource "google_storage_bucket_iam_member" "sessions-iam" {
