@@ -33,7 +33,7 @@ steps:
   - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-deployer/e2e-deployer:${_E2E_DEPLOYER_SHA}'
     entrypoint: /bin/bash
     args:
-      - ./terraform/reusable-project-setup.sh
+      - ./installation-testing/reusable-project-setup.sh
     env:
       - "PROD_PROJECT=${_PROD_PROJECT}"
       - "STAGE_PROJECT=${_STAGE_PROJECT}"
