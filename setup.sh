@@ -318,4 +318,3 @@ if [[ -z "$SKIP_SEEDING" ]]; then
     python3 seed_database.py
     popd
 fi
->>>>>>> Add SKIP_SEEDING functionality
