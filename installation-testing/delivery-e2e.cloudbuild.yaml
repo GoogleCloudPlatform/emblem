@@ -43,7 +43,9 @@ steps:
       # Step-skipping
       - "SKIP_TRIGGERS=true"
       - "SKIP_AUTH=true"
-      - "SKIP_SEEDING=true"
+
+      # Don't prompt for GCP account name
+      - "USE_DEFAULT_ACCOUNT=true"
 
 # Specify a default value for optional variables
 substitutions:
