@@ -29,14 +29,22 @@ steps:
       - "STAGE_PROJECT=${_STAGE_PROJECT}"
       - "OPS_PROJECT=${_OPS_PROJECT}"
 
+  # Make sure GCP projects are reusable
+  - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-deployer/e2e-deployer:${_E2E_DEPLOYER_SHA}'
+    entrypoint: /bin/bash
+    args:
+      - ./terraform/reusable-project-setup.sh
+    env:
+      - "PROD_PROJECT=${_PROD_PROJECT}"
+      - "STAGE_PROJECT=${_STAGE_PROJECT}"
+      - "OPS_PROJECT=${_OPS_PROJECT}"
+
   # Deploy a new Emblem instance
   - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-deployer/e2e-deployer:${_E2E_DEPLOYER_SHA}'
     entrypoint: /bin/bash
     args:
       - ./setup.sh
     env:
-      - "EMBLEM_BILLING_ACCOUNT=${_EMBLEM_BILLING_ACCOUNT}"
-      - "EMBLEM_ORGANIZATION=${_EMBLEM_ORGANIZATION}"
       - "PROJECT_NUMBER=$PROJECT_NUMBER"
 
       # Project IDs
