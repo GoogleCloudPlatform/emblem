@@ -96,6 +96,28 @@ fi
 
 fi # skip terraform
 
+########################
+# Seed Default Content #
+########################
+
+echo
+echo "$(tput bold)Seeding default content...$(tput sgr0)"
+echo
+
+pushd content-api/data
+account=$(gcloud config get-value account 2> /dev/null)
+if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
+    read -rp "Please input the repo owner [${account}]: " approver
+    approver="${approver:-$account}"
+fi
+GOOGLE_CLOUD_PROJECT="${STAGE_PROJECT}" python3 seed_test_approver.py "${approver}"
+GOOGLE_CLOUD_PROJECT="${STAGE_PROJECT}" python3 seed_database.py
+if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
+    GOOGLE_CLOUD_PROJECT="${PROD_PROJECT}" python3 seed_test_approver.py "${approver}"
+    GOOGLE_CLOUD_PROJECT="${PROD_PROJECT}" python3 seed_database.py
+fi
+popd
+
 ####################
 # Build Containers #
 ####################
@@ -237,24 +259,3 @@ if [[ -z "$SKIP_TRIGGERS" ]]; then
     # export GITHUB_URL=https://github.com/$REPO_OWNER/$REPO_NAME
     # sh ./scripts/pubsub_triggers.sh
 fi # skip triggers
-
-########################
-# Seed Default Content #
-########################
-
-echo
-echo "$(tput bold)Seeding default content...$(tput sgr0)"
-echo
-
-pushd content-api/data
-account=$(gcloud config get-value account 2> /dev/null)
-
-if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
-    read -rp "Please input the repo owner [${account}]: " approver
-    approver="${approver:-$account}"
-fi
-
-python3 seed_test_approver.py "${approver}"
-
-python3 seed_database.py
-popd
