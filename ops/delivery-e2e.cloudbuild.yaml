@@ -43,6 +43,7 @@ steps:
       # Step-skipping
       - "SKIP_TRIGGERS=true"
       - "SKIP_AUTH=true"
+      - "SKIP_SEEDING=true"
 
 # Specify a default value for optional variables
 substitutions:
