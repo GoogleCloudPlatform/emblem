@@ -31,6 +31,7 @@ trap '_error_report $LINENO' ERR
 #   SKIP_AUTH               If set, do not prompt to set up auth
 #   SKIP_BUILD              If set, do not build container images
 #   SKIP_DEPLOY             If set, do not deploy services
+#   USE_DEFAULT_ACCOUNT     If set, do not prompt for a GCP Account Name during database seeding
 #   REPO_OWNER              GitHub user/organization name (default: GoogleCloudPlatform)
 #   REPO_NAME               GitHub repo name (default: emblem)
 
@@ -247,8 +248,12 @@ echo
 
 pushd content-api/data
 account=$(gcloud config get-value account 2> /dev/null)
-read -rp "Please input the repo owner [${account}]: " approver
-approver="${approver:-$account}"
+
+if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
+    read -rp "Please input the repo owner [${account}]: " approver
+    approver="${approver:-$account}"
+fi
+
 python3 seed_test_approver.py "${approver}"
 
 python3 seed_database.py
