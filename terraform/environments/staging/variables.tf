@@ -15,6 +15,12 @@ variable "enable_apis" {
   default     = true
 }
 
+variable "deploy_session_bucket" {
+  type        = bool
+  default     = true
+  description = ""
+}
+
 variable "session_bucket_ttl_days" {
   type        = number
   description = "Number of days before session bucket data is deleted."
