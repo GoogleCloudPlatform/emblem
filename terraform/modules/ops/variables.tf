@@ -27,9 +27,9 @@ variable "enable_apis" {
   default     = true
 }
 
-variable "deploy_triggers" {
+variable "cd_system" {
   type        = bool
   default     = false
-  description = "This value should only be changed to true after connecting a Github repository to your project."
+  description = "Create deployment triggers. Enable only if Cloud Build has been granted GitHub access."
 }
 
