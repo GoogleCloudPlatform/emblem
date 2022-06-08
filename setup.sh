@@ -15,9 +15,10 @@
 
 set -eu
 
+# Should this script error, print out the line that was responsible
 _error_report() {
   echo >&2 "Exited [$?] at line $(caller):"
-  pr -tn $0 | tail -n+$(($1 - 3)) | head -n7 | sed "4s/^\s*/>>> /"
+  cat -n $0 | tail -n+$(($1 - 3)) | head -n7 | sed "4s/^\s*/>>> /"
 }
 trap '_error_report $LINENO' ERR
 
