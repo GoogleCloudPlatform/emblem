@@ -15,9 +15,10 @@
 
 set -eu
 
+# Should this script error, print out the line that was responsible
 _error_report() {
   echo >&2 "Exited [$?] at line $(caller):"
-  pr -tn $0 | tail -n+$(($1 - 3)) | head -n7 | sed "4s/^\s*/>>> /"
+  cat -n $0 | tail -n+$(($1 - 3)) | head -n7 | sed "4s/^\s*/>>> /"
 }
 trap '_error_report $LINENO' ERR
 
@@ -108,8 +109,9 @@ pushd content-api/data
 account=$(gcloud config get-value account 2> /dev/null)
 if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
     read -rp "Please input the repo owner [${account}]: " approver
-    approver="${approver:-$account}"
 fi
+approver="${approver:-$account}"
+
 GOOGLE_CLOUD_PROJECT="${STAGE_PROJECT}" python3 seed_test_approver.py "${approver}"
 GOOGLE_CLOUD_PROJECT="${STAGE_PROJECT}" python3 seed_database.py
 if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
