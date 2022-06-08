@@ -1,10 +1,6 @@
 # GCP project data
-data "google_project" "main" {
-  project_id = var.google_project_id
-}
-
 data "google_project" "ops" {
-  project_id = var.google_ops_project_id
+  project_id = var.ops_project_id
 }
 
 ############################
@@ -16,10 +12,6 @@ resource "google_project_iam_member" "delivery_gae_viewer" {
   provider = google
   role     = "roles/appengine.appViewer"
   member   = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
-
-  depends_on = [
-    google_project_service.emblem_app_services
-  ]
 }
 
 resource "google_project_iam_member" "delivery_sa_admin" {
@@ -27,10 +19,6 @@ resource "google_project_iam_member" "delivery_sa_admin" {
   provider = google
   role     = "roles/iam.serviceAccountAdmin"
   member   = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
-
-  depends_on = [
-    google_project_service.emblem_app_services
-  ]
 }
 
 resource "google_project_iam_member" "delivery_compute_viewer" {
@@ -38,10 +26,6 @@ resource "google_project_iam_member" "delivery_compute_viewer" {
   provider = google
   role     = "roles/compute.viewer"
   member   = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
-
-  depends_on = [
-    google_project_service.emblem_app_services
-  ]
 }
 
 resource "google_project_iam_member" "delivery_iam_reviewer" {
@@ -49,22 +33,13 @@ resource "google_project_iam_member" "delivery_iam_reviewer" {
   provider = google
   role     = "roles/iam.securityReviewer"
   member   = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
-
-  depends_on = [
-    google_project_service.emblem_app_services
-  ]
 }
 
 resource "google_storage_bucket_iam_member" "delivery_storage_admin" {
-  project  = var.project_id
   provider = google
   role     = "roles/storage.admin"
-  member   = "serviceAccount:${data.google_project.target_project.number}@cloudbuild.gserviceaccount.com"
-  bucket   = google_storage_bucket.sessions.name
-
-  depends_on = [
-    google_project_service.emblem_ops_services
-  ]
+  member   = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
+  bucket   = "${var.ops_project_id}-sessions"
 }
 
 # These `iam.securityAdmin` roles allows the target service accounts to change IAM policies.
@@ -80,11 +55,7 @@ resource "google_project_iam_member" "delivery_storage_object_admin_granting" {
   project  = var.project_id
   provider = google
   role     = "roles/iam.securityAdmin"
-  member   = "serviceAccount:${data.google_project.target_project.number}@cloudbuild.gserviceaccount.com"
-
-  depends_on = [
-    google_project_service.emblem_ops_services
-  ]
+  member   = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
 
   condition {
     title       = "Sessions Object Admin only"
@@ -97,11 +68,7 @@ resource "google_project_iam_member" "delivery_run_admin_granting" {
   project  = var.project_id
   provider = google
   role     = "roles/iam.securityAdmin"
-  member   = "serviceAccount:${data.google_project.target_project.number}@cloudbuild.gserviceaccount.com"
-
-  depends_on = [
-    google_project_service.emblem_ops_services
-  ]
+  member   = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
 
   # Restrict which roles the Service Account can grant
   # See https://cloud.google.com/iam/docs/conditions-overview
