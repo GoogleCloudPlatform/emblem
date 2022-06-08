@@ -7,10 +7,10 @@ data "google_project" "ops" {
 # E2E Delivery testing IAM #
 ############################
 
-resource "google_project_iam_member" "delivery_gae_viewer" {
+resource "google_project_iam_member" "delivery_gae_deployer" {
   project  = var.project_id
   provider = google
-  role     = "roles/appengine.appViewer"
+  role     = "roles/appengine.deployer"
   member   = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
 }
 
