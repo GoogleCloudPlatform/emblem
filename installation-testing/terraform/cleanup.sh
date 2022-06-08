@@ -16,10 +16,7 @@
 REGION="${REGION:-us-central1}"
 
 # Check env variables are not empty strings
-if [[ -z "${PROD_PROJECT}" ]]; then
-    echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
-    exit 1
-elif [[ -z "${STAGE_PROJECT}" ]]; then
+if [[ -z "${STAGE_PROJECT}" ]]; then
     echo "Please set the $(tput bold)STAGE_PROJECT$(tput sgr0) variable"
     exit 1
 elif [[ -z "${OPS_PROJECT}" ]]; then
@@ -41,12 +38,6 @@ gcloud pubsub topics delete gcr \
     --project "$OPS_PROJECT" \
     || true
 gcloud pubsub topics delete nightly-builds \
-    --project "$OPS_PROJECT" \
-    || true
-gcloud pubsub topics delete "canary-${PROD_PROJECT}" \
-    --project "$OPS_PROJECT" \
-    || true
-gcloud pubsub topics delete "deploy-${PROD_PROJECT}" \
     --project "$OPS_PROJECT" \
     || true
 
@@ -102,22 +93,6 @@ gcloud iam service-accounts delete \
     -q \
     || true
 
-gcloud iam service-accounts delete \
-    "cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
-    --project "$PROD_PROJECT" \
-    -q \
-    || true
-gcloud iam service-accounts delete \
-    "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
-    --project "$PROD_PROJECT" \
-    -q \
-    || true
-gcloud iam service-accounts delete \
-    "api-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
-    --project "$PROD_PROJECT" \
-    -q \
-    || true
-
 # Secrets
 # (QUESTION: this will brick auth; **should** we delete these?)
 gcloud secrets delete client_id_secret \
@@ -157,21 +132,6 @@ terraform apply \
     -destroy --auto-approve \
     -var google_ops_project_id="${OPS_PROJECT}" \
     -var google_project_id="${STAGE_PROJECT}" \
-    || true
-popd
-
-# Remove existing Terraform state (Part 3)
-pushd terraform/environments/prod
-cat > terraform.tfvars <<EOF
-ops_project_id = "${OPS_PROJECT}"
-project_id = "${PROD_PROJECT}"
-EOF
-
-terraform init
-terraform apply \
-    -destroy --auto-approve \
-    -var google_ops_project_id="${OPS_PROJECT}" \
-    -var google_project_id="${PROD_PROJECT}" \
     || true
 popd
 
