@@ -17,13 +17,12 @@ steps:
   # Docker Build
   - name: gcr.io/cloud-builders/docker
     entrypoint: /bin/bash
-    dir: ops/e2e-deployer
     args:
       - '-c'
       - |
         docker build -t \
         ${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/deployer:${_IMAGE_TAG} \
-        .
+        ops/e2e-deployer
 
 # Default to us-central1
 substitutions:
