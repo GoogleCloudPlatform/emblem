@@ -47,6 +47,9 @@ gcloud pubsub topics delete "canary-staging" \
 gcloud pubsub topics delete "deploy-staging" \
     --project "$OPS_PROJECT" \
     || true
+gcloud pubsub topics delete "deploy-completed-staging" \
+    --project "$OPS_PROJECT" \
+    || true
 
 # Artifact Registry repositories
 gcloud artifacts repositories delete website \
