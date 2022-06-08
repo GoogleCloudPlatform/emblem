@@ -1,3 +1,12 @@
+# GCP project data
+data "google_project" "main" {
+  project_id = var.google_project_id
+}
+
+data "google_project" "ops" {
+  project_id = var.google_ops_project_id
+}
+
 ############################
 # E2E Delivery testing IAM #
 ############################
