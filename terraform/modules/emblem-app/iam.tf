@@ -19,6 +19,9 @@ resource "google_service_account" "api_manager" {
   display_name = "api-manager"
 }
 
+# Note: any roles used here must be added to this file to prevent CI failures
+# installation-testing/terraform/modules/emblem-app/delivery_testing.tf
+
 resource "google_project_iam_member" "project" {
   project = var.project_id
   role    = "roles/datastore.user"
