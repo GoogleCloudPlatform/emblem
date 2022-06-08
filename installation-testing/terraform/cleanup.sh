@@ -27,6 +27,7 @@ fi
 #########################################
 #   This script deletes resources not   #
 # deleted by `terraform apply -destroy` #
+# when recycling `ops`/`stage` projects #
 #########################################
 
 echo "###################################################"
@@ -45,6 +46,9 @@ gcloud pubsub topics delete "canary-staging" \
     --project "$OPS_PROJECT" \
     || true
 gcloud pubsub topics delete "deploy-staging" \
+    --project "$OPS_PROJECT" \
+    || true
+gcloud pubsub topics delete "deploy-completed-staging" \
     --project "$OPS_PROJECT" \
     || true
 
