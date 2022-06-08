@@ -93,7 +93,12 @@ gcloud iam service-accounts delete \
     -q \
     || true
 gcloud iam service-accounts delete \
-    "api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+    "test-user@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+    --project "$STAGE_PROJECT" \
+    -q \
+    || true
+gcloud iam service-accounts delete \
+    "test-approver@${STAGE_PROJECT}.iam.gserviceaccount.com" \
     --project "$STAGE_PROJECT" \
     -q \
     || true
