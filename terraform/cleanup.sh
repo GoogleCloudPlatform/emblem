@@ -148,8 +148,8 @@ popd
 # Remove existing Terraform state (Part 2)
 pushd terraform/environments/staging
 cat > terraform.tfvars <<EOF
-google_ops_project_id = "${OPS_PROJECT}"
-google_project_id = "${STAGE_PROJECT}"
+ops_project_id = "${OPS_PROJECT}"
+project_id = "${STAGE_PROJECT}"
 EOF
 
 terraform init
@@ -163,8 +163,8 @@ popd
 # Remove existing Terraform state (Part 3)
 pushd terraform/environments/prod
 cat > terraform.tfvars <<EOF
-google_ops_project_id = "${OPS_PROJECT}"
-google_project_id = "${PROD_PROJECT}"
+ops_project_id = "${OPS_PROJECT}"
+project_id = "${PROD_PROJECT}"
 EOF
 
 terraform init
