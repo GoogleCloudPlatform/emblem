@@ -106,7 +106,7 @@ resource "google_cloudbuild_trigger" "e2e_nightly_tests" {
 
   # These properties are detected as changed if not initialized.
   # Alternately, add a lifecycle rule to ignore_changes.
-  ignored_files = []
+  ignored_files  = []
   included_files = []
   substitutions  = {}
   tags           = []
