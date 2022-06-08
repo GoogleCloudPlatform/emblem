@@ -46,6 +46,27 @@ resource "google_project_iam_member" "delivery_iam_reviewer" {
   ]
 }
 
+resource "google_storage_bucket_iam_member" "delivery_storage_admin" {
+  project  = var.project_id
+  provider = google
+  role     = "roles/storage.admin"
+  member   = "serviceAccount:${data.google_project.target_project.number}@cloudbuild.gserviceaccount.com"
+  bucket   = google_storage_bucket.sessions.name
+
+  depends_on = [
+    google_project_service.emblem_ops_services
+  ]
+}
+
+# These `iam.securityAdmin` roles allows the target service accounts to change IAM policies.
+#
+# To prevent them granting arbitrary IAM roles, we use
+# a `condition` clause to restrict what they can grant.
+#
+# See this doc page for more information on conditions:
+#
+#   https://cloud.google.com/iam/docs/conditions-overview
+#
 resource "google_project_iam_member" "delivery_storage_object_admin_granting" {
   project  = var.project_id
   provider = google
@@ -80,16 +101,4 @@ resource "google_project_iam_member" "delivery_run_admin_granting" {
     description = "Only allow granting/revocation of roles relevant to Cloud Run"
     expression  = "api.getAttribute('iam.googleapis.com/modifiedGrantsByRole', []).hasOnly(['roles/run.admin', 'roles/iam.serviceAccountUser'])"
   }
-}
-
-resource "google_storage_bucket_iam_member" "delivery_storage_admin" {
-  project  = var.project_id
-  provider = google
-  role     = "roles/storage.admin"
-  member   = "serviceAccount:${data.google_project.target_project.number}@cloudbuild.gserviceaccount.com"
-  bucket   = google_storage_bucket.sessions.name
-
-  depends_on = [
-    google_project_service.emblem_ops_services
-  ]
 }

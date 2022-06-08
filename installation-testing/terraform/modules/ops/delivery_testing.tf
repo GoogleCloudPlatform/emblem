@@ -46,6 +46,18 @@ resource "google_project_iam_member" "delivery_pubsub_editor" {
   ]
 }
 
+# This role allows the target service account to change IAM policies.
+#
+# To prevent it granting arbitrary IAM roles, we use
+# a `condition` clause to restrict what it can grant.
+#
+# Namely, the service account can ONLY grant
+# or revoke the `roles/pubsub.publisher` role.
+#
+# See this doc page for more information on conditions:
+#
+#   https://cloud.google.com/iam/docs/conditions-overview
+#
 resource "google_project_iam_member" "delivery_pubsub_publisher_granting" {
   project  = var.project_id
   provider = google
