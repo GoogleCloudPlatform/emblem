@@ -92,7 +92,7 @@ if [[ -z "$SKIP_TERRAFORM" ]]; then
         done
 
         # Configure terraform to setup the CD system.
-        export TF_VAR_cd_system="true"
+        export TF_VAR_setup_cd_system="true"
         export TF_VAR_repo_owner="${repo_owner}"
         export TF_VAR_repo_name="${repo_name}"
     fi # skip triggers
