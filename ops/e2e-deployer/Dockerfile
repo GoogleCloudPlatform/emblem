@@ -21,8 +21,9 @@ FROM google/cloud-sdk:alpine
 # Install pip
 RUN apk add py3-pip
 
-# Install packages used by Content API
-RUN pip install content-api/requirements.txt
-
 # Install Terraform
 RUN apk add terraform --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community
+
+# Install packages used by Content API
+COPY ../../content-api/requirements.txt requirements.txt
+RUN pip install requirements.txt
