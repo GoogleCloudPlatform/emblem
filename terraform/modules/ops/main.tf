@@ -10,6 +10,8 @@ resource "google_pubsub_topic" "gcr" {
   provider = google
 }
 
+# Across Cloud Build jobs we need to publish to several topics.
+# TODO: Break up this permission to granular topics via gcloud_pubsub_topic_iam_member.
 resource "google_project_iam_member" "pubsub_publisher_iam_member" {
   project  = var.project_id
   provider = google
@@ -21,25 +23,9 @@ resource "google_project_iam_member" "pubsub_publisher_iam_member" {
   ]
 }
 
-# Container Hosting
-
-# Artifact Registry API enablement is eventually consistent
-# for brand-new GCP projects; we add a delay as a work-around.
-# For more information, see this GitHub issue:
-# https://github.com/hashicorp/terraform-provider-google/issues/11020
-resource "time_sleep" "wait_for_artifactregistry" {
-  create_duration = "40s"
-  depends_on = [
-    google_project_service.emblem_ops_beta_services
-  ]
-}
-
-resource "time_sleep" "wait_for_cloud_scheduler" {
-  create_duration = "40s"
-  depends_on = [
-    google_project_service.emblem_ops_services
-  ]
-}
+#####################
+# Container Hosting #
+#####################
 
 resource "google_artifact_registry_repository" "website_docker" {
   format        = "DOCKER"
@@ -79,18 +65,19 @@ resource "google_artifact_registry_repository" "e2e_runner_docker" {
   ]
 }
 
-###
-# Secret Manager
-###
+###########################
+# End-user Authentication #
+###########################
 
-# OAuth 2.0 secrets
-# These secret resources are REQUIRED, but configuring them is OPTIONAL.
-# To avoid leaking secret data, we set their values directly with `gcloud`.
-# (Otherwise, Terraform would store secret data unencrypted in .tfstate files.)
+# This section provides common infrastructure for Google Sign-in OAuth.
+#
+# These secrets are referenced as part of the Cloud Run Website service.
+# If the OAuth setup is not completed the lack of values indicate the site
+# should operate in read-only mode.
+#
+# See https://github.com/GoogleCloudPlatform/blob/main/scripts/configure_auth.sh
+# to setup authentication if your Emblem instance is missing secret versions.
 
-# TODO: prod and staging should use different secrets
-# See the following GitHub issue:
-#   https://github.com/GoogleCloudPlatform/emblem/issues/263
 resource "google_secret_manager_secret" "oauth_client_id" {
   project   = var.project_id
   secret_id = "client_id_secret"
@@ -117,32 +104,22 @@ resource "google_secret_manager_secret" "oauth_client_secret" {
   depends_on = [google_project_service.emblem_ops_services]
 }
 
-###
-# Service Accounts (test users for the website)
-###
-resource "google_service_account" "website_test_user" {
-  project      = var.project_id
-  account_id   = "website-test-user"
-  display_name = "Website Test User"
-}
-
-resource "google_service_account" "website_test_approver" {
-  project      = var.project_id
-  account_id   = "website-test-approver"
-  display_name = "Website Test Approver"
-}
+######################
+# Nightly Operations #
+######################
 
 # This topic is published to once a day via Cloud Scheduler
-# Its purpose is to trigger "nightly" builds
+# Used by:
+# - google_cloudbuild_trigger.e2e_nightly_tests
 resource "google_pubsub_topic" "nightly" {
-  name    = "nightly-builds"
+  name    = "nightly"
   project = var.project_id
 }
 
 resource "google_cloud_scheduler_job" "nightly_schedule" {
   project     = var.project_id
-  name        = "nightly-builds"
-  description = "This job runs all nightly builds"
+  name        = "nightly"
+  description = "This job runs nightly operations."
   region      = var.region
   schedule    = "*/2 * * * *"
   pubsub_target {
