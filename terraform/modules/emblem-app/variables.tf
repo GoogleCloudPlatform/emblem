@@ -3,6 +3,11 @@ variable "project_id" {
   description = "Project ID of project to deploy resources to."
 }
 
+variable "environment" {
+  type        = string
+  description = "Environment name such as 'staging' or 'production'."
+}
+
 variable "region" {
   type        = string
   description = "Region to deploy resources to."
@@ -13,6 +18,29 @@ variable "enable_apis" {
   type        = bool
   description = "Toggle to include required APIs."
   default     = true
+}
+
+variable "setup_cd_system" {
+  type        = bool
+  default     = false
+  description = "Create deployment triggers. Enable only if Cloud Build has GitHub repository access."
+}
+
+variable "repo_owner" {
+  description = "Repo Owner (GoogleCloudPlatform)"
+  type        = string
+  default     = ""
+}
+
+variable "repo_name" {
+  description = "Repo Name (emblem)"
+  type        = string
+  default     = ""
+}
+
+variable "deploy_trigger_topic_id" {
+  type        = string
+  description = "Pub/Sub Topic ID that triggers Cloud Build deployment."
 }
 
 variable "deploy_session_bucket" {
