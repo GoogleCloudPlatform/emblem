@@ -75,6 +75,6 @@ resource "google_project_iam_member" "delivery_run_admin_granting" {
   condition {
     title       = "Cloud Run roles only"
     description = "Only allow granting/revocation of roles relevant to Cloud Run"
-    expression  = "api.getAttribute('iam.googleapis.com/modifiedGrantsByRole', []).hasOnly(['roles/run.admin', 'roles/iam.serviceAccountUser'])"
+    expression  = "api.getAttribute('iam.googleapis.com/modifiedGrantsByRole', []).hasOnly(['roles/run.admin', 'roles/iam.serviceAccountUser', 'roles/datastore.user'])"
   }
 }
