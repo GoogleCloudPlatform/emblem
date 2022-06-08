@@ -41,10 +41,10 @@ gcloud pubsub topics delete nightly \
     --project "$OPS_PROJECT" \
     || true
 
-gcloud pubsub topics delete "canary-${STAGE_PROJECT}" \
+gcloud pubsub topics delete "canary-staging" \
     --project "$OPS_PROJECT" \
     || true
-gcloud pubsub topics delete "deploy-${STAGE_PROJECT}" \
+gcloud pubsub topics delete "deploy-staging" \
     --project "$OPS_PROJECT" \
     || true
 
