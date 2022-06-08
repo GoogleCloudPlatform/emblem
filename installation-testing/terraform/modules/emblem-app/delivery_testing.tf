@@ -42,7 +42,7 @@ resource "google_storage_bucket_iam_member" "delivery_storage_admin" {
   bucket   = "${var.ops_project_id}-sessions"
 }
 
-# These `iam.securityAdmin` roles allows the target service accounts to change IAM policies.
+# These `iam.securityAdmin` roles allow the target service accounts to change IAM policies.
 #
 # To prevent them granting arbitrary IAM roles, we use
 # a `condition` clause to restrict what they can grant.
