@@ -18,7 +18,7 @@ variable "enable_apis" {
 variable "deploy_session_bucket" {
   type        = bool
   default     = true
-  description = ""
+  description = "Whether or not to deploy a [fresh] bucket for storing session data"
 }
 
 variable "session_bucket_ttl_days" {
