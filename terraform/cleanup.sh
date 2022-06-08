@@ -36,6 +36,8 @@ echo "###################################################"
 echo "# THIS IS A CLEANUP SCRIPT (errors are not fatal) #"
 echo "###################################################"
 
+echo "DEBUG: ${PROD_PROJECT} ${STAGE_PROJECT} ${OPS_PROJECT}"
+
 # Pub/Sub topics
 gcloud pubsub topics delete gcr \
     --project "$OPS_PROJECT" \
