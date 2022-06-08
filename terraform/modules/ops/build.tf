@@ -2,7 +2,7 @@
 
 resource "google_cloudbuild_trigger" "api_push_to_main" {
   project        = var.project_id
-  count          = var.cd_system ? 1 : 0
+  count          = var.setup_cd_system ? 1 : 0
   name           = "api-push-to-main"
   filename       = "ops/api-build.cloudbuild.yaml"
   included_files = ["content-api/**"]
@@ -26,7 +26,7 @@ resource "google_cloudbuild_trigger" "api_push_to_main" {
 
 resource "google_cloudbuild_trigger" "web_push_to_main" {
   project  = var.project_id
-  count    = var.cd_system ? 1 : 0
+  count    = var.setup_cd_system ? 1 : 0
   name     = "web-push-to-main"
   filename = "ops/web-build.cloudbuild.yaml"
   included_files = [
@@ -54,7 +54,7 @@ resource "google_cloudbuild_trigger" "web_push_to_main" {
 
 resource "google_cloudbuild_trigger" "e2e_runner_push_to_main" {
   project  = var.project_id
-  count    = var.cd_system ? 1 : 0
+  count    = var.setup_cd_system ? 1 : 0
   name     = "e2e-runner-push-to-main"
   filename = "ops/e2e-runner-build.cloudbuild.yaml"
   included_files = [

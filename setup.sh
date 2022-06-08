@@ -124,7 +124,6 @@ if [[ -z "$SKIP_TERRAFORM" ]]; then
         PROD_ENVIRONMENT_DIR=terraform/environments/prod
         export TF_VAR_project_id=${PROD_PROJECT}
         export TF_VAR_ops_project_id=${OPS_PROJECT}
-        export TF_VAR_deploy_trigger_project=${STAGE_PROJECT}
         terraform -chdir=${PROD_ENVIRONMENT_DIR} init
         terraform -chdir=${PROD_ENVIRONMENT_DIR} apply --auto-approve
     fi

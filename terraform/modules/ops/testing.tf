@@ -25,7 +25,7 @@ resource "google_service_account" "test_approver" {
 
 resource "google_cloudbuild_trigger" "api_unit_tests" {
   project        = var.project_id
-  count          = var.cd_system ? 1 : 0
+  count          = var.setup_cd_system ? 1 : 0
   name           = "api-unit-tests"
   filename       = "ops/unit-tests.cloudbuild.yaml"
   included_files = ["content-api/**"]
@@ -52,7 +52,7 @@ resource "google_cloudbuild_trigger" "api_unit_tests" {
 
 resource "google_cloudbuild_trigger" "web_system_tests" {
   project  = var.project_id
-  count    = var.cd_system ? 1 : 0
+  count    = var.setup_cd_system ? 1 : 0
   name     = "web-system-tests"
   filename = "ops/web-e2e.cloudbuild.yaml"
   included_files = [
@@ -86,7 +86,7 @@ resource "google_cloudbuild_trigger" "web_system_tests" {
 # the API.  Investigate work-around.
 resource "google_cloudbuild_trigger" "e2e_nightly_tests" {
   project = var.project_id
-  count   = var.cd_system ? 1 : 0
+  count   = var.setup_cd_system ? 1 : 0
   name    = "e2e-nightly-tests"
 
   pubsub_config {

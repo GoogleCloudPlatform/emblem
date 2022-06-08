@@ -9,7 +9,7 @@ variable "region" {
   description = ""
 }
 
-variable "cd_system" {
+variable "setup_cd_system" {
   type        = bool
   default     = false
   description = "Create deployment triggers. Enable only if Cloud Build has been granted GitHub access."
