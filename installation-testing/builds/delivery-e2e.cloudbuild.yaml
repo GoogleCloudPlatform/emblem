@@ -18,7 +18,7 @@ steps:
   - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-testing/deployer:${_E2E_DEPLOYER_SHA}'
     entrypoint: /bin/bash
     args:
-      - ./terraform/cleanup.sh
+      - ./installation-testing/terraform/cleanup.sh
     env:
       - "PROJECT_NUMBER=$PROJECT_NUMBER"
 
