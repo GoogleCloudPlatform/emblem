@@ -69,7 +69,14 @@ resource "google_artifact_registry_repository" "e2e_runner_docker" {
 # End-user Authentication #
 ###########################
 
-# This section provides common infrastructure for oAuth across environments.
+# This section provides common infrastructure for Google Sign-in OAuth.
+#
+# These secrets are referenced as part of the Cloud Run Website service.
+# If the OAuth setup is not completed the lack of values indicate the site
+# should operate in read-only mode.
+#
+# See https://github.com/GoogleCloudPlatform/blob/main/scripts/configure_auth.sh
+# to setup authentication if your Emblem instance is missing secret versions.
 
 resource "google_secret_manager_secret" "oauth_client_id" {
   project   = var.project_id
