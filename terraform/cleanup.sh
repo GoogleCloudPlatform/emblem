@@ -37,7 +37,7 @@ echo "###################################################"
 gcloud pubsub topics delete gcr \
     --project "$OPS_PROJECT" \
     || true
-gcloud pubsub topics delete nightly-builds \
+gcloud pubsub topics delete nightly \
     --project "$OPS_PROJECT" \
     || true
 
@@ -115,7 +115,7 @@ gcloud secrets delete client_secret_secret \
     || true
 
 # Cloud Scheduler jobs
-gcloud scheduler jobs delete nightly-builds \
+gcloud scheduler jobs delete nightly \
     --project "$OPS_PROJECT" \
     --location "$REGION" \
     -q \
