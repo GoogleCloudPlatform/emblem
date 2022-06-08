@@ -92,6 +92,16 @@ gcloud iam service-accounts delete \
     --project "$STAGE_PROJECT" \
     -q \
     || true
+gcloud iam service-accounts delete \
+    "test-user@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+    --project "$STAGE_PROJECT" \
+    -q \
+    || true
+gcloud iam service-accounts delete \
+    "test-approver@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+    --project "$STAGE_PROJECT" \
+    -q \
+    || true
 
 # Secrets
 # (QUESTION: this will brick auth; **should** we delete these?)
