@@ -63,13 +63,13 @@ resource "google_cloudbuild_trigger" "web_deploy" {
     topic = var.deploy_trigger_topic_id
   }
   approval_config {
-    approval_required = var.environment == "prod"
+    approval_required = var.require_deploy_approval
   }
   filter = "_IMAGE_NAME.matches('website')"
   substitutions = {
-    _IMAGE_NAME     = "$(body.message.attributes._IMAGE_NAME)"
-    _REGION         = "$(body.message.attributes._REGION)"
-    _REVISION       = "$(body.message.attributes._REVISION)"
+    _IMAGE_NAME     = var.gcr_pubsub_format ? "$(body.message.data.tag)" : "$(body.message.attributes._IMAGE_NAME)"
+    _REGION         = var.region
+    _REVISION       = var.gcr_pubsub_format ? "$(body.message.messageId)" : "$(body.message.attributes._REVISION)"
     _SERVICE        = "website"
     _TARGET_PROJECT = var.project_id
     _ENV            = var.environment
@@ -93,13 +93,13 @@ resource "google_cloudbuild_trigger" "api_deploy" {
     topic = var.deploy_trigger_topic_id
   }
   approval_config {
-    approval_required = var.environment == "prod"
+    approval_required = var.require_deploy_approval
   }
   filter = "_IMAGE_NAME.matches('content-api')"
   substitutions = {
-    _IMAGE_NAME     = "$(body.message.attributes._IMAGE_NAME)"
-    _REGION         = "$(body.message.attributes._REGION)"
-    _REVISION       = "$(body.message.attributes._REVISION)"
+    _IMAGE_NAME     = var.gcr_pubsub_format ? "$(body.message.data.tag)" : "$(body.message.attributes._IMAGE_NAME)"
+    _REGION         = var.region
+    _REVISION       = var.gcr_pubsub_format ? "$(body.message.messageId)" : "$(body.message.attributes._REVISION)"
     _SERVICE        = "content-api"
     _TARGET_PROJECT = var.project_id
     _ENV            = var.environment
@@ -127,10 +127,10 @@ resource "google_cloudbuild_trigger" "web_canary" {
   approval_config {
     approval_required = false
   }
-  filter = format("_SERVICE.matches('%s') && _ENV == '%s'", "website", var.environment)
+  filter = format("_SERVICE.matches('%s')", "website")
   substitutions = {
     _IMAGE_NAME     = "$(body.message.attributes._IMAGE_NAME)"
-    _REGION         = "$(body.message.attributes._REGION)"
+    _REGION         = var.region
     _REVISION       = "$(body.message.attributes._REVISION)"
     _TRAFFIC        = "$(body.message.attributes._TRAFFIC)"
     _SERVICE        = "website"
@@ -158,10 +158,10 @@ resource "google_cloudbuild_trigger" "api_canary" {
   approval_config {
     approval_required = false
   }
-  filter = format("_SERVICE.matches('%s') && _ENV == '%s'", "content-api", var.environment)
+  filter = format("_SERVICE.matches('%s')", "content-api")
   substitutions = {
     _IMAGE_NAME     = "$(body.message.attributes._IMAGE_NAME)"
-    _REGION         = "$(body.message.attributes._REGION)"
+    _REGION         = var.region
     _REVISION       = "$(body.message.attributes._REVISION)"
     _TRAFFIC        = "$(body.message.attributes._TRAFFIC)"
     _SERVICE        = "content-api"
