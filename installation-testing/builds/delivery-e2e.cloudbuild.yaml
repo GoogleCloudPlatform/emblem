@@ -18,7 +18,7 @@ steps:
   - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-testing/deployer:${_E2E_DEPLOYER_SHA}'
     entrypoint: /bin/bash
     args:
-      - ./terraform/cleanup.sh
+      - ./installation-testing/terraform/cleanup.sh
     env:
       - "PROJECT_NUMBER=$PROJECT_NUMBER"
 
@@ -50,6 +50,9 @@ steps:
 
       # Don't prompt for GCP account name
       - "USE_DEFAULT_ACCOUNT=true"
+      
+      # Skip sessions bucket creation
+      - "TF_VAR_deploy_session_bucket=0"
 
       # Skip sessions bucket creation
       - "TF_VAR_deploy_session_bucket=0"
