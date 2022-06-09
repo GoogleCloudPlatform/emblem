@@ -33,7 +33,7 @@ terraform -chdir="terraform/modules/ops" apply
 gcloud builds submit \
     --config=installation-testing/builds/e2e-deployer.cloudbuild.yaml \
     --project="$TESTING_PROJECT" \
-    --substitutions=_REGION="$REGION",_IMAGE_TAG="latest" \
+    --substitutions=_REGION="$REGION",_IMAGE_TAG="latest"
 ```
 
 5. Set up the [core Emblem application](/docs/tutorials/setup-quickstart.md).
