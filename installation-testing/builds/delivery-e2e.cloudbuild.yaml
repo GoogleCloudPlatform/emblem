@@ -49,6 +49,9 @@ steps:
 
       # Don't prompt for GCP account name
       - "USE_DEFAULT_ACCOUNT=true"
+      
+      # Skip sessions bucket creation
+      - "TF_VAR_deploy_session_bucket=0"
 
 # Specify a default value for optional variables
 substitutions:
