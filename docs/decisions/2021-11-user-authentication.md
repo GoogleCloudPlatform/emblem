@@ -1,7 +1,8 @@
 # User Authentication
 
-* **Status:** draft
+* **Status:** approved
 * **Last Updated:** 2021-11-23
+* **Builds On:** [Cloud Identity for SSO](2021-07-cloud-identity.md), [User & Application Authorization](2021-07-user-app-auth.md)
 * **Objective:** Choose how to authenticate users with Google
 
 ## Context & Problem Statement
