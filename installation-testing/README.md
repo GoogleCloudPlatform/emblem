@@ -14,8 +14,13 @@ Follow the steps below to set up these tests.
 export TF_VAR_setup_cd_system=true
 ```
 
-2. Set required variables:
+2. Set required variables.:
 ```
+# Common regions include `us-central1`, `europe-west6` and `asia-east1`.
+# See the page below for a full list:
+#   https://cloud.google.com/about/locations
+export REGION=<YOUR GCP REGION>
+
 export TESTING_PROJECT=<YOUR GCP PROJECT>
 ```
 
@@ -28,7 +33,7 @@ terraform -chdir="terraform/modules/ops" init
 terraform -chdir="terraform/modules/ops" apply
 ```
 
-4. Build the testing container
+4. Build the testing container:
 ```
 gcloud builds submit \
     --config=installation-testing/builds/e2e-deployer.cloudbuild.yaml \
