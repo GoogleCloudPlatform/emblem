@@ -10,19 +10,19 @@ Read on if you want to explore your own Emblem instance, contribute to the proje
 
 There are two ways to set up your own Emblem instance:
 
-* [Follow an Interactive Walkthrough in Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/emblem&cloudshell_tutorial=docs/tutorials/setup-walkthrough.md)
-* [Follow a Tutorial in your local terminal or Cloud Shell](tutorials/setup-quickstart.md)
+* 🚀 [Launch an Interactive Walkthrough in Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/emblem&cloudshell_tutorial=docs/tutorials/setup-walkthrough.md)
+* 📖 [Follow a Tutorial in your local terminal or Cloud Shell](tutorials/setup-quickstart.md)
 
 If you prefer a minimal, manually configured instance of Emblem, you can follow
 these two walkthroughs to setup the application without Terraform:
 
-1. [Manual API Setup Walkthrough in Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/emblem&cloudshell_tutorial=docs/tutorials/api-quickstart.md)
-1. [Manual Website Setup Walkthrough in Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/emblem&cloudshell_tutorial=docs/tutorials/website-quickstart.md)
+1. 📖 [Manual API Setup Walkthrough in Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/emblem&cloudshell_tutorial=docs/tutorials/api-quickstart.md)
+1. 📖 [Manual Website Setup Walkthrough in Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/emblem&cloudshell_tutorial=docs/tutorials/website-quickstart.md)
 
 ## Learn About Emblem
 
-* [Content API](./content-api.md)
-* [Website README](./website.md)
+* Detailed reading on the [Content API](./content-api.md)
+* Detailed reading on the [Website](./website.md)
 
 ### API Reference Materials
 
