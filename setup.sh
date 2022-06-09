@@ -36,7 +36,7 @@ trap '_error_report $LINENO' ERR
 #   USE_DEFAULT_ACCOUNT     If set, do not prompt for a GCP Account Name during database seeding
 #   REPO_OWNER              GitHub user/organization name (default: GoogleCloudPlatform)
 #   REPO_NAME               GitHub repo name (default: emblem)
-#   RUN_REQUIRE_AUTH        If set, require authentication for requests to deployed services
+#   RUN_ALLOW_UNAUTH        Whether to allow unauthenticated requests to Cloud Run services
 
 # Default to empty, avoiding unbound variable errors.
 SKIP_TERRAFORM=${SKIP_TERRAFORM:-}
@@ -45,6 +45,7 @@ SKIP_AUTH=${SKIP_AUTH:-}
 SKIP_BUILD=${SKIP_BUILD:-}
 SKIP_DEPLOY=${SKIP_DEPLOY:-}
 SKIP_SEEDING=${SKIP_SEEDING:-}
+RUN_ALLOW_UNAUTH=${RUN_ALLOW_UNAUTH:-true}
 
 # Check env variables are not empty strings
 if [[ -z "${PROD_PROJECT}" ]]; then
@@ -205,7 +206,7 @@ echo
 # Only deploy to separate project for multi-project setups
 if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
 gcloud run deploy content-api \
-    ${RUN_REQUIRE_AUTH:---allow-unauthenticated} \
+    ${RUN_ALLOW_UNAUTH:+--allow-unauthenticated} \
     --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
     --service-account "api-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
     --project "${PROD_PROJECT}" \
@@ -213,7 +214,7 @@ gcloud run deploy content-api \
 
 PROD_API_URL=$(gcloud run services describe content-api --project "${PROD_PROJECT}" --region ${REGION} --format 'value(status.url)')
 gcloud run deploy website \
-    ${RUN_REQUIRE_AUTH:---allow-unauthenticated} \
+    ${RUN_ALLOW_UNAUTH:+--allow-unauthenticated} \
     --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
     --service-account "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
     --update-env-vars "EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions" \
