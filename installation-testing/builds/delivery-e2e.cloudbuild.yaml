@@ -54,9 +54,6 @@ steps:
       # Skip sessions bucket creation
       - "TF_VAR_deploy_session_bucket=0"
 
-      # Skip sessions bucket creation
-      - "TF_VAR_deploy_session_bucket=0"
-
 # Specify a default value for optional variables
 substitutions:
   _REGION: us-central1
