@@ -47,7 +47,6 @@ steps:
       - "SKIP_TRIGGERS=true"
       - "SKIP_AUTH=true"
       - "SKIP_SEEDING=true"
-      - "SKIP_BUILD=true"
 
       # Don't prompt for GCP account name
       - "USE_DEFAULT_ACCOUNT=true"
