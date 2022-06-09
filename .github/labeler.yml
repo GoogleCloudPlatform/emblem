@@ -38,6 +38,9 @@
 - 'docs/**/*'
 - 'content-api/data/*'
 - 'content-api/data/**/*'
+'component: experimental':
+- 'experimental/*'
+- 'experimental/**/*'
 
 # The following labels are under general use evaluation.
 
