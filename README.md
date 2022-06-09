@@ -18,6 +18,13 @@ are not real.
 
 ## Learn About This Project
 
+* This project will help you learn about:
+  * 2-tier web application architecture with Cloud Run
+  * Continuous Delivery with Cloud Build
+  * Using Terraform to manage Google Cloud resources
+  * Making sustainable decisions on Cloud usage for a team
+* See products in use: Cloud Run, IAM, Secret Manager, Cloud Storage,
+  Cloud Firestore, Cloud Build, Artifact Registry, Cloud Pub/Sub, Cloud Logging
 * Go deeper into project details in the [documentation](./docs)
 * Read through the [technical decisions](docs/decisions/README.md) that got us where we are today.
 
