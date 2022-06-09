@@ -37,7 +37,5 @@ these two walkthroughs to setup the application without Terraform:
 
 ## Decision Log
 
-Read the context of decisions made in this project in the [Decision Log](./decisions). Some "story arcs" within the decisions include:
-
-* **Where to Run Your Code**: [Serverless](2021-03-serverless.md), [Cloud Run (Website)](2021-04-run-website.md), [Cloud Functions (API)](2021-04-functions-api.md), [Cloud Run (API)](2021-06-run-api.md)
-* **Shipping Software**: [Using Terraform](2021-04-terraform.md) vs. [Using gcloud](2021-05-gcloud-deploy.md)
+Learn about architectural decision records and how we use them in
+the [Decision Log](./decisions#readme), or go directly to the [big list](./decisions).
