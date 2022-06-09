@@ -170,14 +170,20 @@ echo
 echo "$(tput bold)Building container images for testing and application hosting...$(tput sgr0)"
 echo
 
-gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
+# Parallelize Cloud Builds
+# (This speeds up setup.sh significantly!)
+BUILD_A=$(
+    gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
     --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
-
-gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
+) \
+BUILD_B=$(
+    gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
     --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
-
-gcloud builds submit --config=ops/e2e-runner-build.cloudbuild.yaml \
+) \
+BUILD_C=$(
+    gcloud builds submit --config=ops/e2e-runner-build.cloudbuild.yaml \
     --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG"
+) && echo "$BUILD_A\n$BUILD_B\n$BUILD_C"
 
 fi # skip build
 
