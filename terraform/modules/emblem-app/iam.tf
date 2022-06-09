@@ -1,3 +1,10 @@
+################
+# IAM Resource #
+################
+
+# Assign IAM permission for the Cloud Run service.
+# Cloud Build permissions related to this environment are defined in deploy.tf.
+
 resource "google_service_account" "cloud_run_manager" {
   project      = var.project_id
   account_id   = "cloud-run-manager"
@@ -17,6 +24,15 @@ resource "google_service_account" "api_manager" {
   account_id   = "api-manager"
   description  = "Manages API deployments on Cloud Run."
   display_name = "api-manager"
+}
+
+# Note: any roles used here must be added to this file to prevent CI failures
+# installation-testing/terraform/modules/emblem-app/delivery_testing.tf
+
+resource "google_project_iam_member" "project" {
+  project = var.project_id
+  role    = "roles/datastore.user"
+  member  = "serviceAccount:${google_service_account.api_manager.email}"
 }
 
 resource "google_secret_manager_secret_iam_member" "secret_access_iam_client_id" {
@@ -45,7 +61,6 @@ resource "google_artifact_registry_repository_iam_member" "api_cloudrun_role_ar_
     google_project_service.emblem_app_services
   ]
 }
-
 
 ## Cloud Run service agent access to Artifact Registry (Website).
 resource "google_artifact_registry_repository_iam_member" "website_cloudrun_role_ar_reader" {

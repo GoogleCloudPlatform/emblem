@@ -25,42 +25,20 @@ resource "google_app_engine_application" "main" {
   ]
 }
 
-# TODO: narrow scope of IAM permission to only necessary service accounts rather than whole project
-resource "google_project_iam_member" "cloudbuild_role_service_account_user" {
-  role    = "roles/iam.serviceAccountUser"
-  member  = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
-  project = var.project_id
-}
-
-resource "google_project_iam_member" "cloudbuild_role_run_admin" {
-  role    = "roles/run.admin"
-  member  = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
-  project = var.project_id
-}
-
-###
-# Pipeline Orchestration
-###
-
-resource "google_pubsub_topic" "canary" {
-  name    = "canary-${var.project_id}"
-  project = var.ops_project_id
-}
-
-resource "google_pubsub_topic" "deploy" {
-  name    = "deploy-${var.project_id}"
-  project = var.ops_project_id
-}
-
 # Define user session storage bucket.
 # Objects created in this bucket represent a new user session.
 # A user may have more than one session, representing different authenticated applications/devices.
 resource "google_storage_bucket" "sessions" {
+  # Allow Terraform runs to opt-out of creating this bucket.
+  # (This is necessary for some of Emblem's automated tests.)
+  count = var.deploy_session_bucket ? 1 : 0
+
   name                        = "${var.project_id}-sessions"
   project                     = var.project_id
   uniform_bucket_level_access = true
   force_destroy               = true
   location                    = var.region
+  labels                      = {}
   # These buckets will contain end-user data, so periodic deletion is a best practice.
   # See: https://cloud.google.com/storage/docs/lifecycle
   lifecycle_rule {
@@ -74,7 +52,8 @@ resource "google_storage_bucket" "sessions" {
 }
 
 resource "google_storage_bucket_iam_member" "sessions-iam" {
-  bucket = google_storage_bucket.sessions.name
+  bucket = google_storage_bucket.sessions[0].name
   role   = "roles/storage.objectAdmin"
   member = "serviceAccount:${google_service_account.website_manager.email}"
+  count  = var.deploy_session_bucket ? 1 : 0
 }

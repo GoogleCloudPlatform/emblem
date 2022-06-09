@@ -9,10 +9,10 @@ variable "region" {
   description = ""
 }
 
-variable "deploy_triggers" {
+variable "setup_cd_system" {
   type        = bool
   default     = false
-  description = ""
+  description = "Create deployment triggers. Enable only if Cloud Build has been granted GitHub access."
 }
 
 variable "repo_owner" {
@@ -27,7 +27,3 @@ variable "repo_name" {
   default     = ""
 }
 
-variable "environment_project_ids" {
-  type        = map(string)
-  description = "Map containing environment names and project IDs"
-}
