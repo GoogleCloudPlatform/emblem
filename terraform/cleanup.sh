@@ -137,7 +137,7 @@ gcloud scheduler jobs delete nightly-builds \
     || true
 
 # Remove existing Terraform state (Part 1)
-pushd "terraform/ops"
+pushd terraform/environments/ops
 terraform init
 terraform apply \
     -destroy --auto-approve \
@@ -146,20 +146,33 @@ terraform apply \
 popd
 
 # Remove existing Terraform state (Part 2)
-APP_PROJECTS=(
-    "${STAGE_PROJECT}"
-    "${PROD_PROJECT}"
-)
+pushd terraform/environments/staging
+cat > terraform.tfvars <<EOF
+google_ops_project_id = "${OPS_PROJECT}"
+google_project_id = "${STAGE_PROJECT}"
+EOF
 
-pushd terraform/app
-for proj in ${APP_PROJECTS[@]}; do
-    terraform init
-    terraform apply \
-        -destroy --auto-approve \
-        -var google_ops_project_id="${OPS_PROJECT}" \
-        -var google_project_id="${proj}" \
-        || true
-done
+terraform init
+terraform apply \
+    -destroy --auto-approve \
+    -var google_ops_project_id="${OPS_PROJECT}" \
+    -var google_project_id="${STAGE_PROJECT}" \
+    || true
+popd
+
+# Remove existing Terraform state (Part 3)
+pushd terraform/environments/prod
+cat > terraform.tfvars <<EOF
+google_ops_project_id = "${OPS_PROJECT}"
+google_project_id = "${PROD_PROJECT}"
+EOF
+
+terraform init
+terraform apply \
+    -destroy --auto-approve \
+    -var google_ops_project_id="${OPS_PROJECT}" \
+    -var google_project_id="${PROD_PROJECT}" \
+    || true
 popd
 
 echo "###################################################"

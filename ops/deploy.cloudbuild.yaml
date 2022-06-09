@@ -21,7 +21,6 @@ steps:
       - ${_SERVICE}
       - --image=${_IMAGE_NAME}
       - --region=${_REGION}
-      - --platform=managed
       - --revision-suffix=${_REVISION}
       - --project=${_TARGET_PROJECT}
       - --allow-unauthenticated
@@ -35,8 +34,8 @@ steps:
       - pubsub
       - topics
       - publish
-      - canary-${_TARGET_PROJECT}
-      - --message="Start ${_SERVICE}-${_REVISION} rollout"
+      - canary-${_ENV}
+      - --message="Ready for ${_SERVICE}-${_REVISION} rollout"
       - --attribute=_TARGET_PROJECT=${_TARGET_PROJECT},_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION},_REGION=${_REGION},_TRAFFIC=5
 
 options:

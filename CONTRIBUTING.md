@@ -1,7 +1,5 @@
 # How to Contribute
 
-We are not currently accepting patches for this project. If you'd like to get a head start on becoming a contributor however, you can review the information below.
-
 ## Contributor License Agreement
 
 Contributions to this project must be accompanied by a Contributor License
@@ -26,7 +24,64 @@ We represent business requirements as "User Journeys". Each user journey may rep
 
 Journeys should be created via the [User Journey Proposal](https://github.com/GoogleCloudPlatform/emblem/issues/new?assignees=&labels=status%3A+investigating%2C+priority%3A+p2%2C+type%3A+journey&template=user_journey.md&title=%28Journey%29+UJ1%3A+Journey+Title) template.
 
-For more incremental changes, a feature request will be considered but should relate to an existing User Journey.
+For more incremental changes, please open a feature request. Referencing an
+[existing User Journey](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+label%3A%22type%3A+journey%22+) is helpful in considering how it fits project scope.
+
+The first implementation step for any API change is to send PR to modify
+the [OpenAPI description](content-api/openapi.yaml).
+
+## Code Reviews
+
+All submissions, including submissions by project members, require review. We
+use GitHub pull requests for this purpose. Consult
+[GitHub Help](https://help.github.com/articles/about-pull-requests/) for more
+information on using pull requests.
+
+We recommend
+[making suggestions to a Pull Request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/reviewing-changes-in-pull-requests/incorporating-feedback-in-your-pull-request) to collaboratively fix problems.
+
+## Set Up Emblem
+
+There are two ways you can setup your Emblem instance:
+
+* Maximize automation by following the [Emblem Quickstart](docs/tutorials/setup-quickstart.md)
+* Make the minimal steps manually:
+  * [Setup the Content API](docs/content-api.md#interactive-walkthrough-for-setup)
+  * [Setup the Website](docs/website.md#interactive-walkthrough-for-setup)
+
+## Running Tests
+
+See [Testing Emblem](docs/testing.md) for detailed testing instructions.
+
+## Decision Records for Significant Changes
+
+Significant changes to the architecture, developer experience, or dependencies
+involve making critical decisions about future design needs.
+
+As the project evolves, we want to capture the context of these key decisions to
+facilitate future engineering. Please [add a decision record](docs/decisions)
+to your pull request.
+
+## Automate Toil
+
+If you plan to automate codebase quality checks, consider using [googleapis/code-suggester](https://github.com/googleapis/code-suggester) to suggest changes.
+Minimizing developer follow-up action is [helpful](#positive-helpful-feedback)!
+
+If no Google Cloud resources are needed, use [GitHub Actions](https://docs.github.com/en/actions) to drive automation. Otherwise use Cloud Build ([decision](docs/decisions/2021-05-static-analysis.md)).
+
+## Automated Testing & Productivity
+
+The following automated checks are run against every Pull Request:
+
+* *cla/google*: Ensure Google's [Contributor License Agreement](#contributor-license-agreement) has been met for the proposed change.
+* *[header-check](https://github.com/googleapis/repo-automation-bots/tree/master/packages/header-checker-lint)*: Ensure all applicable files have copyright headers.
+* *[style-terraform](/.github/workflows/style-terraform.yml)*: Runs `terraform fmt`
+  on all Terraform configuration.
+* *[style-python](/.github/workflows/style-python.yml)*: Runs `black` on all python code.
+* *[block-merge](/.github/workflows/block-merge.yml)*: Blocks merging PRs that
+  have the `do not merge` label, or a label containing the word "`needs`".
+* *[auto-label](/.github/workflows/auto-label.yml)*: Adds PR labels based on
+  PR title and changed files
 
 ## Design & Project Philosophy
 
@@ -36,57 +91,3 @@ Whether it's a code review, a static analysis outcome, or an error message in th
 
 * Warnings & errors should provide context, suggest next steps, and provide direct access to more details. (For example, link to build logs.)
 * When a warning or error has a generally agreed fix or next step, point the way or suggest the fix. (For example, linting checks on a PR should propose the fixes to correct the code formatting.)
-
-## Significant Contributions
-
-**Significant contributions** change the architecture, developer experience, or add exciting new capabilities to the application. This requires making technical decisions, and in this project we do our best to capture the considerations in these moments to tell a story of software evolution and preserve context to revisit our design.
-
-Every significant contribution is expected to [add a decision record](docs/decisions.md). To make sure implementation time is not wasted, please propose design in an issue before opening a code editor.
-
-## Code Reviews
-
-All submissions, including submissions by project members, require review. We
-use GitHub pull requests for this purpose. Consult
-[GitHub Help](https://help.github.com/articles/about-pull-requests/) for more
-information on using pull requests.
-
-## Automated Testing & Productivity
-
-The following automated checks are run against every Pull Request:
-
-* *cla/google*: Ensure Google's [Contributor License Agreement](#contributor-license-agreement) has been met for the proposed change.
-* *[header-check](https://github.com/googleapis/repo-automation-bots/tree/master/packages/header-checker-lint)*: Ensure all applicable files have copyright headers.
-* *[style-terraform](/.github/workflows/style-terraform.yml)*: Propose corrections in PRs that add `terraform fmt` violations.
-
-### Creating a New Static Analysis Check
-
-If no Google Cloud resources are needed, use [GitHub Actions](https://docs.github.com/en/actions) to drive automation.
-
-Based on the philosophy [Positive & Helpful Feedback](#positive-helpful-feedback), where it's possible to [make suggestions to a Pull Request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/reviewing-changes-in-pull-requests/incorporating-feedback-in-your-pull-request) to help it conform with a check, do that in addition to any required failures. [googleapis/code-suggester](https://github.com/googleapis/code-suggester) is a good example of a tool that minimizes contributor toil.
-
-## Running Tests
-
-### Terraform
-
-Run terraform and manually verify the intended configuration change.
-
-1. Retrieve a billing account. To use gcloud to retrieve the billing account for another project:
-
-    ```sh
-    basename $(gcloud alpha billing projects describe [PROJECT] \
-      --format 'value(billingAccountName)')
-    ```
-
-1. Authenticate Terraform with credentials that can create projects. This approach assumes your user account can create projects. **Warning: This grants terraform your user access to manage all Cloud resources. Use for learning purposes only.**
-
-   ```sh
-   gcloud auth application-default login
-   ```
-
-1. Run terraform apply:
-
-   ```sh
-   terraform apply \
-     -var billing_account=[BILLING ACCOUNT] \
-     -var suffix=[USER NAME]
-   ```
