@@ -16,10 +16,7 @@
 REGION="${REGION:-us-central1}"
 
 # Check env variables are not empty strings
-if [[ -z "${PROD_PROJECT}" ]]; then
-    echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
-    exit 1
-elif [[ -z "${STAGE_PROJECT}" ]]; then
+if [[ -z "${STAGE_PROJECT}" ]]; then
     echo "Please set the $(tput bold)STAGE_PROJECT$(tput sgr0) variable"
     exit 1
 elif [[ -z "${OPS_PROJECT}" ]]; then
@@ -30,6 +27,7 @@ fi
 #########################################
 #   This script deletes resources not   #
 # deleted by `terraform apply -destroy` #
+# when recycling `ops`/`stage` projects #
 #########################################
 
 echo "###################################################"
@@ -40,20 +38,17 @@ echo "###################################################"
 gcloud pubsub topics delete gcr \
     --project "$OPS_PROJECT" \
     || true
-gcloud pubsub topics delete nightly_builds \
-    --project "$OPS_PROJECT" \
-    || true
-gcloud pubsub topics delete "canary-${PROD_PROJECT}" \
-    --project "$OPS_PROJECT" \
-    || true
-gcloud pubsub topics delete "deploy-${PROD_PROJECT}" \
+gcloud pubsub topics delete nightly \
     --project "$OPS_PROJECT" \
     || true
 
-gcloud pubsub topics delete "canary-${STAGE_PROJECT}" \
+gcloud pubsub topics delete "canary-staging" \
     --project "$OPS_PROJECT" \
     || true
-gcloud pubsub topics delete "deploy-${STAGE_PROJECT}" \
+gcloud pubsub topics delete "deploy-staging" \
+    --project "$OPS_PROJECT" \
+    || true
+gcloud pubsub topics delete "deploy-completed-staging" \
     --project "$OPS_PROJECT" \
     || true
 
@@ -101,20 +96,14 @@ gcloud iam service-accounts delete \
     --project "$STAGE_PROJECT" \
     -q \
     || true
-
 gcloud iam service-accounts delete \
-    "cloud-run-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
-    --project "$PROD_PROJECT" \
+    "test-user@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+    --project "$STAGE_PROJECT" \
     -q \
     || true
 gcloud iam service-accounts delete \
-    "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
-    --project "$PROD_PROJECT" \
-    -q \
-    || true
-gcloud iam service-accounts delete \
-    "api-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
-    --project "$PROD_PROJECT" \
+    "test-approver@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+    --project "$STAGE_PROJECT" \
     -q \
     || true
 
@@ -130,14 +119,14 @@ gcloud secrets delete client_secret_secret \
     || true
 
 # Cloud Scheduler jobs
-gcloud scheduler jobs delete nightly-builds \
+gcloud scheduler jobs delete nightly \
     --project "$OPS_PROJECT" \
     --location "$REGION" \
     -q \
     || true
 
 # Remove existing Terraform state (Part 1)
-pushd "terraform/ops"
+pushd terraform/environments/ops
 terraform init
 terraform apply \
     -destroy --auto-approve \
@@ -146,25 +135,18 @@ terraform apply \
 popd
 
 # Remove existing Terraform state (Part 2)
-APP_PROJECTS=(
-    "${STAGE_PROJECT}"
-    "${PROD_PROJECT}"
-)
-
-pushd terraform/app
-for proj in ${APP_PROJECTS[@]}; do
+pushd terraform/environments/staging
 cat > terraform.tfvars <<EOF
-google_ops_project_id = "${OPS_PROJECT}"
-google_project_id = "${proj}"
+ops_project_id = "${OPS_PROJECT}"
+project_id = "${STAGE_PROJECT}"
 EOF
 
-    terraform init
-    terraform apply \
-        -destroy --auto-approve \
-        -var google_ops_project_id="${OPS_PROJECT}" \
-        -var google_project_id="${proj}" \
-        || true
-done
+terraform init
+terraform apply \
+    -destroy --auto-approve \
+    -var google_ops_project_id="${OPS_PROJECT}" \
+    -var google_project_id="${STAGE_PROJECT}" \
+    || true
 popd
 
 echo "###################################################"
