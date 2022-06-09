@@ -2,7 +2,8 @@ locals {
   services = var.enable_apis ? [
     "firestore.googleapis.com",
     "appengine.googleapis.com",
-    "run.googleapis.com"
+    "run.googleapis.com",
+    "iam.googleapis.com"
 
   ] : []
 }
