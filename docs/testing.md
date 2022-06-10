@@ -10,13 +10,11 @@ Content API unit tests run automatically under two circumstances:
 
 ### Pipelines / Delivery System
   
-The **delivery system** is covered by an automatic **End-to-End (E2E) Test**.
+The **delivery system** can _optionally_ be covered by an automatic **End-to-End (E2E) Test**.
 
 This test uses Cloud Build to run the [setup/deployment script](/setup.sh), and checks that it completes without any errors.
   
-These tests run against the `main` branch on a **nightly** basis.
-
-> **Note:** this is currently [in progress](https://github.com/GoogleCloudPlatform/emblem/issues/347)
+Follow the [instructions](/installation-testing/README.md) in the `installation-testing` directory to enable this test.
 
 ## Website
 
