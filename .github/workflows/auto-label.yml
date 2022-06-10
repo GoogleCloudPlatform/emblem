@@ -15,7 +15,7 @@
 name: Auto Label
 on:
   pull_request_target:
-    types: [ opened, reopened, synchronized, edited ]
+    types: [ opened, reopened, synchronize, edited ]
 
 # Add labels to Pull Requests
 permissions:
