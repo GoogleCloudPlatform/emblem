@@ -75,16 +75,16 @@ Set the project variables in your Cloud Shell terminal. Replace each `<prod>`, `
   gcloud projects create $STAGE_PROJECT
   gcloud projects create $OPS_PROJECT
   ```
-2. Select a billing account and set the variable below to the **Account ID** of your billing account. (You can view your existing billing accounts by running `gcloud alpha billing accounts list` in the terminal.)
+2. Select a billing account and set the variable below to the **Account ID** of your billing account. (You can view your existing billing accounts by running `gcloud beta billing accounts list` in the terminal.)
   ```bash
   export EMBLEM_BILLING_ACCOUNT=<ACCOUNT ID>
   ```
 
 3. Link the newly created projects to your billing account:
   ```bash
-  gcloud alpha billing projects link $PROD_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
-  gcloud alpha billing projects link $STAGE_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
-  gcloud alpha billing projects link $OPS_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
+  gcloud beta billing projects link $PROD_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
+  gcloud beta billing projects link $STAGE_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
+  gcloud beta billing projects link $OPS_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
   ```
 ---
 
