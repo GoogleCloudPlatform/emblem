@@ -35,6 +35,7 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
       '__api_url__': process.env.API_URL,
       '__client_id__': process.env.CLIENT_ID,
       '__client_secret__': process.env.CLIENT_SECRET,
+      '__site_url__': process.env.SITE_URL,
       '__redirect_uri__': process.env.REDIRECT_URI
     }),
   ]

@@ -19,9 +19,8 @@ import { getConfig } from './config.js';
  * For more information, see https://developers.google.com/identity/protocols/oauth2/web-server
  */ 
 export const login = () => {
-    const { REDIRECT_URI, AUTH_CLIENT_ID } = getConfig();
-
-    const returnTo = '/';
+    const { SITE_URL, REDIRECT_URI, AUTH_CLIENT_ID } = getConfig();
+    
     // Link to redirect to Google auth service, including required query parameters.
     let signInUrl = 'https://accounts.google.com/o/oauth2/v2/auth?';
     // Client apps and their callbacks must be registered and supplied here
@@ -35,7 +34,7 @@ export const login = () => {
     signInUrl += `access_type=offline&`
     // Asking for a code that can then be exchanged for user information
     signInUrl += `response_type=code&`
-    signInUrl += `state=${returnTo}&`;
+    signInUrl += `state=${SITE_URL}&`;
 
     location.href = signInUrl;
 };

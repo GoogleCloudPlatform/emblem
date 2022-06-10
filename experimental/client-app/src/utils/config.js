@@ -15,6 +15,7 @@
 export const getConfig = () => ({
   NODE_ENV: '__env__',
   API_URL: '__api_url__',
+  SITE_URL: '__site_url__',
   THEME: '__theme__',
   REDIRECT_URI: '__redirect_uri__',
   AUTH_CLIENT_ID: '__client_id__',
