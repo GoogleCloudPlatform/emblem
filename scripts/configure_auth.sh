@@ -29,11 +29,11 @@ elif [[ -z "${OPS_PROJECT}" ]]; then
 fi
 
 # Declare variables (calculated from env-var inputs)
-STAGE_WEBSITE_URL=$(gcloud run services describe website --project ${STAGE_PROJECT} --format "value(status.address.url)")
+STAGE_WEBSITE_URL=$(gcloud run services describe lit-website --project ${STAGE_PROJECT} --format "value(status.address.url)")
 STAGE_CALLBACK_URL="${STAGE_WEBSITE_URL}/callback"
 
 if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
-PROD_WEBSITE_URL=$(gcloud run services describe website --project ${PROD_PROJECT} --format "value(status.address.url)") 
+PROD_WEBSITE_URL=$(gcloud run services describe lit-website --project ${PROD_PROJECT} --format "value(status.address.url)") 
 PROD_CALLBACK_URL="${PROD_WEBSITE_URL}/callback"
 fi
 
@@ -133,13 +133,13 @@ AUTH_SECRETS="${AUTH_SECRETS},CLIENT_SECRET=projects/${OPS_PROJECT_NUMBER}/secre
 #       using env vars, for things like custom domains and load balancers.
 #       See https://github.com/GoogleCloudPlatform/emblem/issues/277
 
-gcloud run services update website \
+gcloud run services update lit-website \
     --update-env-vars "REDIRECT_URI=${STAGE_CALLBACK_URL}" \
     --update-secrets "${AUTH_SECRETS}" \
     --project "$STAGE_PROJECT"
 
 if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
-gcloud run services update website \
+gcloud run services update lit-website \
     --update-env-vars "REDIRECT_URI=${PROD_CALLBACK_URL}" \
     --update-secrets "${AUTH_SECRETS}" \
     --project "$PROD_PROJECT"
