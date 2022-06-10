@@ -43,6 +43,8 @@ SKIP_TRIGGERS=${SKIP_TRIGGERS:-1} # TEMPORARY: Suppress triggers during iterativ
 SKIP_AUTH=${SKIP_AUTH:-}
 SKIP_BUILD=${SKIP_BUILD:-}
 SKIP_DEPLOY=${SKIP_DEPLOY:-}
+SKIP_SEEDING=${SKIP_SEEDING:-}
+USE_DEFAULT_ACCOUNT=${USE_DEFAULT_ACCOUNT:-}
 
 # Check env variables are not empty strings
 if [[ -z "${PROD_PROJECT}" ]]; then

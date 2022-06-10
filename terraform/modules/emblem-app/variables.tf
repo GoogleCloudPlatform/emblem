@@ -43,6 +43,18 @@ variable "deploy_trigger_topic_id" {
   description = "Pub/Sub Topic ID that triggers Cloud Build deployment."
 }
 
+variable "gcr_pubsub_format" {
+  type        = bool
+  default     = true
+  description = "True if Cloud Build deploy triggers should expect GCR message format."
+}
+
+variable "require_deploy_approval" {
+  type        = bool
+  default     = false
+  description = "The application services require manual approval to be deployed."
+}
+
 variable "deploy_session_bucket" {
   type        = bool
   default     = true
