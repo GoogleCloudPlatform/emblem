@@ -18,6 +18,7 @@ changelog:
   exclude:
     labels:
       - ignore-for-release
+      - 'component: experimental'
   categories:
     - title: 'Breaking Changes 🛠'
       labels:
