@@ -46,10 +46,13 @@ resource "google_cloudbuild_trigger" "test_installation_nightly" {
     repo_type = "GITHUB"
   }
 
+  substitutions = {
+    _DELIVERY_TEST_PROJECT = var.project_id
+  }
+
   # These properties are detected as changed if not initialized.
   # Alternately, add a lifecycle rule to ignore_changes.
   ignored_files  = []
   included_files = []
-  substitutions  = {}
   tags           = []
 }
