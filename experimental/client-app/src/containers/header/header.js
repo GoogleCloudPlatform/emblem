@@ -13,25 +13,41 @@
 // limitations under the License.
 
 import { LitElement, html, css } from 'lit';
+import { connect } from 'pwa-helpers/connect-mixin.js';
 import '@material/mwc-top-app-bar';
 import '@material/mwc-icon-button';
+import { fetchLoggedIn } from '../actions/auth.js';
 import headerStyles from './styles/header.js';
 import { getConfig } from '../../utils/config.js';
 
 const cloudLogo = new URL('../../../assets/google-cloud-logo.png', import.meta.url).href;
 const cymbalGivingLogo = new URL('../../../assets/cymbal-giving-logo.png', import.meta.url).href;
 
-class Header extends LitElement {
+class Header extends connect(store)(LitElement) {
   static properties = {
     theme: { type: String },
   };
   static styles = headerStyles;
   
+  constructor() {
+    super();
+    this.state = { isLoggedIn };
+  }
+  
+  firstUpdated() {
+    store.dispatch(fetchLoggedIn());
+  }
+  
+  // Note: https://lit.dev/docs/components/lifecycle/#reactive-update-cycle
+  stateChanged(state) {
+    this.state.loggedIn = state.loggedIn;
+    this.requestUpdate();
+  }
+  
   render() {
     const { API_URL } = getConfig();
+    const { isLoggedIn } = this.state;
 
-    const sessionId = document.cookie.match(/session_id=[^;]+/);
-    
     return html`
       <div class="headerContainer">
         ${this.theme === 'cymbal'
@@ -45,7 +61,7 @@ class Header extends LitElement {
           </div>
           <mwc-icon-button icon="help_outline" slot="actionItems"></mwc-icon-button>
           <mwc-icon-button icon="notifications" slot="actionItems"></mwc-icon-button>
-          ${sessionId
+          ${isLoggedIn
             ? html`<a href=${`/auth/logout`}>
                 <mwc-icon-button icon="logout" slot="actionItems" class="login"></mwc-icon-button>
               </a>`

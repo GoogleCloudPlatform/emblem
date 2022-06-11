@@ -13,8 +13,7 @@
 // limitations under the License.
 
 const checkUserAuthentication = store => next => action => {
-  // TODO: Add in check for session cookie and if access
-  // needs to be updated (refresh token)
+  // TODO: Add in check for authentication state
   return next(action);
 }
 

@@ -36,15 +36,8 @@ export const login = () => {
     signInUrl += `response_type=code&`
     signInUrl += `state=${SITE_URL}&`;
 
+    // eslint-disable-next-line no-restricted-globals
     location.href = signInUrl;
 };
 
-/**
- * /logout - deletes the user login session and revokes refresh token
- * For more information, see https://developers.google.com/identity/protocols/oauth2/web-server
- */ 
-export const logout = () => {
-  // TODO: Remove session id/data from cookie if exists
-};
-
-export default { login, logout };
+export default { login };

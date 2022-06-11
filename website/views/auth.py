@@ -160,6 +160,20 @@ def handle_callback():
         response.set_cookie("session_id", value=session_id, secure=True, httponly=True)
         return response
 
+@auth_bp.route("/loggedIn", methods=["GET"])
+def loggedIn():
+    """loggedIn
+
+    Identifies whether user has valid session_id.
+
+    Three actions are taken:
+        - returns boolean if stored session data is present
+    """
+    session_id = request.cookies.get("session_id")
+
+    if session_id is None:
+        return false
+    return true
 
 @auth_bp.route("/logout", methods=["GET"])
 def logout():
@@ -206,3 +220,4 @@ def logout():
     response.delete_cookie("session_id")
 
     return response
+
