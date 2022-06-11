@@ -1,12 +1,3 @@
-# GCP project data
-data "google_project" "ops" {
-  project_id = var.project_id
-}
-
-############################
-# E2E Delivery testing IAM #
-############################
-
 resource "google_project_iam_member" "delivery_ar_admin" {
   project  = var.project_id
   provider = google
