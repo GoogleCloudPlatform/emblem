@@ -25,7 +25,7 @@ steps:
       - --project=${_TARGET_PROJECT}
       - --allow-unauthenticated
       - --no-traffic
-      - --set-env-vars=${_ENV_VARS}
+      - --update-env-vars=${_ENV_VARS}
       - --tag=latest
 
   # Send message to pub/sub to start canary rollout process

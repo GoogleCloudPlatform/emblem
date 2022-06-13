@@ -59,7 +59,7 @@ steps:
       - -c
       - |
         if [ ${_TRAFFIC} -lt 100 ]
-        then gcloud pubsub topics publish canary-${_TARGET_PROJECT} \
+        then gcloud pubsub topics publish canary-${_ENV} \
         --message="Increase ${_SERVICE}-${_REVISION} traffic to $((${_TRAFFIC}+5))" \
         --attribute=_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION},_TRAFFIC=$((${_TRAFFIC}+5))
         else
