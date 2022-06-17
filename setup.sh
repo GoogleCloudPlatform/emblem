@@ -22,7 +22,6 @@ _error_report() {
 }
 trap '_error_report $LINENO' ERR
 
-
 # Variable list
 #   PROD_PROJECT            GCP Project ID of the production project
 #   STAGE_PROJECT           GCP Project ID of the staging project
@@ -34,12 +33,10 @@ trap '_error_report $LINENO' ERR
 #   SKIP_DEPLOY             If set, do not deploy services
 #   SKIP_SEEDING            If set, do not seed the database
 #   USE_DEFAULT_ACCOUNT     If set, do not prompt for a GCP Account Name during database seeding
-#   REPO_OWNER              GitHub user/organization name (default: GoogleCloudPlatform)
-#   REPO_NAME               GitHub repo name (default: emblem)
 
 # Default to empty, avoiding unbound variable errors.
 SKIP_TERRAFORM=${SKIP_TERRAFORM:-}
-SKIP_TRIGGERS=${SKIP_TRIGGERS:-1} # TEMPORARY: Suppress triggers during iterative fix.
+SKIP_TRIGGERS=${SKIP_TRIGGERS:-}
 SKIP_AUTH=${SKIP_AUTH:-}
 SKIP_BUILD=${SKIP_BUILD:-}
 SKIP_DEPLOY=${SKIP_DEPLOY:-}
@@ -61,64 +58,31 @@ fi
 ## Initialize Variables ##
 export REGION="us-central1"
 
-# Force SKIP_TRIGGERS until fully integrated into Terraform ops module
-export SKIP_TRIGGERS="true"
-
 echo "Setting up a new instance of Emblem. There may be a few prompts to guide the process."
 
-########################
-# Infrastructure Setup #
-########################
+###################
+# Terraform Setup #
+###################
 
 if [[ -z "$SKIP_TERRAFORM" ]]; then
-
-    ## Cloud Build Trigger Setup #
-    if [[ -z "$SKIP_TRIGGERS" ]]; then
-        echo
-        echo "$(tput bold)Setting up Cloud Build triggers...$(tput sgr0)"
-        echo
-
-        REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?project=${OPS_PROJECT}"
-        echo "Connect your repos: ${REPO_CONNECT_URL}"
-        read -rp "Once your repo is connected, please continue by typing any key."
-        continue=1
-        while [[ ${continue} -gt 0 ]]; do
-            read -rp "Please input the repo owner [GoogleCloudPlatform]: " REPO_OWNER
-            repo_owner=${repo_owner:-GoogleCloudPlatform}
-            read -rp "Please input the repo name [emblem]: " REPO_NAME
-            repo_name=${repo_name:-emblem}
-
-            read -rp "Is this the correct repo: ${REPO_OWNER}/${REPO_NAME}? (y/n) " yesno
-
-            if [[ ${yesno} == "y" ]]; then
-                continue=0
-            fi
-        done
-
-        # Configure terraform to setup the CD system.
-        export TF_VAR_setup_cd_system="true"
-        export TF_VAR_repo_owner="${repo_owner}"
-        export TF_VAR_repo_name="${repo_name}"
-    fi # skip triggers
-
-    ## Terraform ##
-
     echo
     echo "$(tput bold)Setting up your Cloud resources with Terraform...$(tput sgr0)"
     echo
 
     # Ops Project
     OPS_ENVIRONMENT_DIR=terraform/environments/ops
-    export TF_VAR_project_id=${OPS_PROJECT}
-    export TF_VAR_repo_owner=${OPS_PROJECT}
-    export TF_VAR_repo_name=${OPS_PROJECT}
+    cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+project_id = "${OPS_PROJECT}"
+EOF
     terraform -chdir=${OPS_ENVIRONMENT_DIR} init
     terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
 
     # Staging Project
     STAGE_ENVIRONMENT_DIR=terraform/environments/staging
-    export TF_VAR_project_id=${STAGE_PROJECT}
-    export TF_VAR_ops_project_id=${OPS_PROJECT}
+    cat > "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+project_id = "${STAGE_PROJECT}"
+ops_project_id = "${OPS_PROJECT}"
+EOF
     terraform -chdir=${STAGE_ENVIRONMENT_DIR} init
     terraform -chdir=${STAGE_ENVIRONMENT_DIR} apply --auto-approve
 
@@ -126,8 +90,10 @@ if [[ -z "$SKIP_TERRAFORM" ]]; then
     # Only deploy to separate project for multi-project setups
     if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
         PROD_ENVIRONMENT_DIR=terraform/environments/prod
-        export TF_VAR_project_id=${PROD_PROJECT}
-        export TF_VAR_ops_project_id=${OPS_PROJECT}
+    cat > "${PROD_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+project_id = "${PROD_PROJECT}"
+ops_project_id = "${OPS_PROJECT}"
+EOF
         terraform -chdir=${PROD_ENVIRONMENT_DIR} init
         terraform -chdir=${PROD_ENVIRONMENT_DIR} apply --auto-approve
     fi
@@ -189,52 +155,52 @@ fi # skip build
 
 if [[ -z "$SKIP_DEPLOY" ]]; then
 
-echo
-echo "$(tput bold)Deploying Cloud Run services...$(tput sgr0)"
-echo
+    echo
+    echo "$(tput bold)Deploying Cloud Run services...$(tput sgr0)"
+    echo
 
-## Production Services ##
+    ## Staging Services ##
 
-# Only deploy to separate project for multi-project setups
-if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
-gcloud run deploy content-api \
-    --allow-unauthenticated \
-    --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
-    --service-account "api-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
-    --project "${PROD_PROJECT}" \
-    --region "${REGION}"
+    gcloud run deploy content-api \
+        --allow-unauthenticated \
+        --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
+        --service-account "api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+        --project "${STAGE_PROJECT}" \
+        --region "${REGION}"
 
-PROD_API_URL=$(gcloud run services describe content-api --project "${PROD_PROJECT}" --region ${REGION} --format 'value(status.url)')
-gcloud run deploy website \
-    --allow-unauthenticated \
-    --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
-    --service-account "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
-    --update-env-vars "EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions" \
-    --update-env-vars "EMBLEM_API_URL=${PROD_API_URL}" \
-    --project "${PROD_PROJECT}" \
-    --region "${REGION}" \
-    --tag "latest"
-fi
+    STAGING_API_URL=$(gcloud run services describe content-api --project "${STAGE_PROJECT}" --region ${REGION} --format 'value(status.url)')
+    gcloud run deploy website \
+        --allow-unauthenticated \
+        --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
+        --service-account "website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+        --update-env-vars "EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions" \
+        --update-env-vars "EMBLEM_API_URL=${STAGING_API_URL}" \
+        --project "${STAGE_PROJECT}" \
+        --region "${REGION}" \
+        --tag "latest"
 
-## Staging Services ##
+    ## Production Services ##
 
-gcloud run deploy content-api \
-    --allow-unauthenticated \
-    --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
-    --service-account "api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
-    --project "${STAGE_PROJECT}" \
-    --region "${REGION}" 
+    # Only deploy to separate project for multi-project setups
+    if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
+        gcloud run deploy content-api \
+            --allow-unauthenticated \
+            --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
+            --service-account "api-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
+            --project "${PROD_PROJECT}" \
+            --region "${REGION}"
 
-STAGING_API_URL=$(gcloud run services describe content-api --project "${STAGE_PROJECT}" --region ${REGION} --format 'value(status.url)')
-gcloud run deploy website \
-    --allow-unauthenticated \
-    --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
-    --service-account "website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
-    --update-env-vars "EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions" \
-    --update-env-vars "EMBLEM_API_URL=${STAGING_API_URL}" \
-    --project "${STAGE_PROJECT}" \
-    --region "${REGION}" \
-    --tag "latest"
+        PROD_API_URL=$(gcloud run services describe content-api --project "${PROD_PROJECT}" --region ${REGION} --format 'value(status.url)')
+        gcloud run deploy website \
+            --allow-unauthenticated \
+            --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
+            --service-account "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
+            --update-env-vars "EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions" \
+            --update-env-vars "EMBLEM_API_URL=${PROD_API_URL}" \
+            --project "${PROD_PROJECT}" \
+            --region "${REGION}" \
+            --tag "latest"
+    fi
 
 fi # skip deploy
 
@@ -258,3 +224,24 @@ if [[ -z "$SKIP_AUTH" ]]; then
         echo
     fi
 fi # skip authentication
+
+###############
+# Setup CI/CD #
+###############
+
+if [[ -z "$SKIP_TRIGGERS" ]]; then
+    echo
+    read -rp "Would you like to configure $(tput bold)$(tput setaf 3)continuous delivery?$(tput sgr0) (y/n) " cd_yesno
+
+    if [[ ${cd_yesno} == "y" ]]; then
+        sh ./scripts/configure_delivery.sh
+    else
+        echo "Skipping continuous delivery configuration. You can configure it later by running:"
+        echo
+        echo "  export $(tput bold)PROD_PROJECT$(tput sgr0)=$(tput setaf 6)${PROD_PROJECT}$(tput sgr0)"
+        echo "  export $(tput bold)STAGE_PROJECT$(tput sgr0)=$(tput setaf 6)${STAGE_PROJECT}$(tput sgr0)"
+        echo "  export $(tput bold)OPS_PROJECT$(tput sgr0)=$(tput setaf 6)${OPS_PROJECT}$(tput sgr0)"
+        echo "  $(tput setaf 6)sh ./scripts/configure_delivery.sh$(tput sgr0)"
+        echo
+    fi
+fi # skip triggers
