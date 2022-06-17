@@ -52,7 +52,7 @@ resource "google_cloudbuild_trigger" "web_push_to_main" {
   tags          = []
 }
 
-resource "google_cloudbuild_trigger" "e2e_runner_push_to_main" {
+resource "google_cloudbuild_trigger" "e2e_testing_build_runner" {
   project  = var.project_id
   count    = var.setup_cd_system ? 1 : 0
   name     = "e2e-runner-push-to-main"
