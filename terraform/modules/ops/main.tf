@@ -53,10 +53,10 @@ resource "google_artifact_registry_repository" "api_docker" {
   ]
 }
 
-resource "google_artifact_registry_repository" "e2e_runner_docker" {
+resource "google_artifact_registry_repository" "e2e_testing_docker" {
   format        = "DOCKER"
   location      = var.region
-  repository_id = "e2e-runner"
+  repository_id = "e2e-testing"
   project       = var.project_id
   provider      = google-beta
 
@@ -121,7 +121,7 @@ resource "google_cloud_scheduler_job" "nightly_schedule" {
   name        = "nightly"
   description = "This job runs nightly operations."
   region      = var.region
-  schedule    = "*/2 * * * *"
+  schedule    = "0 2 * * *"
   pubsub_target {
     topic_name = google_pubsub_topic.nightly.id
     data       = base64encode("not empty")
