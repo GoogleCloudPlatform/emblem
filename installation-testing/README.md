@@ -17,7 +17,7 @@ Follow the steps below to set up these tests.
 export TF_VAR_setup_cd_system=true
 ```
 
-2. Set required variables.:
+2. Set required variables:
 ```
 # Common regions include `us-central1`, `europe-west6` and `asia-east1`.
 # See the page below for a full list:
@@ -35,6 +35,9 @@ export TF_VAR_ops_project_id=$TESTING_PROJECT
 # Configure GitHub {user, repository} name
 export TF_VAR_repo_owner=<YOUR GITHUB USER/ORG NAME>
 export TF_VAR_repo_name=emblem
+
+# Specify the triggering Pub/Sub topic ID (default: nightly)
+export TF_VAR_deploy_trigger_topic_id=nightly
 ```
 
 3. Run Terraform from the `installation-testing` directory:
