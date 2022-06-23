@@ -45,11 +45,11 @@ export TF_VAR_environment=staging
 
 3. Run Terraform from the `installation-testing` directory:
 ```
-terraform -chdir="terraform/modules/emblem-app" init
-terraform -chdir="terraform/modules/emblem-app" apply
+terraform -chdir="installation-testing/terraform/modules/emblem-app" init
+terraform -chdir="installation-testing/terraform/modules/emblem-app" apply
 
-terraform -chdir="terraform/modules/ops" init
-terraform -chdir="terraform/modules/ops" apply
+terraform -chdir="installation-testing/terraform/modules/ops" init
+terraform -chdir="installation-testing/terraform/modules/ops" apply
 ```
 
 4. Build the testing container:
