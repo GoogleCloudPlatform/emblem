@@ -22,6 +22,9 @@ export TF_VAR_setup_cd_system=true
 export REGION=<YOUR GCP REGION>
 
 export TESTING_PROJECT=<YOUR GCP PROJECT>
+
+# Expose testing project ID to Terraform
+export TF_VAR_project_id=$TESTING_PROJECT
 ```
 
 3. Run Terraform from the `installation-testing` directory:
