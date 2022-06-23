@@ -9,12 +9,17 @@ This folder contains resources used to test that Emblem is correctly provisioned
 ## Setup
 Follow the steps below to set up these tests.
 
-1. Enable Terraform components:
+1. **[Optional]** If necessary, create a new Google Cloud project:
+```
+gcloud projects create <YOUR GCP PROJECT>
+```
+
+2. Enable Terraform components:
 ```
 export TF_VAR_setup_cd_system=true
 ```
 
-2. Set required variables.:
+3. Set required variables.:
 ```
 # Common regions include `us-central1`, `europe-west6` and `asia-east1`.
 # See the page below for a full list:
@@ -27,7 +32,7 @@ export TESTING_PROJECT=<YOUR GCP PROJECT>
 export TF_VAR_project_id=$TESTING_PROJECT
 ```
 
-3. Run Terraform from the `installation-testing` directory:
+4. Run Terraform from the `installation-testing` directory:
 ```
 terraform -chdir="terraform/modules/emblem-app" init
 terraform -chdir="terraform/modules/emblem-app" apply
@@ -36,7 +41,7 @@ terraform -chdir="terraform/modules/ops" init
 terraform -chdir="terraform/modules/ops" apply
 ```
 
-4. Build the testing container:
+5. Build the testing container:
 ```
 gcloud builds submit \
     --config=installation-testing/builds/e2e-deployer.cloudbuild.yaml \
@@ -44,7 +49,7 @@ gcloud builds submit \
     --substitutions=_REGION="$REGION",_IMAGE_TAG="latest"
 ```
 
-5. Set up the [core Emblem application](/docs/tutorials/setup-quickstart.md).
+6. Set up the [core Emblem application](/docs/tutorials/setup-quickstart.md).
 
 ## Useful links
 
