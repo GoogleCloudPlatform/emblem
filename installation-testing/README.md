@@ -37,6 +37,10 @@ export TF_VAR_project_id=$TESTING_PROJECT
 
 # Use the same project for "ops" and "staging"
 export TF_VAR_ops_project_id=$TESTING_PROJECT
+
+# Configure GitHub {user, repository} name
+export TF_VAR_repo_owner=<YOUR GITHUB USER/ORG NAME>
+export TF_VAR_repo_name=emblem
 ```
 
 4. Run Terraform from the `installation-testing` directory:
