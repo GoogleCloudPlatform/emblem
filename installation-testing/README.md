@@ -38,6 +38,9 @@ export TF_VAR_repo_name=emblem
 
 # Specify the triggering Pub/Sub topic ID (default: nightly)
 export TF_VAR_deploy_trigger_topic_id=nightly
+
+# Specify application environment
+export TF_VAR_environment=staging
 ```
 
 3. Run Terraform from the `installation-testing` directory:
