@@ -9,9 +9,13 @@ This folder contains resources used to test that Emblem is correctly provisioned
 ## Setup
 Follow the steps below to set up these tests.
 
-1. **[Optional]** If necessary, create a new Google Cloud project:
+1. **[Optional]** If necessary, create a new Google Cloud project and a corresponding session data bucket:
 ```
+# Create the GCP project
 gcloud projects create <YOUR GCP PROJECT>
+
+# Create the session data bucket
+gsutil mb gs://<YOUR GCP PROJECT>-sessions
 ```
 
 2. Enable Terraform components:
