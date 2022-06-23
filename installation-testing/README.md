@@ -37,7 +37,7 @@ export TF_VAR_repo_owner=<YOUR GITHUB USER/ORG NAME>
 export TF_VAR_repo_name=emblem
 
 # Specify the triggering Pub/Sub topic ID (default: nightly)
-export TF_VAR_deploy_trigger_topic_id=nightly
+export TF_VAR_deploy_trigger_topic_id="projects/$TESTING_PROJECT/topics/nightly"
 
 # Specify application environment
 export TF_VAR_environment=staging
