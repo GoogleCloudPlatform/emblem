@@ -30,6 +30,9 @@ export TESTING_PROJECT=<YOUR GCP PROJECT>
 
 # Expose testing project ID to Terraform
 export TF_VAR_project_id=$TESTING_PROJECT
+
+# Use the same project for "ops" and "staging"
+export TF_VAR_ops_project_id=$TESTING_PROJECT
 ```
 
 4. Run Terraform from the `installation-testing` directory:
