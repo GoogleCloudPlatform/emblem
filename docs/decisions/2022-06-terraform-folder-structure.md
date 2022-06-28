@@ -21,7 +21,7 @@ N/A
 
 Chosen option: "[option 1] Split Terraform into two primary modules".
 
-`setup.sh` provisioned two types of environments, each associcated with its own Google Cloud Project.  At the time of this decision, these types were ops and application. With the exception of some values that could be managed via variables, deployed resources were identical for each application environment (stage and prod), and ops was unique environment on its own. Therefore `terraform/modules/ops` and `terraform/modules/emblem-app` were created. Additionally, to better isolate state files among environments, `terraform/environments/` was created, where Terraform root modules corresponding with each environment would be created.  
+`setup.sh` provisioned two types of environments, each associated with its own Google Cloud Project.  At the time of this decision, these types were ops and application. With the exception of some values that could be managed via variables, deployed resources were identical for each application environment (stage and prod), and ops was a unique environment on its own. Therefore `terraform/modules/ops` and `terraform/modules/emblem-app` were created. Additionally, to better isolate state files among environments, `terraform/environments/` was created, where Terraform root modules corresponding with each environment would be created.  
 
 ### Expected Consequences <!-- optional -->
 
