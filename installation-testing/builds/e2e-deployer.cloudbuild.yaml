@@ -22,7 +22,7 @@ steps:
       - |
         docker build -t \
         ${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/deployer:${_IMAGE_TAG} \
-        ops/e2e-deployer
+        installation-testing/containers/e2e-deployer
 # Default to us-central1
 substitutions:
   _REGION: us-central1
