@@ -9,7 +9,7 @@ and [ops/](https://github.com/GoogleCloudPlatform/emblem/tree/main/ops).
 
 ## Design
 
-Check out the [Shipping Software decisions](docs/decisions#shipping-software) to review the delivery design as it evolved.
+Check out the [Shipping Software decisions](decisions#shipping-software) to review the delivery design as it evolved.
 
 The installation tools & delivery system together combine to support two primary installation modes:
 
