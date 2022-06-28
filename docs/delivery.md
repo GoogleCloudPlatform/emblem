@@ -1,6 +1,6 @@
 # Emblem - Delivery
 
-![Emblem Delivery Pipeline diagram](docs/images/testing-delivery-pipeline.png)
+![Emblem Delivery Pipeline diagram](images/testing-delivery-pipeline.png)
 
 The Emblem delivery system is responsible for reliably shipping code changes to production.
 
