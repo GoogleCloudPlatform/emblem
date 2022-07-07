@@ -40,7 +40,7 @@
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-replace": "^4.0.0",
     "@web/dev-server": "^0.1.32",
-    "@web/dev-server-rollup": "^0.3.17",
+    "@web/dev-server-rollup": "^0.3.18",
     "@web/rollup-plugin-copy": "^0.3.0",
     "@web/rollup-plugin-html": "^1.10.3",
     "eslint": "^8.17.0",
