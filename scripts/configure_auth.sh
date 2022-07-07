@@ -29,11 +29,11 @@ elif [[ -z "${OPS_PROJECT}" ]]; then
 fi
 
 # Declare variables (calculated from env-var inputs)
-STAGE_WEBSITE_URL=$(gcloud run services describe lit-website --project ${STAGE_PROJECT} --format "value(status.address.url)")
+STAGE_WEBSITE_URL=$(gcloud run services describe content-api --project ${STAGE_PROJECT} --format "value(status.address.url)")
 STAGE_CALLBACK_URL="${STAGE_WEBSITE_URL}/callback"
 
 if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
-PROD_WEBSITE_URL=$(gcloud run services describe lit-website --project ${PROD_PROJECT} --format "value(status.address.url)") 
+PROD_WEBSITE_URL=$(gcloud run services describe content-api --project ${PROD_PROJECT} --format "value(status.address.url)") 
 PROD_CALLBACK_URL="${PROD_WEBSITE_URL}/callback"
 fi
 

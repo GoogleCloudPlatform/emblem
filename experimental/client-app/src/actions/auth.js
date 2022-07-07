@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { configureStore } from '@reduxjs/toolkit';
-import { campaignReducer, campaignListReducer } from './campaigns.js';
-import { sessionReducer } from './auth.js';
-import authMiddleware from '../middleware/auth.js';
-import loggerMiddleware from '../middleware/logger.js';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { getConfig } from '../utils/config.js';
 
-export default configureStore({
-  middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware().concat([loggerMiddleware, authMiddleware]);
-  },
-  reducer: {
-    auth: sessionReducer,
-    campaign: campaignReducer,
-    campaignList: campaignListReducer
+const developmentUrl = getConfig().API_URL;
+export const fetchSession = createAsyncThunk('fetchSession', async () => {
+  let hasSession = false;
+  const url = `${developmentUrl}/hasSession`;
+
+  try {
+    const response = await fetch(url);
+    hasSession = await response.json();
+  } catch(e) {
+    console.error(e);
   }
+  return hasSession;
 });

@@ -30,8 +30,6 @@ class Header extends LitElement {
   render() {
     const { API_URL } = getConfig();
 
-    const sessionId = document.cookie.match(/session_id=[^;]+/);
-    
     return html`
       <div class="headerContainer">
         ${this.theme === 'cymbal'
@@ -45,14 +43,12 @@ class Header extends LitElement {
           </div>
           <mwc-icon-button icon="help_outline" slot="actionItems"></mwc-icon-button>
           <mwc-icon-button icon="notifications" slot="actionItems"></mwc-icon-button>
-          ${sessionId
-            ? html`<a href=${`/auth/logout`}>
-                <mwc-icon-button icon="logout" slot="actionItems" class="login"></mwc-icon-button>
-              </a>`
-            : html`<a href=${`/auth/login`}>
-                <mwc-icon-button icon="person_outline" slot="actionItems" class="logout"></mwc-icon-button>
-              </a>`
-          }
+          <a href=${`/auth/logout`}>
+            <mwc-icon-button icon="logout" slot="actionItems" class="login"></mwc-icon-button>
+          </a>
+          <a href=${`/auth/login`}>
+            <mwc-icon-button icon="person_outline" slot="actionItems" class="logout"></mwc-icon-button>
+          </a>
         </div>
       </div>
       <div class="banner">

@@ -43,8 +43,10 @@ export const login = () => {
  * /logout - deletes the user login session and revokes refresh token
  * For more information, see https://developers.google.com/identity/protocols/oauth2/web-server
  */ 
-export const logout = () => {
-  // TODO: Remove session id/data from cookie if exists
+export const logout = async () => {
+    const { API_URL } = getConfig();
+
+    await fetch(`${API_URL}/logout`, { method: 'GET' });
 };
 
 export default { login, logout };
