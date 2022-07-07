@@ -51,7 +51,7 @@
     "prettier": "^2.7.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.75.7",
-    "stylelint": "^14.8.5",
+    "stylelint": "^14.9.1",
     "stylelint-config-recommended": "^7.0.0",
     "stylelint-config-styled-components": "^0.1.1",
     "stylelint-processor-styled-components": "^1.10.0"
