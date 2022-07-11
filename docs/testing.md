@@ -8,7 +8,7 @@ Content API unit tests run automatically under two circumstances:
 * [nightly against `main`](/terraform/ops/triggers/cloud_build_triggers.tf#:~:text=api_unit_tests_build_trigger)
 * [on pull requests to `main`](/terraform/ops/triggers/cloud_build_triggers.tf#:~:text=api_push_to_main_build_trigger)
 
-### Pipelines / Delivery System
+## Pipelines / Delivery System
   
 The **delivery system** can _optionally_ be covered by an automatic **End-to-End (E2E) Test**.
 
