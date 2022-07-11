@@ -12,25 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-from flask_cors import CORS
-from flask import (
-    Flask,
-    g,
-    Blueprint,
-    current_app,
-    make_response,
-    redirect,
-    render_template,
-    request,
-    session,
-)
+from os import set_inheritable
+from flask import Flask, g, request
 
-import requests
 from google.auth.transport import requests as reqs
 from google.oauth2 import id_token
+
 from resources import methods
-from middleware import session
+
 
 resource = [
     "approvers",
@@ -41,8 +30,7 @@ resource = [
 ]
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
-CORS(app)
+
 
 # Check authentication and remember result in global request context
 #
@@ -86,131 +74,9 @@ def check_user_authentication():
 
     return
 
-#############################
-# Authentication
-# TODO: Ensure any terraform scripts/bash scripts
-# update content-api container with
-# CLIENT_ID, CLIENT_SECRET, EMBLEM_SESSION_BUCKET, REDIRECT_URI
-#############################
 
-@app.route("/callback", methods=["GET"])
-def handle_callback():
-    """handle_callback
-
-    A successful login using Google sign-in will end with the user's browser
-    being redirected to this path, providing query parameters can can be used
-    to retrieve user information.
-    """
-    args = request.args.to_dict()
-
-    # After handling login info and session creation, where should the user go?
-    redirect_path = args.get("state", "/")
-
-    code = args.get("code")
-    if code is None:
-        return render_template("errors/403.html"), 403
-
-    client_id = os.getenv("CLIENT_ID")
-    client_secret = os.getenv("CLIENT_SECRET")
-    redirect_uri = os.getenv("REDIRECT_URI")
-
-    # Exchange the code for tokens
-    r = requests.post(
-        "https://oauth2.googleapis.com/token",
-        data={
-            "code": code,
-            "client_id": client_id,
-            "client_secret": client_secret,
-            "redirect_uri": redirect_uri,
-            "grant_type": "authorization_code",
-        },
-    )
-
-    try:
-        resp = r.json()
-    except Exception as e:
-        return render_template("errors/403.html"), 403
-
-    token = resp.get("id_token")
-    refresh_token = resp.get("refresh_token")
-
-    try:
-        info = id_token.verify_oauth2_token(token, reqs.Request())
-        if "email" not in info:
-            return render_template("errors/403.html"), 403
-    except Exception as e:
-        return render_template("errors/403.html"), 403
-
-    session_id = session.create(
-        {
-            "id_token": token,
-            "refresh_token": refresh_token,
-            "email": info["email"],
-            "expiration": info["exp"],
-        }
-    )
-
-    if session_id is None:
-        return render_template("errors/403.html"), 403
-    else:
-        response = redirect(redirect_path)
-        response.set_cookie("session_id", value=session_id, secure=True, httponly=True)
-        return response
-
-@app.route("/hasSession", methods=["GET"])
-def has_session():
-    session_id = request.cookies.get("session_id")
-
-    if session_id is None:
-        return "false"
-
-    session_data = session.read(session_id)
-
-    if session_data is None:
-        return "false"
-
-    return "true"
-
-@app.route("/logout", methods=["GET"])
-def logout():
-    """logout
-
-    User is logged out.
-
-    Three actions are taken:
-        - refresh token is revoked
-        - cookie "session_id" is deleted
-        - stored session data for "session_id" is deleted
-    """
-
-    redirect_uri = os.getenv("REDIRECT_URI")
-    session_id = request.cookies.get("session_id")
-
-    if session_id is None:
-        return redirect(redirect_uri)
-
-    session_data = session.read(session_id)
-    if session_data is None:
-        return redirect(redirect_uri)
-
-    refresh_token = session_data.get("refresh_token", "")
-
-    # Best effort to revoke the token
-    response = requests.post(
-        f"https://oauth2.googleapis.com/revoke?token={refresh_token}", data={}
-    )
-
-    # Delete the session data
-    session.delete(session_id)
-
-    # Wipe out the session cookie
-    response.delete_cookie("session_id")
-
-    return response
-
-#############################
 # Resource collection methods
-#############################
+
 
 @app.route("/<resource_name>", methods=["GET"])
 def handle_list(resource_name):
@@ -238,9 +104,8 @@ def handle_insert(resource_name):
     return methods.insert(resource_name, body)
 
 
-#############################
 # Individual resource methods
-#############################
+
 
 @app.route("/<resource_name>/<id>", methods=["GET"])
 def handle_get(resource_name, id):

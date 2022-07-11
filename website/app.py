@@ -15,31 +15,26 @@
 import os
 
 from flask import Flask, current_app
-from flask_cors import CORS
 from views.campaigns import campaigns_bp
 from views.donations import donations_bp
 from views.errors import errors_bp
 from views.auth import auth_bp
 from views.robots_txt import robots_txt_bp
-from views.routes import routes_bp
+
 from middleware import auth, csp
-from flask_cors import CORS
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
-CORS(app)
 
-app.register_blueprint(routes_bp)
 app.register_blueprint(errors_bp)
 app.register_blueprint(donations_bp)
 app.register_blueprint(campaigns_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(robots_txt_bp)
-app.register_blueprint(routes_bp)
 
 # Initialize middleware
 auth.init(app)
 csp.init(app)
+
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.py")
 
@@ -47,6 +42,7 @@ if os.path.exists(CONFIG_PATH):
     app.config.from_object("config")
 else:
     raise Exception("Missing configuration file.")
+
 
 if __name__ == "__main__":
     PORT = int(os.getenv("PORT")) if os.getenv("PORT") else 8080
