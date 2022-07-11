@@ -17,7 +17,6 @@ import { connect } from 'pwa-helpers/connect-mixin.js';
 import shellStyles from '../styles/shell.js';
 import CampaignList from '../components/campaign/campaign-list.js';
 import { fetchCampaignList } from '../actions/campaigns.js';
-import { fetchSession } from '../actions/auth.js';
 import store from '../stores/base.js';
 
 class Dashboard extends connect(store)(LitElement) {
@@ -29,7 +28,6 @@ class Dashboard extends connect(store)(LitElement) {
   }
   
   firstUpdated() {
-    store.dispatch(fetchSession());
     store.dispatch(fetchCampaignList());
   }
 

@@ -17,6 +17,7 @@ import '@material/mwc-top-app-bar';
 import '@material/mwc-icon-button';
 import headerStyles from './styles/header.js';
 import { getConfig } from '../../utils/config.js';
+import { hasCookie } from '../../utils/auth.js';
 
 const cloudLogo = new URL('../../../assets/google-cloud-logo.png', import.meta.url).href;
 const cymbalGivingLogo = new URL('../../../assets/cymbal-giving-logo.png', import.meta.url).href;
@@ -43,12 +44,18 @@ class Header extends LitElement {
           </div>
           <mwc-icon-button icon="help_outline" slot="actionItems"></mwc-icon-button>
           <mwc-icon-button icon="notifications" slot="actionItems"></mwc-icon-button>
-          <a href=${`/auth/logout`}>
-            <mwc-icon-button icon="logout" slot="actionItems" class="login"></mwc-icon-button>
-          </a>
-          <a href=${`/auth/login`}>
-            <mwc-icon-button icon="person_outline" slot="actionItems" class="logout"></mwc-icon-button>
-          </a>
+          ${hasCookie() 
+            ? html`
+              <a href=${`/auth/login`}>
+                <mwc-icon-button icon="person_outline" slot="actionItems" class="logout"></mwc-icon-button>
+              </a>
+            `
+            : html`
+              <a href=${`/auth/logout`}>
+                <mwc-icon-button icon="logout" slot="actionItems" class="login"></mwc-icon-button>
+              </a>
+            `
+          }
         </div>
       </div>
       <div class="banner">

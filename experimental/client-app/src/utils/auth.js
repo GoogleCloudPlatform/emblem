@@ -19,24 +19,39 @@ import { getConfig } from './config.js';
  * For more information, see https://developers.google.com/identity/protocols/oauth2/web-server
  */ 
 export const login = () => {
-    const { SITE_URL, REDIRECT_URI, AUTH_CLIENT_ID } = getConfig();
-    
-    // Link to redirect to Google auth service, including required query parameters.
-    let signInUrl = 'https://accounts.google.com/o/oauth2/v2/auth?';
-    // Client apps and their callbacks must be registered and supplied here
-    signInUrl += `redirect_uri=${REDIRECT_URI}&`;
-    signInUrl += `client_id=${AUTH_CLIENT_ID}&`;
-    // Asking for user email and any previously granted scopes
-    signInUrl += `scope=openid%20email&`
-    signInUrl += `include_granted_scopes=true&`
-    // The next two parameters are essential to get a refresh token
-    signInUrl += `prompt=consent&`
-    signInUrl += `access_type=offline&`
-    // Asking for a code that can then be exchanged for user information
-    signInUrl += `response_type=code&`
-    signInUrl += `state=${SITE_URL}&`;
+    const { REDIRECT_URI, AUTH_CLIENT_ID } = getConfig();
 
-    location.href = signInUrl;
+    const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
+    const options = new URLSearchParams({
+        redirect_uri: `${REDIRECT_URI}`,
+        client_id: AUTH_CLIENT_ID,
+        access_type: "offline",
+        response_type: "code",
+        prompt: "consent",
+        scope: [
+            "https://www.googleapis.com/auth/userinfo.profile",
+            "https://www.googleapis.com/auth/userinfo.email",
+        ].join(" "),
+    });
+
+    location.href = `${rootUrl}?${options.toString()}`;
+};
+
+/**
+ * /hasCookie - checks if user is logged in
+ */ 
+export const hasCookie = async () => {
+    const { AUTH_API_URL } = getConfig();
+    
+    let hasCookie = false;
+
+    try {
+        hasCookie = await fetch(`${AUTH_API_URL}/hasCookie`);
+    } catch(e) {
+        throw new Error(e);
+    }
+    
+    return hasCookie;
 };
 
 /**
@@ -44,9 +59,13 @@ export const login = () => {
  * For more information, see https://developers.google.com/identity/protocols/oauth2/web-server
  */ 
 export const logout = async () => {
-    const { API_URL } = getConfig();
-
-    await fetch(`${API_URL}/logout`, { method: 'GET' });
+    const { AUTH_API_URL } = getConfig();
+    
+    try {
+        await fetch(`${AUTH_API_URL}/logout`);
+    } catch(e) {
+        throw new Error(e);
+    }
 };
 
-export default { login, logout };
+export default { login, logout, hasCookie };

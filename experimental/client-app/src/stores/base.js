@@ -14,7 +14,6 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import { campaignReducer, campaignListReducer } from './campaigns.js';
-import { sessionReducer } from './auth.js';
 import authMiddleware from '../middleware/auth.js';
 import loggerMiddleware from '../middleware/logger.js';
 
@@ -23,7 +22,6 @@ export default configureStore({
     return getDefaultMiddleware().concat([loggerMiddleware, authMiddleware]);
   },
   reducer: {
-    auth: sessionReducer,
     campaign: campaignReducer,
     campaignList: campaignListReducer
   }
