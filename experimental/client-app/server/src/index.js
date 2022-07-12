@@ -58,9 +58,11 @@ function getTokens({ code, clientId, clientSecret, redirectUri }) {
 }
 
 /**
- * Applying cors
+ * Applying CORS
+ * 
  * Origin: applies access-control-allow-origin to client app
  * Client: applies access-control-allow-credentials to true
+ * For more information: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
  */
 app.use(
   cors({
@@ -72,7 +74,8 @@ app.use(
 app.use(cookieParser());
 
 /**
- * Handle Auth Callback
+ * Handles Auth Callback
+ * For more information: https://developers.google.com/identity/protocols/oauth2/web-server
  */
 app.get(`${redirectURI}`, async (req, res) => {
   const code = req.query.code;

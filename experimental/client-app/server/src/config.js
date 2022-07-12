@@ -12,9 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export const { CLIENT_ID } = process.env;
-export const { CLIENT_SECRET } = process.env;
-export const { REDIRECT_URI } = process.env;
-export const { SITE_URL } = process.env;
-export const JWT_SECRET = process.env.JWT_SECRET || 'test_default_secret';
+export const {
+  CLIENT_ID,
+  CLIENT_SECRET,
+  REDIRECT_URI,
+  SITE_URL,
+  JWT_SECRET
+} = process.env;
+
 export const COOKIE_NAME = 'auth_token';

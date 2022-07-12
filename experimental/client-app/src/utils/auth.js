@@ -23,7 +23,7 @@ export const login = () => {
 
     const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
     const options = new URLSearchParams({
-        redirect_uri: `${REDIRECT_URI}`,
+        redirect_uri: REDIRECT_URI,
         client_id: AUTH_CLIENT_ID,
         access_type: 'offline',
         response_type: 'code',
