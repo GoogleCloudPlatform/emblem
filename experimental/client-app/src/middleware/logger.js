@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { configureStore } from '@reduxjs/toolkit';
-import { campaignReducer, campaignListReducer } from './campaigns.js';
-import loggerMiddleware from '../middleware/logger.js';
+const logger = store => next => action => {
+  console.group(action.type);
+  console.info('dispatching', action);
+  const result = next(action);
+  console.log('next state', store.getState());
+  console.groupEnd();
+  return result;
+};
 
-export default configureStore({
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat([loggerMiddleware]),
-  reducer: {
-    campaign: campaignReducer,
-    campaignList: campaignListReducer,
-  },
-});
+export default logger;
