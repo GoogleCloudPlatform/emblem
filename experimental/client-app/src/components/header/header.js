@@ -13,9 +13,12 @@
 // limitations under the License.
 
 import { LitElement, html, css } from 'lit';
+import headerStyles from './styles/header.js';
+import { getConfig } from '../../utils/config.js';
+import { hasCookie } from '../../utils/auth.js';
+
 import '@material/mwc-top-app-bar';
 import '@material/mwc-icon-button';
-import headerStyles from './styles/header.js';
 
 const cloudLogo = new URL('../../../assets/google-cloud-logo.png', import.meta.url).href;
 const cymbalGivingLogo = new URL('../../../assets/cymbal-giving-logo.png', import.meta.url).href;
@@ -27,6 +30,8 @@ class Header extends LitElement {
   static styles = headerStyles;
   
   render() {
+    const { API_URL } = getConfig();
+
     return html`
       <div class="headerContainer">
         ${this.theme === 'cymbal'
@@ -40,12 +45,22 @@ class Header extends LitElement {
           </div>
           <mwc-icon-button icon="help_outline" slot="actionItems"></mwc-icon-button>
           <mwc-icon-button icon="notifications" slot="actionItems"></mwc-icon-button>
-          <mwc-icon-button icon="account_circle" slot="actionItems"></mwc-icon-button>
-          <mwc-icon-button icon="login" slot="actionItems"></mwc-icon-button>
+          ${hasCookie() 
+            ? html`
+              <a href=${`/auth/login`}>
+                <mwc-icon-button icon="person_outline" slot="actionItems" class="logout"></mwc-icon-button>
+              </a>
+            `
+            : html`
+              <a href=${`/auth/logout`}>
+                <mwc-icon-button icon="logout" slot="actionItems" class="login"></mwc-icon-button>
+              </a>
+            `
+          }
         </div>
       </div>
       <div class="banner">
-        This website is hosted for demo purposes only. No money will be moved by exploring these features. This is not a Google product. © 2021 Google Inc
+        This website is hosted for demo purposes only. No money will be moved by exploring these features. This is not a Google product. © 2022 Google Inc
       </div>
     `;
   }

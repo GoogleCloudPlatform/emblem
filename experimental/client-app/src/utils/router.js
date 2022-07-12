@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import { Router } from '@vaadin/router';
+import auth from './auth.js';
 
 export const initRouter = () => {
   const router = new Router(document.querySelector('main'));
@@ -27,6 +28,13 @@ export const initRouter = () => {
       component: 'campaign-page',
       action: async () => {
         await import('../containers/campaign/campaign-page.js');
+      }
+    },
+    {
+      path: '/auth/:authPath',
+      component: 'app-dashboard',
+      action: async ({ params }) => {
+        auth[params.authPath]();
       }
     },
     {
