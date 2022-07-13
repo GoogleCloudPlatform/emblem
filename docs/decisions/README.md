@@ -10,6 +10,18 @@ Get started created a new decision record with the template:
 cp template.md NN-title-with-dashes.md
 ```
 
+## Team Structure
+
+[Conway's Law](https://en.wikipedia.org/wiki/Conway%27s_law)
+posits that software design is a function of organizational design. Emblem was
+developed by a group of core contributors working on a single team within a 
+large software company (Google), with supporting contributions from members of
+other teams both internal and external to the company.
+
+While we've done our best to make Emblem applicable to a wide variety of
+organizational structures, Emblem may require some adaptation to properly
+account for aspects unique to your organization.
+
 ## Evolving Decisions
 
 Many decisions build on each other, a driver of iterative change and messiness
