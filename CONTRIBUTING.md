@@ -69,6 +69,9 @@ Minimizing developer follow-up action is [helpful](#positive-helpful-feedback)!
 
 If no Google Cloud resources are needed, use [GitHub Actions](https://docs.github.com/en/actions) to drive automation. Otherwise use Cloud Build ([decision](docs/decisions/2021-05-static-analysis.md)).
 
+Infrastructure (including test fixtures) should be managed by Terraform wherever practical. In cases where resources **cannot** be managed by Terraform, this project recommends manual management instead
+of custom scripts/automation.
+
 ## Automated Testing & Productivity
 
 The following automated checks are run against every Pull Request:
