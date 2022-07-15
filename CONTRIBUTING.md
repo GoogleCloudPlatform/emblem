@@ -91,3 +91,9 @@ Whether it's a code review, a static analysis outcome, or an error message in th
 
 * Warnings & errors should provide context, suggest next steps, and provide direct access to more details. (For example, link to build logs.)
 * When a warning or error has a generally agreed fix or next step, point the way or suggest the fix. (For example, linting checks on a PR should propose the fixes to correct the code formatting.)
+
+### Enable Trunk-Based Development with Experiments
+
+Larger-scale changes to Emblem should be prototyped in the [`/experimental` folder](/experimental).
+
+They can then be merged into the `main` branch in a single pass.
