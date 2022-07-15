@@ -1,13 +1,14 @@
-# Allow "pet" test fixtures
+# Prefer ephemeral test fixtures where possible
 
 * **Status:** approved
 * **Last Updated:** 2022-07
+* **Objective:** Clarify the use of permanent vs. reusable Cloud resources
 
 ## Context & Problem Statement
 
-Emblem evolved to use "pet" test fixtures in end-to-end (E2E) test runs. These include resources such as Google Cloud projects, Cloud Storage buckets, container images in Artifact Registry, and Cloud Run services.
+Emblem evolved to use long-lived, singleton test fixtures in end-to-end (E2E) test runs. These include resources such as Google Cloud projects, Cloud Storage buckets, container images in Artifact Registry, and Cloud Run services.
 
-We decided to investigate whether we should migrate our fixtures to a "cattle"-based model.
+We decided to investigate whether we should migrate these long-lived, singleton fixtures to a more ephemeral approach.
 
 ## Priorities
 
@@ -20,33 +21,47 @@ Ideally, our test fixtures would be designed such that:
 * Tests are runnable by multiple [teams of] developers in parallel.
 * Tests cover as much of the application surface as possible.
 * Tests allow developers and contributors to quickly identify root causes of bugs.
+* Tests have minimal reliance on existing state.
 
 Of course, some of these goals are mutually exclusive: supporting parallel test runs often increases the cost of writing (and in some cases maintaining) tests and test infrastructure.
 
 ## Constraints
 
-### Some resources MUST be pets
-While most of Emblem's Google Cloud resources are provisioned programmatically using Terraform, some (such as the Google Cloud projects themselves) are provisioned manually.
+### Some resources MUST be singletons
+While most of Emblem's Google Cloud resources are provisioned programmatically using Terraform, some (such as the Google Cloud projects themselves) are currently intended to be provisioned manually.
 
-> Consequently, we can't rely entirely on automated provisioning systems (at least, not without significant further engineering work) to spin these up and down arbitrarily.
+> Consequently, we can't rely entirely on automated provisioning systems (at least, not without significant further engineering and/or documentation work) to spin the entire project up and down arbitrarily.
 
 ### Emblem is owned by a single team
 While Emblem is designed with a service-oriented architecture, all of Emblem's components are (currently) owned by the same team.
 
-> Consequently, optimizing our test fixtures for multi-team collaboration isn't as important as minimizing test development/maintenance costs.
+> Consequently, optimizing our test fixtures for multi-team collaboration (such as large numbers of parallel test runs) isn't as important as minimizing test development/maintenance costs.
 
 ## Considered Options
 
 In this case, we have a _continuous spectrum_ of options. Thus, the "options" below are more _extremes_ than options:
 
-* **Extreme 1:** All fixtures are centralized "pets"
-* **Extreme 2:** All fixtures are ephemeral "cattle"
+* **Extreme 1:** All fixtures are centralized, long-lived singletons. Under no circumstances should 2+ instances of the same fixture exist.
+* **Extreme 2:** All fixtures are ephemeral and short-lived, and pluralistic (multiple instances can simultaneously coexist). 
 
 ## Decision
 
-We'll use _programmatically provisioned_ fixture resources wherever practical. These resources can be made ephemeral ("cattle") if necessary.
+We'll use _programmatically provisioned_ fixture resources wherever practical. These resources can be made ephemeral and/or pluralistic if necessary.
 
-In some situations, _manual provisioning_ of centralized ("pet") resources will be simpler to implement (if not outright required). Usually, these resources **cannot** be made ephemeral and will need to be reused between test runs.
+Examples include:
+
+- Cloud Run services
+- Cloud Storage buckets
+- Service Accounts
+- IAM policies
+- Artifact Registry repositories
+
+In some situations, _manual provisioning_ of centralized resources will be simpler to implement (if not outright required). Usually, these resources **cannot** be made ephemeral and must be reused between test runs.
+
+Examples include:
+
+- Google Cloud projects
+- Cloud Firestore environments _(these are tied to Google Cloud projects)_
 
 ### Rationale
 
@@ -63,7 +78,9 @@ The entire Emblem application is currently owned by a single team. Thus, we deci
 
 ### Revisiting this Decision
 
-If the organizational structure behind Emblem changes (for example, Emblem comes under the collective ownership of multiple different teams), we will re-evaluate this decision.
+Currently, the ongoing cost of maintaining long-lived resources is very low. Even though "pluralizing" these resources is likely a _one-time_ cost, the core Emblem team doesn't believe that cost is justified.
+
+The most likely exception to this is if the Emblem team's underlying organizational structure changes. (For example, Emblem may transform from single-team project to one collectively owned by multiple different teams. Each team [member] would likely want testing fixtures dedicated specifically for them, which would be easier to achieve with a more pluralistic approach.)
 
 ## Links
 
