@@ -71,6 +71,7 @@ if [[ -z "$SKIP_TERRAFORM" ]]; then
 
     STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
     gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
+    gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
     
     # Ops Project
     OPS_ENVIRONMENT_DIR=terraform/environments/ops
