@@ -94,6 +94,8 @@ Whether it's a code review, a static analysis outcome, or an error message in th
 
 ### Enable Trunk-Based Development with Experiments
 
+Emblem operates using a [Trunk-Based Development](https://trunkbaseddevelopment.com/) model.
+
 Larger-scale changes to Emblem should be prototyped in the [`/experimental` folder](/experimental).
 
 They can then be merged into the `main` branch in a single pass.
