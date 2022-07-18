@@ -14,12 +14,13 @@
 
 from google.cloud import firestore
 
+import os
 import json
 
 
 def seed_database(content):
 
-    client = firestore.Client()
+    client = firestore.Client(project=os.environ.get("GOOGLE_CLOUD_PROJECT"))
     print("Seeding data into Google Cloud Project '{}'.".format(client.project))
     print("This may take a few minutes...")
     for item in content:

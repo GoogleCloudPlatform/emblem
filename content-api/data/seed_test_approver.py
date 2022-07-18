@@ -14,11 +14,12 @@
 
 
 import argparse
+import os
 from google.cloud import firestore
 
 
 def seed_approver(email):
-    client = firestore.Client()
+    client = firestore.Client(project=os.environ.get("GOOGLE_CLOUD_PROJECT"))
     print("Seeding data into Google Cloud Project '{}'.".format(client.project))
 
     approver = {
