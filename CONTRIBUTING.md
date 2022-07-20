@@ -69,8 +69,7 @@ Minimizing developer follow-up action is [helpful](#positive-helpful-feedback)!
 
 If no Google Cloud resources are needed, use [GitHub Actions](https://docs.github.com/en/actions) to drive automation. Otherwise use Cloud Build ([decision](docs/decisions/2021-05-static-analysis.md)).
 
-Infrastructure (including test fixtures) should be managed by Terraform wherever practical. In cases where resources **cannot** be managed by Terraform, this project recommends manual management instead
-of custom scripts/automation. ([decision](docs/decisions/2022-07-pet-test-fixtures.md))
+Infrastructure (including test fixtures) should be managed automatically (by Terraform if possible, otherwise by custom scripts) wherever practical. However, some cases exist where resources **cannot** be managed automatically. In those cases, Emblem allows for manual resource management. ([decision](docs/decisions/2022-07-pet-test-fixtures.md))
 
 ## Automated Testing & Productivity
 
