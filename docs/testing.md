@@ -12,7 +12,7 @@ Content API unit tests run automatically under two circumstances:
   
 The **delivery system** can _optionally_ be covered by an automatic **End-to-End (E2E) Test**.
 
-This test uses Cloud Build to run the [setup/deployment script](/setup.sh), and checks that it completes without any errors.
+This test uses Cloud Build to run the [setup/deployment script](/setup.sh) on a nightly basis, and checks that it completes without any errors.
   
 Follow the [instructions](/installation-testing/README.md) in the `installation-testing` directory to enable this test.
 
