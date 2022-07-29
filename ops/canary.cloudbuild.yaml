@@ -60,8 +60,8 @@ steps:
       - |
         if [ ${_TRAFFIC} -lt 100 ]
         then gcloud pubsub topics publish canary-${_ENV} \
-        --message="Increase ${_SERVICE}-${_REVISION} traffic to $((${_TRAFFIC}+5))" \
-        --attribute=_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION},_TRAFFIC=$((${_TRAFFIC}+5))
+        --message="Increase ${_SERVICE}-${_REVISION} traffic to $((${_TRAFFIC}+20))" \
+        --attribute=_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION},_TRAFFIC=$((${_TRAFFIC}+20))
         else
         gcloud pubsub topics publish deploy-completed-${_ENV} \
         --message="Deployed ${_SERVICE}-${_REVISION} [${_ENV}] to ${_TARGET_PROJECT}" \
