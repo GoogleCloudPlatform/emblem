@@ -47,3 +47,4 @@ We chose to use **Programmatically-provisioned IAM Policies**, coupled with [res
     * [Document Roles in CI Pipeline](https://github.com/GoogleCloudPlatform/emblem/pull/489)
 * Related User Journeys
     * [Limit Blast Radius of a Security Exploit](https://github.com/GoogleCloudPlatform/emblem/issues/45)
+    * [Deploy a Change](https://github.com/GoogleCloudPlatform/emblem/issues/26)
