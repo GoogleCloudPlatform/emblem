@@ -22,6 +22,11 @@ on:
       - main
     paths:
       - '**.py'
+
+permissions:
+  checks: write
+  pull-requests: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
