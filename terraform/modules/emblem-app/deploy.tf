@@ -133,7 +133,7 @@ resource "google_cloudbuild_trigger" "web_canary" {
     _REGION         = var.region
     _REVISION       = "$(body.message.attributes._REVISION)"
     _TRAFFIC        = "$(body.message.attributes._TRAFFIC)"
-    _SERVICE        = "website"
+    _SERVICE        = "$(body.message.attributes._SERVICE)"
     _TARGET_PROJECT = var.project_id
     _ENV            = var.environment
   }
@@ -164,7 +164,7 @@ resource "google_cloudbuild_trigger" "api_canary" {
     _REGION         = var.region
     _REVISION       = "$(body.message.attributes._REVISION)"
     _TRAFFIC        = "$(body.message.attributes._TRAFFIC)"
-    _SERVICE        = "content-api"
+    _SERVICE        = "$(body.message.attributes._SERVICE)"
     _TARGET_PROJECT = var.project_id
     _ENV            = var.environment
   }
