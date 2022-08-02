@@ -69,12 +69,16 @@ if [[ -z "$SKIP_TERRAFORM" ]]; then
     echo "$(tput bold)Setting up your Cloud resources with Terraform...$(tput sgr0)"
     echo
 
+    STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
+    gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
+    gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
+    
     # Ops Project
     OPS_ENVIRONMENT_DIR=terraform/environments/ops
     cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 project_id = "${OPS_PROJECT}"
 EOF
-    terraform -chdir=${OPS_ENVIRONMENT_DIR} init
+    terraform -chdir=${OPS_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=ops"
     terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
 
     # Staging Project
@@ -83,7 +87,7 @@ EOF
 project_id = "${STAGE_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
-    terraform -chdir=${STAGE_ENVIRONMENT_DIR} init
+    terraform -chdir=${STAGE_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=stage"
     terraform -chdir=${STAGE_ENVIRONMENT_DIR} apply --auto-approve
 
     # Prod Project
@@ -94,7 +98,7 @@ EOF
 project_id = "${PROD_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
-        terraform -chdir=${PROD_ENVIRONMENT_DIR} init
+        terraform -chdir=${PROD_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=prod"
         terraform -chdir=${PROD_ENVIRONMENT_DIR} apply --auto-approve
     fi
 
