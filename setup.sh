@@ -126,7 +126,7 @@ if [[ -z "$SKIP_SEEDING" ]]; then
         GOOGLE_CLOUD_PROJECT="${PROD_PROJECT}" python3 seed_database.py
     fi
     popd
-fi
+fi # skip seeding
 
 ####################
 # Build Containers #
@@ -249,3 +249,13 @@ if [[ -z "$SKIP_TRIGGERS" ]]; then
         echo
     fi
 fi # skip triggers
+
+echo
+STAGING_WEBSITE_URL=$(gcloud run services describe website --project "${STAGE_PROJECT}" --region ${REGION} --format 'value(status.url)')
+if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
+  PROD_WEBSITE_URL=$(gcloud run services describe website --project "${PROD_PROJECT}" --region ${REGION} --format 'value(status.url)')
+  echo "💠 The staging environment is ready! Navigate your browser to ${STAGING_WEBSITE_URL}"
+  echo "💠 The production environment is ready! Navigate your browser to ${PROD_WEBSITE_URL}"
+else
+  echo "💠 The application is ready! Navigate your browser to ${STAGING_WEBSITE_URL}"
+fi
