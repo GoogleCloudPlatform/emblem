@@ -1,4 +1,4 @@
-# Store optional Emblem features in "plugin" directories
+# Store optional Emblem features in "extension" directories
  
 * **Status:** approved
 * **Last Updated:** 2022-08
@@ -18,8 +18,8 @@ Thus, the Emblem team needed a way for interested audiences to enable these feat
 
 ## Considered Options
 
-### Plugin Model
-Our first option was to use a "plugin" model, where Emblem's opt-in features were stored separately from core Emblem functionality.
+### Extension Model
+Our first option was to use a "extension" model, where Emblem's opt-in features were stored separately from core Emblem functionality.
 
 We also planned to store each opt-in feature separately from the other opt-in features to allow Emblem users to opt into individual features one-by-one.
 
@@ -29,15 +29,15 @@ Our second option was to store opt-in features and core features in the same fol
 
 ## Decision
 
-Chosen option: **Plugin Model**
+Chosen option: **Extension Model**
 
-The Emblem team chose to use the **Plugin Model** for two reasons:
+The Emblem team chose to use the **Extension Model** for two reasons:
 
-> The Plugin Model enabled greater separation of concerns vs. the Feature Flags approach. This enables Emblem contributors to make changes to the project without having to worry about 
+> The Extension Model enabled greater separation of concerns vs. the Feature Flags approach. This enables Emblem contributors to make changes to the project without having to worry about 
 >
-> While the Plugin Model _does_ complicate Emblem's end-user setup process slightly, the additional complication is greatly outweighed by the separation-of-concerns benefits described above. 
+> While the Extension Model _does_ complicate Emblem's end-user setup process slightly, the additional complication is greatly outweighed by the separation-of-concerns benefits described above. 
 
 ## Links
 
-* [Example Plugin](/installation-testing) (Installation Testing)
+* [Example Extension](/installation-testing) (Installation Testing)
 * [Discussion Thread in related PR](https://github.com/GoogleCloudPlatform/emblem/pull/490#discussion_r890645862)
