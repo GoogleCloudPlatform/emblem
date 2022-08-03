@@ -2,7 +2,7 @@
 
 In this project we capture important decisions with [architectural decision records](https://adr.github.io/).
 
-These records provide context, trade-offs, and reasoning taken at our community & technical cross-roads. Our goal is to preserve the understanding of how the project has grown, and capture enough insight to effectively revisit prevision decisions.
+These records provide context, trade-offs, and reasoning taken at our community & technical cross-roads. Our goal is to preserve the understanding of how the project has grown, and capture enough insight to effectively revisit previous decisions.
 
 Get started created a new decision record with the template:
 
