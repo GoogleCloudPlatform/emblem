@@ -149,3 +149,6 @@ gcloud run services update website \
     --region "${REGION}" \
     --project "${PROD_PROJECT}"
 fi
+
+echo
+echo "The application is now configured for end-user authentication."
