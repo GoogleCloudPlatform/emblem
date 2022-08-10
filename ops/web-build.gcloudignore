@@ -1,4 +1,4 @@
-#!include:.gitignore
+#!include:../.gitignore
 
 # Files in root dir
 *.md
