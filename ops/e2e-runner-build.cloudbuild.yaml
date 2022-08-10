@@ -17,7 +17,6 @@ steps:
   # Docker Build
   - name: gcr.io/cloud-builders/docker
     entrypoint: /bin/bash
-    dir: ops/e2e-runner
     args: 
       - '-c'
       - |

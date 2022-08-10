@@ -16,7 +16,6 @@
 steps:
   # Docker Build 
   - name: 'gcr.io/cloud-builders/docker'
-    dir: content-api
     args: 
       - 'build'
       - '-t'
