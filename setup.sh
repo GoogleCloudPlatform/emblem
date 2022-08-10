@@ -120,7 +120,7 @@ if [[ -z "$SKIP_SEEDING" ]]; then
     pushd content-api/data
     account=$(gcloud config get-value account 2> /dev/null)
     if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
-        read -rp "Please input the repo owner [${account}]: " approver
+        read -rp "Please input an email address for an approver. This email will be added to the Firestore database as an 'approver' and will be able to perform privileged API operations from the website frontend: [${account}]: " approver
     fi
     approver="${approver:-$account}"
 
