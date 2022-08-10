@@ -1,10 +1,12 @@
-#!include:../.gitignore
+# Misc. stuff
+*.pyc
+__pypackages__/
+node_modules/
 
 # Files in root dir
 *.md
 *.sh
 *.toml
-*.json
 
 # Dirs except:
 # - client-libs
