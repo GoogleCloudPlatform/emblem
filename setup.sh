@@ -70,8 +70,13 @@ if [[ -z "$SKIP_TERRAFORM" ]]; then
     echo
 
     STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
-    gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
-    gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
+    
+    # Create remote state bucket if it doesn't exist
+    if gsutil ls $STATE_GCS_BUCKET_NAME > /dev/null ; then
+        echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
+        gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
+        gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
+    fi
     
     # Ops Project
     OPS_ENVIRONMENT_DIR=terraform/environments/ops
