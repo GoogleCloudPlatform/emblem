@@ -70,8 +70,13 @@ if [[ -z "$SKIP_TERRAFORM" ]]; then
     echo
 
     STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
-    gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
-    gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
+    
+    # Create remote state bucket if it doesn't exist
+    if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
+        echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
+        gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
+        gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
+    fi
     
     # Ops Project
     OPS_ENVIRONMENT_DIR=terraform/environments/ops
@@ -115,7 +120,7 @@ if [[ -z "$SKIP_SEEDING" ]]; then
     pushd content-api/data
     account=$(gcloud config get-value account 2> /dev/null)
     if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
-        read -rp "Please input the repo owner [${account}]: " approver
+        read -rp "Please input an email address for an approver. This email will be added to the Firestore database as an 'approver' and will be able to perform privileged API operations from the website frontend: [${account}]: " approver
     fi
     approver="${approver:-$account}"
 
