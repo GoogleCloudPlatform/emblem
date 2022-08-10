@@ -1,0 +1,18 @@
+#!include:.gitignore
+
+# Files in root dir
+*.md
+*.sh
+*.toml
+*.json
+
+# Dirs except:
+# - client-libs
+# - website
+content-api/
+docs/
+experimental/
+installation-testing/
+ops/
+scripts/
+terraform/
