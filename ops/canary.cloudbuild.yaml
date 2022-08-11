@@ -13,7 +13,7 @@
 # limitations under the License.
 
 steps:
-  # Prints entire body of pub/sub message for debugging
+  # Print the full Pub/Sub message for debugging.
   - name: gcr.io/cloud-builders/gcloud
     entrypoint: /bin/bash
     args:

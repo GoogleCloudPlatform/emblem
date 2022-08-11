@@ -21,7 +21,7 @@ steps:
       - '-c'
       - |
         docker build -t \
-        ${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/deployer:${_IMAGE_TAG} \
+        ${_REGION}-docker.pkg.dev/${PROJECT_ID}/installation-testing/deployer:${_IMAGE_TAG} \
         installation-testing/containers/e2e-deployer
 # Default to us-central1
 substitutions:
@@ -30,4 +30,4 @@ substitutions:
 
 # Store in Artifact Registry
 images:
-  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/deployer:${_IMAGE_TAG}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/installation-testing/deployer:${_IMAGE_TAG}'
