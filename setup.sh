@@ -157,7 +157,6 @@ gcloud builds submit \
 
 gcloud builds submit "ops/e2e-runner" \
     --config=ops/e2e-runner-build.cloudbuild.yaml \
-
     --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG"
 
 fi # skip build
