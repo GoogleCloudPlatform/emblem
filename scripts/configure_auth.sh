@@ -136,14 +136,14 @@ AUTH_SECRETS="${AUTH_SECRETS},CLIENT_SECRET=projects/${OPS_PROJECT_NUMBER}/secre
 #       using env vars, for things like custom domains and load balancers.
 #       See https://github.com/GoogleCloudPlatform/emblem/issues/277
 
-gcloud run services update website --region ${REGION} \
+gcloud run services update website \
     --update-env-vars "REDIRECT_URI=${STAGE_CALLBACK_URL}" \
     --update-secrets "${AUTH_SECRETS}" \
     --region "${REGION}" \
     --project "${STAGE_PROJECT}"
 
 if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
-gcloud run services update website --region ${REGION} \
+gcloud run services update website \
     --update-env-vars "REDIRECT_URI=${PROD_CALLBACK_URL}" \
     --update-secrets "${AUTH_SECRETS}" \
     --region "${REGION}" \
