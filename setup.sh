@@ -70,7 +70,7 @@ if [[ -z "$SKIP_TERRAFORM" ]]; then
     echo
 
     STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
-
+    
     # Create remote state bucket if it doesn't exist
     if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
         echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
