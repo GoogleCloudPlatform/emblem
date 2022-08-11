@@ -136,7 +136,7 @@ resource "google_cloudbuild_trigger" "web_canary" {
     _IMAGE_NAME     = "$(body.message.attributes._IMAGE_NAME)"
     _REGION         = var.region
     _REVISION       = "$(body.message.attributes._REVISION)"
-    _SERVICE        = "website"
+    _SERVICE        = "$(body.message.attributes._SERVICE)"
     _TARGET_PROJECT = var.project_id
     _TRAFFIC        = "$(body.message.attributes._TRAFFIC)"
   }
@@ -168,7 +168,7 @@ resource "google_cloudbuild_trigger" "api_canary" {
     _IMAGE_NAME     = "$(body.message.attributes._IMAGE_NAME)"
     _REGION         = var.region
     _REVISION       = "$(body.message.attributes._REVISION)"
-    _SERVICE        = "content-api"
+    _SERVICE        = "$(body.message.attributes._SERVICE)"
     _TARGET_PROJECT = var.project_id
     _TRAFFIC        = "$(body.message.attributes._TRAFFIC)"
   }

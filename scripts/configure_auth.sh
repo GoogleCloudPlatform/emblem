@@ -142,5 +142,8 @@ if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
 gcloud run services update website \
     --update-env-vars "REDIRECT_URI=${PROD_CALLBACK_URL}" \
     --update-secrets "${AUTH_SECRETS}" \
-    --project "$PROD_PROJECT"
+    --project "${PROD_PROJECT}"
 fi
+
+echo
+echo "The application is now configured for end-user authentication."
