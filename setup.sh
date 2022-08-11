@@ -148,12 +148,12 @@ echo
 
 gcloud builds submit "content-api" \
     --config=ops/api-build.cloudbuild.yaml \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_SHORT_SHA="$SHORT_SHA"
 
 gcloud builds submit \
     --config=ops/web-build.cloudbuild.yaml \
     --ignore-file=ops/web-build.gcloudignore \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_SHORT_SHA="$SHORT_SHA"
 
 gcloud builds submit "ops/e2e-runner" \
     --config=ops/e2e-runner-build.cloudbuild.yaml \
