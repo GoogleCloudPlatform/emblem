@@ -29,7 +29,7 @@ steps:
 # Default to us-central1 
 substitutions:
   _REGION: us-central1
-  _SHORT_SHA: latest
+  SHORT_SHA: latest
 
 # Store in Artifact Registry
 images:
