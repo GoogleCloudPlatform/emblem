@@ -23,14 +23,14 @@ steps:
       - |
         cp -R client-libs/ website/client-libs
         docker build -t \
-        ${_REGION}-docker.pkg.dev/${PROJECT_ID}/website/website:${SHORT_SHA} \
+        ${_REGION}-docker.pkg.dev/${PROJECT_ID}/website/website:${_SHORT_SHA} \
         website/. 
 
 # Default to us-central1 
 substitutions:
   _REGION: us-central1
-  SHORT_SHA: latest
+  _SHORT_SHA: latest
 
 # Store in Artifact Registry
 images:
-  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/website/website:${SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/website/website:${_SHORT_SHA}'
