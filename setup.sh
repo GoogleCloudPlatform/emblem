@@ -145,13 +145,17 @@ echo
 echo "$(tput bold)Building container images for testing and application hosting...$(tput sgr0)"
 echo
 
-gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+gcloud builds submit "content-api" \
+    --config=ops/api-build.cloudbuild.yaml \
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_SHORT_SHA="$SHORT_SHA"
 
-gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+gcloud builds submit \
+    --config=ops/web-build.cloudbuild.yaml \
+    --ignore-file=ops/web-build.gcloudignore \
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_SHORT_SHA="$SHORT_SHA"
 
-gcloud builds submit --config=ops/e2e-runner-build.cloudbuild.yaml \
+gcloud builds submit "ops/e2e-runner" \
+    --config=ops/e2e-runner-build.cloudbuild.yaml \
     --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG"
 
 fi # skip build
