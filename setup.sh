@@ -33,8 +33,9 @@ trap '_error_report $LINENO' ERR
 #   SKIP_DEPLOY             If set, do not deploy services
 #   SKIP_SEEDING            If set, do not seed the database
 #   USE_DEFAULT_ACCOUNT     If set, do not prompt for a GCP Account Name during database seeding
+#   REGION                  Default region to deploy resources to. Defaults to 'us-central1'
 
-# Default to empty, avoiding unbound variable errors.
+# Default to empty or default values, avoiding unbound variable errors.
 SKIP_TERRAFORM=${SKIP_TERRAFORM:-}
 SKIP_TRIGGERS=${SKIP_TRIGGERS:-}
 SKIP_AUTH=${SKIP_AUTH:-}
@@ -42,6 +43,7 @@ SKIP_BUILD=${SKIP_BUILD:-}
 SKIP_DEPLOY=${SKIP_DEPLOY:-}
 SKIP_SEEDING=${SKIP_SEEDING:-}
 USE_DEFAULT_ACCOUNT=${USE_DEFAULT_ACCOUNT:-}
+export REGION=${REGION:=us-central1}
 
 # Check env variables are not empty strings
 if [[ -z "${PROD_PROJECT}" ]]; then
@@ -54,9 +56,6 @@ elif [[ -z "${OPS_PROJECT}" ]]; then
     echo "Please set the $(tput bold)OPS_PROJECT$(tput sgr0) variable"
     exit 1
 fi
-
-## Initialize Variables ##
-export REGION="us-central1"
 
 echo "Setting up a new instance of Emblem. There may be a few prompts to guide the process."
 
