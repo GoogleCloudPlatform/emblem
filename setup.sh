@@ -69,12 +69,21 @@ if [[ -z "$SKIP_TERRAFORM" ]]; then
     echo "$(tput bold)Setting up your Cloud resources with Terraform...$(tput sgr0)"
     echo
 
+    STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
+    
+    # Create remote state bucket if it doesn't exist
+    if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
+        echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
+        gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
+        gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
+    fi
+    
     # Ops Project
     OPS_ENVIRONMENT_DIR=terraform/environments/ops
     cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 project_id = "${OPS_PROJECT}"
 EOF
-    terraform -chdir=${OPS_ENVIRONMENT_DIR} init
+    terraform -chdir=${OPS_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=ops"
     terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
 
     # Staging Project
@@ -83,7 +92,7 @@ EOF
 project_id = "${STAGE_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
-    terraform -chdir=${STAGE_ENVIRONMENT_DIR} init
+    terraform -chdir=${STAGE_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=stage"
     terraform -chdir=${STAGE_ENVIRONMENT_DIR} apply --auto-approve
 
     # Prod Project
@@ -94,7 +103,7 @@ EOF
 project_id = "${PROD_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
-        terraform -chdir=${PROD_ENVIRONMENT_DIR} init
+        terraform -chdir=${PROD_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=prod"
         terraform -chdir=${PROD_ENVIRONMENT_DIR} apply --auto-approve
     fi
 
@@ -111,7 +120,7 @@ if [[ -z "$SKIP_SEEDING" ]]; then
     pushd content-api/data
     account=$(gcloud config get-value account 2> /dev/null)
     if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
-        read -rp "Please input the repo owner [${account}]: " approver
+        read -rp "Please input an email address for an approver. This email will be added to the Firestore database as an 'approver' and will be able to perform privileged API operations from the website frontend: [${account}]: " approver
     fi
     approver="${approver:-$account}"
 
@@ -122,7 +131,7 @@ if [[ -z "$SKIP_SEEDING" ]]; then
         GOOGLE_CLOUD_PROJECT="${PROD_PROJECT}" python3 seed_database.py
     fi
     popd
-fi
+fi # skip seeding
 
 ####################
 # Build Containers #
@@ -245,3 +254,13 @@ if [[ -z "$SKIP_TRIGGERS" ]]; then
         echo
     fi
 fi # skip triggers
+
+echo
+STAGING_WEBSITE_URL=$(gcloud run services describe website --project "${STAGE_PROJECT}" --region ${REGION} --format 'value(status.url)')
+if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
+  PROD_WEBSITE_URL=$(gcloud run services describe website --project "${PROD_PROJECT}" --region ${REGION} --format 'value(status.url)')
+  echo "💠 The staging environment is ready! Navigate your browser to ${STAGING_WEBSITE_URL}"
+  echo "💠 The production environment is ready! Navigate your browser to ${PROD_WEBSITE_URL}"
+else
+  echo "💠 The application is ready! Navigate your browser to ${STAGING_WEBSITE_URL}"
+fi
