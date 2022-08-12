@@ -1,0 +1,20 @@
+# Misc. stuff
+*.pyc
+__pypackages__/
+node_modules/
+
+# Files in root dir
+*.md
+*.sh
+*.toml
+
+# Dirs except:
+# - client-libs
+# - website
+content-api/
+docs/
+experimental/
+installation-testing/
+ops/
+scripts/
+terraform/

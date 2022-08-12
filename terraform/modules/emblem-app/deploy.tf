@@ -67,12 +67,13 @@ resource "google_cloudbuild_trigger" "web_deploy" {
   }
   filter = "_IMAGE_NAME.matches('website')"
   substitutions = {
+    _BODY           = "$(body)"
+    _ENV            = var.environment
     _IMAGE_NAME     = var.gcr_pubsub_format ? "$(body.message.data.tag)" : "$(body.message.attributes._IMAGE_NAME)"
     _REGION         = var.region
     _REVISION       = var.gcr_pubsub_format ? "$(body.message.messageId)" : "$(body.message.attributes._REVISION)"
     _SERVICE        = "website"
     _TARGET_PROJECT = var.project_id
-    _ENV            = var.environment
   }
   source_to_build {
     uri       = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
@@ -97,12 +98,13 @@ resource "google_cloudbuild_trigger" "api_deploy" {
   }
   filter = "_IMAGE_NAME.matches('content-api')"
   substitutions = {
+    _BODY           = "$(body)"
+    _ENV            = var.environment
     _IMAGE_NAME     = var.gcr_pubsub_format ? "$(body.message.data.tag)" : "$(body.message.attributes._IMAGE_NAME)"
     _REGION         = var.region
     _REVISION       = var.gcr_pubsub_format ? "$(body.message.messageId)" : "$(body.message.attributes._REVISION)"
     _SERVICE        = "content-api"
     _TARGET_PROJECT = var.project_id
-    _ENV            = var.environment
   }
   source_to_build {
     uri       = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
@@ -129,13 +131,14 @@ resource "google_cloudbuild_trigger" "web_canary" {
   }
   filter = format("_SERVICE.matches('%s')", "website")
   substitutions = {
+    _BODY           = "$(body)"
+    _ENV            = var.environment
     _IMAGE_NAME     = "$(body.message.attributes._IMAGE_NAME)"
     _REGION         = var.region
     _REVISION       = "$(body.message.attributes._REVISION)"
-    _TRAFFIC        = "$(body.message.attributes._TRAFFIC)"
     _SERVICE        = "$(body.message.attributes._SERVICE)"
     _TARGET_PROJECT = var.project_id
-    _ENV            = var.environment
+    _TRAFFIC        = "$(body.message.attributes._TRAFFIC)"
   }
   source_to_build {
     uri       = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
@@ -160,13 +163,14 @@ resource "google_cloudbuild_trigger" "api_canary" {
   }
   filter = format("_SERVICE.matches('%s')", "content-api")
   substitutions = {
+    _BODY           = "$(body)"
+    _ENV            = var.environment
     _IMAGE_NAME     = "$(body.message.attributes._IMAGE_NAME)"
     _REGION         = var.region
     _REVISION       = "$(body.message.attributes._REVISION)"
-    _TRAFFIC        = "$(body.message.attributes._TRAFFIC)"
     _SERVICE        = "$(body.message.attributes._SERVICE)"
     _TARGET_PROJECT = var.project_id
-    _ENV            = var.environment
+    _TRAFFIC        = "$(body.message.attributes._TRAFFIC)"
   }
   source_to_build {
     uri       = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
