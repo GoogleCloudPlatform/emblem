@@ -220,10 +220,15 @@ img.emblem-avatar {
   width: 100%;
 }
 
-/* Donate button */
+/* Donate + view logs buttons */
 .emblem-campaign-details .mdc-button {
   margin-top: 1em;
   float: right;
+  display: inline-flex;
+}
+
+.emblem-campaign-details .mdc-button:nth-child(1) {
+  margin-left: 1em;
 }
 
 /***** Donate to Campaign page *****/
