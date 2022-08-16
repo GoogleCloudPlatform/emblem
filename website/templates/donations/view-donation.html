@@ -51,14 +51,16 @@
     </div>
     <!-- Buttons -->
     <div class="emblem-campaign-details mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-      <!-- View Logs button -->
-      <a href="https://console.cloud.google.com/logs/query;query=resource.type%3D%22cloud_run_revision%22;cursorTimestamp={{ donation.time_created.strftime('%Y-%m-%dT%H:%M:%S.%fZ') }}" class="mdc-button mdc-button--raised" target=”_blank”>
-        <span class="mdc-button__ripple"></span>
-        <i class="material-icons mdc-button__icon" aria-hidden="true"
-          >manage_search</i
-        >
-        <span class="mdc-button__label">View logs</span>
-      </a>
+      {% if logsUrl %}
+        <!-- View Logs button -->
+        <a href="{{ logsUrl }}" class="mdc-button mdc-button--raised" target=”_blank”>
+          <span class="mdc-button__ripple"></span>
+          <i class="material-icons mdc-button__icon" aria-hidden="true"
+            >manage_search</i
+          >
+          <span class="mdc-button__label">View logs</span>
+        </a>
+      {% endif %}
       <!-- Donate button -->
       <a href="/donate?campaign_id={{ campaign.id }}" class="mdc-button mdc-button--raised">
         <span class="mdc-button__ripple"></span>

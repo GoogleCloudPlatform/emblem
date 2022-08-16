@@ -119,8 +119,16 @@ def webapp_view_donation():
         log(f"Exception when getting a campaign for a donations: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403
 
+    logs_url = None
+    try:
+        trace_id = request.headers.get('X-Cloud-Trace-Context').split('/')[0]
+        logs_url = f'https://console.cloud.google.com/logs/query;query=trace%3D~%22projects%2F.*%2Ftraces%2F{trace_id}%22' if trace_id else None
+    except Exception as e:
+        log(f"Exception when getting trace context: {e}", severity="WARNING")
+
     return render_template(
         "donations/view-donation.html",
         donation=donation_instance,
         campaign=campaign_instance,
+        logsUrl=logs_url
     )
