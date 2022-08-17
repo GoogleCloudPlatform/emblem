@@ -14,6 +14,7 @@
 
 
 import os
+import requests
 from flask import after_this_request, Blueprint, g, redirect, request, render_template
 
 from middleware import session
@@ -123,7 +124,14 @@ def webapp_view_donation():
     logs_url = None
     try:
         trace_id = request.args.get("trace_id")
-        logs_url = f'https://console.cloud.google.com/logs/query;query=trace%3D~%22projects%2F.*%2Ftraces%2F{trace_id}%22' if trace_id else None
+
+        project_req = requests.get(
+            "http://metadata.google.internal/computeMetadata/v1/project/project-id",
+            headers={'Metadata-Flavor': 'Google'})
+        project_id = project_req.text
+
+        if trace_id and project_id:
+            logs_url = f'https://console.cloud.google.com/logs/query;query=trace%3D~%22projects%2F{project_id}%2Ftraces%2F{trace_id}%22?project={project_id}'
     except Exception as e:
         log(f"Exception when getting trace ID: {e}", severity="WARNING")
 
