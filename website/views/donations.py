@@ -102,7 +102,7 @@ def record_donation():
         log(f"Exception when creating a donation: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403
 
-    trace_id = request.headers.get('X-Cloud-Trace-Context').split('/')[0]
+    trace_id = request.headers.get("X-Cloud-Trace-Context").split("/")[0]
     return redirect(f"/viewDonation?donation_id={donation.id}&trace_id={trace_id}")
 
 
@@ -127,11 +127,12 @@ def webapp_view_donation():
 
         project_req = requests.get(
             "http://metadata.google.internal/computeMetadata/v1/project/project-id",
-            headers={'Metadata-Flavor': 'Google'})
+            headers={"Metadata-Flavor": "Google"},
+        )
         project_id = project_req.text
 
         if trace_id and project_id:
-            logs_url = f'https://console.cloud.google.com/logs/query;query=trace%3D~%22projects%2F{project_id}%2Ftraces%2F{trace_id}%22?project={project_id}'
+            logs_url = f"https://console.cloud.google.com/logs/query;query=trace%3D~%22projects%2F{project_id}%2Ftraces%2F{trace_id}%22?project={project_id}"
     except Exception as e:
         log(f"Exception when getting trace ID: {e}", severity="WARNING")
 
@@ -139,5 +140,5 @@ def webapp_view_donation():
         "donations/view-donation.html",
         donation=donation_instance,
         campaign=campaign_instance,
-        logsUrl=logs_url
+        logsUrl=logs_url,
     )
