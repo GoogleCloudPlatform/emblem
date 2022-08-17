@@ -31,7 +31,7 @@ campaigns_bp = Blueprint("campaigns", __name__, template_folder="templates")
 def list_campaigns():
     current_user = None
 
-    if g.session_data is not None:
+    if g.session_data:
         current_user = g.session_data.get("email")
 
     try:
