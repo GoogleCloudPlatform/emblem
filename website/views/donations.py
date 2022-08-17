@@ -101,7 +101,8 @@ def record_donation():
         log(f"Exception when creating a donation: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403
 
-    return redirect("/viewDonation?donation_id=" + donation.id)
+    trace_id = request.headers.get('X-Cloud-Trace-Context').split('/')[0]
+    return redirect(f"/viewDonation?donation_id={donation.id}&trace_id={trace_id}")
 
 
 @donations_bp.route("/viewDonation", methods=["GET"])
@@ -121,10 +122,10 @@ def webapp_view_donation():
 
     logs_url = None
     try:
-        trace_id = request.headers.get('X-Cloud-Trace-Context').split('/')[0]
+        trace_id = request.args.get("trace_id")
         logs_url = f'https://console.cloud.google.com/logs/query;query=trace%3D~%22projects%2F.*%2Ftraces%2F{trace_id}%22' if trace_id else None
     except Exception as e:
-        log(f"Exception when getting trace context: {e}", severity="WARNING")
+        log(f"Exception when getting trace ID: {e}", severity="WARNING")
 
     return render_template(
         "donations/view-donation.html",
