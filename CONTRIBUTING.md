@@ -69,6 +69,8 @@ Minimizing developer follow-up action is [helpful](#positive-helpful-feedback)!
 
 If no Google Cloud resources are needed, use [GitHub Actions](https://docs.github.com/en/actions) to drive automation. Otherwise use Cloud Build ([decision](docs/decisions/2021-05-static-analysis.md)).
 
+Infrastructure (including test fixtures) should be managed automatically. This should be by Terraform where possible, and by custom scripts where necessary. ([decision](docs/decisions/2021-04-terraform.md)) However, some cases exist where resources **cannot** be managed automatically. In those cases, Emblem allows for manual resource management. ([decision](docs/decisions/2022-07-test-fixtures.md))
+
 ## Automated Testing & Productivity
 
 The following automated checks are run against every Pull Request:
@@ -91,3 +93,11 @@ Whether it's a code review, a static analysis outcome, or an error message in th
 
 * Warnings & errors should provide context, suggest next steps, and provide direct access to more details. (For example, link to build logs.)
 * When a warning or error has a generally agreed fix or next step, point the way or suggest the fix. (For example, linting checks on a PR should propose the fixes to correct the code formatting.)
+
+### Enable Trunk-Based Development with Experiments
+
+Emblem operates using a [Trunk-Based Development](https://trunkbaseddevelopment.com/) model.
+
+Larger-scale changes to Emblem should be prototyped in the [`/experimental` folder](/experimental).
+
+They can then be merged into the `main` branch in a single pass.
