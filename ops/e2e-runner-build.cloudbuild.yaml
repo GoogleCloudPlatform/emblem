@@ -17,10 +17,10 @@ steps:
   # Docker Build
   - name: gcr.io/cloud-builders/docker
     entrypoint: /bin/bash
-    dir: ops/e2e-runner
     args: 
       - '-c'
       - |
+        cd ops/e2e-runner; \
         docker build -t \
         ${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:${_IMAGE_TAG} \
         . 
