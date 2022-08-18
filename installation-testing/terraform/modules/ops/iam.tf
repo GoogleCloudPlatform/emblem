@@ -26,6 +26,13 @@ resource "google_project_iam_member" "delivery_pubsub_editor" {
   member   = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
 }
 
+resource "google_project_iam_member" "delivery_storage_admin" {
+  project  = var.project_id
+  provider = google
+  role     = "roles/storage.admin"
+  member   = "serviceAccount:${data.google_project.ops.number}@cloudbuild.gserviceaccount.com"
+}
+
 # This role allows the target service account to change IAM policies.
 #
 # To prevent it granting arbitrary IAM roles, we use
