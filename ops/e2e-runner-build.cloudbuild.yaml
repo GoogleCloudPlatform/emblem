@@ -20,6 +20,7 @@ steps:
     args: 
       - '-c'
       - |
+        cd ops/e2e-runner; \
         docker build -t \
         ${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:${_IMAGE_TAG} \
         . 
