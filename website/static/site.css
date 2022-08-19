@@ -220,7 +220,11 @@ img.emblem-avatar {
   width: 100%;
 }
 
-/* Donate + view logs buttons */
+/* Donate button */
+.emblem-donation-wrapper {
+  margin: 10px auto;
+}
+
 .emblem-campaign-details .mdc-button {
   margin-top: 1em;
   float: right;
