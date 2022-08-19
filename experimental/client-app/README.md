@@ -58,10 +58,11 @@ Requires the following environment variables to be set within each Cloud Run con
 ### Lit container
 
 ```bash
-gcloud builds submit --tag gcr.io/$PROJECT_ID/lit-auth-website
-gcloud run deploy --image=gcr.io/$PROJECT_ID/lit-auth-website --port 8000
+gcloud builds submit --tag $REGION-docker.pkg.dev/$PROJECT_ID/website/lit-based-website
 
-gcloud run services update lit-auth-website \
+gcloud run deploy --image=$REGION-docker.pkg.dev/$PROJECT_ID/website/lit-based-website --port 8000
+
+gcloud run services update lit-based-website \
   --update-env-vars REDIRECT_URI=$(your-redirect-uri) \
   --update-env-vars API_URL=$(your-api-url) \
   --update-env-vars AUTH_API_URL=$(your-auth-api-url) \
@@ -74,8 +75,10 @@ gcloud run services update lit-auth-website \
 
 ```bash
 cd server/
-gcloud builds submit --tag gcr.io/$PROJECT_ID/lit-auth-api
-gcloud run deploy --image=gcr.io/$PROJECT_ID/lit-auth-api --port 4000
+
+gcloud builds submit --tag $REGION-docker.pkg.dev/$PROJECT_ID/website/lit-auth-api
+
+gcloud run deploy --image=$REGION-docker.pkg.dev/$PROJECT_ID/website/lit-auth-api --port 4000
 
 gcloud run services update lit-auth-api \
 --update-env-vars REDIRECT_URI=$(your-redirect-uri) \
