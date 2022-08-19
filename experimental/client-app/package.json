@@ -13,7 +13,7 @@
     "start:build": " web-dev-server --root-dir dist --app-index index.html --open",
     "analyze": "cem analyze --litelement",
     "lint:css": "stylelint \"src/**/*.js\"",
-    "start": "THEME=cymbal NODE_ENV=development web-dev-server"
+    "start": "THEME=cymbal web-dev-server"
   },
   "dependencies": {
     "@material/mwc-button": "^0.26.1",

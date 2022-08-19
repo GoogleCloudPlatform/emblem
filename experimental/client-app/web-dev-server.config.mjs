@@ -17,7 +17,6 @@ import rollupReplace from '@rollup/plugin-replace';
 
 const replace = fromRollup(rollupReplace);
 const hmr = process.argv.includes('--hmr');
-const env = process.env.NODE_ENV;
 const theme = process.env.THEME;
 
 export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
@@ -30,7 +29,6 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
     replace({
       include: ['src/utils/config.js'],
       preventAssignment: false,
-      '__env__': env || 'development',
       '__theme__': theme || 'default', // one of cymbal or default
       '__api_url__': process.env.API_URL,
       '__auth_api_url__': process.env.AUTH_API_URL,

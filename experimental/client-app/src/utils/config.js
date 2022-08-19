@@ -13,7 +13,6 @@
 // limitations under the License.
 
 export const getConfig = () => ({
-  NODE_ENV: '__env__',
   API_URL: '__api_url__',
   SITE_URL: '__site_url__',
   THEME: '__theme__',
