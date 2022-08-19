@@ -8,3 +8,4 @@ Guidelines for contributing:
 - Use comments to show what you're testing and why
 - Write small atomic tests
 - Create a separate PR to delete your subdirectory after the code has been incorporated into the main project and the design decisions have been documented
+- Experiments should be timeboxed to ~2 weeks maximum.
