@@ -16,17 +16,17 @@
 steps:
   # Docker Build 
   - name: 'gcr.io/cloud-builders/docker'
-    dir: content-api
     args: 
       - 'build'
       - '-t'
-      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/content-api/content-api:${SHORT_SHA}'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/content-api/content-api:${_SHORT_SHA}'
       - '.'
 
 # Default to us-central1
 substitutions:
   _REGION: us-central1
+  _SHORT_SHA: latest
 
 # Store in Artifact Registry
 images:
-  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/content-api/content-api:${SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/content-api/content-api:${_SHORT_SHA}'

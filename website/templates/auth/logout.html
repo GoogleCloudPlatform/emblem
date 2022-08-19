@@ -19,6 +19,12 @@
 {% block title %}Log Out{% endblock %}
 
 {% block content %}
-  <h1>You have been logged out.</h1>
-  <p><a href="/">Return to home page</a></p>
+<div class="mdc-layout-grid">
+  <div class="mdc-layout-grid__inner">
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+      <h1>You have been logged out.</h1>
+      <a href="/" class="mdc-button mdc-button--outlined">Return to home page</a>
+    </div>
+  </div>
+</div>
 {% endblock %}
