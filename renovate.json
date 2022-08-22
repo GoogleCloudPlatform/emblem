@@ -14,7 +14,8 @@
       "paths": [
         "experimental/"
       ],
-      "rangeStrategy": "bump"
+      "rangeStrategy": "auto",
+      "schedule": ["every weekend"]
     }
   ]
 }
