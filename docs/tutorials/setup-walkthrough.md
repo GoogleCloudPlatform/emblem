@@ -21,19 +21,6 @@ teachme docs/tutorials/setup-walkthrough.md
 
 Click **Start** below to get started.
 
-## Login
-Set your application default credentials by running the command below in the terminal and logging in with your Google account:
-
-```bash
-gcloud auth application-default login
-```
-
-If you encounter auth errors, you may need to unset your `GOOGLE_APPLICATION_CREDENTIALS` in your terminal.
-
-```bash
-unset GOOGLE_APPLICATION_CREDENTIALS
-```
-
 ## Set projects
 
 Emblem uses three projects: `prod`, `stage`, and `ops`.
