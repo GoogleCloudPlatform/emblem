@@ -77,3 +77,9 @@ variable "approver_email" {
   description = "Email of initial user to add to Firebase as approver."
   default     = "user@example.com"
 }
+
+variable "seed_test_data" {
+  type        = bool
+  description = "Toggle to seed test data into Firebase."
+  default     = false
+}
