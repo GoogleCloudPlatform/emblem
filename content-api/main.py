@@ -28,7 +28,7 @@ resource = [
 ]
 
 app = Flask(__name__)
-cors = CORS(app) # add cross-origin
+cors = CORS(app)
 
 # Check authentication and remember result in global request context
 #
