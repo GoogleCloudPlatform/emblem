@@ -22,7 +22,7 @@ data "template_file" "approver" {
 resource "google_firestore_document" "approvers" {
   count = var.seed_test_data ? 1 : 0
   collection  = "approvers"
-  document_id = random_string.approver_doc_id.result
+  document_id = random_string.approver_doc_id[count.index].result
   fields      = data.template_file.approver[count.index].rendered
 }
 
