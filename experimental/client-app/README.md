@@ -48,11 +48,11 @@ Requires the following environment variables to be set within each Cloud Run con
 | AUTH_API_URL   | path that points to nodejs auth api url     | `https://lit-auth-api-abc123-uc.a.run.app` |
 | REDIRECT_URI   | path that points to AUTH_API_URL callback   | `${AUTH_API_URL}/auth/google`              |
 
-| Secrets        | Description                                                       |                                                                                  |
-| -------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| JWT_SECRET     | String to encode jwt token (only required for auth api container) | `random-value-emblem-string`                                                     |
-| CLIENT_ID      | OAuth 2.0 credentials client id                                   | From [web client credentials](https://console.cloud.google.com/apis/credentials) |
-| CLIENT_SECRET  | OAuth 2.0 credentials client secret                               | From [web client credentials](https://console.cloud.google.com/apis/credentials) |
+| Secrets        | Description                                                                                      |                                                                                  |
+| -------------- | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
+| JWT_SECRET     | String to encode [jwt token](https://jwt.io/introduction) (only required for auth api container) | `some-arbitrary-string`                                                     |
+| CLIENT_ID      | OAuth 2.0 credentials client id                                                                  | From [web client credentials](https://console.cloud.google.com/apis/credentials) |
+| CLIENT_SECRET  | OAuth 2.0 credentials client secret                                                              | From [web client credentials](https://console.cloud.google.com/apis/credentials) |
 
 
 ### Lit container
