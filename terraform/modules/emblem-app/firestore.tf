@@ -1,5 +1,5 @@
 locals {
-  donor_test_data = jsondecode(file("${path.module}/files/donors.json"))
+  donor_test_data = jsondecode(file("${path.module}/files/test-data/donors.json"))
 }
 
 # Seed Firestore with approvers
