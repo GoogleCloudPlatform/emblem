@@ -14,9 +14,12 @@
 
 from os import set_inheritable
 from flask import Flask, g, request
+
 from google.auth.transport import requests as reqs
 from google.oauth2 import id_token
+
 from resources import methods
+
 
 resource = [
     "approvers",
@@ -27,6 +30,7 @@ resource = [
 ]
 
 app = Flask(__name__)
+
 
 # Check authentication and remember result in global request context
 #
