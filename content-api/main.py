@@ -14,7 +14,6 @@
 
 from os import set_inheritable
 from flask import Flask, g, request
-from flask_cors import CORS
 
 from google.auth.transport import requests as reqs
 from google.oauth2 import id_token
@@ -30,7 +29,6 @@ resource = [
     "donors",
 ]
 app = Flask(__name__)
-cors = CORS(app)
 
 
 # Check authentication and remember result in global request context
