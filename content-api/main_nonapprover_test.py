@@ -46,6 +46,8 @@ token = os.environ.get("ID_TOKEN")
 
 
 if token is not None:
+    print('------ token found -----')
+    print('------ token -----')
     headers = {"Authorization": f"Bearer {token}"}
 
     info = None
