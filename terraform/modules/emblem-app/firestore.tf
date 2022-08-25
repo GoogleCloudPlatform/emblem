@@ -20,6 +20,7 @@ data "template_file" "approver" {
 }
 
 resource "google_firestore_document" "approvers" {
+  project = var.project_id
   count = var.seed_test_data ? 1 : 0
   collection  = "approvers"
   document_id = random_string.approver_doc_id[count.index].result
@@ -40,6 +41,7 @@ data "template_file" "donors" {
 }
 
 resource "google_firestore_document" "donors" {
+  project = var.project_id
   count = var.seed_test_data ? "${length(data.template_file.donors)}" : 0
   collection  = "donors"
   document_id = local.donor_test_data[count.index].id
