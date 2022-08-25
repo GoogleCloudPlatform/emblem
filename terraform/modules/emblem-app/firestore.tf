@@ -7,7 +7,7 @@ resource "random_string" "approver_doc_id" {
 }
 
 data "template_file" "approver" {
-  template = file("${path.module}/files/approvers.tftpl")
+  template = file("${path.module}/files/templates/approvers.tftpl")
   vars = {
     email = var.approver_email
   }
