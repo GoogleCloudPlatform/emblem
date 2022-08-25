@@ -4,11 +4,11 @@ locals {
 
 # Seed Firestore with approvers
 resource "random_string" "approver_doc_id" {
-  count            = var.seed_test_data ? 1 : 0
-  length           = 20
-  special          = false
-  min_numeric      = 3
-  min_lower        = 10
+  count       = var.seed_test_data ? 1 : 0
+  length      = 20
+  special     = false
+  min_numeric = 3
+  min_lower   = 10
 }
 
 data "template_file" "approver" {
@@ -20,8 +20,8 @@ data "template_file" "approver" {
 }
 
 resource "google_firestore_document" "approvers" {
-  project = var.project_id
-  count = var.seed_test_data ? 1 : 0
+  project     = var.project_id
+  count       = var.seed_test_data ? 1 : 0
   collection  = "approvers"
   document_id = random_string.approver_doc_id[count.index].result
   fields      = data.template_file.approver[count.index].rendered
@@ -31,18 +31,18 @@ resource "google_firestore_document" "approvers" {
 
 data "template_file" "donors" {
   template = file("${path.module}/files/templates/donors.tftpl")
-  count = var.seed_test_data ? "${length(local.donor_test_data)}" : 0
+  count    = var.seed_test_data ? "${length(local.donor_test_data)}" : 0
   vars = {
-    id = local.donor_test_data[count.index].id
-    name = local.donor_test_data[count.index].data.name
-    email = local.donor_test_data[count.index].data.email
+    id              = local.donor_test_data[count.index].id
+    name            = local.donor_test_data[count.index].data.name
+    email           = local.donor_test_data[count.index].data.email
     mailing_address = local.donor_test_data[count.index].data.mailing_address
   }
 }
 
 resource "google_firestore_document" "donors" {
-  project = var.project_id
-  count = var.seed_test_data ? "${length(data.template_file.donors)}" : 0
+  project     = var.project_id
+  count       = var.seed_test_data ? "${length(data.template_file.donors)}" : 0
   collection  = "donors"
   document_id = local.donor_test_data[count.index].id
   fields      = data.template_file.donors[count.index].rendered
