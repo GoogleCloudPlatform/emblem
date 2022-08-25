@@ -273,6 +273,9 @@ def test_insert_with_authentication(client):
 
     # Donors should work for donor == test user
     r = client.post(f"/donors", headers=headers, json=TEST_DONORS[EMAIL])
+    print('------------')
+    print(TEST_DONORS[EMAIL])
+
     assert r.status_code == 201
     assert r.headers.get("Content-Type") == "application/json"
     payload = json.loads(r.data)
