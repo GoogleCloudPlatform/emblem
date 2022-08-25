@@ -43,6 +43,10 @@ TEST_CAUSE = None
 
 # Set auth headers from the ID_TOKEN if possible
 token = os.environ.get("ID_TOKEN")
+
+print('----- token ------')
+print(token)
+
 if token is not None:
     headers = {"Authorization": f"Bearer {token}"}
 
@@ -63,6 +67,7 @@ if token is not None:
     if info is not None and "email" in info:
         EMAIL = info["email"]
 else:
+    print('------ no token found -----')
     headers = {}
 
 
