@@ -281,10 +281,13 @@ def test_insert_with_authentication(client):
     print('-----debugging-------')
     print(TEST_DONORS[EMAIL])
     print(EMAIL)
+    print('----- headers ------')
     print(headers)
+    print('----- id_token ------')
     print(id_token)
     print('----- token ------')
     print(token)
+    print(os.environ.get("ID_TOKEN"))
 
     assert r.status_code == 201
     assert r.headers.get("Content-Type") == "application/json"
