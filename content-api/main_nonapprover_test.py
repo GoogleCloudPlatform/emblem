@@ -44,8 +44,6 @@ TEST_CAUSE = None
 # Set auth headers from the ID_TOKEN if possible
 token = os.environ.get("ID_TOKEN")
 
-print('----- token ------')
-print(token)
 
 if token is not None:
     headers = {"Authorization": f"Bearer {token}"}
@@ -283,6 +281,8 @@ def test_insert_with_authentication(client):
     print(EMAIL)
     print(headers)
     print(id_token)
+    print('----- token ------')
+    print(token)
 
     assert r.status_code == 201
     assert r.headers.get("Content-Type") == "application/json"
