@@ -20,6 +20,34 @@ from google.oauth2 import id_token
 
 from resources import methods
 
+from opentelemetry import propagate
+from opentelemetry import trace
+
+from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.propagators.cloud_trace_propagator import CloudTraceFormatPropagator
+from opentelemetry.propagators.composite import CompositePropagator
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
+
+provider = TracerProvider()
+processor = BatchSpanProcessor(CloudTraceSpanExporter())
+provider.add_span_processor(processor)
+
+# Add the X-Cloud-Trace-Context propagator.
+# Note: Because of the behavior of the XCTC 'force trace' bit, this will cause
+# all downstream services to force tracing, resulting in larger than expected
+# storage costs.
+# FIXME: the service account needs 'Cloud Trace Agent' IAM role to write traces.
+propagate.set_global_textmap(CompositePropagator([
+    CloudTraceFormatPropagator(),
+    propagate.get_global_textmap()
+]
+))
+
+# Sets the global default tracer provider
+trace.set_tracer_provider(provider)
 
 resource = [
     "approvers",
@@ -31,6 +59,7 @@ resource = [
 
 app = Flask(__name__)
 
+FlaskInstrumentor().instrument_app(app)
 
 # Check authentication and remember result in global request context
 #
