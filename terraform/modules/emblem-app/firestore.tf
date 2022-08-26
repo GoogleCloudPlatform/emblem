@@ -1,5 +1,6 @@
 locals {
-  donor_test_data = jsondecode(file("${path.module}/files/test-data/donors.json"))
+  donor_test_data    = jsondecode(file("${path.module}/files/test-data/donors.json"))
+  campaign_test_data = jsondecode(file("${path.module}/files/test-data/campaigns.json"))
 }
 
 # Seed Firestore with approvers
@@ -46,4 +47,28 @@ resource "google_firestore_document" "donors" {
   collection  = "donors"
   document_id = local.donor_test_data[count.index].id
   fields      = data.template_file.donors[count.index].rendered
+}
+
+# Seed test data to campaigns collection
+
+data "template_file" "campaigns" {
+  template = file("${path.module}/files/templates/campaigns.tftpl")
+  count    = var.seed_test_data ? "${length(local.campaign_test_data)}" : 0
+  vars = {
+    name        = local.campaign_test_data[count.index].data.name
+    description = local.campaign_test_data[count.index].data.description
+    cause       = local.campaign_test_data[count.index].data.cause
+    managers    = trim("[${join(",", local.campaign_test_data[count.index].data.managers)}]", "[]")
+    goal        = local.campaign_test_data[count.index].data.goal
+    imageUrl    = local.campaign_test_data[count.index].data.imageUrl
+    active      = local.campaign_test_data[count.index].data.active
+  }
+}
+
+resource "google_firestore_document" "campaigns" {
+  project     = var.project_id
+  count       = var.seed_test_data ? "${length(data.template_file.campaigns)}" : 0
+  collection  = "campaigns"
+  document_id = local.campaign_test_data[count.index].id
+  fields      = data.template_file.campaigns[count.index].rendered
 }
