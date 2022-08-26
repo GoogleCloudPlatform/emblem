@@ -35,6 +35,11 @@ const headerStyles =  css`
         align-items: center;
       }
 
+      .headerWrapper .login,
+      .headerWrapper .logout {
+        color: gray;
+      }
+
       .cloudLogoWrapper {
         display: flex;
         flex-direction: column;
