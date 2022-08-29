@@ -29,7 +29,6 @@ from opentelemetry.propagators.cloud_trace_propagator import CloudTraceFormatPro
 from opentelemetry.propagators.composite import CompositePropagator
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 
 provider = TracerProvider()
 processor = BatchSpanProcessor(CloudTraceSpanExporter())
@@ -39,7 +38,7 @@ provider.add_span_processor(processor)
 # Note: Because of the behavior of the XCTC 'force trace' bit, this will cause
 # all downstream services to force tracing, resulting in larger than expected
 # storage costs.
-# FIXME: the service account needs 'Cloud Trace Agent' IAM role to write traces.
+# TODO: replace this with a one-way propagator when available.
 propagate.set_global_textmap(CompositePropagator([
     CloudTraceFormatPropagator(),
     propagate.get_global_textmap()
