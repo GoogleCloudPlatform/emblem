@@ -2,7 +2,7 @@ locals {
   donor_test_data    = jsondecode(file("${path.module}/files/test-data/donors.json"))
   campaign_test_data = jsondecode(file("${path.module}/files/test-data/campaigns.json"))
   cause_test_data    = jsondecode(file("${path.module}/files/test-data/causes.json"))
-  donation_test_data = jsondecode(file("${path.module}/files/test-data/donations.json"))  
+  donation_test_data = jsondecode(file("${path.module}/files/test-data/donations.json"))
 }
 
 # Seed Firestore with approvers
@@ -102,9 +102,9 @@ data "template_file" "donations" {
   template = file("${path.module}/files/templates/donations.tftpl")
   count    = var.seed_test_data ? "${length(local.donation_test_data)}" : 0
   vars = {
-    campaign        = local.donation_test_data[count.index].data.campaign
-    donor = local.donation_test_data[count.index].data.donor
-    amount    = local.donation_test_data[count.index].data.amount
+    campaign = local.donation_test_data[count.index].data.campaign
+    donor    = local.donation_test_data[count.index].data.donor
+    amount   = local.donation_test_data[count.index].data.amount
   }
 }
 
