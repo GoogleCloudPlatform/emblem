@@ -27,6 +27,7 @@ import re
 import requests
 
 from flask import request
+from opentelemetry import trace
 
 
 # Query the metadata server on initialization to get the project number used
@@ -61,13 +62,13 @@ def log(message, severity="DEFAULT", **kwargs):
     logStruct = {"message": f"API: {message}", "severity": severity}
 
     if request:  # Usually will be in a request context, but not always
-        trace = request.headers.get("X-Cloud-Trace-Context")
+        traceid = trace.format_trace_id(
+            trace.get_current_span().get_span_context().trace_id)
 
-        if trace is not None:
-            trace = re.split(r"\W+", trace)[0]
+        if traceid is not None:
             logStruct[
                 "logging.googleapis.com/trace"
-            ] = f"projects/{PROJECT_ID}/traces/{trace}"
+            ] = f"projects/{PROJECT_ID}/traces/{traceid}"
 
     for key in kwargs:
         if key not in logStruct:
