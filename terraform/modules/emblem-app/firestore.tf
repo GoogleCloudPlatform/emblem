@@ -1,6 +1,8 @@
 locals {
   donor_test_data    = jsondecode(file("${path.module}/files/test-data/donors.json"))
   campaign_test_data = jsondecode(file("${path.module}/files/test-data/campaigns.json"))
+  cause_test_data    = jsondecode(file("${path.module}/files/test-data/causes.json"))
+  donation_test_data = jsondecode(file("${path.module}/files/test-data/donations.json"))
 }
 
 # Seed Firestore with approvers
@@ -71,4 +73,45 @@ resource "google_firestore_document" "campaigns" {
   collection  = "campaigns"
   document_id = local.campaign_test_data[count.index].id
   fields      = data.template_file.campaigns[count.index].rendered
+}
+
+# Seed test data to causes collection
+
+data "template_file" "causes" {
+  template = file("${path.module}/files/templates/causes.tftpl")
+  count    = var.seed_test_data ? "${length(local.cause_test_data)}" : 0
+  vars = {
+    name        = local.cause_test_data[count.index].data.name
+    description = local.cause_test_data[count.index].data.description
+    imageUrl    = local.cause_test_data[count.index].data.imageUrl
+    active      = local.cause_test_data[count.index].data.active
+  }
+}
+
+resource "google_firestore_document" "causes" {
+  project     = var.project_id
+  count       = var.seed_test_data ? "${length(data.template_file.causes)}" : 0
+  collection  = "causes"
+  document_id = local.cause_test_data[count.index].id
+  fields      = data.template_file.causes[count.index].rendered
+}
+
+# Seed test data to donations collection
+
+data "template_file" "donations" {
+  template = file("${path.module}/files/templates/donations.tftpl")
+  count    = var.seed_test_data ? "${length(local.donation_test_data)}" : 0
+  vars = {
+    campaign = local.donation_test_data[count.index].data.campaign
+    donor    = local.donation_test_data[count.index].data.donor
+    amount   = local.donation_test_data[count.index].data.amount
+  }
+}
+
+resource "google_firestore_document" "donations" {
+  project     = var.project_id
+  count       = var.seed_test_data ? "${length(data.template_file.donations)}" : 0
+  collection  = "donations"
+  document_id = local.donation_test_data[count.index].id
+  fields      = data.template_file.donations[count.index].rendered
 }
