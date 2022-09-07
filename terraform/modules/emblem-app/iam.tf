@@ -5,13 +5,6 @@
 # Assign IAM permission for the Cloud Run service.
 # Cloud Build permissions related to this environment are defined in deploy.tf.
 
-resource "google_service_account" "cloud_run_manager" {
-  project      = var.project_id
-  account_id   = "cloud-run-manager"
-  description  = "Deploys new revisions and controls traffic to Cloud Run."
-  display_name = "cloud-run-manager"
-}
-
 resource "google_service_account" "website_manager" {
   project      = var.project_id
   account_id   = "website-manager"
