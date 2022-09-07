@@ -17,8 +17,6 @@ import rollupReplace from '@rollup/plugin-replace';
 
 const replace = fromRollup(rollupReplace);
 const hmr = process.argv.includes('--hmr');
-const env = process.env.NODE_ENV;
-const isFlaskProxy = process.env.FLASK_PROXY;
 const theme = process.env.THEME;
 
 export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
@@ -31,9 +29,13 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
     replace({
       include: ['src/utils/config.js'],
       preventAssignment: false,
-      '__env__': env || 'development',
       '__theme__': theme || 'default', // one of cymbal or default
-      '__api_url__': isFlaskProxy ? 'http://127.0.0.1:5000/api/v1' : 'http://localhost:3000'
+      '__api_url__': process.env.API_URL,
+      '__auth_api_url__': process.env.AUTH_API_URL,
+      '__client_id__': process.env.CLIENT_ID,
+      '__client_secret__': process.env.CLIENT_SECRET,
+      '__site_url__': process.env.SITE_URL,
+      '__redirect_uri__': process.env.REDIRECT_URI
     }),
   ]
 });
