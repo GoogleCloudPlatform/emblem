@@ -1,11 +1,11 @@
-{
-    "name": {
-        "stringValue": "${name}"
-    },
-    "email": {
-        "stringValue": "${email}"
-    },
-    "mailing_address": {
-        "stringValue": "${mailing_address}"
+${jsonencode({
+    name = {
+        stringValue = name
     }
-}
+    email = {
+        stringValue = email
+    }
+    mailing_address = {
+        stringValue = mailing_address
+    }
+})}
