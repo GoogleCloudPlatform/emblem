@@ -91,6 +91,9 @@ EOF
 project_id = "${STAGE_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
+    if [[ -z ${SKIP_SEEDING} ]]; then
+        echo "seed_test_data = true" >> ${STAGE_ENVIRONMENT_DIR}/terraform.tfvars
+    fi
     terraform -chdir=${STAGE_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=stage"
     terraform -chdir=${STAGE_ENVIRONMENT_DIR} apply --auto-approve
 
@@ -102,6 +105,9 @@ EOF
 project_id = "${PROD_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
+    if [[ -z ${SKIP_SEEDING} ]]; then
+        echo "seed_test_data = true" >> ${PROD_ENVIRONMENT_DIR}/terraform.tfvars
+    fi
         terraform -chdir=${PROD_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=prod"
         terraform -chdir=${PROD_ENVIRONMENT_DIR} apply --auto-approve
     fi
@@ -111,26 +117,26 @@ fi # skip terraform
 ########################
 # Seed Default Content #
 ########################
-if [[ -z "$SKIP_SEEDING" ]]; then
-    echo
-    echo "$(tput bold)Seeding default content...$(tput sgr0)"
-    echo
+# if [[ -z "$SKIP_SEEDING" ]]; then
+#     echo
+#     echo "$(tput bold)Seeding default content...$(tput sgr0)"
+#     echo
 
-    pushd content-api/data
-    account=$(gcloud config get-value account 2> /dev/null)
-    if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
-        read -rp "Please input an email address for an approver. This email will be added to the Firestore database as an 'approver' and will be able to perform privileged API operations from the website frontend: [${account}]: " approver
-    fi
-    approver="${approver:-$account}"
+#     pushd content-api/data
+#     account=$(gcloud config get-value account 2> /dev/null)
+#     if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
+#         read -rp "Please input an email address for an approver. This email will be added to the Firestore database as an 'approver' and will be able to perform privileged API operations from the website frontend: [${account}]: " approver
+#     fi
+#     approver="${approver:-$account}"
 
-    GOOGLE_CLOUD_PROJECT="${STAGE_PROJECT}" python3 seed_test_approver.py "${approver}"
-    GOOGLE_CLOUD_PROJECT="${STAGE_PROJECT}" python3 seed_database.py
-    if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
-        GOOGLE_CLOUD_PROJECT="${PROD_PROJECT}" python3 seed_test_approver.py "${approver}"
-        GOOGLE_CLOUD_PROJECT="${PROD_PROJECT}" python3 seed_database.py
-    fi
-    popd
-fi # skip seeding
+#     GOOGLE_CLOUD_PROJECT="${STAGE_PROJECT}" python3 seed_test_approver.py "${approver}"
+#     GOOGLE_CLOUD_PROJECT="${STAGE_PROJECT}" python3 seed_database.py
+#     if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
+#         GOOGLE_CLOUD_PROJECT="${PROD_PROJECT}" python3 seed_test_approver.py "${approver}"
+#         GOOGLE_CLOUD_PROJECT="${PROD_PROJECT}" python3 seed_database.py
+#     fi
+#     popd
+# fi # skip seeding
 
 ####################
 # Build Containers #
