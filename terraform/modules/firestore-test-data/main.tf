@@ -33,7 +33,6 @@ data "template_file" "donors" {
   template = file("${path.module}/files/templates/donors.tftpl")
   for_each = { for entry in local.donor_test_data : entry.id => entry }
   vars = {
-    id              = each.key
     name            = each.value.data.name
     email           = each.value.data.email
     mailing_address = each.value.data.mailing_address
@@ -44,7 +43,7 @@ resource "google_firestore_document" "donors" {
   project     = var.project_id
   for_each    = data.template_file.donors
   collection  = "donors"
-  document_id = each.value["id"]
+  document_id = each.key
   fields      = each.value["rendered"]
 }
 
@@ -68,7 +67,7 @@ resource "google_firestore_document" "campaigns" {
   project     = var.project_id
   for_each    = data.template_file.campaigns
   collection  = "campaigns"
-  document_id = each.value["id"]
+  document_id = each.key
   fields      = each.value["rendered"]
 }
 
@@ -89,11 +88,11 @@ resource "google_firestore_document" "causes" {
   project     = var.project_id
   for_each    = data.template_file.causes
   collection  = "causes"
-  document_id = each.value["id"]
+  document_id = each.key
   fields      = each.value["rendered"]
 }
 
-# # Seed test data to donations collection
+# Seed test data to donations collection
 
 data "template_file" "donations" {
   template = file("${path.module}/files/templates/donations.tftpl")
@@ -109,6 +108,6 @@ resource "google_firestore_document" "donations" {
   project     = var.project_id
   for_each    = data.template_file.donations
   collection  = "donations"
-  document_id = each.value["id"]
+  document_id = each.key
   fields      = each.value["rendered"]
 }
