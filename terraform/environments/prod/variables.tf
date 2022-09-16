@@ -55,3 +55,15 @@ variable "deploy_trigger_topic" {
   description = "Pub/Sub Topic to watch for deploy requests."
   default     = "deploy-completed-staging"
 }
+
+variable "approver_email" {
+  type        = string
+  description = "Email of initial user to add to Firebase as approver."
+  default     = "user@example.com"
+}
+
+variable "seed_test_data" {
+  type        = bool
+  description = "Toggle to seed test data into Firebase."
+  default     = false
+}

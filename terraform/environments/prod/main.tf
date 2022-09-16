@@ -18,4 +18,6 @@ module "emblem_prod" {
   deploy_trigger_topic_id = data.google_pubsub_topic.deploy_trigger.id
   gcr_pubsub_format       = false
   require_deploy_approval = true
+  approver_email          = var.approver_email
+  seed_test_data          = var.seed_test_data
 }
