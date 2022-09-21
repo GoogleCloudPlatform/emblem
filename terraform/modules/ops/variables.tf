@@ -33,3 +33,7 @@ variable "setup_cd_system" {
   description = "Create deployment triggers. Enable only if Cloud Build has been granted GitHub access."
 }
 
+variable "testRolesList" {
+  type = list(string)
+  default = ["roles/datastore.user", "roles/iam.serviceAccountTokenCreator"]
+}

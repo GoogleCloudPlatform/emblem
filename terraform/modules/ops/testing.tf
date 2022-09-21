@@ -9,7 +9,6 @@ resource "google_service_account" "test_user" {
   account_id   = "test-user"
   display_name = "Test Account [User]"
   description  = "Mock user account for unit and integration tests."
-
 }
 
 resource "google_service_account" "test_approver" {

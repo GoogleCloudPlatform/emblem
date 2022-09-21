@@ -22,6 +22,18 @@ resource "google_project_iam_member" "pubsub_publisher_iam_member" {
     google_project_service.emblem_ops_services
   ]
 }
+  
+resource "google_project_iam_member" "test_cloudbuild_iam_member" {
+  project  = var.project_id
+  provider = google
+  count = length(var.testRolesList)
+  role =  var.rolesList[count.index]
+  member   = "serviceAccount:${data.google_project.target_project.number}@cloudbuild.gserviceaccount.com"
+
+  depends_on = [
+    google_project_service.emblem_ops_services
+  ]
+}
 
 #####################
 # Container Hosting #
