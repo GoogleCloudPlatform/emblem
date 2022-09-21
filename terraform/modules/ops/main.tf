@@ -15,19 +15,8 @@ resource "google_pubsub_topic" "gcr" {
 resource "google_project_iam_member" "pubsub_publisher_iam_member" {
   project  = var.project_id
   provider = google
-  role     = "roles/pubsub.publisher"
-  member   = "serviceAccount:${data.google_project.target_project.number}@cloudbuild.gserviceaccount.com"
-
-  depends_on = [
-    google_project_service.emblem_ops_services
-  ]
-}
-  
-resource "google_project_iam_member" "test_cloudbuild_iam_member" {
-  project  = var.project_id
-  provider = google
-  count = length(var.testRolesList)
-  role =  var.rolesList[count.index]
+  count = length(var.pubsub_iam_roles_list)
+  role =  var.pubsub_iam_roles_list[count.index]
   member   = "serviceAccount:${data.google_project.target_project.number}@cloudbuild.gserviceaccount.com"
 
   depends_on = [
