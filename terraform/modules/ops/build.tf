@@ -34,6 +34,9 @@ resource "google_cloudbuild_trigger" "web_push_to_main" {
     "website/*/*",
     "client-libs/python/*"
   ]
+  ignore_files = [
+    "website/e2e-test/*",
+  ]
   github {
     owner = var.repo_owner
     name  = var.repo_name
@@ -58,7 +61,7 @@ resource "google_cloudbuild_trigger" "e2e_testing_build_runner" {
   name     = "e2e-runner-push-to-main"
   filename = "ops/e2e-runner-build.cloudbuild.yaml"
   included_files = [
-    "website/e2e-test/Dockerfile",
+    "website/e2e-test/*",
   ]
   github {
     owner = var.repo_owner
