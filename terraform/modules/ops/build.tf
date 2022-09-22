@@ -20,8 +20,10 @@ resource "google_cloudbuild_trigger" "api_push_to_main" {
   # These properties are detected as changed if not initialized.
   # Alternately, add a lifecycle rule to ignore_changes.
   ignored_files = []
-  substitutions = {}
-  tags          = []
+  substitutions = {
+    _CONTEXT = "content-api/."
+  }
+  tags = []
 }
 
 resource "google_cloudbuild_trigger" "web_push_to_main" {
@@ -34,7 +36,7 @@ resource "google_cloudbuild_trigger" "web_push_to_main" {
     "website/*/*",
     "client-libs/python/*"
   ]
-  ignore_files = [
+  ignored_files = [
     "website/e2e-test/*",
   ]
   github {
@@ -50,7 +52,6 @@ resource "google_cloudbuild_trigger" "web_push_to_main" {
 
   # These properties are detected as changed if not initialized.
   # Alternately, add a lifecycle rule to ignore_changes.
-  ignored_files = []
   substitutions = {}
   tags          = []
 }
