@@ -15,8 +15,8 @@ resource "google_pubsub_topic" "gcr" {
 resource "google_project_iam_member" "pubsub_publisher_iam_member" {
   project  = var.project_id
   provider = google
-  count = length(var.pubsub_iam_roles_list)
-  role =  var.pubsub_iam_roles_list[count.index]
+  for_each = toset(local.pubsub_iam_roles_list)
+  role =  each.key
   member   = "serviceAccount:${data.google_project.target_project.number}@cloudbuild.gserviceaccount.com"
 
   depends_on = [

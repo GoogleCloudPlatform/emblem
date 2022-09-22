@@ -11,6 +11,12 @@ locals {
   beta_services = var.enable_apis ? [
     "artifactregistry.googleapis.com"
   ] : []
+  # Cloud build service account roles
+  pubsub_iam_roles_list = [
+    "roles/pubsub.publisher",
+    "roles/datastore.user",
+    "roles/iam.serviceAccountTokenCreator"
+  ]
 }
 
 resource "google_project_service" "emblem_ops_services" {
