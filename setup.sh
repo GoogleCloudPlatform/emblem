@@ -147,7 +147,7 @@ echo
 
 gcloud builds submit "content-api" \
     --config=ops/api-build.cloudbuild.yaml \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_SHORT_SHA="$SHORT_SHA"
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_SHORT_SHA="$SHORT_SHA",_CONTEXT="."
 
 gcloud builds submit \
     --config=ops/web-build.cloudbuild.yaml \
