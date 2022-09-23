@@ -46,9 +46,16 @@ Emblem is made of a combination of resources created and managed by Terraform an
 
 ### Prerequisites
 
-```
+To deploy Emblem, you will need 3 Google Cloud projects (ops, stage, prod) with billing enabled on each.  
 
-```
+Your local host will need the following installed:
+* Google Cloud CLI
+* Terraform
+* Python3
+
+We recommend running through setup steps using Google Cloud Shell, which has the required softare pre-installed. The following will open Cloud Shell Editor and clone this repo:
+
+ [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2FGoogleCloudPlatform%2Femblem&cloudshell_tutorial=docs%2Ftutorials%2Fsetup-walkthrough.md)
 
 ### Streamlined setup
 
