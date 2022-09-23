@@ -7,24 +7,31 @@ Emblem Giving is a sample application intended to demonstrate a complex, end-to-
 
 > This sample application for learning purposes only. Real financial transactions are not made. The giving campaigns in the app are not real.
 
+## Features
+
+This project features:
+  * 2-tier web application architecture with Cloud Run
+  * continuous delivery with Cloud Build
+  * Terraform deployment
+  * Example configuration and usage of the following Google services and apis:
+    * Cloud Run
+    * IAM
+    * Secret Manager
+    * Cloud Storage
+    * Cloud Firestore
+    * Cloud Build
+    * Artifact Registry
+    * Pub/Sub
+
+
+Go deeper into project details in the [documentation](./docs) or read through the [technical decisions](docs/decisions/README.md) that got us where we are today.
+
 ![Emblem architecture diagram](./docs/images/emblem-simplified.png)
 
 ## Project Status
 
 * **Release Stage:** Alpha
 * **Self-service / Independent Setup:** Follow the instructions to set up Emblem by reading the [setup quickstart](./docs/tutorials/setup-quickstart.md), or by launching the [Interactive Walkthrough](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2FGoogleCloudPlatform%2Femblem&cloudshell_tutorial=docs%2Ftutorials%2Fsetup-walkthrough.md) on Cloud Shell.
-
-## Learn About This Project
-
-* This project will help you learn about:
-  * 2-tier web application architecture with Cloud Run
-  * Continuous Delivery with Cloud Build
-  * Using Terraform to manage Google Cloud resources
-  * Making sustainable decisions on Cloud usage for a team
-* See products in use: Cloud Run, IAM, Secret Manager, Cloud Storage,
-  Cloud Firestore, Cloud Build, Artifact Registry, Cloud Pub/Sub, Cloud Logging
-* Go deeper into project details in the [documentation](./docs)
-* Read through the [technical decisions](docs/decisions/README.md) that got us where we are today.
 
 ## Contributing
 
