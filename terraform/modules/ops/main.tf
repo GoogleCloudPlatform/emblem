@@ -2,6 +2,15 @@ data "google_project" "target_project" {
   project_id = var.project_id
 }
 
+locals {
+  # Cloud build service account roles
+  pubsub_iam_roles_list = [
+    "roles/pubsub.publisher",
+    "roles/datastore.user",
+    "roles/iam.serviceAccountTokenCreator"
+  ]
+}
+
 # Create this topic to emit writes to Artifact Registry as events.
 # https://cloud.google.com/artifact-registry/docs/configure-notifications#topic
 resource "google_pubsub_topic" "gcr" {
