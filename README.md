@@ -40,6 +40,30 @@ Go deeper into project details in the [documentation](./docs) or read through th
 * Become a [CONTRIBUTOR](./CONTRIBUTING.md)!
 * Check out our shovel-ready [Good First Issues](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22good+first+issue%22) or go a bit deeper in [Help Wanted](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22)
 
+## Getting Started
+
+```
+
+```
+
+### Prerequisites
+
+```
+
+```
+
+### Streamlined setup
+
+```
+
+```
+
+### Manual setup
+
+```
+
+```
+
 ---
 
 This is not an official Google project.
