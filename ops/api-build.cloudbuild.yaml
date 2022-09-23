@@ -20,7 +20,7 @@ steps:
       - 'build'
       - '-t'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/content-api/content-api:${_SHORT_SHA}'
-      - '.'
+      - '${_CONTEXT}'
 
 # Default to us-central1
 substitutions:
