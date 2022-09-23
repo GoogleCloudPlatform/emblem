@@ -26,6 +26,8 @@ This project features:
 
 Go deeper into project details in the [documentation](./docs) or read through the [technical decisions](docs/decisions/README.md) that got us where we are today.
 
+## Service architecture
+
 ![Emblem architecture diagram](./docs/images/emblem-simplified.png)
 
 ## Project Status
