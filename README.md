@@ -1,13 +1,11 @@
-# 🚧 THIS PROJECT IS IN ALPHA STAGE 🏗️
+# 💠 Emblem Giving
+---
+## 🚧 THIS PROJECT IS IN ALPHA STAGE 🏗️
+---
 
-# Emblem Giving: A Sample Application
+Emblem Giving is a sample application intended to demonstrate a complex, end-to-end serverless architecture. It showcases serverless continuous delivery as a donation sample app hosted on Google Cloud.   
 
-> This sample application is only for learning purposes.
-
-Emblem Giving demonstrates a complex, end-to-end serverless architecture. It showcases continuous delivery and trouble recovery wrapped up in a donation sample app.
-
-Real financial transactions are not made. The giving campaigns in the app
-are not real.
+> This sample application for learning purposes only. Real financial transactions are not made. The giving campaigns in the app are not real.
 
 ![Emblem architecture diagram](./docs/images/emblem-simplified.png)
 
