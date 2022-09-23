@@ -20,9 +20,7 @@ resource "google_cloudbuild_trigger" "api_push_to_main" {
   # These properties are detected as changed if not initialized.
   # Alternately, add a lifecycle rule to ignore_changes.
   ignored_files = []
-  substitutions = {
-    _CONTEXT = "content-api/."
-  }
+  substitutions = {}
   tags = []
 }
 
