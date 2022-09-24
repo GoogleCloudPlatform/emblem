@@ -46,12 +46,14 @@ Emblem is made of a combination of resources created and managed by Terraform an
 
 ### Prerequisites
 
-To deploy Emblem, you will need 3 Google Cloud projects (ops, stage, prod) with billing enabled on each.  
+To deploy Emblem, you will need:
+  * 3 Google Cloud projects (ops, stage, prod) with billing enabled on each
+  * A fork of this repo
 
 Your local host will need the following installed:
-* Google Cloud CLI
-* Terraform
-* Python3
+  * Google Cloud CLI
+  * Terraform
+  * Python3
 
 We recommend running through setup steps using Google Cloud Shell, which has the required softare pre-installed. The following will open Cloud Shell Editor and clone this repo:
 
@@ -59,9 +61,38 @@ We recommend running through setup steps using Google Cloud Shell, which has the
 
 ### Streamlined setup
 
-```
+1. **Connect a fork of this Github repo to your Emblem ops project**
+   
+   Click [here](https://console.cloud.google.com/cloud-build/triggers/connect) to connect your repository to your Google Cloud Project. Make sure you are working from your **ops** project. This will require you to authenticate with your Github account.
 
-```
+   Principals with access to your Google Cloud project will be able to create and run triggers on the repository you use.
+
+1. **Set environment variables** 
+
+   This setup uses `setup.sh` to deploy Emblem resources via Terraform and the `gcloud` CLI.
+
+   Set your project id's as environment variables:
+   ```
+   export PROD_PROJECT=<YOUR_PROD_PROJECT_ID>
+   export STAGE_PROJECT=<YOUR_STAGE_PROJECT_ID>
+   export OPS_PROJECT=<YOUR_OPS_PROJECT_ID>
+   ```
+
+1. **Execute setup.sh**
+
+   The setup will do the following:
+
+   1. Create a GCS bucket that will be used to store remote Terraform state files
+   1. Run `terraform apply` from each of the environment root directories in `terraform/environments/`
+   1. Build and push `content-api`, `web`, and `runner` containers to the Artifact Registry repositories in your ops project
+   1. Seed sample data into the Firestore instances in your staging and prod projects
+   1. Deploy Cloud Run services for `content-api` and `website` in your stage and prod projects
+ 
+   You will be prompted to enter the URL for the Github repository you added to your ops project in step 1. This will be used to deploy Cloud Build triggers for the CICD pipeline. To begin setup:
+   ```
+   ./setup.sh
+   ```
+   Once complete you will have a deployed instance of Emblem.  
 
 ### Manual setup
 
