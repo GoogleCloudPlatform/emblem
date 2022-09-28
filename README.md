@@ -1,7 +1,4 @@
 # 💠 Emblem Giving
----
-## 🚧 THIS PROJECT IS IN ALPHA STAGE 🏗️
----
 
 Emblem Giving is a sample application intended to demonstrate a complex, end-to-end serverless architecture. It showcases serverless continuous delivery as a donation sample app hosted on Google Cloud.   
 
