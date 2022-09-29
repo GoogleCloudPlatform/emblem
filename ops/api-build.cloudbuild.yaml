@@ -19,14 +19,14 @@ steps:
     args: 
       - 'build'
       - '-t'
-      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/content-api/content-api:${_SHORT_SHA}'
-      - '.'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/content-api/content-api:${_IMAGE_TAG}'
+      - '${_CONTEXT}'
 
 # Default to us-central1
 substitutions:
   _REGION: us-central1
-  _SHORT_SHA: latest
+  _IMAGE_TAG: $SHORT_SHA
 
 # Store in Artifact Registry
 images:
-  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/content-api/content-api:${_SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/content-api/content-api:${_IMAGE_TAG}'

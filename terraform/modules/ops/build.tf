@@ -20,8 +20,10 @@ resource "google_cloudbuild_trigger" "api_push_to_main" {
   # These properties are detected as changed if not initialized.
   # Alternately, add a lifecycle rule to ignore_changes.
   ignored_files = []
-  substitutions = {}
-  tags          = []
+  substitutions = {
+    _CONTEXT = "content-api/."
+  }
+  tags = []
 }
 
 resource "google_cloudbuild_trigger" "web_push_to_main" {
@@ -33,6 +35,9 @@ resource "google_cloudbuild_trigger" "web_push_to_main" {
     "website/*",
     "website/*/*",
     "client-libs/python/*"
+  ]
+  ignored_files = [
+    "website/e2e-test/*",
   ]
   github {
     owner = var.repo_owner
@@ -47,7 +52,6 @@ resource "google_cloudbuild_trigger" "web_push_to_main" {
 
   # These properties are detected as changed if not initialized.
   # Alternately, add a lifecycle rule to ignore_changes.
-  ignored_files = []
   substitutions = {}
   tags          = []
 }
@@ -58,7 +62,7 @@ resource "google_cloudbuild_trigger" "e2e_testing_build_runner" {
   name     = "e2e-runner-push-to-main"
   filename = "ops/e2e-runner-build.cloudbuild.yaml"
   included_files = [
-    "website/e2e-test/Dockerfile",
+    "website/e2e-test/*",
   ]
   github {
     owner = var.repo_owner

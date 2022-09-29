@@ -23,8 +23,8 @@ The [Website](/docs/website.md) component is covered by automatic **End-to-End (
 These tests run the website in a [Docker container](/ops/e2e-runner), and check that the website's routes load without any errors.
 
 These tests run automatically under two circumstances:
-* [nightly against `main`](/terraform/ops/triggers/cloud_build_triggers.tf#:~:text=e2e_runner_nightly_build_trigger)
-* [when the `main` branch is updated](/terraform/ops/triggers/cloud_build_triggers.tf#:~:text=e2e_runner_push_to_main_build_trigger).
+* [nightly against `main`](/terraform/ops/testing.tf#:~:text=e2e_nightly_tests)
+* [when the `main` branch is updated](/terraform/modules/ops/build.tf#:~:text=e2e_testing_build_runner).
 
 > **Note:** we are working on adding a pull-request runner as well
 
