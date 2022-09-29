@@ -1,0 +1,5 @@
+# Automatically trigger Cloud Build tests
+# (only works on the GoogleCloudPlatform org!)
+annotations:
+  - type: comment
+    text: "/gcbrun"
