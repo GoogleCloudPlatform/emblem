@@ -33,8 +33,9 @@ trap '_error_report $LINENO' ERR
 #   SKIP_DEPLOY             If set, do not deploy services
 #   SKIP_SEEDING            If set, do not seed the database
 #   USE_DEFAULT_ACCOUNT     If set, do not prompt for a GCP Account Name during database seeding
+#   REGION                  Default region to deploy resources to. Defaults to 'us-central1'
 
-# Default to empty, avoiding unbound variable errors.
+# Default to empty or default values, avoiding unbound variable errors.
 SKIP_TERRAFORM=${SKIP_TERRAFORM:-}
 SKIP_TRIGGERS=${SKIP_TRIGGERS:-}
 SKIP_AUTH=${SKIP_AUTH:-}
@@ -42,6 +43,7 @@ SKIP_BUILD=${SKIP_BUILD:-}
 SKIP_DEPLOY=${SKIP_DEPLOY:-}
 SKIP_SEEDING=${SKIP_SEEDING:-}
 USE_DEFAULT_ACCOUNT=${USE_DEFAULT_ACCOUNT:-}
+export REGION=${REGION:=us-central1}
 
 # Check env variables are not empty strings
 if [[ -z "${PROD_PROJECT}" ]]; then
@@ -54,9 +56,6 @@ elif [[ -z "${OPS_PROJECT}" ]]; then
     echo "Please set the $(tput bold)OPS_PROJECT$(tput sgr0) variable"
     exit 1
 fi
-
-## Initialize Variables ##
-export REGION="us-central1"
 
 echo "Setting up a new instance of Emblem. There may be a few prompts to guide the process."
 
@@ -137,7 +136,7 @@ fi # skip seeding
 # Build Containers #
 ####################
 
-SHORT_SHA="setup"
+SETUP_IMAGE_TAG="setup"
 E2E_RUNNER_TAG="latest"
 
 if [[ -z "$SKIP_BUILD" ]]; then
@@ -146,13 +145,17 @@ echo
 echo "$(tput bold)Building container images for testing and application hosting...$(tput sgr0)"
 echo
 
-gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+gcloud builds submit "content-api" \
+    --config=ops/api-build.cloudbuild.yaml \
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG",_CONTEXT="."
 
-gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+gcloud builds submit \
+    --config=ops/web-build.cloudbuild.yaml \
+    --ignore-file=ops/web-build.gcloudignore \
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG"
 
-gcloud builds submit --config=ops/e2e-runner-build.cloudbuild.yaml \
+gcloud builds submit "ops/e2e-runner" \
+    --config=ops/e2e-runner-build.cloudbuild.yaml \
     --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG"
 
 fi # skip build
@@ -172,7 +175,7 @@ if [[ -z "$SKIP_DEPLOY" ]]; then
 
     gcloud run deploy content-api \
         --allow-unauthenticated \
-        --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
+        --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SETUP_IMAGE_TAG}" \
         --service-account "api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
         --project "${STAGE_PROJECT}" \
         --region "${REGION}"
@@ -180,7 +183,7 @@ if [[ -z "$SKIP_DEPLOY" ]]; then
     STAGING_API_URL=$(gcloud run services describe content-api --project "${STAGE_PROJECT}" --region ${REGION} --format 'value(status.url)')
     gcloud run deploy website \
         --allow-unauthenticated \
-        --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
+        --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SETUP_IMAGE_TAG}" \
         --service-account "website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
         --update-env-vars "EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions" \
         --update-env-vars "EMBLEM_API_URL=${STAGING_API_URL}" \
@@ -194,7 +197,7 @@ if [[ -z "$SKIP_DEPLOY" ]]; then
     if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
         gcloud run deploy content-api \
             --allow-unauthenticated \
-            --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
+            --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SETUP_IMAGE_TAG}" \
             --service-account "api-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
             --project "${PROD_PROJECT}" \
             --region "${REGION}"
@@ -202,7 +205,7 @@ if [[ -z "$SKIP_DEPLOY" ]]; then
         PROD_API_URL=$(gcloud run services describe content-api --project "${PROD_PROJECT}" --region ${REGION} --format 'value(status.url)')
         gcloud run deploy website \
             --allow-unauthenticated \
-            --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
+            --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SETUP_IMAGE_TAG}" \
             --service-account "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
             --update-env-vars "EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions" \
             --update-env-vars "EMBLEM_API_URL=${PROD_API_URL}" \

@@ -1,0 +1,752 @@
+[
+    {
+        "collection": "campaigns",
+        "id": "59d32e9805fc4d3388db",
+        "data": {
+            "name": "Books for Ostriches needs your help!",
+            "description": "This time of year, Books for Ostriches could really use your help. Donate to my campaign to raise funds for Books for Ostriches today!",
+            "cause": "Books for Ostriches",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 240,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ostrich_%28Struthio_camelus%29_male_%2813994461256%29.jpg/2560px-Ostrich_%28Struthio_camelus%29_male_%2813994461256%29.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "f1c4414d1fd74ab69969",
+        "data": {
+            "name": "Spare change for Meals for Dinosaurs",
+            "description": "Meals for Dinosaurs is a cause near and dear to my heart. Please support this impactful charity organization.",
+            "cause": "Meals for Dinosaurs",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 2450,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/LA-Triceratops_mount-2.jpg/2560px-LA-Triceratops_mount-2.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "826a7006c3d34ff9b65a",
+        "data": {
+            "name": "Retirement funds for Otters needs your help!",
+            "description": "Seeking funds for Retirement funds for Otters. Please help me reach my campaign goal.",
+            "cause": "Retirement funds for Otters",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 5520,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Water_Animal.jpg/2560px-Water_Animal.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "c3b77518432a48d1ac0b",
+        "data": {
+            "name": "Be a hero - donate today",
+            "description": "Help make the world a better place by donating to Blankets for Tigers. All donations are tax-deductible!",
+            "cause": "Blankets for Tigers",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 4410,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Walking_tiger_female.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "adf53a3c16cc470bbf03",
+        "data": {
+            "name": "Helping raise money for Hats for Tigers",
+            "description": "The best way to spend your fictitious money is by donating to a fictitious cause. Support Hats for Tigers and donate!",
+            "cause": "Hats for Tigers",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 1550,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Walking_tiger_female.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "6747c2d7631d4763b1e6",
+        "data": {
+            "name": "Blankets for Tigers needs your help!",
+            "description": "Blankets for Tigers is a cause near and dear to my heart. Please support this impactful charity organization.",
+            "cause": "Blankets for Tigers",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 760,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Walking_tiger_female.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "a87f8a72934749d9bbb8",
+        "data": {
+            "name": "Housing for Whales needs your money!",
+            "description": "Housing for Whales is a cause near and dear to my heart. Please support this impactful charity organization.",
+            "cause": "Housing for Whales",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 360,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Mother_and_baby_sperm_whale.jpg/2880px-Mother_and_baby_sperm_whale.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "d9acf2caa90d45f2bcef",
+        "data": {
+            "name": "Hats for Tigers needs your money!",
+            "description": "Seeking funds for Hats for Tigers. Please help me reach my campaign goal.",
+            "cause": "Hats for Tigers",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 60,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Walking_tiger_female.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "5c3d6313aae146c7b9db",
+        "data": {
+            "name": "Spare change for Transportation for Hamsters",
+            "description": "Help make the world a better place by donating to Transportation for Hamsters. All donations are tax-deductible!",
+            "cause": "Transportation for Hamsters",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 420,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Peach_the_pet_hamster.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "71f3b299a95e430abb01",
+        "data": {
+            "name": "Help Transportation for Otters!",
+            "description": "Transportation for Otters is a cause near and dear to my heart. Please support this impactful charity organization.",
+            "cause": "Transportation for Otters",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 1980,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Water_Animal.jpg/2560px-Water_Animal.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "e644ffc13e45476ab476",
+        "data": {
+            "name": "Collecting money to support Housing for Whales",
+            "description": "Seeking funds for Housing for Whales. Please help me reach my campaign goal.",
+            "cause": "Housing for Whales",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 5280,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Mother_and_baby_sperm_whale.jpg/2880px-Mother_and_baby_sperm_whale.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "902110774a5146d08c96",
+        "data": {
+            "name": "Helping raise money for Food for Koalas",
+            "description": "Accepting donations for Food for Koalas. Help reach our fundraising goal and change the life of these needy creatures.",
+            "cause": "Food for Koalas",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 8910,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/49/Koala_climbing_tree.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "f45a23d495f247cd907a",
+        "data": {
+            "name": "Help me reach my goal!",
+            "description": "Help make the world a better place by donating to Shelter for Otters. All donations are tax-deductible!",
+            "cause": "Shelter for Otters",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 3360,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Water_Animal.jpg/2560px-Water_Animal.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "a2fad786f66e4405b3cc",
+        "data": {
+            "name": "Food for Seagulls needs your support!",
+            "description": "Fundraiser for Food for Seagulls",
+            "cause": "Food for Seagulls",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 1520,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sea_Gull_at_Point_Lobos_State_Natural_Reserve%2C_CA.jpg/2560px-Sea_Gull_at_Point_Lobos_State_Natural_Reserve%2C_CA.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "fcfcea59f46944b49305",
+        "data": {
+            "name": "Collecting money to support Coats for Dinosaurs",
+            "description": "Coats for Dinosaurs is a cause near and dear to my heart. Please support this impactful charity organization.",
+            "cause": "Coats for Dinosaurs",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 580,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/LA-Triceratops_mount-2.jpg/2560px-LA-Triceratops_mount-2.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "82d4f79423024eebab1e",
+        "data": {
+            "name": "Spare change for Food for Seagulls",
+            "description": "This time of year, Food for Seagulls could really use your help. Donate to my campaign to raise funds for Food for Seagulls today!",
+            "cause": "Food for Seagulls",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 1520,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sea_Gull_at_Point_Lobos_State_Natural_Reserve%2C_CA.jpg/2560px-Sea_Gull_at_Point_Lobos_State_Natural_Reserve%2C_CA.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "135c1666d5d24698b418",
+        "data": {
+            "name": "Be a hero - donate today",
+            "description": "Learn more about the worthy cause, Transportation for Otters, and help spread the word by donating to this campaign.",
+            "cause": "Transportation for Otters",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 3200,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Water_Animal.jpg/2560px-Water_Animal.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "39bd8658cd754a7caae5",
+        "data": {
+            "name": "Transportation for Fish needs your money!",
+            "description": "Accepting donations for Transportation for Fish. Help reach our fundraising goal and change the life of these needy creatures.",
+            "cause": "Transportation for Fish",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 3150,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/23/Georgia_Aquarium_-_Giant_Grouper_edit.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "95809499ae8a49f6a7db",
+        "data": {
+            "name": "Spare change for Careers for Fish",
+            "description": "Careers for Fish is a cause near and dear to my heart. Please support this impactful charity organization.",
+            "cause": "Careers for Fish",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 3800,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/23/Georgia_Aquarium_-_Giant_Grouper_edit.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "7cc9ec1c70ac491799a3",
+        "data": {
+            "name": "Reaching out for Water for Eagles",
+            "description": "The best way to spend your fictitious money is by donating to a fictitious cause. Support Water for Eagles and donate!",
+            "cause": "Water for Eagles",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 160,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/19/%C3%81guila_calva.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "19c0749c97b44616b60e",
+        "data": {
+            "name": "Reaching out for Books for Seagulls",
+            "description": "Can you spare a dime for Books for Seagulls? They do great work and need your help!",
+            "cause": "Books for Seagulls",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 3440,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sea_Gull_at_Point_Lobos_State_Natural_Reserve%2C_CA.jpg/2560px-Sea_Gull_at_Point_Lobos_State_Natural_Reserve%2C_CA.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "a45c093e8fbb4d8c8fce",
+        "data": {
+            "name": "Saving the world - with Retirement funds for Otters!",
+            "description": "Help make the world a better place by donating to Retirement funds for Otters. All donations are tax-deductible!",
+            "cause": "Retirement funds for Otters",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 3320,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Water_Animal.jpg/2560px-Water_Animal.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "82fedc01135e44f4a3ca",
+        "data": {
+            "name": "Reaching out for Blankets for Tigers",
+            "description": "Seeking funds for Blankets for Tigers. Please help me reach my campaign goal.",
+            "cause": "Blankets for Tigers",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 4550,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Walking_tiger_female.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "6d4afc70022941a4bb5e",
+        "data": {
+            "name": "Fundraiser for Retirement funds for Otters",
+            "description": "Can you spare a dime for Retirement funds for Otters? They do great work and need your help!",
+            "cause": "Retirement funds for Otters",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 9400,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Water_Animal.jpg/2560px-Water_Animal.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "84f9424edf4e47de8e59",
+        "data": {
+            "name": "Water for Frogs needs your help!",
+            "description": "The best way to spend your fictitious money is by donating to a fictitious cause. Support Water for Frogs and donate!",
+            "cause": "Water for Frogs",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 8550,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Variegated_golden_frog_%28Mantella_baroni%29_Ranomafana.jpg/2560px-Variegated_golden_frog_%28Mantella_baroni%29_Ranomafana.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "f810d8cd19ba4d5eaf99",
+        "data": {
+            "name": "Saving the world - with Retirement funds for Otters!",
+            "description": "Seeking funds for Retirement funds for Otters. Please help me reach my campaign goal.",
+            "cause": "Retirement funds for Otters",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 1560,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Water_Animal.jpg/2560px-Water_Animal.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "7bde773588794af09e4e",
+        "data": {
+            "name": "Coats for Dinosaurs needs your money!",
+            "description": "Help make the world a better place by donating to Coats for Dinosaurs. All donations are tax-deductible!",
+            "cause": "Coats for Dinosaurs",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 1680,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/LA-Triceratops_mount-2.jpg/2560px-LA-Triceratops_mount-2.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "a918e7def61d4ee689b5",
+        "data": {
+            "name": "Spare change for Toys for Sharks",
+            "description": "Accepting donations for Toys for Sharks. Help reach our fundraising goal and change the life of these needy creatures.",
+            "cause": "Toys for Sharks",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 9300,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/83/Carcharhinus_leucas%2C_Koh_Phangan.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "676160f83935418d8aff",
+        "data": {
+            "name": "Saving the world - with Water for Seagulls!",
+            "description": "Seeking funds for Water for Seagulls. Please help me reach my campaign goal.",
+            "cause": "Water for Seagulls",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 2400,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sea_Gull_at_Point_Lobos_State_Natural_Reserve%2C_CA.jpg/2560px-Sea_Gull_at_Point_Lobos_State_Natural_Reserve%2C_CA.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "826317093d784c9685bc",
+        "data": {
+            "name": "Collecting money to support Books for Ostriches",
+            "description": "Raising money to support Books for Ostriches",
+            "cause": "Books for Ostriches",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 1520,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ostrich_%28Struthio_camelus%29_male_%2813994461256%29.jpg/2560px-Ostrich_%28Struthio_camelus%29_male_%2813994461256%29.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "96bd5b61cba941f1b6cb",
+        "data": {
+            "name": "Help Books for Bees!",
+            "description": "Can you spare a dime for Books for Bees? They do great work and need your help!",
+            "cause": "Books for Bees",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 0,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Bumblebee_heuchera.jpg/1920px-Bumblebee_heuchera.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "143b0c0bc68f4b56aff0",
+        "data": {
+            "name": "Reaching out for Transportation for Fish",
+            "description": "The best way to spend your fictitious money is by donating to a fictitious cause. Support Transportation for Fish and donate!",
+            "cause": "Transportation for Fish",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 1000,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/23/Georgia_Aquarium_-_Giant_Grouper_edit.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "de87b3b760224638a9c1",
+        "data": {
+            "name": "Help Water for Seagulls!",
+            "description": "Help make the world a better place by donating to Water for Seagulls. All donations are tax-deductible!",
+            "cause": "Water for Seagulls",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 1000,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sea_Gull_at_Point_Lobos_State_Natural_Reserve%2C_CA.jpg/2560px-Sea_Gull_at_Point_Lobos_State_Natural_Reserve%2C_CA.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "b84da506508b4f52a6e6",
+        "data": {
+            "name": "Help me reach my goal!",
+            "description": "This time of year, Books for Seagulls could really use your help. Donate to my campaign to raise funds for Books for Seagulls today!",
+            "cause": "Books for Seagulls",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 1710,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sea_Gull_at_Point_Lobos_State_Natural_Reserve%2C_CA.jpg/2560px-Sea_Gull_at_Point_Lobos_State_Natural_Reserve%2C_CA.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "14cc3949063f48f696c4",
+        "data": {
+            "name": "Spare change for Water for Seagulls",
+            "description": "Seeking funds for Water for Seagulls. Please help me reach my campaign goal.",
+            "cause": "Water for Seagulls",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 1540,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sea_Gull_at_Point_Lobos_State_Natural_Reserve%2C_CA.jpg/2560px-Sea_Gull_at_Point_Lobos_State_Natural_Reserve%2C_CA.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "50d463d2c06440a186c9",
+        "data": {
+            "name": "Help Books for Ostriches reach their goal",
+            "description": "Fundraiser for Books for Ostriches",
+            "cause": "Books for Ostriches",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 3550,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ostrich_%28Struthio_camelus%29_male_%2813994461256%29.jpg/2560px-Ostrich_%28Struthio_camelus%29_male_%2813994461256%29.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "633e95ea652e4484b5b3",
+        "data": {
+            "name": "Spare change for Bicycles for Hamsters",
+            "description": "Accepting donations for Bicycles for Hamsters. Help reach our fundraising goal and change the life of these needy creatures.",
+            "cause": "Bicycles for Hamsters",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 2900,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Peach_the_pet_hamster.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "bccd31cd6c264449b8fa",
+        "data": {
+            "name": "Meals for Unicorns needs your money!",
+            "description": "Fundraiser for Meals for Unicorns",
+            "cause": "Meals for Unicorns",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 1400,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/70/Oftheunicorn.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "8d98ea86e6644c72ac61",
+        "data": {
+            "name": "Helping raise money for Life-saving surgery for Sharks",
+            "description": "Raising money to support Life-saving surgery for Sharks",
+            "cause": "Life-saving surgery for Sharks",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 3960,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/83/Carcharhinus_leucas%2C_Koh_Phangan.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "8811d0dff2504344a89b",
+        "data": {
+            "name": "Hats for Tigers needs your support!",
+            "description": "Learn more about the worthy cause, Hats for Tigers, and help spread the word by donating to this campaign.",
+            "cause": "Hats for Tigers",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 1710,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Walking_tiger_female.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "75f374577ab147578cbe",
+        "data": {
+            "name": "Help Transportation for Hamsters!",
+            "description": "Accepting donations for Transportation for Hamsters. Help reach our fundraising goal and change the life of these needy creatures.",
+            "cause": "Transportation for Hamsters",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 5180,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Peach_the_pet_hamster.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "d1860129237b4299b5f8",
+        "data": {
+            "name": "Raising funds for Books for Bees",
+            "description": "This time of year, Books for Bees could really use your help. Donate to my campaign to raise funds for Books for Bees today!",
+            "cause": "Books for Bees",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 1600,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Bumblebee_heuchera.jpg/1920px-Bumblebee_heuchera.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "46bc552cd9714b5ab9a1",
+        "data": {
+            "name": "Help Books for Bees reach their goal",
+            "description": "Accepting donations for Books for Bees. Help reach our fundraising goal and change the life of these needy creatures.",
+            "cause": "Books for Bees",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 950,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Bumblebee_heuchera.jpg/1920px-Bumblebee_heuchera.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "b9c219c4a3f5498d96e2",
+        "data": {
+            "name": "Raising funds for Coats for Sharks",
+            "description": "Seeking funds for Coats for Sharks. Please help me reach my campaign goal.",
+            "cause": "Coats for Sharks",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 3300,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/83/Carcharhinus_leucas%2C_Koh_Phangan.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "bae04507c523429fa045",
+        "data": {
+            "name": "Saving the world - with Toys for Sharks!",
+            "description": "Fundraiser for Toys for Sharks",
+            "cause": "Toys for Sharks",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 520,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/83/Carcharhinus_leucas%2C_Koh_Phangan.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "aae62c8c38d047efa868",
+        "data": {
+            "name": "Fundraiser for Water for Frogs",
+            "description": "Can you spare a dime for Water for Frogs? They do great work and need your help!",
+            "cause": "Water for Frogs",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 550,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Variegated_golden_frog_%28Mantella_baroni%29_Ranomafana.jpg/2560px-Variegated_golden_frog_%28Mantella_baroni%29_Ranomafana.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "d862f4a1e42e4ed7a01c",
+        "data": {
+            "name": "Saving the world - with Clean water for Mice!",
+            "description": "Learn more about the worthy cause, Clean water for Mice, and help spread the word by donating to this campaign.",
+            "cause": "Clean water for Mice",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 2160,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Mouse_white_background.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "a5b2b63d6ef44b37b993",
+        "data": {
+            "name": "Help Life-saving surgery for Ostriches reach their goal",
+            "description": "The best way to spend your fictitious money is by donating to a fictitious cause. Support Life-saving surgery for Ostriches and donate!",
+            "cause": "Life-saving surgery for Ostriches",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 2360,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ostrich_%28Struthio_camelus%29_male_%2813994461256%29.jpg/2560px-Ostrich_%28Struthio_camelus%29_male_%2813994461256%29.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "8e69b7b425c748d8a2d1",
+        "data": {
+            "name": "Reaching out for Food for Dinosaurs",
+            "description": "The best way to spend your fictitious money is by donating to a fictitious cause. Support Food for Dinosaurs and donate!",
+            "cause": "Food for Dinosaurs",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 8010,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/LA-Triceratops_mount-2.jpg/2560px-LA-Triceratops_mount-2.jpg",
+            "active": true
+        }
+    },
+    {
+        "collection": "campaigns",
+        "id": "1702615c336147219891",
+        "data": {
+            "name": "Collecting money to support Housing for Dinosaurs",
+            "description": "Accepting donations for Housing for Dinosaurs. Help reach our fundraising goal and change the life of these needy creatures.",
+            "cause": "Housing for Dinosaurs",
+            "managers": [
+                "user@example.com"
+            ],
+            "goal": 9100,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/LA-Triceratops_mount-2.jpg/2560px-LA-Triceratops_mount-2.jpg",
+            "active": true
+        }
+    }
+]
