@@ -3,7 +3,7 @@
 resource "google_cloudbuild_trigger" "api_push_to_main" {
   project        = var.project_id
   count          = var.setup_cd_system ? 1 : 0
-  name           = "api-push-to-main"
+  name           = "api-new-build"
   filename       = "ops/api-build.cloudbuild.yaml"
   included_files = ["content-api/**"]
   github {
@@ -29,7 +29,7 @@ resource "google_cloudbuild_trigger" "api_push_to_main" {
 resource "google_cloudbuild_trigger" "web_push_to_main" {
   project  = var.project_id
   count    = var.setup_cd_system ? 1 : 0
-  name     = "web-push-to-main"
+  name     = "web-new-build"
   filename = "ops/web-build.cloudbuild.yaml"
   included_files = [
     "website/*",
