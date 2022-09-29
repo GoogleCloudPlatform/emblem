@@ -52,7 +52,8 @@ resource "google_cloudbuild_trigger" "api_unit_tests" {
 resource "google_cloudbuild_trigger" "web_system_tests" {
   project  = var.project_id
   count    = var.setup_cd_system ? 1 : 0
-  name     = "web-system-tests"
+  name     = "testing-web-e2e-test"
+  description = "Performs end-to-end testing of web service."
   filename = "ops/web-e2e.cloudbuild.yaml"
   included_files = [
     "website/**",
