@@ -28,11 +28,11 @@ resource "google_cloudbuild_trigger" "api_push_to_main" {
 }
 
 resource "google_cloudbuild_trigger" "web_push_to_main" {
-  project  = var.project_id
-  count    = var.setup_cd_system ? 1 : 0
-  name     = "web-new-build"
+  project     = var.project_id
+  count       = var.setup_cd_system ? 1 : 0
+  name        = "web-new-build"
   description = "Builds a new image of the web container based on git main branch."
-  filename = "ops/web-build.cloudbuild.yaml"
+  filename    = "ops/web-build.cloudbuild.yaml"
   included_files = [
     "website/*",
     "website/*/*",
