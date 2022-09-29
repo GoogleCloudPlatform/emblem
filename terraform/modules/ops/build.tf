@@ -4,6 +4,7 @@ resource "google_cloudbuild_trigger" "api_push_to_main" {
   project        = var.project_id
   count          = var.setup_cd_system ? 1 : 0
   name           = "api-new-build"
+  description    = "Builds a new image of the content-api container based on git main branch."
   filename       = "ops/api-build.cloudbuild.yaml"
   included_files = ["content-api/**"]
   github {
@@ -30,6 +31,7 @@ resource "google_cloudbuild_trigger" "web_push_to_main" {
   project  = var.project_id
   count    = var.setup_cd_system ? 1 : 0
   name     = "web-new-build"
+  description = "Builds a new image of the web container based on git main branch."
   filename = "ops/web-build.cloudbuild.yaml"
   included_files = [
     "website/*",
