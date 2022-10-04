@@ -14,7 +14,8 @@
 
 
 import os
-from flask import Blueprint, g, redirect, request, render_template
+import requests
+from flask import after_this_request, Blueprint, g, redirect, request, render_template
 
 from middleware import session
 from middleware.logging import log
@@ -101,7 +102,8 @@ def record_donation():
         log(f"Exception when creating a donation: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403
 
-    return redirect("/viewDonation?donation_id=" + donation.id)
+    trace_id = request.headers.get("X-Cloud-Trace-Context").split("/")[0]
+    return redirect(f"/viewDonation?donation_id={donation.id}&trace_id={trace_id}")
 
 
 @donations_bp.route("/viewDonation", methods=["GET"])
@@ -119,8 +121,24 @@ def webapp_view_donation():
         log(f"Exception when getting a campaign for a donations: {e}", severity="ERROR")
         return render_template("errors/403.html"), 403
 
+    logs_url = None
+    try:
+        trace_id = request.args.get("trace_id")
+
+        project_req = requests.get(
+            "http://metadata.google.internal/computeMetadata/v1/project/project-id",
+            headers={"Metadata-Flavor": "Google"},
+        )
+        project_id = project_req.text
+
+        if trace_id and project_id:
+            logs_url = f"https://console.cloud.google.com/logs/query;query=trace%3D~%22projects%2F{project_id}%2Ftraces%2F{trace_id}%22?project={project_id}"
+    except Exception as e:
+        log(f"Exception when getting trace ID: {e}", severity="WARNING")
+
     return render_template(
         "donations/view-donation.html",
         donation=donation_instance,
         campaign=campaign_instance,
+        logsUrl=logs_url,
     )

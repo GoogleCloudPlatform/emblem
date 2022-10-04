@@ -15,14 +15,14 @@
 steps:
   # Install dependencies
   - id: "Install Dependencies"
-    name: python:3.9-slim
+    name: python:3.10-slim
     dir: ${_DIR}
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
 
   # Install test requirements
   - id: "Install Pytest"
-    name: python:3.9-slim
+    name: python:3.10-slim
     dir: ${_DIR}
     entrypoint: pip
     args: ["install", "-r", "requirements-test.txt", "--user"]
@@ -46,7 +46,7 @@ steps:
 
   # Run unit tests
   - id: "Unit Tests"
-    name: python:3.9-slim
+    name: python:3.10-slim
     dir: ${_DIR}
     entrypoint: /bin/bash
     args: 

@@ -1,0 +1,60 @@
+# Copyright 2022 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+steps:
+  # Clean up any old Emblem instance cruft.
+  - name: '${_REGION}-docker.pkg.dev/${_DELIVERY_TEST_PROJECT}/installation-testing/deployer:${_E2E_DEPLOYER_SHA}'
+    entrypoint: /bin/bash
+    args:
+      - ./installation-testing/terraform/cleanup.sh
+    env:
+      - "PROJECT_NUMBER=$PROJECT_NUMBER"
+
+      # Project IDs
+      - "PROD_PROJECT=${_DELIVERY_TEST_PROJECT}"
+      - "STAGE_PROJECT=${_DELIVERY_TEST_PROJECT}"
+      - "OPS_PROJECT=${_DELIVERY_TEST_PROJECT}"
+
+  # Deploy a new Emblem instance
+  - name: '${_REGION}-docker.pkg.dev/${_DELIVERY_TEST_PROJECT}/installation-testing/deployer:${_E2E_DEPLOYER_SHA}'
+    entrypoint: /bin/bash
+    args:
+      - ./setup.sh
+    env:
+      - "PROJECT_NUMBER=$PROJECT_NUMBER"
+
+      # Specify project IDs
+      #
+      # This build combines `prod`, `stage`, and
+      # `ops` environments into one GCP project.
+      - "PROD_PROJECT=${_DELIVERY_TEST_PROJECT}"
+      - "STAGE_PROJECT=${_DELIVERY_TEST_PROJECT}"
+      - "OPS_PROJECT=${_DELIVERY_TEST_PROJECT}"
+
+      # Step-skipping
+      - "SKIP_TRIGGERS=true"
+      - "SKIP_AUTH=true"
+      - "SKIP_SEEDING=true"
+
+      # Don't prompt for GCP account name
+      - "USE_DEFAULT_ACCOUNT=true"
+      
+      # Skip sessions bucket creation
+      - "TF_VAR_deploy_session_bucket=0"
+
+# Specify a default value for optional variables
+substitutions:
+  _REGION: us-central1
+  _E2E_DEPLOYER_SHA: latest

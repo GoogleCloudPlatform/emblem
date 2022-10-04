@@ -29,14 +29,18 @@ campaigns_bp = Blueprint("campaigns", __name__, template_folder="templates")
 
 @campaigns_bp.route("/")
 def list_campaigns():
+    current_user = None
+
+    if g.session_data:
+        current_user = g.session_data.get("email")
+
     try:
         campaigns = g.api.campaigns_get()
     except Exception as e:
-        log(f"Exception when listing campaigns: {e}", severity="ERROR")
+        log(f"Exception when on listing campaigns view: {e}", severity="ERROR")
         campaigns = []
 
-    print(campaigns)
-    return render_template("home.html", campaigns=campaigns)
+    return render_template("home.html", campaigns=campaigns, current_user=current_user)
 
 
 @campaigns_bp.route("/createCampaign", methods=["GET"])

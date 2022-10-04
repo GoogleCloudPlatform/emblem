@@ -8,16 +8,23 @@ Read on if you want to explore your own Emblem instance, contribute to the proje
 
 ## Getting Started
 
-<!-- TODO: Move documentation to ./docs -->
-* [Content API](./content-api.md)
-* [Website README](../website/README.md)
+There are two ways to set up your own Emblem instance:
 
-### Interactive Tutorials
+* 🚀 [Launch an Interactive Walkthrough in Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/emblem&cloudshell_tutorial=docs/tutorials/setup-walkthrough.md)
+* 📖 [Follow a Tutorial in your local terminal or Cloud Shell](tutorials/setup-quickstart.md)
 
-* [API Quickstart in Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/emblem&cloudshell_tutorial=docs/tutorials/api-quickstart.md)
-* [Website Quickstart in Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/emblem&cloudshell_tutorial=docs/tutorials/website-quickstart.md)
+If you prefer a minimal, manually configured instance of Emblem, you can follow
+these two walkthroughs to setup the application without Terraform:
 
-## API Reference Materials
+1. 📖 [Manual API Setup Walkthrough in Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/emblem&cloudshell_tutorial=docs/tutorials/api-quickstart.md)
+1. 📖 [Manual Website Setup Walkthrough in Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/emblem&cloudshell_tutorial=docs/tutorials/website-quickstart.md)
+
+## Learn About Emblem
+
+* Detailed reading on the [Content API](./content-api.md)
+* Detailed reading on the [Website](./website.md)
+
+### API Reference Materials
 
 <!-- TODO: Merge Example Requests with API Reference -->
 <!-- TODO: Merge Example Resources with seed data -->
@@ -30,7 +37,5 @@ Read on if you want to explore your own Emblem instance, contribute to the proje
 
 ## Decision Log
 
-Read the context of decisions made in this project in the [Decision Log](./decisions). Some "story arcs" within the decisions include:
-
-* **Where to Run Your Code**: [Serverless](2021-03-serverless.md), [Cloud Run (Website)](2021-04-run-website.md), [Cloud Functions (API)](2021-04-functions-api.md), [Cloud Run (API)](2021-06-run-api.md)
-* **Shipping Software**: [Using Terraform](2021-04-terraform.md) vs. [Using gcloud](2021-05-gcloud-deploy.md)
+Learn about architectural decision records and how we use them in
+the [Decision Log](./decisions#readme), or go directly to the [big list](./decisions).

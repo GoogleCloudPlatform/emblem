@@ -1,4 +1,5 @@
-# Emblem Quickstart
+# Emblem Walkthrough
+<!-- This is an interactive walkthrough for use in Cloud Console. -->
 
 ## Introduction
 
@@ -20,22 +21,9 @@ teachme docs/tutorials/setup-walkthrough.md
 
 Click **Start** below to get started.
 
-## Login
-Set your application default credentials by running the command below in the terminal and logging in with your Google account:
-
-```bash
-gcloud auth application-default login
-```
-
-If you encounter auth errors, you may need to unset your `GOOGLE_APPLICATION_CREDENTIALS` in your terminal.
-
-```bash
-unset GOOGLE_APPLICATION_CREDENTIALS
-```
-
 ## Set projects
 
-Emblem uses three projects: `prod`, `stage`, and `ops`. 
+Emblem uses three projects: `prod`, `stage`, and `ops`.
 
 You can use existing Google Cloud projects or create new projects. Choose either **Select existing projects** or **Create new projects** below and follow the instructions.
 
@@ -74,16 +62,16 @@ Set the project variables in your Cloud Shell terminal. Replace each `<prod>`, `
   gcloud projects create $STAGE_PROJECT
   gcloud projects create $OPS_PROJECT
   ```
-2. Select a billing account and set the variable below to the **Account ID** of your billing account. (You can view your existing billing accounts by running `gcloud alpha billing accounts list` in the terminal.)
+2. Select a billing account and set the variable below to the **Account ID** of your billing account. (You can view your existing billing accounts by running `gcloud beta billing accounts list` in the terminal.)
   ```bash
   export EMBLEM_BILLING_ACCOUNT=<ACCOUNT ID>
   ```
 
 3. Link the newly created projects to your billing account:
   ```bash
-  gcloud alpha billing projects link $PROD_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
-  gcloud alpha billing projects link $STAGE_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
-  gcloud alpha billing projects link $OPS_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
+  gcloud beta billing projects link $PROD_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
+  gcloud beta billing projects link $STAGE_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
+  gcloud beta billing projects link $OPS_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
   ```
 ---
 

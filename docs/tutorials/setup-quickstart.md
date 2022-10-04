@@ -1,4 +1,5 @@
 # Emblem Quickstart
+<!-- This is a general tutorial that can be used in Cloud Shell or locally. -->
 
 ## Introduction
 
@@ -9,28 +10,30 @@ This tutorial shows you how to run a setup script to deploy the Emblem applicati
 To clone Emblem into a preconfigured Cloud Shell instance and launch the setup instructions as an interactive tutorial, click the button under [Open in Cloud Shell](#open-in-cloud-shell). Otherwise, configure your machine by following the instructions under [Configure environment](#configure-environment).
 
 ---
+
 ### Open in Cloud Shell
 
 [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2FGoogleCloudPlatform%2Femblem&cloudshell_tutorial=docs%2Ftutorials%2Fsetup-walkthrough.md)
 
-
 ---
+
 ### Configure environment
 
 1. Ensure that the following dependencies are installed on your machine:
-* Python (3.8 or higher)
-* [pip](https://pypi.org/project/pip/)
-* [git](https://github.com)
-* [Cloud SDK](https://cloud.google.com/sdk/docs/install)
+   * Python (3.8 or higher)
+   * [pip](https://pypi.org/project/pip/)
+   * [git](https://github.com)
+   * [Cloud SDK](https://cloud.google.com/sdk/docs/install)
 
 2. Clone the Emblem application and `cd` into the `emblem` directory by running the command below in your terminal:
+
   ```bash
   git clone https://github.com/GoogleCloudPlatform/emblem.git
   cd emblem
   ```
 
-
 ## Login
+
 Set your application default credentials by running the command below in the terminal and logging in with your Google account:
 
 ```bash
@@ -45,7 +48,7 @@ unset GOOGLE_APPLICATION_CREDENTIALS
 
 ## Set projects
 
-Emblem uses three projects: `prod`, `stage`, and `ops`. 
+Emblem uses three projects: `prod`, `stage`, and `ops`.
 
 You can use existing Google Cloud projects or create new projects. Choose either **[Select existing projects](#select-existing-projects)** or **[Create new projects](create-new-projects)** below and follow the instructions.
 
@@ -55,16 +58,11 @@ You can use existing Google Cloud projects or create new projects. Choose either
 
 Emblem uses [Cloud Firestore in Native mode](https://cloud.google.com/datastore/docs/firestore-or-datastore#in_native_mode) as the database for each project. Since the selected mode is permanent for a project, make sure that your existing projects are not already using Datastore mode by checking the configuration in the [Firestore console](https://console.cloud.google.com/firestore).
 
-
 1. Set the project variables in your terminal. Replace each `<prod>`, `<stage>`, and `<ops>` value with the corresponding project ID for your `prod`, `stage`, and `ops` projects.
 
   ```bash
   export PROD_PROJECT=<prod>
-  ```
-  ```bash
   export STAGE_PROJECT=<stage>
-  ```
-  ```bash
   export OPS_PROJECT=<ops>
   ```
 
@@ -73,6 +71,7 @@ Emblem uses [Cloud Firestore in Native mode](https://cloud.google.com/datastore/
 ### Create new projects
 
 1. Copy the commands below into your terminal to create new `prod`, `stage`, and `ops` projects.
+
   ```bash
   export PREFIX=$(gcloud config get-value account | cut -f1 -d"@")-emblem
   export PROD_PROJECT=$PREFIX-prod
@@ -83,21 +82,25 @@ Emblem uses [Cloud Firestore in Native mode](https://cloud.google.com/datastore/
   gcloud projects create $STAGE_PROJECT
   gcloud projects create $OPS_PROJECT
   ```
-2. Select a billing account and set the variable below to the **Account ID** of your billing account. (You can view your existing billing accounts by running `gcloud alpha billing accounts list` in the terminal.)
+
+2. Select a billing account and set the variable below to the **Account ID** of your billing account. (You can view your existing billing accounts by running `gcloud beta billing accounts list` in the terminal.)
+
   ```bash
   export EMBLEM_BILLING_ACCOUNT=<ACCOUNT ID>
   ```
 
 3. Link the newly created projects to your billing account:
+
   ```bash
-  gcloud alpha billing projects link $PROD_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
-  gcloud alpha billing projects link $STAGE_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
-  gcloud alpha billing projects link $OPS_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
+  gcloud beta billing projects link $PROD_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
+  gcloud beta billing projects link $STAGE_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
+  gcloud beta billing projects link $OPS_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
   ```  
 
 ## Run setup script
 
 Run the following command in the terminal:
+
 ```bash
 sh setup.sh
 ```
@@ -108,7 +111,7 @@ Watch the terminal as [Terraform](https://terraform.io) builds and deploys the E
 
 If you are prompted to enable any APIs for your projects, enter "y" in the terminal to enable them.
 
-If you are prompted to select a region for the Cloud Run deployments, enter the number of the region closest to your users. 
+If you are prompted to select a region for the Cloud Run deployments, enter the number of the region closest to your users.
 
 ## Configure end-user authentication
 
@@ -127,7 +130,7 @@ sh ./scripts/configure_auth.sh
 When you receive the prompt below:
 `Connect your repos: https://console.cloud.google.com/cloud-build/triggers/connect`
 
-Click the link provided in the prompt and follow the instructions to connect your repository. 
+Click the link provided in the prompt and follow the instructions to connect your repository.
 
 Once your repo has been connected, click **Done**, then return to the terminal and press any key to continue. You will be prompted to enter the `repo owner` and `repo name`; enter the values from your repository and confirm them by pressing `y`.
 
@@ -136,4 +139,5 @@ Once your repo has been connected, click **Done**, then return to the terminal a
 Your Emblem application is now running!
 
 ### Next steps
+
 Test the delivery pipeline by pushing a change to your Emblem repo. Check out the [Cloud Build dashboard](https://console.cloud.google.com/cloud-build/builds) and inspect the build logs and tests.

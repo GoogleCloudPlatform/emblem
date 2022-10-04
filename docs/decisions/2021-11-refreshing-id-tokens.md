@@ -1,6 +1,7 @@
 # Refreshing *id tokens*
 
-* **Status:** draft
+* **Status:** approved
+* **Based On:** [2021-08 Session Cookies](2021-08-13-session-cookies.md)
 * **Last Updated:** 2021-11-23
 * **Objective:** Determine how to refresh *id tokens*
 
@@ -18,7 +19,7 @@ expires.
 ## Priorities & Constraints
 
 The website should be able to maintain an active *id token* for a logged-in
-user for as long as that user remains active on the site. 
+user for as long as that user remains active on the site.
 
 ## Considered Options
 

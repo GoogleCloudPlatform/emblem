@@ -17,23 +17,30 @@ steps:
   # Run E2E tests
   # These DO NOT use auth, so we can use a
   # "dummy value" for EMBLEM_SESSION_BUCKET
-  - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-runner/e2e-runner:${_E2E_RUNNER_SHA}'
+  - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-testing/runner:${_E2E_RUNNER_SHA}'
     entrypoint: /bin/bash
     args:
       - '-c'
       - |
         cp -R ../client-libs/ client-libs
         pip install -r requirements.txt
-        python -m flask run &
+        python -m flask run --port ${_FLASK_PORT} &
         cd e2e-test && npm install && npm test
     dir: 'website'
     env:
       - "EMBLEM_URL=${_EMBLEM_URL}"
       - "EMBLEM_SESSION_BUCKET=${_EMBLEM_SESSION_BUCKET}"
+
+      # This allows us to test Emblem instances
+      # running both locally **and** remotely.
       - "EMBLEM_API_URL=${_EMBLEM_API_URL}"
+
+      # Used when running the Flask website locally
+      - "FLASK_PORT=${_FLASK_PORT}"
 
 # Specify a default value for optional variables
 substitutions:
   _EMBLEM_SESSION_BUCKET: nonexistent-bucket
   _REGION: us-central1
   _E2E_RUNNER_SHA: latest
+  _FLASK_PORT: "8080"

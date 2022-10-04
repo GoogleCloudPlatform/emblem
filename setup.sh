@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,23 +13,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Run ./setup.sh from a project with a billing account enabled
-# This will require 3 projects, for ops, staging, and prod
-# To auto-create the projects, run clean_project_setup.sh
+set -eu
+
+# Should this script error, print out the line that was responsible
+_error_report() {
+  echo >&2 "Exited [$?] at line $(caller):"
+  cat -n $0 | tail -n+$(($1 - 3)) | head -n7 | sed "4s/^\s*/>>> /"
+}
+trap '_error_report $LINENO' ERR
 
 # Variable list
 #   PROD_PROJECT            GCP Project ID of the production project
 #   STAGE_PROJECT           GCP Project ID of the staging project
 #   OPS_PROJECT             GCP Project ID of the operations project
+#   SKIP_TERRAFORM          If set, don't set up infrastructure
 #   SKIP_TRIGGERS           If set, don't set up build triggers
-#   SKIP_AUTH               If set, don't set up auth
-#   REPO_OWNER              GitHub user/organization name (default: GoogleCloudPlatform)
-#   REPO_NAME               GitHub repo name (default: emblem)
+#   SKIP_AUTH               If set, do not prompt to set up auth
+#   SKIP_BUILD              If set, do not build container images
+#   SKIP_DEPLOY             If set, do not deploy services
+#   SKIP_SEEDING            If set, do not seed the database
+#   USE_DEFAULT_ACCOUNT     If set, do not prompt for a GCP Account Name during database seeding
+#   REGION                  Default region to deploy resources to. Defaults to 'us-central1'
 
+# Default to empty or default values, avoiding unbound variable errors.
+SKIP_TERRAFORM=${SKIP_TERRAFORM:-}
 SKIP_TRIGGERS=${SKIP_TRIGGERS:-}
 SKIP_AUTH=${SKIP_AUTH:-}
-
-set -eu
+SKIP_BUILD=${SKIP_BUILD:-}
+SKIP_DEPLOY=${SKIP_DEPLOY:-}
+SKIP_SEEDING=${SKIP_SEEDING:-}
+USE_DEFAULT_ACCOUNT=${USE_DEFAULT_ACCOUNT:-}
+export REGION=${REGION:=us-central1}
 
 # Check env variables are not empty strings
 if [[ -z "${PROD_PROJECT}" ]]; then
@@ -43,196 +57,213 @@ elif [[ -z "${OPS_PROJECT}" ]]; then
     exit 1
 fi
 
+echo "Setting up a new instance of Emblem. There may be a few prompts to guide the process."
 
-######################
-# Terraform Projects #
-######################
+###################
+# Terraform Setup #
+###################
 
+if [[ -z "$SKIP_TERRAFORM" ]]; then
+    echo
+    echo "$(tput bold)Setting up your Cloud resources with Terraform...$(tput sgr0)"
+    echo
 
-## Ops Project ##
-pushd terraform/ops
-terraform init
-terraform apply --auto-approve \
-    -var google_ops_project_id="${OPS_PROJECT}" 
-popd
-
-
-## Staging Project ##
-pushd terraform/app
-
-# Set Staging Variables
-cat > terraform.tfvars <<EOF
-google_ops_project_id = "${OPS_PROJECT}"
-google_project_id = "${STAGE_PROJECT}"
-EOF
-
-terraform init --backend-config "path=./stage.tfstate" -reconfigure 
-# Import App Engine if it already exists in the project. 
-# App Engine cannot be deleted so running terraform in a project with 
-# an already extant App Engine project raises an error on terraform apply.
-# Importing the module resolves the error.  
-#
-# Note: If AppEngine is in a different region than Cloud Run or in the wrong mode 
-# (Datastore vs Firestore), this could cause latency or query compatibility issues.
-
-terraform import module.application.google_app_engine_application.main "${STAGE_PROJECT}" 2>/dev/null || true
-terraform apply --auto-approve 
-
-# Firestore requires App Engine for automatic provisioning.
-# App Engine is not compatible with terraform destroy.
-# This allows terraform destroy to run without modifying App Engine.
-# Remove this when App Engine support for terraform destroy is fixed or Firestore has a direct provisioning solution.
-# https://github.com/GoogleCloudPlatform/emblem/issues/217
-terraform state rm module.application.google_app_engine_application.main || true
-
-
-## Prod Project ##
-if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
-# Set Prod Variables
-cat > terraform.tfvars <<EOF
-google_ops_project_id = "${OPS_PROJECT}"
-google_project_id = "${PROD_PROJECT}"
-EOF
-
-terraform init --backend-config "path=./prod.tfstate" -reconfigure
-terraform import module.application.google_app_engine_application.main "${PROD_PROJECT}" 2>/dev/null || true
-terraform apply --auto-approve 
-terraform state rm module.application.google_app_engine_application.main || true
-fi
+    STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
     
-# Return to root directory
-popd
+    # Create remote state bucket if it doesn't exist
+    if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
+        echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
+        gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
+        gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
+    fi
+    
+    # Ops Project
+    OPS_ENVIRONMENT_DIR=terraform/environments/ops
+    cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+project_id = "${OPS_PROJECT}"
+EOF
+    terraform -chdir=${OPS_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=ops"
+    terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
+
+    # Staging Project
+    STAGE_ENVIRONMENT_DIR=terraform/environments/staging
+    cat > "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+project_id = "${STAGE_PROJECT}"
+ops_project_id = "${OPS_PROJECT}"
+EOF
+    terraform -chdir=${STAGE_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=stage"
+    terraform -chdir=${STAGE_ENVIRONMENT_DIR} apply --auto-approve
+
+    # Prod Project
+    # Only deploy to separate project for multi-project setups
+    if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
+        PROD_ENVIRONMENT_DIR=terraform/environments/prod
+    cat > "${PROD_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+project_id = "${PROD_PROJECT}"
+ops_project_id = "${OPS_PROJECT}"
+EOF
+        terraform -chdir=${PROD_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=prod"
+        terraform -chdir=${PROD_ENVIRONMENT_DIR} apply --auto-approve
+    fi
+
+fi # skip terraform
+
+########################
+# Seed Default Content #
+########################
+if [[ -z "$SKIP_SEEDING" ]]; then
+    echo
+    echo "$(tput bold)Seeding default content...$(tput sgr0)"
+    echo
+
+    pushd content-api/data
+    account=$(gcloud config get-value account 2> /dev/null)
+    if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
+        read -rp "Please input an email address for an approver. This email will be added to the Firestore database as an 'approver' and will be able to perform privileged API operations from the website frontend: [${account}]: " approver
+    fi
+    approver="${approver:-$account}"
+
+    GOOGLE_CLOUD_PROJECT="${STAGE_PROJECT}" python3 seed_test_approver.py "${approver}"
+    GOOGLE_CLOUD_PROJECT="${STAGE_PROJECT}" python3 seed_database.py
+    if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
+        GOOGLE_CLOUD_PROJECT="${PROD_PROJECT}" python3 seed_test_approver.py "${approver}"
+        GOOGLE_CLOUD_PROJECT="${PROD_PROJECT}" python3 seed_database.py
+    fi
+    popd
+fi # skip seeding
 
 ####################
 # Build Containers #
 ####################
 
-export REGION="us-central1"
-SHORT_SHA="setup"
+SETUP_IMAGE_TAG="setup"
 E2E_RUNNER_TAG="latest"
 
-# Submit builds
-gcloud builds submit --config=ops/api-build.cloudbuild.yaml \
---project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+if [[ -z "$SKIP_BUILD" ]]; then
 
-gcloud builds submit --config=ops/web-build.cloudbuild.yaml \
---project="$OPS_PROJECT" --substitutions=_REGION="$REGION",SHORT_SHA="$SHORT_SHA"
+echo
+echo "$(tput bold)Building container images for testing and application hosting...$(tput sgr0)"
+echo
 
-gcloud builds submit --config=ops/e2e-runner-build.cloudbuild.yaml \
---project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG"
+gcloud builds submit "content-api" \
+    --config=ops/api-build.cloudbuild.yaml \
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG",_CONTEXT="."
 
+gcloud builds submit \
+    --config=ops/web-build.cloudbuild.yaml \
+    --ignore-file=ops/web-build.gcloudignore \
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG"
 
-#################
-# Prod Services #
-#################
+gcloud builds submit "ops/e2e-runner" \
+    --config=ops/e2e-runner-build.cloudbuild.yaml \
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG"
 
-# Only deploy to separate project for multi-project setups
-if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
-# Deploy API
-gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
---project "$PROD_PROJECT"  --service-account "api-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
---region "${REGION}" content-api
+fi # skip build
 
-
-PROD_API_URL=$(gcloud run services describe content-api --project ${PROD_PROJECT} --region ${REGION} --format "value(status.url)")
-
-WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions"
-WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${PROD_API_URL}"
-
-gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
---project "$PROD_PROJECT" --service-account "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com"  \
---set-env-vars "$WEBSITE_VARS" --region "${REGION}" --tag "latest" \
-website
-fi
 
 ##################
-# Stage Services #
+# Deploy Services #
 ##################
 
-gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SHORT_SHA}" \
---project "$STAGE_PROJECT"  --service-account "api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com"  \
---region "${REGION}" content-api
+if [[ -z "$SKIP_DEPLOY" ]]; then
 
-STAGE_API_URL=$(gcloud run services describe content-api --project ${STAGE_PROJECT} --region ${REGION} --format "value(status.url)")
+    echo
+    echo "$(tput bold)Deploying Cloud Run services...$(tput sgr0)"
+    echo
 
-WEBSITE_VARS="EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions"
-WEBSITE_VARS="${WEBSITE_VARS},EMBLEM_API_URL=${STAGE_API_URL}"
+    ## Staging Services ##
 
-gcloud run deploy --allow-unauthenticated \
---image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SHORT_SHA}" \
---project "$STAGE_PROJECT" --service-account "website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
---set-env-vars "$WEBSITE_VARS" --region "${REGION}" --tag "latest" \
-website
+    gcloud run deploy content-api \
+        --allow-unauthenticated \
+        --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SETUP_IMAGE_TAG}" \
+        --service-account "api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+        --project "${STAGE_PROJECT}" \
+        --region "${REGION}"
 
-###############
-# Set up auth #
-###############
+    STAGING_API_URL=$(gcloud run services describe content-api --project "${STAGE_PROJECT}" --region ${REGION} --format 'value(status.url)')
+    gcloud run deploy website \
+        --allow-unauthenticated \
+        --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SETUP_IMAGE_TAG}" \
+        --service-account "website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
+        --update-env-vars "EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions" \
+        --update-env-vars "EMBLEM_API_URL=${STAGING_API_URL}" \
+        --project "${STAGE_PROJECT}" \
+        --region "${REGION}" \
+        --tag "latest"
+
+    ## Production Services ##
+
+    # Only deploy to separate project for multi-project setups
+    if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
+        gcloud run deploy content-api \
+            --allow-unauthenticated \
+            --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SETUP_IMAGE_TAG}" \
+            --service-account "api-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
+            --project "${PROD_PROJECT}" \
+            --region "${REGION}"
+
+        PROD_API_URL=$(gcloud run services describe content-api --project "${PROD_PROJECT}" --region ${REGION} --format 'value(status.url)')
+        gcloud run deploy website \
+            --allow-unauthenticated \
+            --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SETUP_IMAGE_TAG}" \
+            --service-account "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
+            --update-env-vars "EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions" \
+            --update-env-vars "EMBLEM_API_URL=${PROD_API_URL}" \
+            --project "${PROD_PROJECT}" \
+            --region "${REGION}" \
+            --tag "latest"
+    fi
+
+fi # skip deploy
+
+#######################
+# User Authentication #
+#######################
+
 if [[ -z "$SKIP_AUTH" ]]; then
-    echo ""
-    read -p "Would you like to configure $(tput bold)$(tput setaf 3)end-user authentication?$(tput sgr0) (y/n) " auth_yesno
+    echo
+    read -rp "Would you like to configure $(tput bold)$(tput setaf 3)end-user authentication?$(tput sgr0) (y/n) " auth_yesno
 
     if [[ ${auth_yesno} == "y" ]]; then
         sh ./scripts/configure_auth.sh
     else
         echo "Skipping end-user authentication configuration. You can configure it later by running:"
-        echo ""
+        echo
         echo "  export $(tput bold)PROD_PROJECT$(tput sgr0)=$(tput setaf 6)${PROD_PROJECT}$(tput sgr0)"
         echo "  export $(tput bold)STAGE_PROJECT$(tput sgr0)=$(tput setaf 6)${STAGE_PROJECT}$(tput sgr0)"
         echo "  export $(tput bold)OPS_PROJECT$(tput sgr0)=$(tput setaf 6)${OPS_PROJECT}$(tput sgr0)"
         echo "  $(tput setaf 6)sh scripts/configure_auth.sh$(tput sgr0)"
-        echo ""
+        echo
     fi
-fi
+fi # skip authentication
 
-################
-# Set up CI/CD #
-################
+###############
+# Setup CI/CD #
+###############
 
 if [[ -z "$SKIP_TRIGGERS" ]]; then
-    REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?\
-    project=${OPS_PROJECT}"
-    echo "Connect your repos: ${REPO_CONNECT_URL}"
+    echo
+    read -rp "Would you like to configure $(tput bold)$(tput setaf 3)continuous delivery?$(tput sgr0) (y/n) " cd_yesno
 
-    python3 -m webbrowser ${REPO_CONNECT_URL}
+    if [[ ${cd_yesno} == "y" ]]; then
+        sh ./scripts/configure_delivery.sh
+    else
+        echo "Skipping continuous delivery configuration. You can configure it later by running:"
+        echo
+        echo "  export $(tput bold)PROD_PROJECT$(tput sgr0)=$(tput setaf 6)${PROD_PROJECT}$(tput sgr0)"
+        echo "  export $(tput bold)STAGE_PROJECT$(tput sgr0)=$(tput setaf 6)${STAGE_PROJECT}$(tput sgr0)"
+        echo "  export $(tput bold)OPS_PROJECT$(tput sgr0)=$(tput setaf 6)${OPS_PROJECT}$(tput sgr0)"
+        echo "  $(tput setaf 6)sh ./scripts/configure_delivery.sh$(tput sgr0)"
+        echo
+    fi
+fi # skip triggers
 
-    read -p "Once your repo is connected, please continue by typing any key."
-
-    continue=1
-    while [[ ${continue} -gt 0 ]]
-    do
-
-        read -p "Please input the repo owner [GoogleCloudPlatform]: " repo_owner
-        repo_owner=${repo_owner:-GoogleCloudPlatform}
-        read -p "Please input the repo name [emblem]: " repo_name
-        repo_name=${repo_name:-emblem}
-
-        read -p "Is this the correct repo: ${repo_owner}/${repo_name}? (y/n) " yesno
-
-        if [[ ${yesno} == "y" ]]
-            then continue=0
-        fi
-
-    done
-
-    ###################
-    # Create Triggers #
-    ###################
-
-    pushd terraform/ops/triggers
-    # Set Trigger Variables
-    cat > terraform.tfvars <<EOF
-google_ops_project_id = "${OPS_PROJECT}"
-repo_owner = "${repo_owner}"
-repo_name = "${repo_name}"
-EOF
-
-    terraform init
-    terraform apply --auto-approve
-    popd
-
-    export GITHUB_URL="https://github.com/${repo_owner}/${repo_name}"
-    sh ./scripts/pubsub_triggers.sh
+echo
+STAGING_WEBSITE_URL=$(gcloud run services describe website --project "${STAGE_PROJECT}" --region ${REGION} --format 'value(status.url)')
+if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
+  PROD_WEBSITE_URL=$(gcloud run services describe website --project "${PROD_PROJECT}" --region ${REGION} --format 'value(status.url)')
+  echo "💠 The staging environment is ready! Navigate your browser to ${STAGING_WEBSITE_URL}"
+  echo "💠 The production environment is ready! Navigate your browser to ${PROD_WEBSITE_URL}"
+else
+  echo "💠 The application is ready! Navigate your browser to ${STAGING_WEBSITE_URL}"
 fi

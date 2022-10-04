@@ -221,9 +221,18 @@ img.emblem-avatar {
 }
 
 /* Donate button */
+.emblem-donation-wrapper {
+  margin: 10px auto;
+}
+
 .emblem-campaign-details .mdc-button {
   margin-top: 1em;
   float: right;
+  display: inline-flex;
+}
+
+.emblem-campaign-details .mdc-button:nth-child(1) {
+  margin-left: 1em;
 }
 
 /***** Donate to Campaign page *****/
@@ -241,6 +250,16 @@ img.emblem-avatar {
 .emblem-new-campaign .emblem-back-button button {
   font-size: 48px;
   padding-top: 5px;
+}
+
+select.emblem-new-campaign-input {
+  padding: 15px;
+  border: none;
+  border-bottom: 1px solid #757575;
+  color: #505050;
+  font-size: 15px;
+  outline-width: 0;
+  appearance: inherit;
 }
 
 .emblem-new-campaign-input {
