@@ -4,7 +4,7 @@ resource "google_cloudbuild_trigger" "api_push_to_main" {
   project        = var.project_id
   count          = var.setup_cd_system ? 1 : 0
   name           = "api-new-build"
-  description    = "Builds a new image of the content-api container based on git main branch."
+  description    = "Builds a new image of the content-api container based on git main branch update."
   filename       = "ops/api-build.cloudbuild.yaml"
   included_files = ["content-api/**"]
   github {
