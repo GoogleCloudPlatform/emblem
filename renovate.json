@@ -2,20 +2,17 @@
   "extends": [
     "config:base"
   ],
+  "ignorePaths": [
+    "experimental/**"
+  ],
   "rangeStrategy": "pin",
+  "schedule": "before 10am every 3 weeks on Monday", 
   "packageRules": [
     {
       "paths": [
         "client-libs/"
       ],
       "rangeStrategy": "replace"
-    },
-    {
-      "paths": [
-        "experimental/"
-      ],
-      "rangeStrategy": "auto",
-      "schedule": ["every weekend"]
     }
   ]
 }
