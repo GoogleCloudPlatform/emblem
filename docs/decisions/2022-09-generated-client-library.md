@@ -14,7 +14,7 @@ REST API, using a Python client library reduces duplication of code and effort
 in the website's code base.
 
 The Python client library could be hand-written or automatically generated from the
-(Content API API specification)[../../content-api/openapi.yaml].
+[Content API API specification](../../content-api/openapi.yaml).
 
 ## Priorities & Constraints
 
@@ -33,8 +33,8 @@ but this would create a more complicated code base.
 
 ### Option 2: Generate the library
 
-Since it had already been decided to use a (REST API)[./2021-04-functions-api.md]
-and document that API with the (OpenAPI standard)[./2021-08-18-openapi-tools.md],
+Since it had already been decided to use a [REST API](./2021-04-functions-api.md)
+and document that API with the [OpenAPI standard](./2021-08-18-openapi-tools.md),
 which has a large number of tools available for it, generating the library would
 require little effort.
 
@@ -44,6 +44,6 @@ We chose to generate the library. Since the generated library supports a number
 of options when create a client object, we also created a wrapper module that
 creates that object with the options most applicable to the Emblem application.
 
-As (previously documented)[./2021-08-17-openapi-tools.md], we tried two
+As [previously documented](./2021-08-17-openapi-tools.md), we tried two
 well-known tools and selected the
-(OpenAPI generator)[https://github.com/OpenAPITools/openapi-generator].
+[OpenAPI generator](https://github.com/OpenAPITools/openapi-generator).
