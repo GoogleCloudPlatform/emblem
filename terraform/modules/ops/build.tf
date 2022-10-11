@@ -6,7 +6,7 @@ resource "google_cloudbuild_trigger" "api_push_to_main" {
   name           = "api-push-to-main"
   filename       = "ops/api-build.cloudbuild.yaml"
   included_files = ["content-api/**"]
-  description  = "Triggers on every change to main branch in content-api directory. Initiates content-api image build."
+  description    = "Triggers on every change to main branch in content-api directory. Initiates content-api image build."
   github {
     owner = var.repo_owner
     name  = var.repo_name
@@ -28,11 +28,11 @@ resource "google_cloudbuild_trigger" "api_push_to_main" {
 }
 
 resource "google_cloudbuild_trigger" "web_push_to_main" {
-  project  = var.project_id
-  count    = var.setup_cd_system ? 1 : 0
-  name     = "web-push-to-main"
-  filename = "ops/web-build.cloudbuild.yaml"
-  description  = "Triggers on every change to main branch in website directory. Initiates website image build."
+  project     = var.project_id
+  count       = var.setup_cd_system ? 1 : 0
+  name        = "web-push-to-main"
+  filename    = "ops/web-build.cloudbuild.yaml"
+  description = "Triggers on every change to main branch in website directory. Initiates website image build."
   included_files = [
     "website/*",
     "website/*/*",
