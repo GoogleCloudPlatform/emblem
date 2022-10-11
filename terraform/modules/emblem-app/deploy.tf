@@ -59,6 +59,7 @@ resource "google_cloudbuild_trigger" "web_deploy" {
   count   = var.setup_cd_system ? 1 : 0
   project = var.ops_project_id
   name    = "web-deploy-${var.environment}"
+  description  = "Triggers on any new website build to Artifact Registry. Begins container deployment for staging/prod environment.
   pubsub_config {
     topic = var.deploy_trigger_topic_id
   }
@@ -90,6 +91,7 @@ resource "google_cloudbuild_trigger" "api_deploy" {
   count   = var.setup_cd_system ? 1 : 0
   project = var.ops_project_id
   name    = "api-deploy-${var.environment}"
+  description  = "Triggers on any new content-api build to Artifact Registry. Begins container deployment for staging/prod environment."
   pubsub_config {
     topic = var.deploy_trigger_topic_id
   }
@@ -123,6 +125,7 @@ resource "google_cloudbuild_trigger" "web_canary" {
   count   = var.setup_cd_system ? 1 : 0
   project = var.ops_project_id
   name    = "web-canary-${var.environment}"
+  description  = "Triggers on initial environment (staging, prod) deployment for website container. Performs general health check before increasing traffic."
   pubsub_config {
     topic = google_pubsub_topic.canary.id
   }
@@ -155,6 +158,7 @@ resource "google_cloudbuild_trigger" "api_canary" {
   count   = var.setup_cd_system ? 1 : 0
   project = var.ops_project_id
   name    = "api-canary-${var.environment}"
+  description  = "Triggers on initial environment (staging, prod) deployment for content-api container. Performs general health check before increasing traffic."
   pubsub_config {
     topic = google_pubsub_topic.canary.id
   }
