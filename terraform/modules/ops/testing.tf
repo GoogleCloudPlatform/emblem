@@ -32,6 +32,7 @@ resource "google_cloudbuild_trigger" "api_unit_tests" {
     _DIR             = "content-api"
     _SERVICE_ACCOUNT = google_service_account.test_user.email
   }
+  description = "Triggers on every pull request with content-api directory changes. Runs api unit tests."
   github {
     owner = var.repo_owner
     name  = var.repo_name
@@ -50,10 +51,11 @@ resource "google_cloudbuild_trigger" "api_unit_tests" {
 ###################
 
 resource "google_cloudbuild_trigger" "web_system_tests" {
-  project  = var.project_id
-  count    = var.setup_cd_system ? 1 : 0
-  name     = "web-system-tests"
-  filename = "ops/web-e2e.cloudbuild.yaml"
+  project     = var.project_id
+  count       = var.setup_cd_system ? 1 : 0
+  name        = "web-system-tests"
+  filename    = "ops/web-e2e.cloudbuild.yaml"
+  description = "Triggers on every pull request with website directory changes. Runs system tests."
   included_files = [
     "website/**",
     "ops/web-e2e.cloudbuild.yaml"
@@ -84,10 +86,10 @@ resource "google_cloudbuild_trigger" "web_system_tests" {
 # the filename parameter, which is not required, but still populated by
 # the API.  Investigate work-around.
 resource "google_cloudbuild_trigger" "e2e_nightly_tests" {
-  project = var.project_id
-  count   = 0
-  name    = "e2e-nightly-tests"
-
+  project     = var.project_id
+  count       = 0
+  name        = "e2e-nightly-tests"
+  description = "Triggers via nightly Cloud Scheduler. Builds e2e container image."
   pubsub_config {
     topic = google_pubsub_topic.nightly.id
   }
@@ -112,10 +114,11 @@ resource "google_cloudbuild_trigger" "e2e_nightly_tests" {
 }
 
 resource "google_cloudbuild_trigger" "e2e_testing_build_runner" {
-  project  = var.project_id
-  count    = 0
-  name     = "e2e-runner-push-to-main"
-  filename = "ops/e2e-runner-build.cloudbuild.yaml"
+  project     = var.project_id
+  count       = 0
+  name        = "e2e-runner-push-to-main"
+  filename    = "ops/e2e-runner-build.cloudbuild.yaml"
+  description = "Triggers on every change to main in the website/e2e-test directory. Builds e2e container image."
   included_files = [
     "website/e2e-test/*",
   ]
