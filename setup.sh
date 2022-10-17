@@ -116,20 +116,21 @@ if [[ -z "$SKIP_SEEDING" ]]; then
     echo "$(tput bold)Seeding default content...$(tput sgr0)"
     echo
 
-    pushd content-api/data
     account=$(gcloud config get-value account 2> /dev/null)
     if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
         read -rp "Please input an email address for an approver. This email will be added to the Firestore database as an 'approver' and will be able to perform privileged API operations from the website frontend: [${account}]: " approver
     fi
     approver="${approver:-$account}"
 
-    GOOGLE_CLOUD_PROJECT="${STAGE_PROJECT}" python3 seed_test_approver.py "${approver}"
-    GOOGLE_CLOUD_PROJECT="${STAGE_PROJECT}" python3 seed_database.py
+    gcloud builds submit content-api/data  --project="$OPS_PROJECT" \
+    --substitutions=_FIREBASE_PROJECT="${STAGE_PROJECT}",_APPROVER_EMAIL="${approver}" \
+    --config=./content-api/data/cloudbuild.yaml
+
     if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
-        GOOGLE_CLOUD_PROJECT="${PROD_PROJECT}" python3 seed_test_approver.py "${approver}"
-        GOOGLE_CLOUD_PROJECT="${PROD_PROJECT}" python3 seed_database.py
+        gcloud builds submit content-api/data  --project="$OPS_PROJECT" \
+        --substitutions=_FIREBASE_PROJECT="${PROD_PROJECT}",_APPROVER_EMAIL="${approver}" \
+        --config=./content-api/data/cloudbuild.yaml
     fi
-    popd
 fi # skip seeding
 
 ####################

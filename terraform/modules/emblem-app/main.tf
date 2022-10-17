@@ -57,3 +57,16 @@ resource "google_storage_bucket_iam_member" "sessions-iam" {
   member = "serviceAccount:${google_service_account.website_manager.email}"
   count  = var.deploy_session_bucket ? 1 : 0
 }
+
+## Ops Cloud Build service account permission to update Firestore
+resource "google_project_service_identity" "ops_cloudbuild" {
+  provider = google-beta
+  project  = data.google_project.ops.project_id
+  service  = "cloudbuild.googleapis.com"
+}
+
+resource "google_project_iam_member" "ops_cloudbuild_datastore_user" {
+  project = var.project_id
+  role    = "roles/datastore.user"
+  member  = "serviceAccount:${google_project_service_identity.ops_cloudbuild.email}"
+}

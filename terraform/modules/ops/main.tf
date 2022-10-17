@@ -129,6 +129,7 @@ resource "google_pubsub_topic" "nightly" {
 resource "google_cloud_scheduler_job" "nightly_schedule" {
   project     = var.project_id
   name        = "nightly"
+  count       = 0
   description = "This job runs nightly operations."
   region      = var.region
   schedule    = "0 2 * * *"
