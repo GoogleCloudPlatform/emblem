@@ -1,6 +1,6 @@
 # Build & Store Container Images
 
-resource "google_cloudbuild_trigger" "api_push_to_main" {
+resource "google_cloudbuild_trigger" "api_new_build" {
   project        = var.project_id
   count          = var.setup_cd_system ? 1 : 0
   name           = "api-new-build"
@@ -27,7 +27,7 @@ resource "google_cloudbuild_trigger" "api_push_to_main" {
   tags = []
 }
 
-resource "google_cloudbuild_trigger" "web_push_to_main" {
+resource "google_cloudbuild_trigger" "web_new_build" {
   project     = var.project_id
   count       = var.setup_cd_system ? 1 : 0
   name        = "web-new-build"
