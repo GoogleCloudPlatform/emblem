@@ -50,10 +50,10 @@ resource "google_cloudbuild_trigger" "api_unit_tests" {
 # Website Testing #
 ###################
 
-resource "google_cloudbuild_trigger" "web_system_tests" {
+resource "google_cloudbuild_trigger" "web_e2e_test" {
   project     = var.project_id
   count       = var.setup_cd_system ? 1 : 0
-  name        = "web-system-tests"
+  name        = "web-e2e-test"
   filename    = "ops/web-e2e.cloudbuild.yaml"
   description = "Triggers on every pull request with website directory changes. Runs system tests."
   included_files = [
