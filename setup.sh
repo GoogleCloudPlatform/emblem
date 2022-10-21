@@ -122,12 +122,12 @@ if [[ -z "$SKIP_SEEDING" ]]; then
     fi
     approver="${approver:-$account}"
 
-    gcloud builds submit content-api/data  --project="$OPS_PROJECT" \
+    gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
     --substitutions=_FIREBASE_PROJECT="${STAGE_PROJECT}",_APPROVER_EMAIL="${approver}" \
     --config=./content-api/data/cloudbuild.yaml
 
     if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
-        gcloud builds submit content-api/data  --project="$OPS_PROJECT" \
+        gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
         --substitutions=_FIREBASE_PROJECT="${PROD_PROJECT}",_APPROVER_EMAIL="${approver}" \
         --config=./content-api/data/cloudbuild.yaml
     fi
