@@ -59,9 +59,9 @@ fi
 
 echo "Setting up a new instance of Emblem. There may be a few prompts to guide the process."
 
-###################
-# Terraform Setup #
-###################
+#####################
+# Initial Ops Setup #
+#####################
 
 if [[ -z "$SKIP_TERRAFORM" ]]; then
     echo
@@ -84,7 +84,41 @@ project_id = "${OPS_PROJECT}"
 EOF
     terraform -chdir=${OPS_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=ops"
     terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
+fi # $SKIP_TERRAFORM
 
+####################
+# Build Containers #
+####################
+
+SETUP_IMAGE_TAG="setup"
+E2E_RUNNER_TAG="latest"
+
+if [[ -z "$SKIP_BUILD" ]]; then
+
+echo
+echo "$(tput bold)Building container images for testing and application hosting...$(tput sgr0)"
+echo
+
+gcloud builds submit "content-api" --async \
+    --config=ops/api-build.cloudbuild.yaml \
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG",_CONTEXT="."
+
+gcloud builds submit \
+    --config=ops/web-build.cloudbuild.yaml --async \
+    --ignore-file=ops/web-build.gcloudignore \
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG"
+
+gcloud builds submit "ops/e2e-runner" --async \
+    --config=ops/e2e-runner-build.cloudbuild.yaml \
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG"
+
+fi # skip build
+
+#####################
+# Application Setup #
+#####################
+
+if [[ -z "$SKIP_TERRAFORM" ]]; then
     # Staging Project
     STAGE_ENVIRONMENT_DIR=terraform/environments/staging
     cat > "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
@@ -132,35 +166,6 @@ if [[ -z "$SKIP_SEEDING" ]]; then
         --config=./content-api/data/cloudbuild.yaml
     fi
 fi # skip seeding
-
-####################
-# Build Containers #
-####################
-
-SETUP_IMAGE_TAG="setup"
-E2E_RUNNER_TAG="latest"
-
-if [[ -z "$SKIP_BUILD" ]]; then
-
-echo
-echo "$(tput bold)Building container images for testing and application hosting...$(tput sgr0)"
-echo
-
-gcloud builds submit "content-api" \
-    --config=ops/api-build.cloudbuild.yaml \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG",_CONTEXT="."
-
-gcloud builds submit \
-    --config=ops/web-build.cloudbuild.yaml \
-    --ignore-file=ops/web-build.gcloudignore \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG"
-
-gcloud builds submit "ops/e2e-runner" \
-    --config=ops/e2e-runner-build.cloudbuild.yaml \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG"
-
-fi # skip build
-
 
 ##################
 # Deploy Services #
