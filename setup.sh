@@ -38,7 +38,7 @@ trap '_error_report $LINENO' ERR
 # Default to empty or default values, avoiding unbound variable errors.
 SKIP_TERRAFORM=${SKIP_TERRAFORM:-}
 SKIP_TRIGGERS=${SKIP_TRIGGERS:-}
-SKIP_AUTH=${SKIP_AUTH:-}
+SKIP_AUTH=${SKIP_AUTH:=true}
 SKIP_BUILD=${SKIP_BUILD:-}
 SKIP_DEPLOY=${SKIP_DEPLOY:-}
 SKIP_SEEDING=${SKIP_SEEDING:-}
@@ -222,27 +222,6 @@ if [[ -z "$SKIP_DEPLOY" ]]; then
 
 fi # skip deploy
 
-#######################
-# User Authentication #
-#######################
-
-if [[ -z "$SKIP_AUTH" ]]; then
-    echo
-    read -rp "Would you like to configure $(tput bold)$(tput setaf 3)end-user authentication?$(tput sgr0) (y/n) " auth_yesno
-
-    if [[ ${auth_yesno} == "y" ]]; then
-        sh ./scripts/configure_auth.sh
-    else
-        echo "Skipping end-user authentication configuration. You can configure it later by running:"
-        echo
-        echo "  export $(tput bold)PROD_PROJECT$(tput sgr0)=$(tput setaf 6)${PROD_PROJECT}$(tput sgr0)"
-        echo "  export $(tput bold)STAGE_PROJECT$(tput sgr0)=$(tput setaf 6)${STAGE_PROJECT}$(tput sgr0)"
-        echo "  export $(tput bold)OPS_PROJECT$(tput sgr0)=$(tput setaf 6)${OPS_PROJECT}$(tput sgr0)"
-        echo "  $(tput setaf 6)sh scripts/configure_auth.sh$(tput sgr0)"
-        echo
-    fi
-fi # skip authentication
-
 ###############
 # Setup CI/CD #
 ###############
@@ -263,3 +242,24 @@ if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
 else
   echo "💠 The application is ready! Navigate your browser to ${STAGING_WEBSITE_URL}"
 fi
+
+#######################
+# User Authentication #
+#######################
+
+if [[ -z "$SKIP_AUTH" ]]; then
+    echo
+    read -rp "Would you like to configure $(tput bold)$(tput setaf 3)end-user authentication?$(tput sgr0) (y/n) " auth_yesno
+
+    if [[ ${auth_yesno} == "y" ]]; then
+        sh ./scripts/configure_auth.sh
+    else
+        echo "Skipping end-user authentication configuration. You can configure it later by running:"
+        echo
+        echo "  export $(tput bold)PROD_PROJECT$(tput sgr0)=$(tput setaf 6)${PROD_PROJECT}$(tput sgr0)"
+        echo "  export $(tput bold)STAGE_PROJECT$(tput sgr0)=$(tput setaf 6)${STAGE_PROJECT}$(tput sgr0)"
+        echo "  export $(tput bold)OPS_PROJECT$(tput sgr0)=$(tput setaf 6)${OPS_PROJECT}$(tput sgr0)"
+        echo "  $(tput setaf 6)sh scripts/configure_auth.sh$(tput sgr0)"
+        echo
+    fi
+fi # skip authentication
