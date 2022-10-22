@@ -249,19 +249,9 @@ fi # skip authentication
 
 if [[ -z "$SKIP_TRIGGERS" ]]; then
     echo
-    read -rp "Would you like to configure $(tput bold)$(tput setaf 3)continuous delivery?$(tput sgr0) (y/n) " cd_yesno
 
-    if [[ ${cd_yesno} == "y" ]]; then
-        sh ./scripts/configure_delivery.sh
-    else
-        echo "Skipping continuous delivery configuration. You can configure it later by running:"
-        echo
-        echo "  export $(tput bold)PROD_PROJECT$(tput sgr0)=$(tput setaf 6)${PROD_PROJECT}$(tput sgr0)"
-        echo "  export $(tput bold)STAGE_PROJECT$(tput sgr0)=$(tput setaf 6)${STAGE_PROJECT}$(tput sgr0)"
-        echo "  export $(tput bold)OPS_PROJECT$(tput sgr0)=$(tput setaf 6)${OPS_PROJECT}$(tput sgr0)"
-        echo "  $(tput setaf 6)sh ./scripts/configure_delivery.sh$(tput sgr0)"
-        echo
-    fi
+    sh ./scripts/configure_delivery.sh
+    
 fi # skip triggers
 
 echo
