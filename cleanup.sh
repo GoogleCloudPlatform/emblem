@@ -37,7 +37,7 @@ elif [[ -z "${OPS_PROJECT}" ]]; then
 fi
 
 # TF Resources
-# App Terraform resources include dependencies on ops resources, so the ops environment should be destroyed last.  
+# App Terraform resources include dependencies on ops resources, so the ops environment should be destroyed last to avoid errors.  
 
 STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
 
