@@ -89,14 +89,42 @@ We recommend running through setup steps using Google Cloud Shell, which has the
    ```
    ./setup.sh
    ```
-   Once complete you will have a deployed instance of Emblem.  
 
-### Manual setup
+   Once complete you will have a deployed instance of Emblem.
 
-```
+   To see which Google services and apis got installed in your projects, check out below:
 
-```
+   ```mermaid
+   stateDiagram
+       Operations --> Staging
+       Operations --> Production
 
+       state Operations {
+         state "IAM" as a0
+         state "Secret Manager" as a1
+         state "Cloud Build" as a2
+         state "Artifact Registry" as a3
+         state "Cloud Firestore" as a4
+         state "Cloud Scheduler" as a5
+         state "Pub/Sub" as a6
+       }
+
+       state Staging {
+         direction LR
+         state "Cloud Firestore" as b0
+         state "Cloud Storage" as b1
+         state "Cloud Run" as b2
+         state "Cloud Logging" as b3
+       }
+
+       state Production {
+         direction LR
+         state "Cloud Firestore" as c0
+         state "Cloud Storage" as c1
+         state "Cloud Run" as c2
+         state "Cloud Logging" as c3
+       }
+   ```
 ---
 
 This is not an official Google project.
