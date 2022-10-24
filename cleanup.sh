@@ -50,9 +50,8 @@ terraform -chdir=${STAGE_ENVIRONMENT_DIR} destroy --auto-approve && rm ${STAGE_E
 OPS_ENVIRONMENT_DIR=terraform/environments/ops
 terraform -chdir=${OPS_ENVIRONMENT_DIR} destroy --auto-approve && rm ${OPS_ENVIRONMENT_DIR}/terraform.tfvars && rm -rf ${OPS_ENVIRONMENT_DIR}/.terraform
 
-# Delete GCS state bucket
-gsutil -m rm -r gs://${STATE_GCS_BUCKET_NAME}/* && gsutil rb gs://${STATE_GCS_BUCKET_NAME}
-
+# Delete GCS state bucket contents and bucket
+gcloud storage rm -r  gs://${STATE_GCS_BUCKET_NAME}
 # Delete Run services
 gcloud run services delete --project $STAGE_PROJECT --region $REGION website --quiet
 gcloud run services delete --project $STAGE_PROJECT --region $REGION content-api --quiet
