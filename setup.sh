@@ -99,18 +99,18 @@ echo
 echo "$(tput bold)Building container images for testing and application hosting...$(tput sgr0)"
 echo
 
-gcloud builds submit "content-api" --async \
+API_BUILD_ID=`gcloud builds submit "content-api" --async \
     --config=ops/api-build.cloudbuild.yaml \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG",_CONTEXT="."
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG",_CONTEXT="." --format='value(ID)'`
 
-gcloud builds submit \
+WEB_BUILD_ID=`gcloud builds submit \
     --config=ops/web-build.cloudbuild.yaml --async \
     --ignore-file=ops/web-build.gcloudignore \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG"
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG" --format='value(ID)'`
 
-gcloud builds submit "ops/e2e-runner" --async \
+E2E_BUILD_ID=`gcloud builds submit "ops/e2e-runner" --async \
     --config=ops/e2e-runner-build.cloudbuild.yaml \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG"
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG" --format='value(ID)'`
 
 fi # skip build
 
