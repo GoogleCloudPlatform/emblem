@@ -171,6 +171,41 @@ fi # skip seeding
 # Deploy Services #
 ##################
 
+# Function will check build before deploying Run service
+check_for_build_then_run () {
+    local build_id="${1}"
+    local run_command="${2}"
+    # Wait for build to complete.
+    if [ $(gcloud builds describe $build_id --format='value(status)') == "WORKING" ]; then
+        log_url=$(gcloud builds describe $build_id --format='value(logUrl)')
+        echo "Build $build_id still working."
+        echo "Logs are available at [ $log_url ]."
+        while [ $(gcloud builds describe $build_id --format='value(status)') == "WORKING" ]
+        do
+          echo "Build $build_id still working..."
+          sleep 10
+        done
+    fi
+    # Return error and build log for failures. 
+    if [ $(gcloud builds describe $build_id --format='value(status)') == "FAILURE" ]; then
+        build_describe=$(gcloud builds describe $build_id --format='csv(failureInfo.detail,logUrl)[no-heading]')
+        fail_info=$(echo $build_describe | awk -F',' '{gsub(/""/,"\"");print $1}')
+        log_url=$(echo $build_describe | awk -F',' '{print $2}')
+        echo "Build ${build_id} failed. See build log: $log_url"
+        echo "ERROR: ${fail_info}"
+        exit 2
+    # Deploy if build is successful.
+    elif [ `gcloud builds describe $build_id --format='value(status)'` == "SUCCESS" ]; then
+        $run_command
+    # Return build log for all other statuses.
+    else
+        log_url=$(gcloud builds describe $build_id --format='value(logUrl)')
+        echo "Build ${build_id} did not complete." 
+        echo "See build log: $log_url"
+        exit 2
+    fi;
+}
+
 if [[ -z "$SKIP_DEPLOY" ]]; then
 
     echo
