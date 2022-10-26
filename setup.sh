@@ -213,16 +213,16 @@ if [[ -z "$SKIP_DEPLOY" ]]; then
     echo
 
     ## Staging Services ##
-
-    gcloud run deploy content-api \
+    check_for_build_then_run $API_BUILD_ID "gcloud run deploy content-api \
         --allow-unauthenticated \
         --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SETUP_IMAGE_TAG}" \
         --service-account "api-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
         --project "${STAGE_PROJECT}" \
-        --region "${REGION}"
+        --region "${REGION}""
 
     STAGING_API_URL=$(gcloud run services describe content-api --project "${STAGE_PROJECT}" --region ${REGION} --format 'value(status.url)')
-    gcloud run deploy website \
+    
+    check_for_build_then_run $WEB_BUILD_ID "gcloud run deploy website \
         --allow-unauthenticated \
         --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SETUP_IMAGE_TAG}" \
         --service-account "website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
@@ -230,21 +230,22 @@ if [[ -z "$SKIP_DEPLOY" ]]; then
         --update-env-vars "EMBLEM_API_URL=${STAGING_API_URL}" \
         --project "${STAGE_PROJECT}" \
         --region "${REGION}" \
-        --tag "latest"
+        --tag "latest""
 
     ## Production Services ##
 
     # Only deploy to separate project for multi-project setups
     if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
-        gcloud run deploy content-api \
+        check_for_build_then_run $API_BUILD_ID "gcloud run deploy content-api \
             --allow-unauthenticated \
             --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/content-api/content-api:${SETUP_IMAGE_TAG}" \
             --service-account "api-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
             --project "${PROD_PROJECT}" \
-            --region "${REGION}"
+            --region "${REGION}""
 
         PROD_API_URL=$(gcloud run services describe content-api --project "${PROD_PROJECT}" --region ${REGION} --format 'value(status.url)')
-        gcloud run deploy website \
+        
+        check_for_build_then_run $WEB_BUILD_ID "gcloud run deploy website \
             --allow-unauthenticated \
             --image "${REGION}-docker.pkg.dev/${OPS_PROJECT}/website/website:${SETUP_IMAGE_TAG}" \
             --service-account "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
@@ -252,7 +253,7 @@ if [[ -z "$SKIP_DEPLOY" ]]; then
             --update-env-vars "EMBLEM_API_URL=${PROD_API_URL}" \
             --project "${PROD_PROJECT}" \
             --region "${REGION}" \
-            --tag "latest"
+            --tag "latest""
     fi
 
 fi # skip deploy
