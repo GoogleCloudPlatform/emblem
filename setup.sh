@@ -193,6 +193,7 @@ check_for_build_then_run () {
         log_url=$(echo $build_describe | awk -F',' '{print $2}')
         echo "Build ${build_id} failed. See build log: $log_url"
         echo "ERROR: ${fail_info}"
+        echo "Please re-run setup."
         exit 2
     # Deploy if build is successful.
     elif [ `gcloud builds describe $build_id --format='value(status)'` == "SUCCESS" ]; then
@@ -202,6 +203,7 @@ check_for_build_then_run () {
         log_url=$(gcloud builds describe $build_id --format='value(logUrl)')
         echo "Build ${build_id} did not complete." 
         echo "See build log: $log_url"
+        echo "Please re-run setup."
         exit 2
     fi;
 }
