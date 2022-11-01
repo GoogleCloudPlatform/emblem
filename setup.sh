@@ -171,7 +171,12 @@ fi # skip seeding
 # Deploy Services #
 ##################
 
-# Function will check build before deploying Run service
+# This function will wait for job status for the provided build job to update 
+# from WORKING to FAILURE or SUCCESS. For failed build jobs, the failure info 
+# will be returned along with the url to the build log. For successful build 
+# jobs, the provided run command will be executed. For all other statuses,
+# url to the build log is returned.
+
 check_for_build_then_run () {
     local build_id="${1}"
     local run_command="${2}"
