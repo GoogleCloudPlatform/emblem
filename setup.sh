@@ -99,18 +99,18 @@ echo
 echo "$(tput bold)Building container images for testing and application hosting...$(tput sgr0)"
 echo
 
-API_BUILD_ID=`gcloud builds submit "content-api" --async \
+API_BUILD_ID=$(gcloud builds submit "content-api" --async \
     --config=ops/api-build.cloudbuild.yaml \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG",_CONTEXT="." --format='value(ID)'`
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG",_CONTEXT="." --format='value(ID)')
 
-WEB_BUILD_ID=`gcloud builds submit \
+WEB_BUILD_ID=$(gcloud builds submit \
     --config=ops/web-build.cloudbuild.yaml --async \
     --ignore-file=ops/web-build.gcloudignore \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG" --format='value(ID)'`
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG" --format='value(ID)')
 
-E2E_BUILD_ID=`gcloud builds submit "ops/e2e-runner" --async \
+E2E_BUILD_ID=$(gcloud builds submit "ops/e2e-runner" --async \
     --config=ops/e2e-runner-build.cloudbuild.yaml \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG" --format='value(ID)'`
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG" --format='value(ID)')
 
 fi # skip build
 
@@ -196,7 +196,7 @@ check_for_build_then_run () {
         echo "Please re-run setup."
         exit 2
     # Deploy if build is successful.
-    elif [ `gcloud builds describe $build_id --format='value(status)'` == "SUCCESS" ]; then
+    elif [ $(gcloud builds describe $build_id --format='value(status)') == "SUCCESS" ]; then
         $run_command
     # Return build log for all other statuses.
     else
