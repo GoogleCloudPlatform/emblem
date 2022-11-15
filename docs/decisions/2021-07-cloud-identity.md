@@ -1,6 +1,6 @@
 # Use Cloud Identity Platform for user authorization
 
-* **Status:** Superceded by [2021-11 User Authentication](2021-11-user-authentication.md)]
+* **Status:** Superceded by [2021-11 User Authentication](2021-11-user-authentication.md)
 * **Last Updated:** 2021-07
 * **Objective:** How should we implement SSO/Authentication?
 
