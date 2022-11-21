@@ -40,15 +40,6 @@ information on using pull requests.
 We recommend
 [making suggestions to a Pull Request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/reviewing-changes-in-pull-requests/incorporating-feedback-in-your-pull-request) to collaboratively fix problems.
 
-## Set Up Emblem
-
-There are two ways you can setup your Emblem instance:
-
-* Maximize automation by following the [Emblem Quickstart](docs/tutorials/setup-quickstart.md)
-* Make the minimal steps manually:
-  * [Setup the Content API](docs/content-api.md#interactive-walkthrough-for-setup)
-  * [Setup the Website](docs/website.md#interactive-walkthrough-for-setup)
-
 ## Running Tests
 
 See [Testing Emblem](docs/testing.md) for detailed testing instructions.
@@ -93,11 +84,3 @@ Whether it's a code review, a static analysis outcome, or an error message in th
 
 * Warnings & errors should provide context, suggest next steps, and provide direct access to more details. (For example, link to build logs.)
 * When a warning or error has a generally agreed fix or next step, point the way or suggest the fix. (For example, linting checks on a PR should propose the fixes to correct the code formatting.)
-
-### Enable Trunk-Based Development with Experiments
-
-Emblem operates using a [Trunk-Based Development](https://trunkbaseddevelopment.com/) model.
-
-Larger-scale changes to Emblem should be prototyped in the [`/experimental` folder](/experimental).
-
-They can then be merged into the `main` branch in a single pass.
