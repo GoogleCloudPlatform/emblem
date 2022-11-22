@@ -1,6 +1,6 @@
 # Generate, rather than hand-write, the Content API client library
 
-* **Status:** draft
+* **Status:** proposed
 * **Last Updated:** 2022-09
 * **Objective:** Explain why we use a generated client library and chose the specific tool
 
