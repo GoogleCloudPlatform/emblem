@@ -42,7 +42,7 @@ fi
 
 REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?project=${OPS_PROJECT}"
 echo "Connect your repos: ${REPO_CONNECT_URL}"
-read -rp "Once your repo is connected, please continue by typing any key."
+read -rp "Once your forked emblem repo is connected, please continue by typing any key."
 
 if [[ -z "${REPO_NAME}" || -z "${REPO_NAME}" ]]
 then

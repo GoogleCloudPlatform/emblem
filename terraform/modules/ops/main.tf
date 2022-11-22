@@ -2,6 +2,15 @@ data "google_project" "target_project" {
   project_id = var.project_id
 }
 
+locals {
+  # Cloud build service account roles
+  pubsub_iam_roles_list = [
+    "roles/pubsub.publisher",
+    "roles/datastore.user",
+    "roles/iam.serviceAccountTokenCreator"
+  ]
+}
+
 # Create this topic to emit writes to Artifact Registry as events.
 # https://cloud.google.com/artifact-registry/docs/configure-notifications#topic
 resource "google_pubsub_topic" "gcr" {
@@ -15,7 +24,8 @@ resource "google_pubsub_topic" "gcr" {
 resource "google_project_iam_member" "pubsub_publisher_iam_member" {
   project  = var.project_id
   provider = google
-  role     = "roles/pubsub.publisher"
+  for_each = toset(local.pubsub_iam_roles_list)
+  role     = each.key
   member   = "serviceAccount:${data.google_project.target_project.number}@cloudbuild.gserviceaccount.com"
 
   depends_on = [
@@ -119,6 +129,7 @@ resource "google_pubsub_topic" "nightly" {
 resource "google_cloud_scheduler_job" "nightly_schedule" {
   project     = var.project_id
   name        = "nightly"
+  count       = 0
   description = "This job runs nightly operations."
   region      = var.region
   schedule    = "0 2 * * *"

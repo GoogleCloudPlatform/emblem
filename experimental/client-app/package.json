@@ -13,9 +13,7 @@
     "start:build": " web-dev-server --root-dir dist --app-index index.html --open",
     "analyze": "cem analyze --litelement",
     "lint:css": "stylelint \"src/**/*.js\"",
-    "server": "node server/proxy.js",
-    "start": "THEME=cymbal NODE_ENV=development web-dev-server",
-    "dev": "run-p server start"
+    "start": "THEME=cymbal web-dev-server"
   },
   "dependencies": {
     "@material/mwc-button": "^0.27.0",
@@ -43,15 +41,14 @@
     "@web/dev-server-rollup": "^0.3.19",
     "@web/rollup-plugin-copy": "^0.3.0",
     "@web/rollup-plugin-html": "^1.11.0",
-    "eslint": "^8.22.0",
+    "eslint": "8.24.0",
     "eslint-config-prettier": "^8.5.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
-    "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.78.1",
-    "stylelint": "14.11.0",
+    "rollup": "2.79.1",
+    "stylelint": "14.13.0",
     "stylelint-config-recommended": "9.0.0",
     "stylelint-config-styled-components": "^0.1.1",
     "stylelint-processor-styled-components": "^1.10.0"

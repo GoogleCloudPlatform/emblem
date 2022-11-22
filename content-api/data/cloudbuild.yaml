@@ -1,0 +1,17 @@
+steps:
+  - id: Install Python requirements
+    name: python
+    entrypoint: pip
+    args: ["install", "-r", "requirements.txt", "--user"]
+  - id: Seed initial approver email
+    name: python
+    entrypoint: python
+    args: ["seed_test_approver.py", "${_APPROVER_EMAIL}"]
+    env:
+    - "GOOGLE_CLOUD_PROJECT=$_FIREBASE_PROJECT"
+  - id: Seed test user data
+    name: python
+    entrypoint: python
+    args: ["seed_database.py"]
+    env:
+    - "GOOGLE_CLOUD_PROJECT=$_FIREBASE_PROJECT"
