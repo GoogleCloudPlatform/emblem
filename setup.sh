@@ -235,7 +235,8 @@ if [[ -z "$SKIP_DEPLOY" ]]; then
         --service-account "website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
         --update-env-vars "EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions" \
         --update-env-vars "EMBLEM_API_URL=${STAGING_API_URL}" \
-        --update-env-vars "OTEL_TRACES_EXPORTER=gcp" \
+        --update-env-vars "OTEL_TRACES_EXPORTER=gcp_trace" \
+        --update-env-vars "OTEL_METRICS_EXPORTER=none" \
         --project "${STAGE_PROJECT}" \
         --region "${REGION}" \
         --tag "latest""
@@ -259,7 +260,8 @@ if [[ -z "$SKIP_DEPLOY" ]]; then
             --service-account "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
             --update-env-vars "EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions" \
             --update-env-vars "EMBLEM_API_URL=${PROD_API_URL}" \
-            --update-env-vars "OTEL_TRACES_EXPORTER=gcp" \
+            --update-env-vars "OTEL_TRACES_EXPORTER=gcp_trace" \
+            --update-env-vars "OTEL_METRICS_EXPORTER=none" \
             --project "${PROD_PROJECT}" \
             --region "${REGION}" \
             --tag "latest""
