@@ -36,4 +36,5 @@ variable "setup_cd_system" {
 variable "e2e_api_url" {
   type        = string
   description = "URL to the API instance to use when running end-to-end website tests."
+  default     = ""
 }
