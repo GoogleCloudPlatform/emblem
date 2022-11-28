@@ -21,6 +21,7 @@
 #   OPS_PROJECT             GCP Project ID of the operations project
 #   REPO_OWNER              GitHub user/organization name
 #   REPO_NAME               GitHub repo name
+#   E2E_API_URL             API URL to use for E2E tests
 
 set -e
 
@@ -37,6 +38,9 @@ elif [[ -z "${STAGE_PROJECT}" ]]; then
     exit 1
 elif [[ -z "${OPS_PROJECT}" ]]; then
     echo "Please set the $(tput bold)OPS_PROJECT$(tput sgr0) variable"
+    exit 1
+elif [[ -z "${E2E_API_URL}" ]]; then
+    echo "Please set the $(tput bold)E2E_API_URL$(tput sgr0) variable"
     exit 1
 fi
 
@@ -67,6 +71,7 @@ cat >> "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 setup_cd_system="true"
 repo_owner="${REPO_OWNER}"
 repo_name="${REPO_NAME}"
+e2e_api_url="${E2E_API_URL}"
 EOF
 terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
 
@@ -76,6 +81,7 @@ cat >> "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 setup_cd_system="true"
 repo_owner="${REPO_OWNER}"
 repo_name="${REPO_NAME}"
+e2e_api_url="${E2E_API_URL}"
 EOF
 terraform -chdir=${STAGE_ENVIRONMENT_DIR} apply --auto-approve
 
@@ -87,6 +93,7 @@ cat >> "${PROD_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 setup_cd_system="true"
 repo_owner="${REPO_OWNER}"
 repo_name="${REPO_NAME}"
+e2e_api_url="${E2E_API_URL}"
 EOF
     terraform -chdir=${PROD_ENVIRONMENT_DIR} apply --auto-approve
 fi

@@ -272,6 +272,7 @@ fi # skip deploy
 if [[ -z "$SKIP_TRIGGERS" ]]; then
     echo
 
+    export E2E_API_URL="$STAGING_API_URL"
     sh ./scripts/configure_delivery.sh
     
 fi # skip triggers
