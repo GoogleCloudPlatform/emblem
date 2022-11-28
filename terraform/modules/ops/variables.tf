@@ -32,3 +32,8 @@ variable "setup_cd_system" {
   default     = false
   description = "Create deployment triggers. Enable only if Cloud Build has been granted GitHub access."
 }
+
+variable "e2e_api_url" {
+  type        = string
+  description = "URL to the API instance to use when running end-to-end website tests."
+}

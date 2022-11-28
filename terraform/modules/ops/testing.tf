@@ -61,9 +61,10 @@ resource "google_cloudbuild_trigger" "web_e2e_test" {
     "ops/web-e2e.cloudbuild.yaml"
   ]
   substitutions = {
-    _DIR        = "website"
-    _EMBLEM_URL = "http://localhost:8080"
-    _PROJECT    = data.google_project.target_project.project_id
+    _DIR            = "website"
+    _EMBLEM_URL     = "http://localhost:8080"
+    _EMBLEM_API_URL = var.e2e_api_url
+    _PROJECT        = data.google_project.target_project.project_id
   }
   github {
     owner = var.repo_owner
