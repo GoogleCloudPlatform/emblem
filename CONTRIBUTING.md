@@ -1,6 +1,11 @@
-# How to Contribute
+# Contributing guide
 
-## Contributor License Agreement
+Thank you for your interest in contributing to Emblem! Please review this guide 
+for important information before submitting issues or pull requests.
+
+## Before you begin
+
+### Sign our Contributor License Agreement
 
 Contributions to this project must be accompanied by a Contributor License
 Agreement (CLA). You (or your employer) retain the copyright to your
@@ -13,11 +18,11 @@ You generally only need to submit a CLA once, so if you've already submitted one
 (even if it was for a different project), you probably don't need to do it
 again.
 
-## Community Guidelines
+### Review our Community Guidelines
 
 This project follows
-[Google's Open Source Community Guidelines](https://opensource.google/conduct/) as well as the included [Code of Conduct](/CODE_OF_CONDUCT.md).
-
+[Google's Open Source Community Guidelines](https://opensource.google/conduct/) 
+as well as the included [Code of Conduct](/CODE_OF_CONDUCT.md).
 ## Proposing Changes
 
 We represent business requirements as "User Journeys". Each user journey may represent a new use case for the application, an operational requirement for the architecture, or a demo requirement for how this application is used as a learning resource.
