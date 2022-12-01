@@ -29,7 +29,7 @@ Go deeper into project details in the [documentation](./docs) or read through th
 ## Project Status
 
 * **Release Stage:** Alpha
-* **Self-service / Independent Setup:** Follow the instructions to set up Emblem by reading the [setup quickstart](./docs/tutorials/setup-quickstart.md), or by launching the [Interactive Walkthrough](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2FGoogleCloudPlatform%2Femblem&cloudshell_tutorial=docs%2Ftutorials%2Fsetup-walkthrough.md) on Cloud Shell.
+* **Self-service / Independent Setup:** Follow the instructions to set up Emblem in the [Getting Started](#getting-started) section below. 
 
 ## Contributing
 
