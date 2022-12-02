@@ -66,7 +66,7 @@ resource "google_cloudbuild_trigger" "web_deploy" {
   approval_config {
     approval_required = var.require_deploy_approval
   }
-  filter = "_IMAGE_NAME.matches('website')"
+  filter   = "_IMAGE_NAME.matches('website')"
   filename = "ops/deploy.cloudbuild.yaml"
   substitutions = {
     _BODY           = "$(body)"
@@ -95,7 +95,7 @@ resource "google_cloudbuild_trigger" "api_deploy" {
   approval_config {
     approval_required = var.require_deploy_approval
   }
-  filter = "_IMAGE_NAME.matches('content-api')"
+  filter   = "_IMAGE_NAME.matches('content-api')"
   filename = "ops/deploy.cloudbuild.yaml"
   substitutions = {
     _BODY           = "$(body)"
@@ -126,7 +126,7 @@ resource "google_cloudbuild_trigger" "web_canary" {
   approval_config {
     approval_required = false
   }
-  filter = format("_SERVICE.matches('%s')", "website")
+  filter   = format("_SERVICE.matches('%s')", "website")
   filename = "ops/canary.cloudbuild.yaml"
   substitutions = {
     _BODY           = "$(body)"
@@ -156,7 +156,7 @@ resource "google_cloudbuild_trigger" "api_canary" {
   approval_config {
     approval_required = false
   }
-  filter = format("_SERVICE.matches('%s')", "content-api")
+  filter   = format("_SERVICE.matches('%s')", "content-api")
   filename = "ops/canary.cloudbuild.yaml"
   substitutions = {
     _BODY           = "$(body)"
