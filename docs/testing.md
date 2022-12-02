@@ -4,9 +4,7 @@ These tests run automatically once you have set up a working instance of Emblem.
 
 ## Content API
 
-Content API unit tests run automatically under two circumstances:
-* [nightly against `main`](/terraform/ops/triggers/cloud_build_triggers.tf#:~:text=api_unit_tests_build_trigger)
-* [on pull requests to `main`](/terraform/ops/triggers/cloud_build_triggers.tf#:~:text=api_push_to_main_build_trigger)
+Content API unit tests run automatically [on pull requests to `main`](/terraform/modules/ops/testing.tf#:~:text=resource%20%22google_cloudbuild_trigger%22%20%22api_unit_tests%22).
 
 ## Pipelines / Delivery System
   
@@ -22,11 +20,12 @@ The [Website](/docs/website.md) component is covered by automatic **End-to-End (
   
 These tests run the website in a [Docker container](/ops/e2e-runner), and check that the website's routes load without any errors.
 
-These tests run automatically under two circumstances:
-* [nightly against `main`](/terraform/ops/testing.tf#:~:text=e2e_nightly_tests)
-* [when the `main` branch is updated](/terraform/modules/ops/build.tf#:~:text=e2e_testing_build_runner).
+> **Note:** this Docker container is rebuilt [nightly](/terraform/modules/ops/testing.tf#:~:text=resource%20%22google_cloudbuild_trigger%22%20%22e2e_nightly_tests%22) _and_ [on pushes/merges to `main`](/terraform/modules/ops/testing.tf#:~:text=resource%20%22google_cloudbuild_trigger%22%20%22e2e_testing_build_runner%22).
 
-> **Note:** we are working on adding a pull-request runner as well
+These tests run automatically [on pull requests to `main`](/terraform/modules/ops/testing.tf#:~:text=resource%20%22google_cloudbuild_trigger%22%20%22web_e2e_test%22).
+
+
+> **Note:** we are working on adding a nightly test runner as well
 
 # Manually Running Tests
 
