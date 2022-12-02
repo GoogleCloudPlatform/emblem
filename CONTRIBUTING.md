@@ -35,7 +35,12 @@ contributor and user success.
 
 ## How to contribute
 
-### Reporting issues
+### Submitting GitHub issues
+
+We welcome all contributors to open GitHub issues in the repository for bugs, 
+feature requests, and issues.  Please use the 
+[provided issue templates](https://github.com/GoogleCloudPlatform/emblem/issues/new/choose)
+when submitting issues and include log files and error output when applicable.  
 
 ### Proposing changes
 
@@ -58,6 +63,7 @@ Contributors can browse issues labeled
 ## Pull requests
 
 ### Submitting a PR
+
 
 ### Code Reviews
 
