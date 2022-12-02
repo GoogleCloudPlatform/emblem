@@ -20,8 +20,7 @@ again.
 
 ### Review our Community Guidelines
 
-This project follows
-[Google's Open Source Community Guidelines](https://opensource.google/conduct/) 
+This project follows [Google's Open Source Community Guidelines](https://opensource.google/conduct/) 
 as well as the included [Code of Conduct](/CODE_OF_CONDUCT.md).
 
 ## How to contribute
@@ -39,6 +38,12 @@ For more incremental changes, please open a feature request. Referencing an
 
 The first implementation step for any API change is to send PR to modify
 the [OpenAPI description](content-api/openapi.yaml).
+
+### Where to begin
+
+Contributors can browse issues labeled 
+[Help Wanted](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22).  Issues labeled 
+[Good First Issues](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22good+first+issue%22) are recommended for new contributors.
 
 ## Code Reviews
 
