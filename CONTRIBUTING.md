@@ -23,7 +23,12 @@ again.
 This project follows
 [Google's Open Source Community Guidelines](https://opensource.google/conduct/) 
 as well as the included [Code of Conduct](/CODE_OF_CONDUCT.md).
-## Proposing Changes
+
+## How to contribute
+
+### Reporting issues
+
+### Proposing changes
 
 We represent business requirements as "User Journeys". Each user journey may represent a new use case for the application, an operational requirement for the architecture, or a demo requirement for how this application is used as a learning resource.
 
