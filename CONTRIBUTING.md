@@ -3,6 +3,22 @@
 Thank you for your interest in contributing to Emblem! Please review this guide 
 for important information before submitting issues or pull requests.
 
+- [Contributing guide](#contributing-guide)
+  - [Before you begin](#before-you-begin)
+    - [Sign our Contributor License Agreement](#sign-our-contributor-license-agreement)
+    - [Review our Community Guidelines](#review-our-community-guidelines)
+  - [Design and project philosophy](#design-and-project-philosophy)
+    - [Decision records for significant changes](#decision-records-for-significant-changes)
+    - [Positive and helpful feedback](#positive-and-helpful-feedback)
+    - [Toil automation](#toil-automation)
+  - [Where to begin](#where-to-begin)
+  - [Submitting GitHub issues](#submitting-github-issues)
+  - [Pull requests](#pull-requests)
+    - [Submitting a PR](#submitting-a-pr)
+    - [Code Reviews](#code-reviews)
+    - [User journeys](#user-journeys)
+    - [Github workflows automation](#github-workflows-automation)
+
 ## Before you begin
 
 ### Sign our Contributor License Agreement
