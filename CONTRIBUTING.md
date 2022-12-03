@@ -62,6 +62,11 @@ when submitting issues and include log files and error output when applicable.
 
 ### Submitting a PR
 
+When submitting a PR, please provide a summary in the PR description of what 
+changes are being made and the expected impact. Be sure to include any GitHub 
+issues associated with the request and any other context that will be helpful
+for review.  
+
 ### Code Reviews
 
 All submissions, including submissions by project members, require review. We
