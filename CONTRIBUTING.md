@@ -33,37 +33,22 @@ contributor and user success.
 * Warnings & errors should provide context, suggest next steps, and provide direct access to more details. (For example, link to build logs.)
 * When a warning or error has a generally agreed fix or next step, point the way or suggest the fix. (For example, linting checks on a PR should propose the fixes to correct the code formatting.)
 
-## How to contribute
+## Where to begin
 
-### Submitting GitHub issues
+Contributors can browse issues labeled 
+[Help Wanted](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22).  Issues labeled 
+[Good First Issues](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22good+first+issue%22) are recommended for new contributors.
+
+## Submitting GitHub issues
 
 We welcome all contributors to open GitHub issues in the repository for bugs, 
 feature requests, and issues.  Please use the 
 [provided issue templates](https://github.com/GoogleCloudPlatform/emblem/issues/new/choose)
 when submitting issues and include log files and error output when applicable.  
 
-### Proposing changes
-
-We represent business requirements as "User Journeys". Each user journey may represent a new use case for the application, an operational requirement for the architecture, or a demo requirement for how this application is used as a learning resource.
-
-Journeys should be created via the [User Journey Proposal](https://github.com/GoogleCloudPlatform/emblem/issues/new?assignees=&labels=status%3A+investigating%2C+priority%3A+p2%2C+type%3A+journey&template=user_journey.md&title=%28Journey%29+UJ1%3A+Journey+Title) template.
-
-For more incremental changes, please open a feature request. Referencing an
-[existing User Journey](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+label%3A%22type%3A+journey%22+) is helpful in considering how it fits project scope.
-
-The first implementation step for any API change is to send PR to modify
-the [OpenAPI description](content-api/openapi.yaml).
-
-### Where to begin
-
-Contributors can browse issues labeled 
-[Help Wanted](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22).  Issues labeled 
-[Good First Issues](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22good+first+issue%22) are recommended for new contributors.
-
-## Pull requests
+## Pull requests 
 
 ### Submitting a PR
-
 
 ### Code Reviews
 
@@ -75,6 +60,24 @@ information on using pull requests.
 We recommend
 [making suggestions to a Pull Request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/reviewing-changes-in-pull-requests/incorporating-feedback-in-your-pull-request) 
 to collaboratively fix problems.
+
+### User journeys
+
+We represent business requirements as "User Journeys". Each user journey may 
+represent a new use case for the application, an operational requirement for 
+the architecture, or a demo requirement for how this application is used as a 
+learning resource.
+
+Journeys should be created via the 
+[User Journey Proposal](https://github.com/GoogleCloudPlatform/emblem/issues/new?assignees=&labels=status%3A+investigating%2C+priority%3A+p2%2C+type%3A+journey&template=user_journey.md&title=%28Journey%29+UJ1%3A+Journey+Title) 
+template.
+
+For more incremental changes, please open a feature request. Referencing an
+[existing User Journey](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+label%3A%22type%3A+journey%22+) 
+is helpful in considering how it fits project scope.
+
+The first implementation step for any API change is to send PR to modify the 
+OpenAPI description](content-api/openapi.yaml).
 
 ### Github workflows automation
 
