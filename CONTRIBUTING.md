@@ -1,7 +1,7 @@
 # Contributing guide
 
 Thank you for your interest in contributing to Emblem! Please review this guide 
-for important information before submitting issues or pull requests.
+for important information before contributing to the project.
 
 - [Contributing guide](#contributing-guide)
   - [Before you begin](#before-you-begin)
