@@ -23,7 +23,19 @@ again.
 This project follows [Google's Open Source Community Guidelines](https://opensource.google/conduct/) 
 as well as the included [Code of Conduct](/CODE_OF_CONDUCT.md).
 
-## Design and project philosophy
+## Design and project philosophy 
+
+### Decision records for significant changes
+
+Significant changes to the architecture, developer experience, or dependencies
+involve making critical decisions about future design needs.
+
+As the project evolves, we capture these key decisions in [architectural decision 
+records](docs/decisions). These decision records facilitate future engineering 
+and provide developers with valuable historical context around some of the major
+technical components of Emblem.
+
+See [`docs/decisions`](docs/decisions) for more information. 
 
 ### Positive and helpful feedback
 
@@ -93,15 +105,6 @@ applicable:
   have the `do not merge` label, or a label containing the word "`needs`".
 * *[auto-label](/.github/workflows/auto-label.yml)*: Adds PR labels based on
   PR title and changed files
-
-## Decision Records for Significant Changes
-
-Significant changes to the architecture, developer experience, or dependencies
-involve making critical decisions about future design needs.
-
-As the project evolves, we want to capture the context of these key decisions to
-facilitate future engineering. Please [add a decision record](docs/decisions)
-to your pull request.
 
 ## Automate Toil
 
