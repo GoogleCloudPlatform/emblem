@@ -1,8 +1,5 @@
 # Build & Store Container Images
 
-# TODO: Terraform will always think these resources will change due to 
-# the filename parameter, which is not required, but still populated by
-# the API.  Investigate work-around.
 resource "google_cloudbuild_trigger" "testing_web_e2e_build_container_trigger" {
   project     = var.project_id
   count       = 0
@@ -18,10 +15,7 @@ resource "google_cloudbuild_trigger" "testing_web_e2e_build_container_trigger" {
     repo_type = "GITHUB"
   }
 
-  git_file_source {
-    path      = "ops/e2e-runner-build.cloudbuild.yaml"
-    repo_type = "GITHUB"
-  }
+  filename = "ops/e2e-runner-build.cloudbuild.yaml"
 
   # These properties are detected as changed if not initialized.
   # Alternately, add a lifecycle rule to ignore_changes.
