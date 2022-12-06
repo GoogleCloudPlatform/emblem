@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -eu
 ### Bootstrap
 # Services
 # needed for terraform to managed IAM resources
@@ -11,6 +11,9 @@ gcloud services enable serviceusage.googleapis.com --project $OPS_PROJECT
 
 # for some reason, needed in the ops project to manage app engine in app projects
 gcloud services enable appengine.googleapis.com --project $OPS_PROJECT
+
+# needed to run Cloud Build in setup
+gcloud services enable cloudbuild.googleapis.com --project $OPS_PROJECT
 
 # Create terraform service account
 
