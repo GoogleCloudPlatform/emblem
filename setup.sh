@@ -62,29 +62,22 @@ echo "Setting up a new instance of Emblem. There may be a few prompts to guide t
 #####################
 # Initial Ops Setup #
 #####################
+export TERRAFORM_SERVICE_ACCOUNT=emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com
+STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
 
-if [[ -z "$SKIP_TERRAFORM" ]]; then
-    echo
-    echo "$(tput bold)Setting up your Cloud resources with Terraform...$(tput sgr0)"
-    echo
+if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
+    echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
+    gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
+    gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
+fi
 
-    STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
-    
-    # Create remote state bucket if it doesn't exist
-    if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
-        echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
-        gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
-        gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
-    fi
-    
-    # Ops Project
-    OPS_ENVIRONMENT_DIR=terraform/environments/ops
-    cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
-project_id = "${OPS_PROJECT}"
+OPS_ENVIRONMENT_DIR=terraform/environments/ops
+cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+    project_id = "${OPS_PROJECT}"
 EOF
-    terraform -chdir=${OPS_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=ops"
-    terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
-fi # $SKIP_TERRAFORM
+
+gcloud builds submit ./terraform --project="$OPS_PROJECT" --config=./ops/terraform.cloudbuild.yaml \
+--substitutions=_ENV="ops",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT
 
 ####################
 # Build Containers #
