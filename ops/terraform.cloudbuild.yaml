@@ -1,0 +1,79 @@
+# Copyright 2019 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+steps:
+- id: 'branch name'
+  name: 'alpine'
+  entrypoint: 'sh'  
+  env:
+    - 'GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=$_TF_SERVICE_ACCT'
+  args: 
+  - '-c'
+  - | 
+      echo "***********************"
+      echo "Setting up Emblem $_ENV infrastructure"
+      echo "***********************"
+- id: 'tf init'
+  name: 'hashicorp/terraform:1.0.0'
+  entrypoint: 'sh'
+  env:
+    - 'GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=$_TF_SERVICE_ACCT'
+  args: 
+  - '-c'
+  - |
+      if [ -d "environments/$_ENV/" ]; then
+        cd environments/$_ENV
+        terraform init -backend-config="bucket=${_STATE_GCS_BUCKET_NAME}" -backend-config="prefix=$_ENV"
+      else
+        echo "*************** TERRAFORM INIT ******************"
+        echo "******* Environment $_ENV not found. ********"
+        echo "*************************************************"
+        exit 1
+      fi 
+ 
+- id: 'tf plan'
+  name: 'hashicorp/terraform:1.0.0'
+  entrypoint: 'sh'
+  env:
+    - 'GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=$_TF_SERVICE_ACCT'
+  args: 
+  - '-c'
+  - | 
+      if [ -d "environments/$_ENV/" ]; then
+        cd environments/$_ENV
+        terraform plan
+      else
+        echo "*************** TERRAFORM PLAN ******************"
+        echo "******* Environment $_ENV not found. ********"
+        echo "*************************************************"
+        exit 1
+      fi 
+
+- id: 'tf apply'
+  name: 'hashicorp/terraform:1.0.0'
+  entrypoint: 'sh'
+  env:
+    - 'GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=$_TF_SERVICE_ACCT'
+  args: 
+  - '-c'
+  - | 
+      if [ -d "environments/$_ENV/" ]; then
+        cd environments/$_ENV    
+        terraform apply -auto-approve
+      else
+        echo "***************************** SKIPPING APPLYING *******************************"
+        echo "******* Environment $_ENV not found. ********"
+        echo "*******************************************************************************"
+      fi
