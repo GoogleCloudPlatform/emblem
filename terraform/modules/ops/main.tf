@@ -113,32 +113,3 @@ resource "google_secret_manager_secret" "oauth_client_secret" {
   #   https://github.com/hashicorp/terraform-provider-google/issues/10682
   depends_on = [google_project_service.emblem_ops_services]
 }
-
-######################
-# Nightly Operations #
-######################
-
-# This topic is published to once a day via Cloud Scheduler
-# Used by:
-# - google_cloudbuild_trigger.e2e_nightly_tests
-resource "google_pubsub_topic" "nightly" {
-  name    = "nightly"
-  project = var.project_id
-}
-
-resource "google_cloud_scheduler_job" "nightly_schedule" {
-  project     = var.project_id
-  name        = "nightly"
-  count       = 0
-  description = "This job runs nightly operations."
-  region      = var.region
-  schedule    = "0 2 * * *"
-  pubsub_target {
-    topic_name = google_pubsub_topic.nightly.id
-    data       = base64encode("not empty")
-  }
-  depends_on = [
-    google_pubsub_topic.nightly,
-    time_sleep.wait_for_artifactregistry
-  ]
-}

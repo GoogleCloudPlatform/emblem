@@ -19,3 +19,18 @@ module "emblem_staging" {
   gcr_pubsub_format       = true
   require_deploy_approval = false
 }
+
+// Set up Website E2E tests against a staging environment
+module "emblem_staging_website_e2e_tests" {
+  source          = "../../modules/website-e2e-test"
+  project_id      = var.project_id
+  region          = var.region
+  repo_owner      = var.repo_owner
+  repo_name       = var.repo_name
+
+  // Temporary variables; used until Website
+  // E2E tests are integrated with setup.sh
+  // TODO: adjust these variables once integration is complete.
+  count           = 0
+  content_api_url = ""
+}
