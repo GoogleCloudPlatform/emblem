@@ -2,7 +2,16 @@
 
 ### Bootstrap
 # Services
+# needed for terraform to managed IAM resources
 gcloud services enable iamcredentials.googleapis.com --project $OPS_PROJECT
+
+#needed for terraform to manage resources
+gcloud services enable cloudresourcemanager.googleapis.com --project $OPS_PROJECT
+gcloud services enable serviceusage.googleapis.com --project $OPS_PROJECT
+
+# for some reason, needed in the ops project to manage app engine in app projects
+gcloud services enable appengine.googleapis.com --project $OPS_PROJECT
+
 # Create terraform service account
 
 gcloud iam service-accounts create emblem-terraformer \
@@ -16,8 +25,8 @@ OPS_PROJECT_NUMBER=$(gcloud projects list --format='value(PROJECT_NUMBER)' --fil
 gcloud iam service-accounts add-iam-policy-binding --project=$OPS_PROJECT \
     emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
     --member="serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" \
-    --role="roles/editor"
- 
+    --role="roles/iam.serviceAccountTokenCreator"
+
 # Apply IAM permissions for terraformer to all projects
 # Editor and IAM Security admin and storage admin for OPS
 gcloud projects add-iam-policy-binding $OPS_PROJECT \
@@ -31,12 +40,20 @@ gcloud projects add-iam-policy-binding $OPS_PROJECT \
 gcloud projects add-iam-policy-binding $OPS_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
     --role="roles/storage.admin"
-    
+
 # editor for STAGE and PROD
 gcloud projects add-iam-policy-binding $STAGE_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
     --role="roles/editor"
 
+gcloud projects add-iam-policy-binding $STAGE_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/iam.securityAdmin"
+
 gcloud projects add-iam-policy-binding $PROD_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
     --role="roles/editor"
+
+gcloud projects add-iam-policy-binding $PROD_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/iam.securityAdmin"
