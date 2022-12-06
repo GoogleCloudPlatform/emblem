@@ -65,13 +65,16 @@ echo "Setting up a new instance of Emblem. There may be a few prompts to guide t
 # Initial Ops Setup #
 #####################
 export TERRAFORM_SERVICE_ACCOUNT=emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com
-STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
+export STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
 
 if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
     echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
     gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
     gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
 fi
+
+# Wait a little while for storage permissions to propagate to the terraform service account.
+sleep 60
 
 OPS_ENVIRONMENT_DIR=terraform/environments/ops
 cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
@@ -131,7 +134,7 @@ EOF
 
 gcloud builds submit ./terraform --project="$OPS_PROJECT" --config=./ops/terraform.cloudbuild.yaml \
 --substitutions=_ENV="prod",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT
-exit 1
+
 ########################
 # Seed Default Content #
 ########################
