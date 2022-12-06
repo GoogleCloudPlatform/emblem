@@ -10,7 +10,7 @@ resource "google_service_account" "test_user" {
   display_name = "Test Account [User]"
   description  = "Mock user account for unit and integration tests."
   depends_on = [
-    google_project_service.emblem_ops_beta_services
+    time_sleep.wait_for_iam_service
   ]
 }
 
@@ -20,7 +20,7 @@ resource "google_service_account" "test_approver" {
   display_name = "Test Account [Approver]"
   description  = "Mock approver account for unit and integration tests."
   depends_on = [
-    google_project_service.emblem_ops_beta_services
+    time_sleep.wait_for_iam_service
   ]
 }
 
