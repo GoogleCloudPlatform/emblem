@@ -111,17 +111,17 @@ fi # skip build
 # Application Setup #
 #####################
 
-if [[ -z "$SKIP_TERRAFORM" ]]; then
-    # Staging Project
-    STAGE_ENVIRONMENT_DIR=terraform/environments/staging
-    cat > "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+STAGE_ENVIRONMENT_DIR=terraform/environments/staging
+
+cat > "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 project_id = "${STAGE_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
-    terraform -chdir=${STAGE_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=stage"
-    terraform -chdir=${STAGE_ENVIRONMENT_DIR} apply --auto-approve
 
-    # Prod Project
+gcloud builds submit ./terraform --project="$OPS_PROJECT" --config=./ops/terraform.cloudbuild.yaml \
+--substitutions=_ENV="staging",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT
+
+if [[ -z "$SKIP_TERRAFORM" ]]; then
     # Only deploy to separate project for multi-project setups
     if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
         PROD_ENVIRONMENT_DIR=terraform/environments/prod
