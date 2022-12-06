@@ -50,6 +50,10 @@ gcloud projects add-iam-policy-binding $STAGE_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
     --role="roles/iam.securityAdmin"
 
+gcloud projects add-iam-policy-binding $STAGE_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/firebase.managementServiceAgent"
+
 gcloud projects add-iam-policy-binding $PROD_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
     --role="roles/editor"
@@ -57,3 +61,7 @@ gcloud projects add-iam-policy-binding $PROD_PROJECT \
 gcloud projects add-iam-policy-binding $PROD_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
     --role="roles/iam.securityAdmin"
+
+gcloud projects add-iam-policy-binding $PROD_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/firebase.managementServiceAgent"
