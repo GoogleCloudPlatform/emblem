@@ -59,14 +59,14 @@ fi
 
 echo "Setting up a new instance of Emblem. There may be a few prompts to guide the process."
 
-./scripts/bootstrap.sh
+# ./scripts/bootstrap.sh
 
 #####################
 # Initial Ops Setup #
 #####################
 export TERRAFORM_SERVICE_ACCOUNT=emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com
 export STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
-
+# TODO: move to bootstrap
 if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
     echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
     gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
@@ -74,7 +74,8 @@ if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
 fi
 
 # Wait a little while for storage permissions to propagate to the terraform service account.
-sleep 60
+# TODO: Find more elegant way of checking for permissions.
+# sleep 60
 
 OPS_ENVIRONMENT_DIR=terraform/environments/ops
 cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
