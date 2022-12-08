@@ -26,20 +26,31 @@ gcloud iam service-accounts add-iam-policy-binding --project=$OPS_PROJECT \
     --member="serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" \
     --role="roles/iam.serviceAccountTokenCreator"
 
-# Apply IAM permissions for Terraform service account
-
-# Ops pernmissions (editor, securityAdmin, and storage.admin)
-gcloud projects add-iam-policy-binding $OPS_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/editor"
+# Ops permissions
 
 gcloud projects add-iam-policy-binding $OPS_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/iam.securityAdmin"
+    --role="roles/cloudbuild.builds.editor"
 
 gcloud projects add-iam-policy-binding $OPS_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/storage.admin"
+    --role="roles/secretmanager.admin" 
+
+gcloud projects add-iam-policy-binding $OPS_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/pubsub.editor" 
+
+gcloud projects add-iam-policy-binding $OPS_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/iam.serviceAccountAdmin" 
+
+gcloud projects add-iam-policy-binding $OPS_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/artifactregistry.admin"
+
+ gcloud projects add-iam-policy-binding $OPS_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/resourcemanager.projectIamAdmin"
 
 # App permissions for stage and prod (editor, securityAdmin, firebase.managementServiceAgent)
 gcloud projects add-iam-policy-binding $STAGE_PROJECT \
