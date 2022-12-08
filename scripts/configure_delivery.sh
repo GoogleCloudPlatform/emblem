@@ -29,34 +29,34 @@ echo "$(tput bold)Setting up Cloud Build triggers...$(tput sgr0)"
 echo
 
 # Check input env variables
-if [ -z "${PROD_PROJECT}" ]; then
+if [[ -z "${PROD_PROJECT}" ]]; then
     echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
     exit 1
-elif [ -z "${STAGE_PROJECT}" ]; then
+elif [[ -z "${STAGE_PROJECT}" ]]; then
     echo "Please set the $(tput bold)STAGE_PROJECT$(tput sgr0) variable"
     exit 1
-elif [ -z "${OPS_PROJECT}" ]; then
+elif [[ -z "${OPS_PROJECT}" ]]; then
     echo "Please set the $(tput bold)OPS_PROJECT$(tput sgr0) variable"
     exit 1
 fi
 
 REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?project=${OPS_PROJECT}"
 echo "Connect your repos: ${REPO_CONNECT_URL}"
-read -rp "Once your forked emblem repo is connected, please continue by typing any key." EMPTY_VAR
+read -rp "Once your forked emblem repo is connected, please continue by typing any key."
 
-if [ -z "${REPO_NAME}" ]
+if [[ -z "${REPO_NAME}" || -z "${REPO_NAME}" ]]
 then
     continue=1
 else
     continue=0
 fi
 
-while [ ${continue} -gt 0 ]; do
+while [[ ${continue} -gt 0 ]]; do
     read -rp "Please input the GitHub repository owner: " REPO_OWNER
     read -rp "Please input the GitHub repository name: " REPO_NAME
     read -rp "Integrate Cloud Build with the repository $(tput bold)https://github.com/${REPO_OWNER}/${REPO_NAME}$(tput sgr0)? (y/n) " yesno
 
-    if [ "$yesno" = "y" ]; then
+    if [[ ${yesno} == "y" ]]; then
         continue=0
     fi
 done

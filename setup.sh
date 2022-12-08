@@ -46,13 +46,13 @@ USE_DEFAULT_ACCOUNT=${USE_DEFAULT_ACCOUNT:-}
 export REGION=${REGION:=us-central1}
 
 # Check env variables are not empty strings
-if [ -z "${PROD_PROJECT}" ]; then
+if [[ -z "${PROD_PROJECT}" ]]; then
     echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
     exit 1
-elif [ -z "${STAGE_PROJECT}" ]; then
+elif [[ -z "${STAGE_PROJECT}" ]]; then
     echo "Please set the $(tput bold)STAGE_PROJECT$(tput sgr0) variable"
     exit 1
-elif [ -z "${OPS_PROJECT}" ]; then
+elif [[ -z "${OPS_PROJECT}" ]]; then
     echo "Please set the $(tput bold)OPS_PROJECT$(tput sgr0) variable"
     exit 1
 fi
@@ -63,7 +63,7 @@ echo "Setting up a new instance of Emblem. There may be a few prompts to guide t
 # Initial Ops Setup #
 #####################
 
-if [ -z "$SKIP_TERRAFORM" ]; then
+if [[ -z "$SKIP_TERRAFORM" ]]; then
     echo
     echo "$(tput bold)Setting up your Cloud resources with Terraform...$(tput sgr0)"
     echo
@@ -93,7 +93,7 @@ fi # $SKIP_TERRAFORM
 SETUP_IMAGE_TAG="setup"
 E2E_RUNNER_TAG="latest"
 
-if [ -z "$SKIP_BUILD" ]; then
+if [[ -z "$SKIP_BUILD" ]]; then
 
 echo
 echo "$(tput bold)Building container images for testing and application hosting...$(tput sgr0)"
@@ -118,7 +118,7 @@ fi # skip build
 # Application Setup #
 #####################
 
-if [ -z "$SKIP_TERRAFORM" ]; then
+if [[ -z "$SKIP_TERRAFORM" ]]; then
     # Staging Project
     STAGE_ENVIRONMENT_DIR=terraform/environments/staging
     cat > "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
@@ -145,13 +145,13 @@ fi # skip terraform
 ########################
 # Seed Default Content #
 ########################
-if [ -z "$SKIP_SEEDING" ]; then
+if [[ -z "$SKIP_SEEDING" ]]; then
     echo
     echo "$(tput bold)Seeding default content...$(tput sgr0)"
     echo
 
     account=$(gcloud config get-value account 2> /dev/null)
-    if [ -z "$USE_DEFAULT_ACCOUNT" ]; then
+    if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
         read -rp "Please input an email address for an approver. This email will be added to the Firestore database as an 'approver' and will be able to perform privileged API operations from the website frontend: [${account}]: " approver
     fi
     approver="${approver:-$account}"
@@ -185,14 +185,14 @@ check_for_build_then_run () {
         log_url=$(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(logUrl)')
         echo "Build $build_id still working."
         echo "Logs are available at [ $log_url ]."
-        while [ $(gcloud builds describe $build_id --project=$OPS_PROJECT  --format='value(status)') = "WORKING" ]
+        while [ $(gcloud builds describe $build_id --project=$OPS_PROJECT  --format='value(status)') == "WORKING" ]
         do
           echo "Build $build_id still working..."
           sleep 10
         done
     fi
     # Return error and build log for failures. 
-    if [ $(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(status)') = "FAILURE" ]; then
+    if [ $(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(status)') == "FAILURE" ]; then
         build_describe=$(gcloud builds describe $build_id --project=$OPS_PROJECT --format='csv(failureInfo.detail,logUrl)[no-heading]')
         fail_info=$(echo $build_describe | awk -F',' '{gsub(/""/,"\"");print $1}')
         log_url=$(echo $build_describe | awk -F',' '{print $2}')
@@ -201,7 +201,7 @@ check_for_build_then_run () {
         echo "Please re-run setup."
         exit 2
     # Deploy if build is successful.
-    elif [ $(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(status)') = "SUCCESS" ]; then
+    elif [ $(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(status)') == "SUCCESS" ]; then
         $run_command
     # Return build log for all other statuses.
     else
@@ -213,7 +213,7 @@ check_for_build_then_run () {
     fi;
 }
 
-if [ -z "$SKIP_DEPLOY" ]; then
+if [[ -z "$SKIP_DEPLOY" ]]; then
 
     echo
     echo "$(tput bold)Deploying Cloud Run services...$(tput sgr0)"
@@ -269,7 +269,7 @@ fi # skip deploy
 # Setup CI/CD #
 ###############
 
-if [ -z "$SKIP_TRIGGERS" ]; then
+if [[ -z "$SKIP_TRIGGERS" ]]; then
     echo
 
     sh ./scripts/configure_delivery.sh
@@ -290,11 +290,11 @@ fi
 # User Authentication #
 #######################
 
-if [ -z "$SKIP_AUTH" ]; then
+if [[ -z "$SKIP_AUTH" ]]; then
     echo
     read -rp "Would you like to configure $(tput bold)$(tput setaf 3)end-user authentication?$(tput sgr0) (y/n) " auth_yesno
 
-    if [ "$auth_yesno" = "y" ]; then
+    if [[ ${auth_yesno} == "y" ]]; then
         sh ./scripts/configure_auth.sh
     else
         echo "Skipping end-user authentication configuration. You can configure it later by running:"
