@@ -1,6 +1,5 @@
 #!/bin/bash
 set -eu
-# TODO: reduce Editor role to only roles needed to deploy Terraform
 # TODO: move the state bucket creation from setup to bootstrap
 
 OPS_PROJECT_NUMBER=$(gcloud projects list --format='value(PROJECT_NUMBER)' --filter=PROJECT_ID=$OPS_PROJECT)
@@ -52,14 +51,23 @@ gcloud projects add-iam-policy-binding $OPS_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
     --role="roles/resourcemanager.projectIamAdmin"
 
-# App permissions for stage and prod (editor, securityAdmin, firebase.managementServiceAgent)
-gcloud projects add-iam-policy-binding $STAGE_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/editor"
+# App permissions for stage and prod
 
 gcloud projects add-iam-policy-binding $STAGE_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/iam.securityAdmin"
+    --role="roles/serviceusage.serviceUsageAdmin"
+
+gcloud projects add-iam-policy-binding $STAGE_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/storage.admin"
+
+gcloud projects add-iam-policy-binding $STAGE_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/resourcemanager.projectIamAdmin"
+
+gcloud projects add-iam-policy-binding $STAGE_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/iam.serviceAccountAdmin"
 
 gcloud projects add-iam-policy-binding $STAGE_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
@@ -67,11 +75,19 @@ gcloud projects add-iam-policy-binding $STAGE_PROJECT \
 
 gcloud projects add-iam-policy-binding $PROD_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/editor"
+    --role="roles/serviceusage.serviceUsageAdmin"
 
 gcloud projects add-iam-policy-binding $PROD_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/iam.securityAdmin"
+    --role="roles/storage.admin"
+
+gcloud projects add-iam-policy-binding $PROD_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/resourcemanager.projectIamAdmin"
+
+gcloud projects add-iam-policy-binding $PROD_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/iam.serviceAccountAdmin"
 
 gcloud projects add-iam-policy-binding $PROD_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
