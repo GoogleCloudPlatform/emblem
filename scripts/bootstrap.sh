@@ -4,6 +4,7 @@ set -eu
 # TODO: reduce Editor role to only roles needed to deploy Terraform
 # TODO: move the state bucket creation from setup to bootstrap
 
+OPS_PROJECT_NUMBER=$(gcloud projects list --format='value(PROJECT_NUMBER)' --filter=PROJECT_ID=$OPS_PROJECT)
 # Services needed for Terraform to manage resources via service account 
 
 gcloud services enable --project $OPS_PROJECT --async \
@@ -20,7 +21,7 @@ gcloud iam service-accounts create emblem-terraformer \
     --display-name="Emblem Terraformer"
 
 # Give cloud build service account token creator on terraform service account policy
-OPS_PROJECT_NUMBER=$(gcloud projects list --format='value(PROJECT_NUMBER)' --filter=PROJECT_ID=$OPS_PROJECT)
+
 gcloud iam service-accounts add-iam-policy-binding --project=$OPS_PROJECT \
     emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
     --member="serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" \
