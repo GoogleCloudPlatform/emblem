@@ -42,7 +42,7 @@ fi
 
 REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?project=${OPS_PROJECT}"
 echo "Connect your repos: ${REPO_CONNECT_URL}"
-read -rp "Once your forked emblem repo is connected, please continue by typing any key."
+read -n 1 -r -s -p $'Once your forked emblem repo is connected, please continue by typing any key.\n'
 
 if [[ -z "${REPO_NAME}" || -z "${REPO_NAME}" ]]
 then
@@ -54,11 +54,16 @@ fi
 while [[ ${continue} -gt 0 ]]; do
     read -rp "Please input the GitHub repository owner: " REPO_OWNER
     read -rp "Please input the GitHub repository name: " REPO_NAME
-    read -rp "Integrate Cloud Build with the repository $(tput bold)https://github.com/${REPO_OWNER}/${REPO_NAME}$(tput sgr0)? (y/n) " yesno
+    read -rp "Integrate Cloud Build with the repository $(tput bold)https://github.com/${REPO_OWNER}/${REPO_NAME}$(tput sgr0)? (Y/n) " yesno
 
-    if [[ ${yesno} == "y" ]]; then
+    case "$yesno" in
+    [yY][eE][sS]|[yY]|"") 
         continue=0
-    fi
+        ;;
+    *)
+        continue=1
+        ;;
+    esac
 done
 
 # Ops Project
