@@ -116,16 +116,36 @@ gcloud storage buckets add-iam-policy-binding gs://$STATE_GCS_BUCKET_NAME \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
     --role="roles/storage.admin" 
 
-echo -e "Connect GitHub repo to your Ops project: $URL"
+# Add GitHub repo to ops project
+REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?project=${OPS_PROJECT}"
 
+echo -e "Connect a fork of the Emblem GitHub repo to your ops project via the Cloud Console: $URL \n"
+read -n 1 -r -s -p $'Once your forked Emblem repo is connected, please type any key to continue.\n'
 
+continue=1
+while [[ ${continue} -gt 0 ]]; do
+    read -rp "Please input the GitHub repository owner: " REPO_OWNER
+    read -rp "Please input the GitHub repository name: " REPO_NAME
+    read -rp "Is this the correct repository URL? $(tput bold)https://github.com/${REPO_OWNER}/${REPO_NAME}$(tput sgr0)? (Y/n) " yesno
+
+    case "$yesno" in
+    [yY][eE][sS]|[yY]|"") 
+        continue=0
+        ;;
+    *)
+        continue=1
+        ;;
+    esac
+done
+
+echo -e "Adding repo information to project metadata... \n"
 gcloud compute project-info add-metadata --project=$OPS_PROJECT \
     --metadata=REPO_NAME=$REPO_NAME
 
 gcloud compute project-info add-metadata --project=$OPS_PROJECT \
     --metadata=REPO_NAME=$REPO_OWNER
-    
-# USE THE FOLLOWING TO RETRIEVE VALUES IN SETUP
+
+# USE THE FOLLOWING TO RETRIEVE VALUES IN SETUP.SH
 # gcloud compute project-info describe \
 #     --project=$OPS_PROJECT \
 #     --format='value[](commonInstanceMetadata.items.REPO_NAME)'
