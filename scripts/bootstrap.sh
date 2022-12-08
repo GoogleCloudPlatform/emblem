@@ -95,13 +95,18 @@ gcloud projects add-iam-policy-binding $PROD_PROJECT \
 # Setup Terraform state bucket
 
 STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
-#TODO: replace with gcloud storage
-if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} 2> /dev/null ; then
-    echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
-    gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
-    gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
+
+if gcloud storage buckets list gs://$STATE_GCS_BUCKET_NAME &> /dev/null ; then
+    echo -e "Using existing Terraform remote state bucket: gs://$STATE_GCS_BUCKET_NAME \n"
+    gcloud storage buckets update gs://$STATE_GCS_BUCKET_NAME --versioning &> /dev/null
+else
+    echo -e "Creating Terraform remote state bucket: gs://$STATE_GCS_BUCKET_NAME \n"
+    gcloud storage buckets create gs://${STATE_GCS_BUCKET_NAME} --project=$OPS_PROJECT
+    echo "Enabling versioning..."
+    gcloud storage buckets update gs://$STATE_GCS_BUCKET_NAME --versioning
 fi
 
+echo -e "Setting storage bucket IAM policy...\n"
 gcloud storage buckets add-iam-policy-binding gs://$STATE_GCS_BUCKET_NAME \
     --project=$OPS_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
