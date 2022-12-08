@@ -4,14 +4,17 @@ set -eu
 OPS_PROJECT_NUMBER=$(gcloud projects list --format='value(PROJECT_NUMBER)' --filter=PROJECT_ID=$OPS_PROJECT)
 # Services needed for Terraform to manage resources via service account 
 
+echo -e "Enabling initial required services... \n"
 gcloud services enable --project $OPS_PROJECT --async \
     iamcredentials.googleapis.com \
     cloudresourcemanager.googleapis.com \
     serviceusage.googleapis.com \
     appengine.googleapis.com \
-    cloudbuild.googleapis.com 
+    cloudbuild.googleapis.com
     
 # Create terraform service account
+
+echo -e "Creating Emblem Terraform service account... \n"
 gcloud iam service-accounts create emblem-terraformer \
     --project="$OPS_PROJECT" \
     --description="Service account for deploying resources via Terraform" \
@@ -19,6 +22,7 @@ gcloud iam service-accounts create emblem-terraformer \
 
 # Give cloud build service account token creator on terraform service account policy
 
+echo -e "Setting assigning required IAM roles... \n"
 gcloud iam service-accounts add-iam-policy-binding --project=$OPS_PROJECT \
     emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
     --member="serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" \
@@ -102,7 +106,7 @@ if gcloud storage buckets list gs://$STATE_GCS_BUCKET_NAME &> /dev/null ; then
 else
     echo -e "Creating Terraform remote state bucket: gs://$STATE_GCS_BUCKET_NAME \n"
     gcloud storage buckets create gs://${STATE_GCS_BUCKET_NAME} --project=$OPS_PROJECT
-    echo "Enabling versioning..."
+    echo "Enabling versioning... \n"
     gcloud storage buckets update gs://$STATE_GCS_BUCKET_NAME --versioning
 fi
 
@@ -111,3 +115,5 @@ gcloud storage buckets add-iam-policy-binding gs://$STATE_GCS_BUCKET_NAME \
     --project=$OPS_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
     --role="roles/storage.admin" 
+
+echo -e "Emblem bootstrapping complete! Please run setup.sh \n"
