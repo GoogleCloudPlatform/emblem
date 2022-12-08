@@ -272,7 +272,7 @@ fi # skip deploy
 if [[ -z "$SKIP_TRIGGERS" ]]; then
     echo
 
-    sh ./scripts/configure_delivery.sh
+    ./scripts/configure_delivery.sh
     
 fi # skip triggers
 
@@ -295,7 +295,7 @@ if [[ -z "$SKIP_AUTH" ]]; then
     read -rp "Would you like to configure $(tput bold)$(tput setaf 3)end-user authentication?$(tput sgr0) (y/n) " auth_yesno
 
     if [[ ${auth_yesno} == "y" ]]; then
-        sh ./scripts/configure_auth.sh
+        ./scripts/configure_auth.sh
     else
         echo "Skipping end-user authentication configuration. You can configure it later by running:"
         echo
