@@ -116,4 +116,18 @@ gcloud storage buckets add-iam-policy-binding gs://$STATE_GCS_BUCKET_NAME \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
     --role="roles/storage.admin" 
 
+echo -e "Connect GitHub repo to your Ops project: $URL"
+
+
+gcloud compute project-info add-metadata --project=$OPS_PROJECT \
+    --metadata=REPO_NAME=$REPO_NAME
+
+gcloud compute project-info add-metadata --project=$OPS_PROJECT \
+    --metadata=REPO_NAME=$REPO_OWNER
+    
+# USE THE FOLLOWING TO RETRIEVE VALUES IN SETUP
+# gcloud compute project-info describe \
+#     --project=$OPS_PROJECT \
+#     --format='value[](commonInstanceMetadata.items.REPO_NAME)'
+
 echo -e "Emblem bootstrapping complete! Please run setup.sh \n"
