@@ -4,19 +4,15 @@ set -eu
 # TODO: reduce Editor role to only roles needed to deploy Terraform
 # TODO: move the state bucket creation from setup to bootstrap
 
-# Services needed for Terraform to managed IAM resources
-gcloud services enable iamcredentials.googleapis.com --project $OPS_PROJECT
+# Services needed for Terraform to manage resources via service account 
 
-# Service needed for Terraform to manage resources
-gcloud services enable cloudresourcemanager.googleapis.com --project $OPS_PROJECT
-gcloud services enable serviceusage.googleapis.com --project $OPS_PROJECT
-
-# Service needed in the ops project to manage app engine in app projects
-gcloud services enable appengine.googleapis.com --project $OPS_PROJECT
-
-# Service needed to run Cloud Build in setup
-gcloud services enable cloudbuild.googleapis.com --project $OPS_PROJECT
-
+gcloud services enable --project $OPS_PROJECT --async \
+    iamcredentials.googleapis.com \
+    cloudresourcemanager.googleapis.com \
+    serviceusage.googleapis.com \
+    appengine.googleapis.com \
+    cloudbuild.googleapis.com 
+    
 # Create terraform service account
 gcloud iam service-accounts create emblem-terraformer \
     --project="$OPS_PROJECT" \
