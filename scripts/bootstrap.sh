@@ -1,6 +1,5 @@
 #!/bin/bash
 set -eu
-# TODO: use json policy file instead of inline IAM configs
 # TODO: reduce Editor role to only roles needed to deploy Terraform
 # TODO: move the state bucket creation from setup to bootstrap
 
