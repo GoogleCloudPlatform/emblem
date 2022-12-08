@@ -91,8 +91,8 @@ For more incremental changes, please open a feature request. Referencing an
 [existing User Journey](https://github.com/GoogleCloudPlatform/emblem/issues?q=is%3Aissue+label%3A%22type%3A+journey%22+) 
 is helpful in considering how it fits project scope.
 
-The first implementation step for any API change is to send PR to modify the 
-OpenAPI description](content-api/openapi.yaml).
+The first implementation step for any API change is to send a PR to modify the 
+[OpenAPI description](content-api/openapi.yaml).
 
 ### Github workflows automation
 
