@@ -12,3 +12,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: simple
           package-name: emblem
+          changelog-type: github
