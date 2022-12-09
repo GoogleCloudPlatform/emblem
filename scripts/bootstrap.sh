@@ -135,12 +135,12 @@ gcloud projects add-iam-policy-binding $PROD_PROJECT \
 # Setup Terraform state bucket
 
 if gcloud storage buckets list gs://$STATE_GCS_BUCKET_NAME &> /dev/null ; then
-    echo -e "\xe2\x88\xb4 Using existing Terraform remote state bucket: gs://$STATE_GCS_BUCKET_NAME \n"
+    echo -e "\xe2\x88\xb4 Using existing Terraform remote state bucket: gs://${STATE_GCS_BUCKET_NAME} \n"
     gcloud storage buckets update gs://$STATE_GCS_BUCKET_NAME --versioning &> /dev/null
 else
-    echo -e "\xe2\x88\xb4 Creating Terraform remote state bucket: gs://$STATE_GCS_BUCKET_NAME \n"
+    echo -e "\xe2\x88\xb4 Creating Terraform remote state bucket: gs://${STATE_GCS_BUCKET_NAME} \n"
     gcloud storage buckets create gs://${STATE_GCS_BUCKET_NAME} --project=$OPS_PROJECT
-    echo "\xe2\x88\xb4 Enabling versioning... \n"
+    echo -e "\xe2\x88\xb4 Enabling versioning... \n"
     gcloud storage buckets update gs://$STATE_GCS_BUCKET_NAME --versioning
 fi
 
@@ -151,7 +151,7 @@ gcloud storage buckets add-iam-policy-binding gs://$STATE_GCS_BUCKET_NAME \
     --role="roles/storage.admin" &> /dev/null
 
 # Add GitHub repo to ops project
-echo -e "${GREEN}\xE2\x9E\xA8 Connect a fork of the Emblem GitHub repo to your ops project via the Cloud Console:${NC} $(tput bold)$REPO_CONNECT_URL$(tput sgr0) \n"
+echo -e "${GREEN}\xE2\x9E\xA8 Connect a fork of the Emblem GitHub repo to your ops project via the Cloud Console:${NC} $(tput bold)${REPO_CONNECT_URL}$(tput sgr0) \n"
 read -n 1 -r -s -p $'Once your forked Emblem repo is connected, please type any key to continue.\n'
 
 continue=1
