@@ -11,91 +11,98 @@ gcloud services enable --project $OPS_PROJECT --async \
     serviceusage.googleapis.com \
     appengine.googleapis.com \
     cloudbuild.googleapis.com
-    
-# Create terraform service account
 
-echo -e "Creating Emblem Terraform service account... \n"
-gcloud iam service-accounts create emblem-terraformer \
-    --project="$OPS_PROJECT" \
-    --description="Service account for deploying resources via Terraform" \
-    --display-name="Emblem Terraformer"
+EMBLEM_TF_SERVICE_ACCOUNT=emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com
+
+# Create terraform service account
+if gcloud iam service-accounts describe \
+    $EMBLEM_TF_SERVICE_ACCOUNT \
+    --project $OPS_PROJECT &> /dev/null ; then
+        echo -e "Using exising Emblem Terraform service account:  $EMBLEM_TF_SERVICE_ACCOUNT \n"
+else
+    echo -e "Creating Emblem Terraform service account: $EMBLEM_TF_SERVICE_ACCOUNT \n"
+    gcloud iam service-accounts create emblem-terraformer \
+        --project="$OPS_PROJECT" \
+        --description="Service account for deploying resources via Terraform" \
+        --display-name="Emblem Terraformer"
+fi
 
 # Give cloud build service account token creator on terraform service account policy
 
 echo -e "Updating Terraform service account IAM policy... \n"
 gcloud iam service-accounts add-iam-policy-binding --project=$OPS_PROJECT \
-    emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    $EMBLEM_TF_SERVICE_ACCOUNT \
     --member="serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" \
-    --role="roles/iam.serviceAccountTokenCreator"
+    --role="roles/iam.serviceAccountTokenCreator" &> /dev/null
 
 # Ops permissions
 echo -e "Updating ops project IAM policy... \n"
 gcloud projects add-iam-policy-binding $OPS_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/cloudbuild.builds.editor" &> /dev/null
 
 gcloud projects add-iam-policy-binding $OPS_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/secretmanager.admin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $OPS_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/pubsub.editor" &> /dev/null
 
 gcloud projects add-iam-policy-binding $OPS_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/iam.serviceAccountAdmin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $OPS_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/artifactregistry.admin" &> /dev/null
 
  gcloud projects add-iam-policy-binding $OPS_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/resourcemanager.projectIamAdmin" &> /dev/null
 
 # App permissions for stage and prod
 
 echo -e "Updating stage project IAM policy... \n"
 gcloud projects add-iam-policy-binding $STAGE_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/serviceusage.serviceUsageAdmin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $STAGE_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/storage.admin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $STAGE_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/resourcemanager.projectIamAdmin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $STAGE_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/iam.serviceAccountAdmin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $STAGE_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/firebase.managementServiceAgent" &> /dev/null
 
 echo -e "Updating prod project IAM policy... \n"
 gcloud projects add-iam-policy-binding $PROD_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/serviceusage.serviceUsageAdmin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $PROD_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/storage.admin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $PROD_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/resourcemanager.projectIamAdmin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $PROD_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/iam.serviceAccountAdmin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $PROD_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/firebase.managementServiceAgent" &> /dev/null
 
 # Setup Terraform state bucket
@@ -115,7 +122,7 @@ fi
 echo -e "Setting storage bucket IAM policy for Terraform service account...\n"
 gcloud storage buckets add-iam-policy-binding gs://$STATE_GCS_BUCKET_NAME \
     --project=$OPS_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
     --role="roles/storage.admin" &> /dev/null
 
 # Add GitHub repo to ops project
@@ -142,10 +149,10 @@ done
 
 echo -e "Adding repo information to project metadata... \n"
 gcloud compute project-info add-metadata --project=$OPS_PROJECT \
-    --metadata=REPO_NAME=$REPO_NAME 
+    --metadata=REPO_NAME=$REPO_NAME &> /dev/null
 
 gcloud compute project-info add-metadata --project=$OPS_PROJECT \
-    --metadata=REPO_NAME=$REPO_OWNER
+    --metadata=REPO_OWNER=$REPO_OWNER &> /dev/null
 
 # USE THE FOLLOWING TO RETRIEVE VALUES IN SETUP.SH
 # gcloud compute project-info describe \
