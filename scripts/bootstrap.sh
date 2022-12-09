@@ -4,97 +4,99 @@ set -eu
 OPS_PROJECT_NUMBER=$(gcloud projects list --format='value(PROJECT_NUMBER)' --filter=PROJECT_ID=$OPS_PROJECT)
 # Services needed for Terraform to manage resources via service account 
 
-# echo -e "Enabling initial required services... \n"
-# gcloud services enable --project $OPS_PROJECT --async \
-#     iamcredentials.googleapis.com \
-#     cloudresourcemanager.googleapis.com \
-#     serviceusage.googleapis.com \
-#     appengine.googleapis.com \
-#     cloudbuild.googleapis.com
+echo -e "Enabling initial required services... \n"
+gcloud services enable --project $OPS_PROJECT --async \
+    iamcredentials.googleapis.com \
+    cloudresourcemanager.googleapis.com \
+    serviceusage.googleapis.com \
+    appengine.googleapis.com \
+    cloudbuild.googleapis.com
     
-# # Create terraform service account
+# Create terraform service account
 
-# echo -e "Creating Emblem Terraform service account... \n"
-# gcloud iam service-accounts create emblem-terraformer \
-#     --project="$OPS_PROJECT" \
-#     --description="Service account for deploying resources via Terraform" \
-#     --display-name="Emblem Terraformer"
+echo -e "Creating Emblem Terraform service account... \n"
+gcloud iam service-accounts create emblem-terraformer \
+    --project="$OPS_PROJECT" \
+    --description="Service account for deploying resources via Terraform" \
+    --display-name="Emblem Terraformer"
 
-# # Give cloud build service account token creator on terraform service account policy
+# Give cloud build service account token creator on terraform service account policy
 
-# echo -e "Setting assigning required IAM roles... \n"
-# gcloud iam service-accounts add-iam-policy-binding --project=$OPS_PROJECT \
-#     emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-#     --member="serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" \
-#     --role="roles/iam.serviceAccountTokenCreator"
+echo -e "Updating Terraform service account IAM policy... \n"
+gcloud iam service-accounts add-iam-policy-binding --project=$OPS_PROJECT \
+    emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --member="serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" \
+    --role="roles/iam.serviceAccountTokenCreator"
 
 # Ops permissions
+echo -e "Updating ops project IAM policy... \n"
+gcloud projects add-iam-policy-binding $OPS_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/cloudbuild.builds.editor" &> /dev/null
 
 gcloud projects add-iam-policy-binding $OPS_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/cloudbuild.builds.editor"
+    --role="roles/secretmanager.admin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $OPS_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/secretmanager.admin" 
+    --role="roles/pubsub.editor" &> /dev/null
 
 gcloud projects add-iam-policy-binding $OPS_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/pubsub.editor" 
+    --role="roles/iam.serviceAccountAdmin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $OPS_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/iam.serviceAccountAdmin" 
-
-gcloud projects add-iam-policy-binding $OPS_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/artifactregistry.admin"
+    --role="roles/artifactregistry.admin" &> /dev/null
 
  gcloud projects add-iam-policy-binding $OPS_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/resourcemanager.projectIamAdmin"
+    --role="roles/resourcemanager.projectIamAdmin" &> /dev/null
 
 # App permissions for stage and prod
 
+echo -e "Updating stage project IAM policy... \n"
 gcloud projects add-iam-policy-binding $STAGE_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/serviceusage.serviceUsageAdmin"
-
-gcloud projects add-iam-policy-binding $STAGE_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/storage.admin"
+    --role="roles/serviceusage.serviceUsageAdmin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $STAGE_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/resourcemanager.projectIamAdmin"
+    --role="roles/storage.admin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $STAGE_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/iam.serviceAccountAdmin"
+    --role="roles/resourcemanager.projectIamAdmin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $STAGE_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/firebase.managementServiceAgent"
+    --role="roles/iam.serviceAccountAdmin" &> /dev/null
+
+gcloud projects add-iam-policy-binding $STAGE_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/firebase.managementServiceAgent" &> /dev/null
+
+echo -e "Updating prod project IAM policy... \n"
+gcloud projects add-iam-policy-binding $PROD_PROJECT \
+    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
+    --role="roles/serviceusage.serviceUsageAdmin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $PROD_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/serviceusage.serviceUsageAdmin"
+    --role="roles/storage.admin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $PROD_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/storage.admin"
+    --role="roles/resourcemanager.projectIamAdmin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $PROD_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/resourcemanager.projectIamAdmin"
+    --role="roles/iam.serviceAccountAdmin" &> /dev/null
 
 gcloud projects add-iam-policy-binding $PROD_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/iam.serviceAccountAdmin"
-
-gcloud projects add-iam-policy-binding $PROD_PROJECT \
-    --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/firebase.managementServiceAgent"
+    --role="roles/firebase.managementServiceAgent" &> /dev/null
 
 # Setup Terraform state bucket
 
@@ -110,11 +112,11 @@ else
     gcloud storage buckets update gs://$STATE_GCS_BUCKET_NAME --versioning
 fi
 
-echo -e "Setting storage bucket IAM policy...\n"
+echo -e "Setting storage bucket IAM policy for Terraform service account...\n"
 gcloud storage buckets add-iam-policy-binding gs://$STATE_GCS_BUCKET_NAME \
     --project=$OPS_PROJECT \
     --member=serviceAccount:emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com \
-    --role="roles/storage.admin" 
+    --role="roles/storage.admin" &> /dev/null
 
 # Add GitHub repo to ops project
 REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?project=${OPS_PROJECT}"
@@ -140,7 +142,7 @@ done
 
 echo -e "Adding repo information to project metadata... \n"
 gcloud compute project-info add-metadata --project=$OPS_PROJECT \
-    --metadata=REPO_NAME=$REPO_NAME
+    --metadata=REPO_NAME=$REPO_NAME 
 
 gcloud compute project-info add-metadata --project=$OPS_PROJECT \
     --metadata=REPO_NAME=$REPO_OWNER
@@ -150,4 +152,4 @@ gcloud compute project-info add-metadata --project=$OPS_PROJECT \
 #     --project=$OPS_PROJECT \
 #     --format='value[](commonInstanceMetadata.items.REPO_NAME)'
 
-echo -e "Emblem bootstrapping complete! Please run setup.sh \n"
+echo -e "\nEmblem bootstrapping complete! Please run setup.sh \n"
