@@ -17,7 +17,13 @@ elif [[ -z "${OPS_PROJECT:-}" ]]; then
     exit 1
 fi
 
-OPS_PROJECT_NUMBER=$(gcloud projects list --format='value(PROJECT_NUMBER)' --filter=PROJECT_ID=$OPS_PROJECT)
+# Retrieve ops project number:
+OPS_PROJECT_NUMBER=$(gcloud projects list --format='value(PROJECT_NUMBER)' --filter=PROJECT_ID=OPS_PROJECT)
+if [[ -z "${OPS_PROJECT_NUMBER}" ]]; then
+    echo -e "---\n${RED}Emblem bootstrap error:${NC} Could not retrieve project number for $(tput bold)${OPS_PROJECT}$(tput sgr0).\n---"
+    exit 1
+fi
+exit
 # Services needed for Terraform to manage resources via service account 
 
 echo -e "Enabling initial required services... \n"
