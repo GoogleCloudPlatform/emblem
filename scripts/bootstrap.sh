@@ -29,6 +29,9 @@ fi
 
 EMBLEM_TF_SERVICE_ACCOUNT=emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com
 BUILD_SERVICE_ACCOUNT=${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com
+REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?project=${OPS_PROJECT}"
+STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
+
 # Services needed for Terraform to manage resources via service account 
 
 echo -e "\xe2\x88\xb4 Enabling initial required services... \n"
@@ -131,8 +134,6 @@ gcloud projects add-iam-policy-binding $PROD_PROJECT \
 
 # Setup Terraform state bucket
 
-STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
-
 if gcloud storage buckets list gs://$STATE_GCS_BUCKET_NAME &> /dev/null ; then
     echo -e "\xe2\x88\xb4 Using existing Terraform remote state bucket: gs://$STATE_GCS_BUCKET_NAME \n"
     gcloud storage buckets update gs://$STATE_GCS_BUCKET_NAME --versioning &> /dev/null
@@ -150,8 +151,6 @@ gcloud storage buckets add-iam-policy-binding gs://$STATE_GCS_BUCKET_NAME \
     --role="roles/storage.admin" &> /dev/null
 
 # Add GitHub repo to ops project
-REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?project=${OPS_PROJECT}"
-
 echo -e "${GREEN}\xE2\x9E\xA8 Connect a fork of the Emblem GitHub repo to your ops project via the Cloud Console:${NC} $(tput bold)$REPO_CONNECT_URL$(tput sgr0) \n"
 read -n 1 -r -s -p $'Once your forked Emblem repo is connected, please type any key to continue.\n'
 
