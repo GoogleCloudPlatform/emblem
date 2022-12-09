@@ -1,6 +1,12 @@
 #!/bin/bash
 set -eu
 
+_error_report() {
+  echo >&2 "Exited [$?] at line $(caller):"
+  cat -n $0 | tail -n+$(($1 - 3)) | head -n7 | sed "4s/^\s*/>>> /"
+}
+trap '_error_report $LINENO' ERR
+
 # Formatting variables
 RED='\033[0;31m'
 GREEN='\033[0;32m'
