@@ -38,6 +38,7 @@ echo -e "\xe2\x88\xb4 Enabling initial required services... \n"
 gcloud services enable --project $OPS_PROJECT --async \
     iamcredentials.googleapis.com \
     cloudresourcemanager.googleapis.com \
+    compute.googleapis.com \
     serviceusage.googleapis.com \
     appengine.googleapis.com \
     cloudbuild.googleapis.com &> /dev/null
