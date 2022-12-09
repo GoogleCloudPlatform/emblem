@@ -3,6 +3,7 @@ set -eu
 
 # Formatting variables
 RED='\033[0;31m'
+GREEN='\033[0;32m'
 NC='\033[0m'
 
 # Check env variables are not empty strings
@@ -17,13 +18,15 @@ elif [[ -z "${OPS_PROJECT:-}" ]]; then
     exit 1
 fi
 
-# Retrieve ops project number:
-OPS_PROJECT_NUMBER=$(gcloud projects list --format='value(PROJECT_NUMBER)' --filter=PROJECT_ID=OPS_PROJECT)
+# Set other variables
+OPS_PROJECT_NUMBER=$(gcloud projects list --format='value(PROJECT_NUMBER)' --filter=PROJECT_ID=$OPS_PROJECT)
 if [[ -z "${OPS_PROJECT_NUMBER}" ]]; then
     echo -e "---\n${RED}Emblem bootstrap error:${NC} Could not retrieve project number for $(tput bold)${OPS_PROJECT}$(tput sgr0).\n---"
     exit 1
 fi
-exit
+
+EMBLEM_TF_SERVICE_ACCOUNT=emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com
+BUILD_SERVICE_ACCOUNT=${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com
 # Services needed for Terraform to manage resources via service account 
 
 echo -e "Enabling initial required services... \n"
@@ -33,8 +36,6 @@ gcloud services enable --project $OPS_PROJECT --async \
     serviceusage.googleapis.com \
     appengine.googleapis.com \
     cloudbuild.googleapis.com
-
-EMBLEM_TF_SERVICE_ACCOUNT=emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com
 
 # Create terraform service account
 if gcloud iam service-accounts describe \
@@ -50,11 +51,10 @@ else
 fi
 
 # Give cloud build service account token creator on terraform service account policy
-
 echo -e "Updating Terraform service account IAM policy... \n"
 gcloud iam service-accounts add-iam-policy-binding --project=$OPS_PROJECT \
     $EMBLEM_TF_SERVICE_ACCOUNT \
-    --member="serviceAccount:${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" \
+    --member="serviceAccount:${BUILD_SERVICE_ACCOUNT}" \
     --role="roles/iam.serviceAccountTokenCreator" &> /dev/null
 
 # Ops permissions
@@ -181,4 +181,4 @@ gcloud compute project-info add-metadata --project=$OPS_PROJECT \
 #     --project=$OPS_PROJECT \
 #     --format='value[](commonInstanceMetadata.items.REPO_NAME)'
 
-echo -e "\nEmblem bootstrapping complete! Please run setup.sh \n"
+echo -e "\n${GREEN}Emblem bootstrapping complete! Please run setup.sh${NC} \n"
