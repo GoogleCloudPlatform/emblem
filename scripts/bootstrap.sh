@@ -1,6 +1,22 @@
 #!/bin/bash
 set -eu
 
+# Formatting variables
+RED='\033[0;31m'
+NC='\033[0m'
+
+# Check env variables are not empty strings
+if [[ -z "${PROD_PROJECT:-}" ]]; then
+    echo -e "---\n${RED}Emblem bootstrap error:${NC} Please set the $(tput bold)PROD_PROJECT$(tput sgr0) environment variable \n---"
+    exit 1
+elif [[ -z "${STAGE_PROJECT:-}" ]]; then
+    echo -e "---\n${RED}Emblem bootstrap error:${NC} Please set the $(tput bold)STAGE_PROJECT$(tput sgr0) environment variable \n---"
+    exit 1
+elif [[ -z "${OPS_PROJECT:-}" ]]; then
+    echo -e "---\n${RED}Emblem bootstrap error:${NC} Please set the $(tput bold)OPS_PROJECT$(tput sgr0) environment variable \n---"
+    exit 1
+fi
+
 OPS_PROJECT_NUMBER=$(gcloud projects list --format='value(PROJECT_NUMBER)' --filter=PROJECT_ID=$OPS_PROJECT)
 # Services needed for Terraform to manage resources via service account 
 
