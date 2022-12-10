@@ -71,102 +71,61 @@ gcloud iam service-accounts add-iam-policy-binding --project=$OPS_PROJECT \
 
 # Ops permissions
 echo -e "\n\xe2\x88\xb4 Updating ops project IAM policy... "
-gcloud projects add-iam-policy-binding $OPS_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/cloudbuild.builds.editor" > /dev/null
 
-sleep 1
+OPS_CURRENT_IAM=$(gcloud projects get-iam-policy $OPS_PROJECT --format=yaml | tail -n +2)
+OPS_IAM="bindings:
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/cloudbuild.builds.editor
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/secretmanager.admin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/pubsub.editor
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/iam.serviceAccountAdmin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/artifactregistry.admin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/resourcemanager.projectIamAdmin"
 
-gcloud projects add-iam-policy-binding $OPS_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/secretmanager.admin" > /dev/null
-
-sleep 1
-
-gcloud projects add-iam-policy-binding $OPS_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/pubsub.editor" > /dev/null
-
-sleep 1
-
-gcloud projects add-iam-policy-binding $OPS_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/iam.serviceAccountAdmin" > /dev/null
-
-sleep 1
-
-gcloud projects add-iam-policy-binding $OPS_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/artifactregistry.admin" > /dev/null
-
-sleep 1
-
- gcloud projects add-iam-policy-binding $OPS_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/resourcemanager.projectIamAdmin" > /dev/null
+echo -e "${OPS_IAM}\n${OPS_CURRENT_IAM}" | \
+    gcloud projects set-iam-policy $OPS_PROJECT /dev/stdin > /dev/null
 
 # App permissions for stage and prod
 
 echo -e "\n\xe2\x88\xb4 Updating stage project IAM policy... "
-gcloud projects add-iam-policy-binding $STAGE_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/serviceusage.serviceUsageAdmin" > /dev/null
 
-sleep 1
+STAGE_CURRENT_IAM=$(gcloud projects get-iam-policy $STAGE_PROJECT --format=yaml | tail -n +2)
+APP_IAM="bindings:
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/serviceusage.serviceUsageAdmin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/storage.admin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/resourcemanager.projectIamAdmin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/iam.serviceAccountAdmin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/firebase.managementServiceAgent"
 
-gcloud projects add-iam-policy-binding $STAGE_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/storage.admin" > /dev/null
-
-sleep 1
-
-gcloud projects add-iam-policy-binding $STAGE_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/resourcemanager.projectIamAdmin" > /dev/null
-
-sleep 1
-
-gcloud projects add-iam-policy-binding $STAGE_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/iam.serviceAccountAdmin" > /dev/null
-
-sleep 1
-
-gcloud projects add-iam-policy-binding $STAGE_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/firebase.managementServiceAgent" > /dev/null
-
-sleep 1
+echo -e "${APP_IAM}\n${STAGE_CURRENT_IAM}" | \
+    gcloud projects set-iam-policy $STAGE_PROJECT /dev/stdin > /dev/null
 
 echo -e "\n\xe2\x88\xb4 Updating prod project IAM policy... "
-gcloud projects add-iam-policy-binding $PROD_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/serviceusage.serviceUsageAdmin" > /dev/null
-
-sleep 1
-
-gcloud projects add-iam-policy-binding $PROD_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/storage.admin" > /dev/null
-
-sleep 1
-
-gcloud projects add-iam-policy-binding $PROD_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/resourcemanager.projectIamAdmin" > /dev/null
-
-sleep 1
-
-gcloud projects add-iam-policy-binding $PROD_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/iam.serviceAccountAdmin" > /dev/null
-
-sleep 1
-
-gcloud projects add-iam-policy-binding $PROD_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/firebase.managementServiceAgent" > /dev/null
-
+PROD_CURRENT_IAM=$(gcloud projects get-iam-policy $PROD_PROJECT --format=yaml | tail -n +2)
+echo -e "${APP_IAM}\n${PROD_CURRENT_IAM}" | \
+    gcloud projects set-iam-policy $PROD_PROJECT /dev/stdin > /dev/null
+    
 # Setup Terraform state bucket
 
 if gcloud storage buckets list gs://$STATE_GCS_BUCKET_NAME &> /dev/null ; then
