@@ -55,7 +55,10 @@ OPS_IAM="bindings:
   role: roles/artifactregistry.admin
 - members:
   - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
-  role: roles/resourcemanager.projectIamAdmin"
+  role: roles/resourcemanager.projectIamAdmin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/serviceusage.serviceUsageAdmin"
 APP_IAM="bindings:
 - members:
   - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
