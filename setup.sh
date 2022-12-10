@@ -66,16 +66,6 @@ echo "Setting up a new instance of Emblem. There may be a few prompts to guide t
 #####################
 export TERRAFORM_SERVICE_ACCOUNT=emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com
 export STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
-# TODO: move to bootstrap
-if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
-    echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
-    gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
-    gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
-fi
-
-# Wait a little while for storage permissions to propagate to the terraform service account.
-# TODO: Find more elegant way of checking for permissions.
-# sleep 60
 
 OPS_ENVIRONMENT_DIR=terraform/environments/ops
 cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
@@ -118,14 +108,15 @@ fi # skip build
 #####################
 
 STAGE_ENVIRONMENT_DIR=terraform/environments/staging
-
 cat > "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 project_id = "${STAGE_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
 
-gcloud builds submit ./terraform --project="$OPS_PROJECT" --config=./ops/terraform.cloudbuild.yaml \
---substitutions=_ENV="staging",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT
+STAGE_BUILD_ID="$(gcloud builds submit ./terraform --project="$OPS_PROJECT" --async --config=./ops/terraform.cloudbuild.yaml \
+    --substitutions=_ENV="staging",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT --format='value(ID)')"
+
+echo $STAGE_BUILD_ID
 
 PROD_ENVIRONMENT_DIR=terraform/environments/prod
 cat > "${PROD_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
@@ -133,37 +124,8 @@ project_id = "${PROD_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
 
-gcloud builds submit ./terraform --project="$OPS_PROJECT" --config=./ops/terraform.cloudbuild.yaml \
---substitutions=_ENV="prod",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT
-
-########################
-# Seed Default Content #
-########################
-if [[ -z "$SKIP_SEEDING" ]]; then
-    echo
-    echo "$(tput bold)Seeding default content...$(tput sgr0)"
-    echo
-
-    account=$(gcloud config get-value account 2> /dev/null)
-    if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
-        read -rp "Please input an email address for an approver. This email will be added to the Firestore database as an 'approver' and will be able to perform privileged API operations from the website frontend: [${account}]: " approver
-    fi
-    approver="${approver:-$account}"
-
-    gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
-    --substitutions=_FIREBASE_PROJECT="${STAGE_PROJECT}",_APPROVER_EMAIL="${approver}" \
-    --config=./content-api/data/cloudbuild.yaml
-
-    if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
-        gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
-        --substitutions=_FIREBASE_PROJECT="${PROD_PROJECT}",_APPROVER_EMAIL="${approver}" \
-        --config=./content-api/data/cloudbuild.yaml
-    fi
-fi # skip seeding
-
-##################
-# Deploy Services #
-##################
+PROD_BUILD_ID="$(gcloud builds submit ./terraform --project="$OPS_PROJECT" --async --config=./ops/terraform.cloudbuild.yaml \
+    --substitutions=_ENV="prod",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT --format='value(ID)') "
 
 # This function will wait for job status for the provided build job to update 
 # from WORKING to FAILURE or SUCCESS. For failed build jobs, the failure info 
@@ -175,37 +137,66 @@ check_for_build_then_run () {
     local build_id="${1}"
     local run_command="${2}"
     # Wait for build to complete.
-    if [ $(gcloud builds describe $build_id --project=$OPS_PROJECT  --format='value(status)') == "WORKING" ]; then
-        log_url=$(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(logUrl)')
+    if [ "$(gcloud builds describe $build_id --project=$OPS_PROJECT  --format='value(status)')" == "WORKING" ]; then
+        log_url="$(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(logUrl)')"
         echo "Build $build_id still working."
         echo "Logs are available at [ $log_url ]."
-        while [ $(gcloud builds describe $build_id --project=$OPS_PROJECT  --format='value(status)') == "WORKING" ]
+        while [ "$(gcloud builds describe $build_id --project=$OPS_PROJECT  --format='value(status)')" == "WORKING" ]
         do
           echo "Build $build_id still working..."
           sleep 10
         done
     fi
     # Return error and build log for failures. 
-    if [ $(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(status)') == "FAILURE" ]; then
-        build_describe=$(gcloud builds describe $build_id --project=$OPS_PROJECT --format='csv(failureInfo.detail,logUrl)[no-heading]')
-        fail_info=$(echo $build_describe | awk -F',' '{gsub(/""/,"\"");print $1}')
-        log_url=$(echo $build_describe | awk -F',' '{print $2}')
-        echo "Build ${build_id} failed. See build log: $log_url"
+    if [ "$(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(status)')" == "FAILURE" ]; then
+        build_describe="$(gcloud builds describe $build_id --project=$OPS_PROJECT --format='csv(failureInfo.detail,logUrl)[no-heading]')"
+        fail_info=$(echo ${build_describe} | awk -F',' '{gsub(/""/,"\"");print $1}')
+        log_url=$(echo ${build_describe} | awk -F',' '{print $2}')
+        echo "Build ${build_id} failed. See build log: ${log_url}"
         echo "ERROR: ${fail_info}"
         echo "Please re-run setup."
         exit 2
     # Deploy if build is successful.
-    elif [ $(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(status)') == "SUCCESS" ]; then
+    elif [ "$(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(status)')" == "SUCCESS" ]; then
         $run_command
     # Return build log for all other statuses.
     else
-        log_url=$(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(logUrl)')
+        log_url="$(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(logUrl)')"
         echo "Build ${build_id} did not complete." 
         echo "See build log: $log_url"
         echo "Please re-run setup."
         exit 2
     fi;
 }
+
+########################
+# Seed Default Content #
+########################
+if [[ -z "$SKIP_SEEDING" ]]; then
+    echo
+    echo "$(tput bold)Seeding default content...$(tput sgr0)"
+    echo
+
+    account="$(gcloud config get-value account 2> /dev/null)"
+    if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
+        read -rp "Please input an email address for an approver. This email will be added to the Firestore database as an 'approver' and will be able to perform privileged API operations from the website frontend: [${account}]: " approver
+    fi
+    approver="${approver:-$account}"
+
+    check_for_build_then_run $STAGE_BUILD_ID "gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
+    --substitutions=_FIREBASE_PROJECT="${STAGE_PROJECT}",_APPROVER_EMAIL="${approver}" \
+    --config=./content-api/data/cloudbuild.yaml"
+
+    if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
+        gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
+        --substitutions=_FIREBASE_PROJECT="${PROD_PROJECT}",_APPROVER_EMAIL="${approver}" \
+        --config=./content-api/data/cloudbuild.yaml
+    fi
+fi # skip seeding
+
+##################
+# Deploy Services #
+##################
 
 if [[ -z "$SKIP_DEPLOY" ]]; then
 
