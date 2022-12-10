@@ -37,6 +37,41 @@ EMBLEM_TF_SERVICE_ACCOUNT=emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.
 BUILD_SERVICE_ACCOUNT=${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com
 REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?project=${OPS_PROJECT}"
 STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
+OPS_IAM="bindings:
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/cloudbuild.builds.editor
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/secretmanager.admin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/pubsub.editor
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/iam.serviceAccountAdmin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/artifactregistry.admin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/resourcemanager.projectIamAdmin"
+APP_IAM="bindings:
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/serviceusage.serviceUsageAdmin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/storage.admin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/resourcemanager.projectIamAdmin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/iam.serviceAccountAdmin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/firebase.managementServiceAgent"
 
 # Services needed for Terraform to manage resources via service account 
 
@@ -73,25 +108,6 @@ gcloud iam service-accounts add-iam-policy-binding --project=$OPS_PROJECT \
 echo -e "\n\xe2\x88\xb4 Updating ops project IAM policy... "
 
 OPS_CURRENT_IAM=$(gcloud projects get-iam-policy $OPS_PROJECT --format=yaml | tail -n +2)
-OPS_IAM="bindings:
-- members:
-  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
-  role: roles/cloudbuild.builds.editor
-- members:
-  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
-  role: roles/secretmanager.admin
-- members:
-  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
-  role: roles/pubsub.editor
-- members:
-  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
-  role: roles/iam.serviceAccountAdmin
-- members:
-  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
-  role: roles/artifactregistry.admin
-- members:
-  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
-  role: roles/resourcemanager.projectIamAdmin"
 
 echo -e "${OPS_IAM}\n${OPS_CURRENT_IAM}" | \
     gcloud projects set-iam-policy $OPS_PROJECT /dev/stdin > /dev/null
@@ -101,22 +117,6 @@ echo -e "${OPS_IAM}\n${OPS_CURRENT_IAM}" | \
 echo -e "\n\xe2\x88\xb4 Updating stage project IAM policy... "
 
 STAGE_CURRENT_IAM=$(gcloud projects get-iam-policy $STAGE_PROJECT --format=yaml | tail -n +2)
-APP_IAM="bindings:
-- members:
-  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
-  role: roles/serviceusage.serviceUsageAdmin
-- members:
-  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
-  role: roles/storage.admin
-- members:
-  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
-  role: roles/resourcemanager.projectIamAdmin
-- members:
-  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
-  role: roles/iam.serviceAccountAdmin
-- members:
-  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
-  role: roles/firebase.managementServiceAgent"
 
 echo -e "${APP_IAM}\n${STAGE_CURRENT_IAM}" | \
     gcloud projects set-iam-policy $STAGE_PROJECT /dev/stdin > /dev/null
@@ -125,7 +125,7 @@ echo -e "\n\xe2\x88\xb4 Updating prod project IAM policy... "
 PROD_CURRENT_IAM=$(gcloud projects get-iam-policy $PROD_PROJECT --format=yaml | tail -n +2)
 echo -e "${APP_IAM}\n${PROD_CURRENT_IAM}" | \
     gcloud projects set-iam-policy $PROD_PROJECT /dev/stdin > /dev/null
-    
+
 # Setup Terraform state bucket
 
 if gcloud storage buckets list gs://$STATE_GCS_BUCKET_NAME &> /dev/null ; then
