@@ -213,7 +213,7 @@ echo -e "\n\xe2\x88\xb4 Adding repo information to project metadata... "
 
 while [[ ! $(gcloud services list --project=$OPS_PROJECT \
     --format="value[](config.name)" \
-    --filter=config.name:compute.googleapiss.com) ]]
+    --filter=config.name:compute.googleapis.com) ]]
     do
         echo -e "\xe2\x88\xb4 Waiting for services... "
         sleep 5
