@@ -63,20 +63,28 @@ gcloud builds submit ./terraform --project="$OPS_PROJECT" \
 # Staging Project
 STAGE_ENVIRONMENT_DIR=terraform/environments/staging
 cat > "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+project_id = "${STAGE_PROJECT}"
+ops_project_id = "${OPS_PROJECT}"
 setup_cd_system="true"
 repo_owner="${REPO_OWNER}"
 repo_name="${REPO_NAME}"
 EOF
-terraform -chdir=${STAGE_ENVIRONMENT_DIR} apply --auto-approve
+gcloud builds submit ./terraform --project="$OPS_PROJECT" \
+    --config=./ops/terraform.cloudbuild.yaml \
+    --substitutions=_ENV="staging",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT
 
 # Prod Project
 # Only deploy to separate project for multi-project setups
+PROD_ENVIRONMENT_DIR=terraform/environments/prod
 if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
-    PROD_ENVIRONMENT_DIR=terraform/environments/prod
-cat >> "${PROD_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+    cat > "${PROD_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+project_id = "${PROD_PROJECT}"
+ops_project_id = "${OPS_PROJECT}"
 setup_cd_system="true"
 repo_owner="${REPO_OWNER}"
 repo_name="${REPO_NAME}"
 EOF
-    terraform -chdir=${PROD_ENVIRONMENT_DIR} apply --auto-approve
+    gcloud builds submit ./terraform --project="$OPS_PROJECT" \
+    --config=./ops/terraform.cloudbuild.yaml \
+    --substitutions=_ENV="prod",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT
 fi
