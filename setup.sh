@@ -72,11 +72,12 @@ export STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
 # Ops Project
 OPS_ENVIRONMENT_DIR=terraform/environments/ops
 cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
-project_id = "${OPS_PROJECT}"
+    project_id = "${OPS_PROJECT}"
 EOF
-terraform -chdir=${OPS_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=ops"
-terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
 
+gcloud builds submit ./terraform --project="$OPS_PROJECT" \
+    --config=./ops/terraform.cloudbuild.yaml \
+    --substitutions=_ENV="ops",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT
 
 ####################
 # Build Containers #
