@@ -111,28 +111,27 @@ fi # skip build
 # Application Setup #
 #####################
 
-# Staging Project
 STAGE_ENVIRONMENT_DIR=terraform/environments/staging
 cat > "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 project_id = "${STAGE_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
-terraform -chdir=${STAGE_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=stage"
-terraform -chdir=${STAGE_ENVIRONMENT_DIR} apply --auto-approve
 
-# Prod Project
-# Only deploy to separate project for multi-project setups
-if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
-    PROD_ENVIRONMENT_DIR=terraform/environments/prod
+STAGE_BUILD_ID="$(gcloud builds submit ./terraform --project="$OPS_PROJECT" \
+    --async --config=./ops/terraform.cloudbuild.yaml \
+    --substitutions=_ENV="staging",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT \
+    --format='value(ID)')"
+
+PROD_ENVIRONMENT_DIR=terraform/environments/prod
 cat > "${PROD_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 project_id = "${PROD_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
-    terraform -chdir=${PROD_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=prod"
-    terraform -chdir=${PROD_ENVIRONMENT_DIR} apply --auto-approve
-fi
 
-
+PROD_BUILD_ID="$(gcloud builds submit ./terraform --project="$OPS_PROJECT" \
+    --async --config=./ops/terraform.cloudbuild.yaml \
+    --substitutions=_ENV="prod",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT \
+    --format='value(ID)') "
 
 ########################
 # Seed Default Content #
