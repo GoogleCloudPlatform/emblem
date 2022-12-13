@@ -40,35 +40,9 @@ elif [[ -z "${OPS_PROJECT}" ]]; then
     exit 1
 fi
 
-REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?project=${OPS_PROJECT}"
-echo "Connect your repos: ${REPO_CONNECT_URL}"
-read -n 1 -r -s -p $'Once your forked emblem repo is connected, please continue by typing any key.\n'
-
-if [[ -z "${REPO_NAME}" ]]
-then
-    continue=1
-else
-    continue=0
-fi
-
-while [[ ${continue} -gt 0 ]]; do
-    read -rp "Please input the GitHub repository owner: " REPO_OWNER
-    read -rp "Please input the GitHub repository name: " REPO_NAME
-    read -rp "Integrate Cloud Build with the repository $(tput bold)https://github.com/${REPO_OWNER}/${REPO_NAME}$(tput sgr0)? (Y/n) " yesno
-
-    case "$yesno" in
-    [yY][eE][sS]|[yY]|"") 
-        continue=0
-        ;;
-    *)
-        continue=1
-        ;;
-    esac
-done
-
 # Ops Project
 OPS_ENVIRONMENT_DIR=terraform/environments/ops
-cat >> "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 setup_cd_system="true"
 repo_owner="${REPO_OWNER}"
 repo_name="${REPO_NAME}"
@@ -77,7 +51,7 @@ terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
 
 # Staging Project
 STAGE_ENVIRONMENT_DIR=terraform/environments/staging
-cat >> "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+cat > "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 setup_cd_system="true"
 repo_owner="${REPO_OWNER}"
 repo_name="${REPO_NAME}"
