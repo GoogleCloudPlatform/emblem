@@ -67,7 +67,7 @@ echo
 echo "$(tput bold)Setting up your Cloud resources with Terraform...$(tput sgr0)"
 echo
 export TERRAFORM_SERVICE_ACCOUNT="emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com"
-export STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
+export STATE_GCS_BUCKET_NAME="${OPS_PROJECT}-tf-states"
 
 # Ops Project
 OPS_ENVIRONMENT_DIR=terraform/environments/ops
@@ -117,9 +117,9 @@ project_id = "${STAGE_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
 
-STAGE_BUILD_ID="$(gcloud builds submit ./terraform --project="$OPS_PROJECT" \
+STAGE_BUILD_ID="$(gcloud builds submit ./terraform --project=${OPS_PROJECT} \
     --async --config=./ops/terraform.cloudbuild.yaml \
-    --substitutions=_ENV="staging",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT \
+    --substitutions=_ENV='staging',_STATE_GCS_BUCKET_NAME=${STATE_GCS_BUCKET_NAME},_TF_SERVICE_ACCT=${TERRAFORM_SERVICE_ACCOUNT} \
     --format='value(ID)')"
 
 PROD_ENVIRONMENT_DIR=terraform/environments/prod
@@ -163,13 +163,13 @@ check_for_build_then_run () {
         echo "Please re-run setup."
         exit 2
     # Deploy if build is successful.
-    elif [ $(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(status)') == "SUCCESS" ]; then
+    elif [ "$(gcloud builds describe ${build_id} --project=${OPS_PROJECT} --format='value(status)')" == "SUCCESS" ]; then
         $run_command
     # Return build log for all other statuses.
     else
-        log_url=$(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(logUrl)')
+        log_url="$(gcloud builds describe ${build_id} --project=${OPS_PROJECT} --format='value(logUrl)')"
         echo "Build ${build_id} did not complete." 
-        echo "See build log: $log_url"
+        echo "See build log: ${log_url}"
         echo "Please re-run setup."
         exit 2
     fi;
@@ -178,7 +178,7 @@ check_for_build_then_run () {
 ########################
 # Seed Default Content #
 ########################
-if [[ -z "$SKIP_SEEDING" ]]; then
+if [[ -z "${SKIP_SEEDING}" ]]; then
     echo
     echo "$(tput bold)Seeding default content...$(tput sgr0)"
     echo
@@ -262,7 +262,7 @@ fi # skip deploy
 # Setup CI/CD #
 ###############
 
-if [[ -z "$SKIP_TRIGGERS" ]]; then
+if [[ -z "${SKIP_TRIGGERS}" ]]; then
     echo
 
     ./scripts/configure_delivery.sh
@@ -270,9 +270,9 @@ if [[ -z "$SKIP_TRIGGERS" ]]; then
 fi # skip triggers
 
 echo
-STAGING_WEBSITE_URL=$(gcloud run services describe website --project "${STAGE_PROJECT}" --region ${REGION} --format 'value(status.url)')
+STAGING_WEBSITE_URL="$(gcloud run services describe website --project ${STAGE_PROJECT} --region ${REGION} --format 'value(status.url)')"
 if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
-  PROD_WEBSITE_URL=$(gcloud run services describe website --project "${PROD_PROJECT}" --region ${REGION} --format 'value(status.url)')
+  PROD_WEBSITE_URL="$(gcloud run services describe website --project ${PROD_PROJECT} --region ${REGION} --format 'value(status.url)')"
   echo "💠 The staging environment is ready! Navigate your browser to ${STAGING_WEBSITE_URL}"
   echo "💠 The production environment is ready! Navigate your browser to ${PROD_WEBSITE_URL}"
 else
@@ -283,7 +283,7 @@ fi
 # User Authentication #
 #######################
 
-if [[ -z "$SKIP_AUTH" ]]; then
+if [[ -z "${SKIP_AUTH}" ]]; then
     echo
     read -rp "Would you like to configure $(tput bold)$(tput setaf 3)end-user authentication?$(tput sgr0) (y/n) " auth_yesno
 
