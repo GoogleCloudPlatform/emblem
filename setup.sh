@@ -133,39 +133,10 @@ PROD_BUILD_ID="$(gcloud builds submit ./terraform --project="$OPS_PROJECT" \
     --substitutions=_ENV="prod",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT \
     --format='value(ID)') "
 
-########################
-# Seed Default Content #
-########################
-if [[ -z "$SKIP_SEEDING" ]]; then
-    echo
-    echo "$(tput bold)Seeding default content...$(tput sgr0)"
-    echo
-
-    account=$(gcloud config get-value account 2> /dev/null)
-    if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
-        read -rp "Please input an email address for an approver. This email will be added to the Firestore database as an 'approver' and will be able to perform privileged API operations from the website frontend: [${account}]: " approver
-    fi
-    approver="${approver:-$account}"
-
-    gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
-    --substitutions=_FIREBASE_PROJECT="${STAGE_PROJECT}",_APPROVER_EMAIL="${approver}" \
-    --config=./content-api/data/cloudbuild.yaml
-
-    if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
-        gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
-        --substitutions=_FIREBASE_PROJECT="${PROD_PROJECT}",_APPROVER_EMAIL="${approver}" \
-        --config=./content-api/data/cloudbuild.yaml
-    fi
-fi # skip seeding
-
-##################
-# Deploy Services #
-##################
-
 # This function will wait for job status for the provided build job to update 
 # from WORKING to FAILURE or SUCCESS. For failed build jobs, the failure info 
 # will be returned along with the url to the build log. For successful build 
-# jobs, the provided run command will be executed. For all other statuses,
+# jobs, the provided command will be executed. For all other statuses,
 # url to the build log is returned.
 
 check_for_build_then_run () {
@@ -203,6 +174,35 @@ check_for_build_then_run () {
         exit 2
     fi;
 }
+
+########################
+# Seed Default Content #
+########################
+if [[ -z "$SKIP_SEEDING" ]]; then
+    echo
+    echo "$(tput bold)Seeding default content...$(tput sgr0)"
+    echo
+
+    account=$(gcloud config get-value account 2> /dev/null)
+    if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
+        read -rp "Please input an email address for an approver. This email will be added to the Firestore database as an 'approver' and will be able to perform privileged API operations from the website frontend: [${account}]: " approver
+    fi
+    approver="${approver:-$account}"
+
+    gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
+    --substitutions=_FIREBASE_PROJECT="${STAGE_PROJECT}",_APPROVER_EMAIL="${approver}" \
+    --config=./content-api/data/cloudbuild.yaml
+
+    if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
+        gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
+        --substitutions=_FIREBASE_PROJECT="${PROD_PROJECT}",_APPROVER_EMAIL="${approver}" \
+        --config=./content-api/data/cloudbuild.yaml
+    fi
+fi # skip seeding
+
+##################
+# Deploy Services #
+##################
 
 if [[ -z "$SKIP_DEPLOY" ]]; then
 
