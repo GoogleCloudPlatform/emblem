@@ -256,7 +256,14 @@ fi # skip deploy
 
 if [[ -z "$SKIP_TRIGGERS" ]]; then
     echo
-
+# TODO: integrate delivery
+REPO_NAME="$(gcloud compute project-info describe \
+    --project=$OPS_PROJECT \
+    --format='value[](commonInstanceMetadata.items.REPO_NAME)')"
+REPO_OWNER="$(gcloud compute project-info describe \
+    --project=$OPS_PROJECT \
+    --format='value[](commonInstanceMetadata.items.REPO_OWNER)')"
+    
     sh ./scripts/configure_delivery.sh
     
 fi # skip triggers
