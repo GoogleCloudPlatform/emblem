@@ -183,20 +183,20 @@ if [[ -z "$SKIP_SEEDING" ]]; then
     echo "$(tput bold)Seeding default content...$(tput sgr0)"
     echo
 
-    account=$(gcloud config get-value account 2> /dev/null)
+    account="$(gcloud config get-value account 2> /dev/null)"
     if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
         read -rp "Please input an email address for an approver. This email will be added to the Firestore database as an 'approver' and will be able to perform privileged API operations from the website frontend: [${account}]: " approver
     fi
     approver="${approver:-$account}"
 
-    gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
+    check_for_build_then_run $STAGE_BUILD_ID "gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
     --substitutions=_FIREBASE_PROJECT="${STAGE_PROJECT}",_APPROVER_EMAIL="${approver}" \
-    --config=./content-api/data/cloudbuild.yaml
+    --config=./content-api/data/cloudbuild.yaml"
 
     if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
-        gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
+        check_for_build_then_run $PROD_BUILD_ID "gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
         --substitutions=_FIREBASE_PROJECT="${PROD_PROJECT}",_APPROVER_EMAIL="${approver}" \
-        --config=./content-api/data/cloudbuild.yaml
+        --config=./content-api/data/cloudbuild.yaml"
     fi
 fi # skip seeding
 
@@ -218,7 +218,9 @@ if [[ -z "$SKIP_DEPLOY" ]]; then
         --project "${STAGE_PROJECT}" \
         --region "${REGION}""
 
-    STAGING_API_URL=$(gcloud run services describe content-api --project "${STAGE_PROJECT}" --region ${REGION} --format 'value(status.url)')
+    STAGING_API_URL=$(gcloud run services describe content-api \
+        --project "${STAGE_PROJECT}" --region ${REGION} \
+        --format 'value(status.url)')
     
     check_for_build_then_run $WEB_BUILD_ID "gcloud run deploy website \
         --allow-unauthenticated \
