@@ -59,6 +59,8 @@ fi
 
 echo "Setting up a new instance of Emblem. There may be a few prompts to guide the process."
 
+./scripts/bootstrap.sh
+
 #####################
 # Initial Ops Setup #
 #####################
