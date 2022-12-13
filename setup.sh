@@ -66,8 +66,8 @@ echo "Setting up a new instance of Emblem. There may be a few prompts to guide t
 echo
 echo "$(tput bold)Setting up your Cloud resources with Terraform...$(tput sgr0)"
 echo
-
-STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
+export TERRAFORM_SERVICE_ACCOUNT="emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com"
+export STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
 
 # Create remote state bucket if it doesn't exist
 if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
