@@ -38,7 +38,7 @@ Go deeper into project details in the [documentation](./docs) or read through th
 
 ## Getting Started
 
-Emblem is made of a combination of resources created and managed by Terraform and resources created via the Google Cloud CLI or Google Cloud Console. You may deploy Emblem by either running `setup.sh` (see [streamlined setup instructions](#streamlined-setup)) or by following the [manual steps below](#manual-setup). 
+Emblem is made of a combination of resources created and managed by Terraform and resources created via the Google Cloud CLI or Google Cloud Console. You may deploy Emblem by running `setup.sh` (see [streamlined setup instructions](#streamlined-setup)). 
 
 ### Prerequisites
 
