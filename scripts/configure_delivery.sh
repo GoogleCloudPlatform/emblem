@@ -68,30 +68,23 @@ done
 
 # Ops Project
 OPS_ENVIRONMENT_DIR=terraform/environments/ops
+TFVARS_FILE="${OPS_ENVIRONMENT_DIR}/terraform.tfvars"
+TFVARS=$(grep -zvwE "repo_(owner|name)" $TFVARS_FILE)
+(echo "$TFVARS") > $TFVARS_FILE
 cat >> "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
-setup_cd_system="true"
 repo_owner="${REPO_OWNER}"
 repo_name="${REPO_NAME}"
 EOF
 terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
 
 # Staging Project
+export TF_VAR_ops_project_id="$OPS_PROJECT"
 STAGE_ENVIRONMENT_DIR=terraform/environments/staging
-cat >> "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
-setup_cd_system="true"
-repo_owner="${REPO_OWNER}"
-repo_name="${REPO_NAME}"
-EOF
 terraform -chdir=${STAGE_ENVIRONMENT_DIR} apply --auto-approve
 
 # Prod Project
 # Only deploy to separate project for multi-project setups
 if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
     PROD_ENVIRONMENT_DIR=terraform/environments/prod
-cat >> "${PROD_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
-setup_cd_system="true"
-repo_owner="${REPO_OWNER}"
-repo_name="${REPO_NAME}"
-EOF
     terraform -chdir=${PROD_ENVIRONMENT_DIR} apply --auto-approve
 fi

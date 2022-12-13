@@ -59,6 +59,9 @@ fi
 
 echo "Setting up a new instance of Emblem. There may be a few prompts to guide the process."
 
+# Common variables
+OPS_ENVIRONMENT_DIR=terraform/environments/ops
+
 #####################
 # Initial Ops Setup #
 #####################
@@ -68,9 +71,8 @@ if [[ -z "$SKIP_TERRAFORM" ]]; then
     echo "$(tput bold)Setting up your Cloud resources with Terraform...$(tput sgr0)"
     echo
 
-    STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
-    
     # Create remote state bucket if it doesn't exist
+    STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
     if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
         echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
         gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
@@ -78,11 +80,11 @@ if [[ -z "$SKIP_TERRAFORM" ]]; then
     fi
     
     # Ops Project
-    OPS_ENVIRONMENT_DIR=terraform/environments/ops
     cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 project_id = "${OPS_PROJECT}"
+setup_cd_system = "false"
 EOF
-    terraform -chdir=${OPS_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=ops"
+    terraform -chdir=${OPS_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=ops" -reconfigure
     terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
 fi # $SKIP_TERRAFORM
 
@@ -125,7 +127,7 @@ if [[ -z "$SKIP_TERRAFORM" ]]; then
 project_id = "${STAGE_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
-    terraform -chdir=${STAGE_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=stage"
+    terraform -chdir=${STAGE_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=stage" -reconfigure
     terraform -chdir=${STAGE_ENVIRONMENT_DIR} apply --auto-approve
 
     # Prod Project
@@ -219,6 +221,13 @@ if [[ -z "$SKIP_DEPLOY" ]]; then
     echo "$(tput bold)Deploying Cloud Run services...$(tput sgr0)"
     echo
 
+    if [[ -n "$SKIP_BUILD" ]]; then
+        echo
+        echo "$(tput bold)$(tput setaf 1)ERROR:$(tput sgr0) \$SKIP_BUILD must be unset in order to deploy to Cloud Run."
+        echo
+        exit 1
+    fi
+
     ## Staging Services ##
     check_for_build_then_run $API_BUILD_ID "gcloud run deploy content-api \
         --allow-unauthenticated \
@@ -272,9 +281,19 @@ fi # skip deploy
 if [[ -z "$SKIP_TRIGGERS" ]]; then
     echo
 
+    # Set `setup_cd_system` Terraform var to "true"
+    TFVARS_FILE="${OPS_ENVIRONMENT_DIR}/terraform.tfvars"
+    TFVARS=$(grep -vw "setup_cd_system" $TFVARS_FILE)
+    (printf '%s\nsetup_cd_system = "true"' "${TFVARS}") > $TFVARS_FILE
+
+    # Set-up CD system
     ./scripts/configure_delivery.sh
-    
+
 fi # skip triggers
+
+##################
+# Launch website #
+##################
 
 echo
 STAGING_WEBSITE_URL=$(gcloud run services describe website --project "${STAGE_PROJECT}" --region ${REGION} --format 'value(status.url)')
