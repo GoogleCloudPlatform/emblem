@@ -186,9 +186,4 @@ gcloud compute project-info add-metadata --project=$OPS_PROJECT \
 gcloud compute project-info add-metadata --project=$OPS_PROJECT \
     --metadata=REPO_OWNER=$REPO_OWNER > /dev/null
 
-# USE THE FOLLOWING TO RETRIEVE VALUES IN SETUP.SH
-# gcloud compute project-info describe \
-#     --project=$OPS_PROJECT \
-#     --format='value[](commonInstanceMetadata.items.REPO_NAME)'
-
 echo -e "\n${GREEN}Emblem bootstrapping complete! Please run setup.sh${NC} \n"
