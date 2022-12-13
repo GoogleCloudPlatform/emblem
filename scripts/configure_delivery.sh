@@ -40,6 +40,13 @@ elif [[ -z "${OPS_PROJECT}" ]]; then
     exit 1
 fi
 
+REPO_NAME="$(gcloud compute project-info describe \
+    --project=${OPS_PROJECT} \
+    --format='value[](commonInstanceMetadata.items.REPO_NAME)')"
+REPO_OWNER="$(gcloud compute project-info describe \
+    --project=${OPS_PROJECT} \
+    --format='value[](commonInstanceMetadata.items.REPO_OWNER)')"
+
 # Ops Project
 OPS_ENVIRONMENT_DIR=terraform/environments/ops
 cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
