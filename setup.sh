@@ -69,13 +69,6 @@ echo
 export TERRAFORM_SERVICE_ACCOUNT="emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com"
 export STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
 
-# Create remote state bucket if it doesn't exist
-if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
-    echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
-    gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
-    gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
-fi
-
 # Ops Project
 OPS_ENVIRONMENT_DIR=terraform/environments/ops
 cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
