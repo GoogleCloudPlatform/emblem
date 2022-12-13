@@ -26,7 +26,6 @@ trap '_error_report $LINENO' ERR
 #   PROD_PROJECT            GCP Project ID of the production project
 #   STAGE_PROJECT           GCP Project ID of the staging project
 #   OPS_PROJECT             GCP Project ID of the operations project
-#   SKIP_TERRAFORM          If set, don't set up infrastructure
 #   SKIP_TRIGGERS           If set, don't set up build triggers
 #   SKIP_AUTH               If set, do not prompt to set up auth
 #   SKIP_BUILD              If set, do not build container images
@@ -36,7 +35,6 @@ trap '_error_report $LINENO' ERR
 #   REGION                  Default region to deploy resources to. Defaults to 'us-central1'
 
 # Default to empty or default values, avoiding unbound variable errors.
-SKIP_TERRAFORM=${SKIP_TERRAFORM:-}
 SKIP_TRIGGERS=${SKIP_TRIGGERS:-}
 SKIP_AUTH=${SKIP_AUTH:=true}
 SKIP_BUILD=${SKIP_BUILD:-}
@@ -65,28 +63,27 @@ echo "Setting up a new instance of Emblem. There may be a few prompts to guide t
 # Initial Ops Setup #
 #####################
 
-if [[ -z "$SKIP_TERRAFORM" ]]; then
-    echo
-    echo "$(tput bold)Setting up your Cloud resources with Terraform...$(tput sgr0)"
-    echo
+echo
+echo "$(tput bold)Setting up your Cloud resources with Terraform...$(tput sgr0)"
+echo
 
-    STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
-    
-    # Create remote state bucket if it doesn't exist
-    if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
-        echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
-        gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
-        gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
-    fi
-    
-    # Ops Project
-    OPS_ENVIRONMENT_DIR=terraform/environments/ops
-    cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
+
+# Create remote state bucket if it doesn't exist
+if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
+    echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
+    gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
+    gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
+fi
+
+# Ops Project
+OPS_ENVIRONMENT_DIR=terraform/environments/ops
+cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 project_id = "${OPS_PROJECT}"
 EOF
-    terraform -chdir=${OPS_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=ops"
-    terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
-fi # $SKIP_TERRAFORM
+terraform -chdir=${OPS_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=ops"
+terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
+
 
 ####################
 # Build Containers #
@@ -120,29 +117,28 @@ fi # skip build
 # Application Setup #
 #####################
 
-if [[ -z "$SKIP_TERRAFORM" ]]; then
-    # Staging Project
-    STAGE_ENVIRONMENT_DIR=terraform/environments/staging
-    cat > "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+# Staging Project
+STAGE_ENVIRONMENT_DIR=terraform/environments/staging
+cat > "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 project_id = "${STAGE_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
-    terraform -chdir=${STAGE_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=stage"
-    terraform -chdir=${STAGE_ENVIRONMENT_DIR} apply --auto-approve
+terraform -chdir=${STAGE_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=stage"
+terraform -chdir=${STAGE_ENVIRONMENT_DIR} apply --auto-approve
 
-    # Prod Project
-    # Only deploy to separate project for multi-project setups
-    if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
-        PROD_ENVIRONMENT_DIR=terraform/environments/prod
-    cat > "${PROD_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+# Prod Project
+# Only deploy to separate project for multi-project setups
+if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
+    PROD_ENVIRONMENT_DIR=terraform/environments/prod
+cat > "${PROD_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 project_id = "${PROD_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
-        terraform -chdir=${PROD_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=prod"
-        terraform -chdir=${PROD_ENVIRONMENT_DIR} apply --auto-approve
-    fi
+    terraform -chdir=${PROD_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=prod"
+    terraform -chdir=${PROD_ENVIRONMENT_DIR} apply --auto-approve
+fi
 
-fi # skip terraform
+
 
 ########################
 # Seed Default Content #
