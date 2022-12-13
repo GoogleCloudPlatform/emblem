@@ -50,11 +50,15 @@ REPO_OWNER="$(gcloud compute project-info describe \
 # Ops Project
 OPS_ENVIRONMENT_DIR=terraform/environments/ops
 cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+project_id = "${OPS_PROJECT}"
 setup_cd_system="true"
 repo_owner="${REPO_OWNER}"
 repo_name="${REPO_NAME}"
 EOF
-terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
+
+gcloud builds submit ./terraform --project="$OPS_PROJECT" \
+    --config=./ops/terraform.cloudbuild.yaml \
+    --substitutions=_ENV="ops",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT
 
 # Staging Project
 STAGE_ENVIRONMENT_DIR=terraform/environments/staging
