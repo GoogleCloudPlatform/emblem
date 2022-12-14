@@ -131,14 +131,14 @@ echo -e "${APP_IAM}\n${PROD_CURRENT_IAM}" | \
 
 # Setup Terraform state bucket
 
-if gcloud storage buckets list gs://$STATE_GCS_BUCKET_NAME &> /dev/null ; then
+if gcloud storage buckets list gs://$STATE_GCS_BUCKET_NAME --project $OPS_PROJECT &> /dev/null ; then
     echo -e "\n\xe2\x88\xb4 Using existing Terraform remote state bucket: gs://${STATE_GCS_BUCKET_NAME} "
-    gcloud storage buckets update gs://$STATE_GCS_BUCKET_NAME --versioning > /dev/null
+    gcloud storage buckets update gs://$STATE_GCS_BUCKET_NAME --versioning --project $OPS_PROJECT > /dev/null
 else
     echo -e "\n\xe2\x88\xb4 Creating Terraform remote state bucket: gs://${STATE_GCS_BUCKET_NAME} "
     gcloud storage buckets create gs://${STATE_GCS_BUCKET_NAME} --project=$OPS_PROJECT > /dev/null
     echo -e "\n\xe2\x88\xb4 Enabling versioning... "
-    gcloud storage buckets update gs://$STATE_GCS_BUCKET_NAME --versioning > /dev/null
+    gcloud storage buckets update gs://$STATE_GCS_BUCKET_NAME --versioning --project $OPS_PROJECT > /dev/null
 fi
 
 echo -e "\n\xe2\x88\xb4 Setting storage bucket IAM policy for Terraform service account..."
