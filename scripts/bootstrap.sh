@@ -142,10 +142,10 @@ else
 fi
 
 echo -e "\n\xe2\x88\xb4 Setting storage bucket IAM policy for Terraform service account..."
-gcloud storage buckets add-iam-policy-binding gs://$STATE_GCS_BUCKET_NAME \
-    --project=$OPS_PROJECT \
-    --member=serviceAccount:$EMBLEM_TF_SERVICE_ACCOUNT \
-    --role="roles/storage.admin" > /dev/null
+# Note: `gcloud storage buckets` does not support `add-iam-policy-binding` in 
+# Google Cloud SDK 410.0.0 (current default in Cloud Shell).
+gsutil iam ch serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}:admin \
+  gs://${STATE_GCS_BUCKET_NAME}
 
 # Add GitHub repo to ops project
 echo -e "\n${GREEN}\xE2\x9E\xA8 Connect a fork of the Emblem GitHub repo to your ops project via the Cloud Console:${NC} $(tput bold)${REPO_CONNECT_URL}$(tput sgr0) \n"
