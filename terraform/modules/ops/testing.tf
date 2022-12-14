@@ -9,6 +9,9 @@ resource "google_service_account" "test_user" {
   account_id   = "test-user"
   display_name = "Test Account [User]"
   description  = "Mock user account for unit and integration tests."
+  depends_on = [
+    time_sleep.wait_for_iam_service
+  ]
 }
 
 resource "google_service_account" "test_approver" {
@@ -16,6 +19,9 @@ resource "google_service_account" "test_approver" {
   account_id   = "test-approver"
   display_name = "Test Account [Approver]"
   description  = "Mock approver account for unit and integration tests."
+  depends_on = [
+    time_sleep.wait_for_iam_service
+  ]
 }
 
 #######################
