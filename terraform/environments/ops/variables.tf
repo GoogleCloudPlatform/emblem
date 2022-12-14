@@ -27,3 +27,8 @@ variable "repo_name" {
   default     = ""
 }
 
+variable "content_api_url" {
+  type        = string
+  description = "The URL of the `staging` project's content API."
+  default     = ""
+}

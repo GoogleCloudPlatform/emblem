@@ -6,3 +6,13 @@ module "emblem_ops" {
   repo_owner      = var.repo_owner
   repo_name       = var.repo_name
 }
+
+module "emblem_website_e2e_test" {
+  source          = "../../modules/website-e2e-test"
+  count           = var.setup_cd_system ? 1 : 0
+  project_id      = var.project_id
+  region          = var.region
+  repo_owner      = var.repo_owner
+  repo_name       = var.repo_name
+  content_api_url = var.content_api_url
+}
