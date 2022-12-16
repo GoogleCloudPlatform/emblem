@@ -32,3 +32,9 @@ variable "setup_cd_system" {
   default     = false
   description = "Create deployment triggers. Enable only if Cloud Build has been granted GitHub access."
 }
+
+variable "setup_e2e_tests" {
+  type        = bool
+  default     = false
+  description = "Create E2E testing triggers for the Website component. Enable only if Cloud Build has been granted GitHub access."
+}

@@ -9,7 +9,7 @@ module "emblem_ops" {
 
 module "website_e2e_test" {
   source          = "../../modules/website-e2e-test"
-  count           = var.setup_cd_system ? 1 : 0
+  count           = var.setup_e2e_tests ? 1 : 0
   project_id      = var.project_id
   region          = var.region
   repo_owner      = var.repo_owner
