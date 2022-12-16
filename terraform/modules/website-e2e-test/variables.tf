@@ -23,7 +23,3 @@ variable "content_api_url" {
   type        = string
   description = "A URL pointing to the Content API deployment (staging *or* prod) to test against."
 }
-
-data "google_project" "project" {
-  project_id = var.project_id
-}
