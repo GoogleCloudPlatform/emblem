@@ -58,6 +58,9 @@ OPS_IAM="bindings:
   role: roles/resourcemanager.projectIamAdmin
 - members:
   - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/cloudscheduler.admin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
   role: roles/serviceusage.serviceUsageAdmin"
 APP_IAM="bindings:
 - members:
