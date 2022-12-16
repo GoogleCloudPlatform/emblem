@@ -7,7 +7,7 @@ module "emblem_ops" {
   repo_name       = var.repo_name
 }
 
-module "emblem_website_e2e_test" {
+module "website_e2e_test" {
   source          = "../../modules/website-e2e-test"
   count           = var.setup_cd_system ? 1 : 0
   project_id      = var.project_id
