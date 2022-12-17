@@ -14,5 +14,4 @@ module "website_e2e_test" {
   region          = var.region
   repo_owner      = var.repo_owner
   repo_name       = var.repo_name
-  content_api_url = var.content_api_url
 }

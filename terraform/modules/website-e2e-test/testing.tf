@@ -13,7 +13,7 @@ resource "google_cloudbuild_trigger" "testing_web_e2e_run_tests_trigger" {
   substitutions = {
     _DIR            = "website"
     _EMBLEM_URL     = "http://localhost:8080"
-    _EMBLEM_API_URL = var.content_api_url
+    _EMBLEM_API_URL = data.google_cloud_run_service.content_api.status.url
     _PROJECT        = var.project_id
   }
   github {
