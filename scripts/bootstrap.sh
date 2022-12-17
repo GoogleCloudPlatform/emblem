@@ -27,14 +27,12 @@ fi
 echo -e "Bootstrapping Emblem...\n"
 
 # Set other variables
-OPS_PROJECT_NUMBER=$(gcloud projects list --format='value(PROJECT_NUMBER)' --filter=PROJECT_ID=$OPS_PROJECT)
 if [[ -z "${OPS_PROJECT_NUMBER}" ]]; then
     echo -e "---\n${RED}Emblem bootstrap error:${NC} Could not retrieve project number for $(tput bold)${OPS_PROJECT}$(tput sgr0).\n---"
     exit 1
 fi
 
 EMBLEM_TF_SERVICE_ACCOUNT=emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com
-BUILD_SERVICE_ACCOUNT=${OPS_PROJECT_NUMBER}@cloudbuild.gserviceaccount.com
 REPO_CONNECT_URL="https://console.cloud.google.com/cloud-build/triggers/connect?project=${OPS_PROJECT}"
 STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
 OPS_IAM="bindings:
@@ -61,8 +59,29 @@ OPS_IAM="bindings:
   role: roles/cloudscheduler.admin
 - members:
   - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/cloudscheduler.admin
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/iam.serviceAccountUser
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/cloudasset.owner
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/logging.logWriter
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
   role: roles/serviceusage.serviceUsageAdmin"
 APP_IAM="bindings:
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/iam.serviceAccountUser
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/cloudasset.owner
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/logging.logWriter
 - members:
   - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
   role: roles/serviceusage.serviceUsageAdmin
@@ -102,13 +121,6 @@ else
         --description="Service account for deploying resources via Terraform" \
         --display-name="Emblem Terraformer"
 fi
-
-# Give cloud build service account token creator on terraform service account policy
-echo -e "\n\xe2\x88\xb4 Updating Terraform service account IAM policy... "
-gcloud iam service-accounts add-iam-policy-binding --project=$OPS_PROJECT \
-    $EMBLEM_TF_SERVICE_ACCOUNT \
-    --member="serviceAccount:${BUILD_SERVICE_ACCOUNT}" \
-    --role="roles/iam.serviceAccountTokenCreator" &> /dev/null
 
 # Ops permissions
 echo -e "\n\xe2\x88\xb4 Updating ops project IAM policy... "
