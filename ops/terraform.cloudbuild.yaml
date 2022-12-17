@@ -28,8 +28,6 @@ steps:
   - id: 'tf init'
     name: 'hashicorp/terraform:1.0.0'
     entrypoint: 'sh'
-    env:
-      - 'GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=$_TF_SERVICE_ACCT'
     args: 
       - '-c'
       - |
@@ -47,8 +45,6 @@ steps:
   - id: 'tf plan'
     name: 'hashicorp/terraform:1.0.0'
     entrypoint: 'sh'
-    env:
-      - 'GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=$_TF_SERVICE_ACCT'
     args: 
     - '-c'
     - | 
@@ -66,8 +62,6 @@ steps:
   - id: 'tf apply'
     name: 'hashicorp/terraform:1.0.0'
     entrypoint: 'sh'
-    env:
-      - 'GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=$_TF_SERVICE_ACCT'
     args: 
     - '-c'
     - | 
@@ -79,3 +73,6 @@ steps:
           echo "******* Environment $_ENV not found. ********"
           echo "*******************************************************************************"
         fi
+serviceAccount: 'projects/${_OPS_PROJECT}/serviceAccounts/${_TF_SERVICE_ACCT}'
+options:
+  logging: CLOUD_LOGGING_ONLY
