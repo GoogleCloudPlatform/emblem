@@ -66,7 +66,8 @@ resource "google_cloudbuild_trigger" "web_deploy" {
   approval_config {
     approval_required = var.require_deploy_approval
   }
-  filter = "_IMAGE_NAME.matches('website')"
+  filter   = "_IMAGE_NAME.matches('website')"
+  filename = "ops/deploy.cloudbuild.yaml"
   substitutions = {
     _BODY           = "$(body)"
     _ENV            = var.environment
@@ -79,10 +80,6 @@ resource "google_cloudbuild_trigger" "web_deploy" {
   source_to_build {
     uri       = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
     ref       = "refs/heads/main"
-    repo_type = "GITHUB"
-  }
-  git_file_source {
-    path      = "ops/deploy.cloudbuild.yaml"
     repo_type = "GITHUB"
   }
 }
@@ -98,7 +95,8 @@ resource "google_cloudbuild_trigger" "api_deploy" {
   approval_config {
     approval_required = var.require_deploy_approval
   }
-  filter = "_IMAGE_NAME.matches('content-api')"
+  filter   = "_IMAGE_NAME.matches('content-api')"
+  filename = "ops/deploy.cloudbuild.yaml"
   substitutions = {
     _BODY           = "$(body)"
     _ENV            = var.environment
@@ -111,10 +109,6 @@ resource "google_cloudbuild_trigger" "api_deploy" {
   source_to_build {
     uri       = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
     ref       = "refs/heads/main"
-    repo_type = "GITHUB"
-  }
-  git_file_source {
-    path      = "ops/deploy.cloudbuild.yaml"
     repo_type = "GITHUB"
   }
 }
@@ -132,7 +126,8 @@ resource "google_cloudbuild_trigger" "web_canary" {
   approval_config {
     approval_required = false
   }
-  filter = format("_SERVICE.matches('%s')", "website")
+  filter   = format("_SERVICE.matches('%s')", "website")
+  filename = "ops/canary.cloudbuild.yaml"
   substitutions = {
     _BODY           = "$(body)"
     _ENV            = var.environment
@@ -146,10 +141,6 @@ resource "google_cloudbuild_trigger" "web_canary" {
   source_to_build {
     uri       = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
     ref       = "refs/heads/main"
-    repo_type = "GITHUB"
-  }
-  git_file_source {
-    path      = "ops/canary.cloudbuild.yaml"
     repo_type = "GITHUB"
   }
 }
@@ -165,7 +156,8 @@ resource "google_cloudbuild_trigger" "api_canary" {
   approval_config {
     approval_required = false
   }
-  filter = format("_SERVICE.matches('%s')", "content-api")
+  filter   = format("_SERVICE.matches('%s')", "content-api")
+  filename = "ops/canary.cloudbuild.yaml"
   substitutions = {
     _BODY           = "$(body)"
     _ENV            = var.environment
@@ -179,10 +171,6 @@ resource "google_cloudbuild_trigger" "api_canary" {
   source_to_build {
     uri       = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
     ref       = "refs/heads/main"
-    repo_type = "GITHUB"
-  }
-  git_file_source {
-    path      = "ops/canary.cloudbuild.yaml"
     repo_type = "GITHUB"
   }
 }

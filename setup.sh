@@ -26,7 +26,6 @@ trap '_error_report $LINENO' ERR
 #   PROD_PROJECT            GCP Project ID of the production project
 #   STAGE_PROJECT           GCP Project ID of the staging project
 #   OPS_PROJECT             GCP Project ID of the operations project
-#   SKIP_TERRAFORM          If set, don't set up infrastructure
 #   SKIP_TRIGGERS           If set, don't set up build triggers
 #   SKIP_AUTH               If set, do not prompt to set up auth
 #   SKIP_BUILD              If set, do not build container images
@@ -36,7 +35,6 @@ trap '_error_report $LINENO' ERR
 #   REGION                  Default region to deploy resources to. Defaults to 'us-central1'
 
 # Default to empty or default values, avoiding unbound variable errors.
-SKIP_TERRAFORM=${SKIP_TERRAFORM:-}
 SKIP_TRIGGERS=${SKIP_TRIGGERS:-}
 SKIP_AUTH=${SKIP_AUTH:=true}
 SKIP_BUILD=${SKIP_BUILD:-}
@@ -59,32 +57,27 @@ fi
 
 echo "Setting up a new instance of Emblem. There may be a few prompts to guide the process."
 
+./scripts/bootstrap.sh
+
 #####################
 # Initial Ops Setup #
 #####################
 
-if [[ -z "$SKIP_TERRAFORM" ]]; then
-    echo
-    echo "$(tput bold)Setting up your Cloud resources with Terraform...$(tput sgr0)"
-    echo
+echo
+echo "$(tput bold)Setting up your Cloud resources with Terraform...$(tput sgr0)"
+echo
+export TERRAFORM_SERVICE_ACCOUNT="emblem-terraformer@${OPS_PROJECT}.iam.gserviceaccount.com"
+export STATE_GCS_BUCKET_NAME="${OPS_PROJECT}-tf-states"
 
-    STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
-    
-    # Create remote state bucket if it doesn't exist
-    if ! gsutil ls gs://${STATE_GCS_BUCKET_NAME} > /dev/null ; then
-        echo "Creating remote state bucket: " $STATE_GCS_BUCKET_NAME
-        gsutil mb -p $OPS_PROJECT -l $REGION gs://${STATE_GCS_BUCKET_NAME}
-        gsutil versioning set on gs://${STATE_GCS_BUCKET_NAME}
-    fi
-    
-    # Ops Project
-    OPS_ENVIRONMENT_DIR=terraform/environments/ops
-    cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
-project_id = "${OPS_PROJECT}"
+# Ops Project
+OPS_ENVIRONMENT_DIR=terraform/environments/ops
+cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+    project_id = "${OPS_PROJECT}"
 EOF
-    terraform -chdir=${OPS_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=ops"
-    terraform -chdir=${OPS_ENVIRONMENT_DIR} apply --auto-approve
-fi # $SKIP_TERRAFORM
+
+gcloud builds submit ./terraform --project="$OPS_PROJECT" \
+    --config=./ops/terraform.cloudbuild.yaml \
+    --substitutions=_ENV="ops",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT
 
 ####################
 # Build Containers #
@@ -118,63 +111,32 @@ fi # skip build
 # Application Setup #
 #####################
 
-if [[ -z "$SKIP_TERRAFORM" ]]; then
-    # Staging Project
-    STAGE_ENVIRONMENT_DIR=terraform/environments/staging
-    cat > "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+STAGE_ENVIRONMENT_DIR=terraform/environments/staging
+cat > "${STAGE_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 project_id = "${STAGE_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
-    terraform -chdir=${STAGE_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=stage"
-    terraform -chdir=${STAGE_ENVIRONMENT_DIR} apply --auto-approve
 
-    # Prod Project
-    # Only deploy to separate project for multi-project setups
-    if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then 
-        PROD_ENVIRONMENT_DIR=terraform/environments/prod
-    cat > "${PROD_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
+STAGE_BUILD_ID="$(gcloud builds submit ./terraform --project=${OPS_PROJECT} \
+    --async --config=./ops/terraform.cloudbuild.yaml \
+    --substitutions=_ENV='staging',_STATE_GCS_BUCKET_NAME=${STATE_GCS_BUCKET_NAME},_TF_SERVICE_ACCT=${TERRAFORM_SERVICE_ACCOUNT} \
+    --format='value(ID)')"
+
+PROD_ENVIRONMENT_DIR=terraform/environments/prod
+cat > "${PROD_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 project_id = "${PROD_PROJECT}"
 ops_project_id = "${OPS_PROJECT}"
 EOF
-        terraform -chdir=${PROD_ENVIRONMENT_DIR} init -backend-config="bucket=${STATE_GCS_BUCKET_NAME}" -backend-config="prefix=prod"
-        terraform -chdir=${PROD_ENVIRONMENT_DIR} apply --auto-approve
-    fi
 
-fi # skip terraform
-
-########################
-# Seed Default Content #
-########################
-if [[ -z "$SKIP_SEEDING" ]]; then
-    echo
-    echo "$(tput bold)Seeding default content...$(tput sgr0)"
-    echo
-
-    account=$(gcloud config get-value account 2> /dev/null)
-    if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
-        read -rp "Please input an email address for an approver. This email will be added to the Firestore database as an 'approver' and will be able to perform privileged API operations from the website frontend: [${account}]: " approver
-    fi
-    approver="${approver:-$account}"
-
-    gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
-    --substitutions=_FIREBASE_PROJECT="${STAGE_PROJECT}",_APPROVER_EMAIL="${approver}" \
-    --config=./content-api/data/cloudbuild.yaml
-
-    if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
-        gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
-        --substitutions=_FIREBASE_PROJECT="${PROD_PROJECT}",_APPROVER_EMAIL="${approver}" \
-        --config=./content-api/data/cloudbuild.yaml
-    fi
-fi # skip seeding
-
-##################
-# Deploy Services #
-##################
+PROD_BUILD_ID="$(gcloud builds submit ./terraform --project="$OPS_PROJECT" \
+    --async --config=./ops/terraform.cloudbuild.yaml \
+    --substitutions=_ENV="prod",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT \
+    --format='value(ID)') "
 
 # This function will wait for job status for the provided build job to update 
 # from WORKING to FAILURE or SUCCESS. For failed build jobs, the failure info 
 # will be returned along with the url to the build log. For successful build 
-# jobs, the provided run command will be executed. For all other statuses,
+# jobs, the provided command will be executed. For all other statuses,
 # url to the build log is returned.
 
 check_for_build_then_run () {
@@ -201,17 +163,46 @@ check_for_build_then_run () {
         echo "Please re-run setup."
         exit 2
     # Deploy if build is successful.
-    elif [ $(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(status)') == "SUCCESS" ]; then
+    elif [ "$(gcloud builds describe ${build_id} --project=${OPS_PROJECT} --format='value(status)')" == "SUCCESS" ]; then
         $run_command
     # Return build log for all other statuses.
     else
-        log_url=$(gcloud builds describe $build_id --project=$OPS_PROJECT --format='value(logUrl)')
+        log_url="$(gcloud builds describe ${build_id} --project=${OPS_PROJECT} --format='value(logUrl)')"
         echo "Build ${build_id} did not complete." 
-        echo "See build log: $log_url"
+        echo "See build log: ${log_url}"
         echo "Please re-run setup."
         exit 2
     fi;
 }
+
+########################
+# Seed Default Content #
+########################
+if [[ -z "${SKIP_SEEDING}" ]]; then
+    echo
+    echo "$(tput bold)Seeding default content...$(tput sgr0)"
+    echo
+
+    account="$(gcloud config get-value account 2> /dev/null)"
+    if [[ -z "$USE_DEFAULT_ACCOUNT" ]]; then
+        read -rp "Please input an email address for an approver. This email will be added to the Firestore database as an 'approver' and will be able to perform privileged API operations from the website frontend: [${account}]: " approver
+    fi
+    approver="${approver:-$account}"
+
+    check_for_build_then_run $STAGE_BUILD_ID "gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
+    --substitutions=_FIREBASE_PROJECT="${STAGE_PROJECT}",_APPROVER_EMAIL="${approver}" \
+    --config=./content-api/data/cloudbuild.yaml"
+
+    if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
+        check_for_build_then_run $PROD_BUILD_ID "gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
+        --substitutions=_FIREBASE_PROJECT="${PROD_PROJECT}",_APPROVER_EMAIL="${approver}" \
+        --config=./content-api/data/cloudbuild.yaml"
+    fi
+fi # skip seeding
+
+##################
+# Deploy Services #
+##################
 
 if [[ -z "$SKIP_DEPLOY" ]]; then
 
@@ -227,7 +218,9 @@ if [[ -z "$SKIP_DEPLOY" ]]; then
         --project "${STAGE_PROJECT}" \
         --region "${REGION}""
 
-    STAGING_API_URL=$(gcloud run services describe content-api --project "${STAGE_PROJECT}" --region ${REGION} --format 'value(status.url)')
+    STAGING_API_URL=$(gcloud run services describe content-api \
+        --project "${STAGE_PROJECT}" --region ${REGION} \
+        --format 'value(status.url)')
     
     check_for_build_then_run $WEB_BUILD_ID "gcloud run deploy website \
         --allow-unauthenticated \
@@ -273,17 +266,17 @@ fi # skip deploy
 # Setup CI/CD #
 ###############
 
-if [[ -z "$SKIP_TRIGGERS" ]]; then
+if [[ -z "${SKIP_TRIGGERS}" ]]; then
     echo
 
-    sh ./scripts/configure_delivery.sh
+    ./scripts/configure_delivery.sh
     
 fi # skip triggers
 
 echo
-STAGING_WEBSITE_URL=$(gcloud run services describe website --project "${STAGE_PROJECT}" --region ${REGION} --format 'value(status.url)')
+STAGING_WEBSITE_URL="$(gcloud run services describe website --project ${STAGE_PROJECT} --region ${REGION} --format 'value(status.url)')"
 if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
-  PROD_WEBSITE_URL=$(gcloud run services describe website --project "${PROD_PROJECT}" --region ${REGION} --format 'value(status.url)')
+  PROD_WEBSITE_URL="$(gcloud run services describe website --project ${PROD_PROJECT} --region ${REGION} --format 'value(status.url)')"
   echo "💠 The staging environment is ready! Navigate your browser to ${STAGING_WEBSITE_URL}"
   echo "💠 The production environment is ready! Navigate your browser to ${PROD_WEBSITE_URL}"
 else
@@ -294,12 +287,12 @@ fi
 # User Authentication #
 #######################
 
-if [[ -z "$SKIP_AUTH" ]]; then
+if [[ -z "${SKIP_AUTH}" ]]; then
     echo
     read -rp "Would you like to configure $(tput bold)$(tput setaf 3)end-user authentication?$(tput sgr0) (y/n) " auth_yesno
 
     if [[ ${auth_yesno} == "y" ]]; then
-        sh ./scripts/configure_auth.sh
+        ./scripts/configure_auth.sh
     else
         echo "Skipping end-user authentication configuration. You can configure it later by running:"
         echo
