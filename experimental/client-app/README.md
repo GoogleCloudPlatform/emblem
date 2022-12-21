@@ -9,13 +9,25 @@
 
 ## Requirements
 
-Please have [node](https://nodejs.org/en/ ) 14 & npm 8 or higher installed.
+* Please have [node](https://nodejs.org/en/ ) 14 & npm 8 or higher installed.
+* Have basic Emblem projects setup. Please see root README.
 
 ## Get started
 
-### Run web app locally
+### Developing the site locally
+
+#### Required before running frontend
 
 ```bash
+gcloud config set project $STAGE_PROJECT # Should be set to staging or prod projects w/ firestore
+gcloud firestore databases create --region=$REGION # Enable Cloud Firestore & seed content
+python main.py # Should have API service running
+```
+
+#### Running site locally
+
+```bash
+# Root: client-app/
 npm install
 npm build 
 npm run start
@@ -23,20 +35,26 @@ npm run start
 
 Open your browser to `localhost:8000`.
 
-### Run auth api locally
+
+### Developing OAuth API
+
+**Note:** Testing full OAuth flow requires container deployment
+
+#### Running OAuth server locally
 
 ```bash
+# Root: client-app/
+cd server/
 npm install
 npm run start
 ```
 
 Server will run at `localhost:4000`.
 
-
-## Deploying containers
+## Deploying required containers
 
 ```bash
-export PROJECT_ID=<YOUR_PROJECT_ID>
+export PROJECT_ID=<your project id>
 ```
 
 Requires the following environment variables to be set within each Cloud Run container.
@@ -55,7 +73,7 @@ Requires the following environment variables to be set within each Cloud Run con
 | CLIENT_SECRET  | OAuth 2.0 credentials client secret                                                              | From [web client credentials](https://console.cloud.google.com/apis/credentials) |
 
 
-### Lit container
+### Deploying Lit container
 
 ```bash
 gcloud builds submit --tag $REGION-docker.pkg.dev/$PROJECT_ID/website/lit-based-website
@@ -71,7 +89,7 @@ gcloud run services update lit-based-website \
   --update-secrets CLIENT_SECRET=$(your-client-secret)
 ```
 
-### Auth API container
+### Deploying Auth API container
 
 ```bash
 cd server/
@@ -91,10 +109,6 @@ gcloud run services update lit-auth-api \
 ## Learning
 
 Want to learn more frontend [resources](docs/resources.md)? This includes tooling used for this project.
-
-## Contribution
-
-Interested in helping out? Follow the yellow brick road to this [guide](docs/contribution_guide.md).
 
 ## Code of Conduct
 
