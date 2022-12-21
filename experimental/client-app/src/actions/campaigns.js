@@ -17,26 +17,36 @@ import { getConfig } from '../utils/config.js';
 
 const developmentUrl = getConfig().API_URL;
 
-export const fetchCampaign = createAsyncThunk('fetchCampaign', async (campaignId) => {
-  let campaign;
-  try {
-    const response = await fetch(`${developmentUrl}/campaigns/${campaignId}`);
-    campaign = await response.json();
-  } catch(e) {
-    console.error(e);
+export const fetchCampaign = createAsyncThunk(
+  'fetchCampaign',
+  async campaignId => {
+    let campaign;
+    try {
+      const response = await fetch(
+        `${developmentUrl}/campaigns/${campaignId}`,
+        { method: 'GET', headers: { 'Content-Type': 'application/json' } }
+      );
+      campaign = await response.json();
+    } catch (e) {
+      console.error(e);
+    }
+    return campaign;
   }
-  return campaign;
-}
 );
 
-export const fetchCampaignList = createAsyncThunk('fetchCampaignList', async () => {
-  let campaigns;
-  try {
-    const response = await fetch(`${developmentUrl}/campaigns`);
-    campaigns = await response.json();
-  } catch(e) {
-    console.error(e);
+export const fetchCampaignList = createAsyncThunk(
+  'fetchCampaignList',
+  async () => {
+    let campaigns;
+    try {
+      const response = await fetch(`${developmentUrl}/campaigns`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      campaigns = await response.json();
+    } catch (e) {
+      console.error(e);
+    }
+    return campaigns;
   }
-  return campaigns;
-}
 );

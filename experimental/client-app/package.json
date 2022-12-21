@@ -9,9 +9,8 @@
     "format": "eslint --ext .js,.html . --fix --ignore-path .gitignore && prettier \"**/*.js\" --write --ignore-path .gitignore",
     "test": "web-test-runner --coverage",
     "test:watch": "web-test-runner --watch",
-    "build": "rimraf dist && rollup -c rollup.config.js && npm run analyze -- --exclude dist",
+    "build": "rimraf dist && rollup -c rollup.config.js",
     "start:build": " web-dev-server --root-dir dist --app-index index.html --open",
-    "analyze": "cem analyze --litelement",
     "lint:css": "stylelint \"src/**/*.js\"",
     "start": "THEME=cymbal web-dev-server"
   },
