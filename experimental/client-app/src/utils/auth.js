@@ -21,8 +21,6 @@ import { getConfig } from './config.js';
 export const login = () => {
     const { REDIRECT_URI, AUTH_CLIENT_ID } = getConfig();
 
-    debugger
-
     const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
     const options = new URLSearchParams({
         redirect_uri: REDIRECT_URI,

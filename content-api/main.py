@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from os import set_inheritable
-from flask import Flask, g, request
+from flask import Response, Flask, g, request
 from flask_cors import CORS
 
 from google.auth.transport import requests as reqs
@@ -31,7 +31,7 @@ resource = [
 ]
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Check authentication and remember result in global request context
 #

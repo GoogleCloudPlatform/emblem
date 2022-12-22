@@ -22,10 +22,14 @@ export const fetchCampaign = createAsyncThunk(
   async campaignId => {
     let campaign;
     try {
-      const response = await fetch(
-        `${developmentUrl}/campaigns/${campaignId}`,
-        { method: 'GET', headers: { 'Content-Type': 'application/json' } }
-      );
+      const response = await fetch(`${developmentUrl}/campaigns/${campaignId}`, 
+        {
+          method: 'GET',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
       campaign = await response.json();
     } catch (e) {
       console.error(e);
@@ -39,9 +43,13 @@ export const fetchCampaignList = createAsyncThunk(
   async () => {
     let campaigns;
     try {
-      const response = await fetch(`${developmentUrl}/campaigns`, {
+      const response = await fetch(`${developmentUrl}/campaigns`,
+      {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        }
       });
       campaigns = await response.json();
     } catch (e) {

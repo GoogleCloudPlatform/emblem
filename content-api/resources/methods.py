@@ -15,7 +15,7 @@
 
 import json
 
-from main import g, request
+from main import g, request, Response
 from data import cloud_firestore as db
 from resources import auth, base
 from utils.logging import log
@@ -81,8 +81,10 @@ def list(resource_kind):
                 item for item in all_donations if item["donor"] in matching_donor_ids
             ]
 
-    return json.dumps(results), 200, {"Content-Type": "application/json"}
+    resp = Response(response=json.dumps(results), status=200,  mimetype="application/json")
+    resp.headers["Content-Type"] = "application/json"
 
+    return resp
 
 def list_subresource(resource_kind, id, subresource_kind):
     if resource_kind not in resource_fields or subresource_kind not in resource_fields:
@@ -119,8 +121,10 @@ def list_subresource(resource_kind, id, subresource_kind):
         item for item in matching_children if item["donor"] in matching_donor_ids
     ]
 
-    return json.dumps(results), 200, {"Content-Type": "application/json"}
+    resp = Response(response=json.dumps(results), status=200,  mimetype="application/json")
+    resp.headers["Content-Type"] = "application/json"
 
+    return resp
 
 def get(resource_kind, id):
     log(f"Request to get {resource_kind}", severity="INFO")
@@ -131,11 +135,11 @@ def get(resource_kind, id):
     if result is None:
         return "Not found", 404, {}
 
-    return (
-        json.dumps(result),
-        200,
-        {"Content-Type": "application/json", "ETag": base.etag(result)},
-    )
+    resp = Response(response=json.dumps(result), status=200,  mimetype="application/json")
+    resp.headers["Content-Type"] = "application/json"
+    resp.headers["ETag"] = base.etag(result)
+
+    return resp
 
 
 def insert(resource_kind, representation):
@@ -164,14 +168,11 @@ def insert(resource_kind, representation):
             if status != 200:
                 return resource, status
 
-        return (
-            json.dumps(resource),
-            201,
-            {
-                "Content-Type": "application/json",
-                "ETag": base.etag(resource),
-            },
-        )
+        resp = Response(response=json.dumps(resource), status=201,  mimetype="application/json")
+        resp.headers["Content-Type"] = "application/json"
+        resp.headers["ETag"] = base.etag(resource)
+
+        return resp
 
     if resource_kind == "donations":  # Special case: enforce referential integrity
         if (
@@ -197,15 +198,11 @@ def insert(resource_kind, representation):
             resource_kind, representation, resource_fields[resource_kind]
         )
 
-    return (
-        json.dumps(resource),
-        201,
-        {
-            "Content-Type": "application/json",
-            "ETag": base.etag(resource),
-        },
-    )
+    resp = Response(response=json.dumps(resource), status=201,  mimetype="application/json")
+    resp.headers["Content-Type"] = "application/json"
+    resp.headers["ETag"] = base.etag(resource)
 
+    return resp
 
 def patch(resource_kind, id, representation):
     if resource_kind not in resource_fields:
@@ -219,16 +216,12 @@ def patch(resource_kind, id, representation):
     if resource is None:
         return "", status
 
-    return (
-        json.dumps(resource),
-        201,
-        {
-            "Content-Type": "application/json",
-            "Location": resource["selfLink"],
-            "ETag": base.etag(resource),
-        },
-    )
+    resp = Response(response=json.dumps(resource), status=201,  mimetype="application/json")
+    resp.headers["Content-Type"] = "application/json"
+    resp.headers["Location"] = resource["selfLink"]
+    resp.headers["ETag"] = base.etag(resource)
 
+    return resp
 
 def delete(resource_kind, id):
     if resource_kind not in resource_fields:
