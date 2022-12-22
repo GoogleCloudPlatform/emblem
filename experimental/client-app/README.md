@@ -103,6 +103,14 @@ stateDiagram
       }
 ```
 
+Leverage the start shell script to deploy and build the containers on your behalf.
+
+```bash
+./start.sh
+```
+
+If you would like to manually build & deploy, read on.
+
 ## Build Images  
 
 ### Lit container

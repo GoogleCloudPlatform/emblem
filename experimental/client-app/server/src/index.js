@@ -48,7 +48,7 @@ function getTokens({ code, clientId, clientSecret, redirectUri }) {
     },
   };
 
-  return axios
+return axios
     .post(url, querystring.stringify(values), options)
     .then(res => res.data)
     .catch(err => {
