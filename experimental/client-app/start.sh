@@ -15,50 +15,64 @@
 
 set -eu
 
-export REGION=us-central1
-export PROD_PROJECT=applied-primacy-prod
-export STAGE_PROJECT=applied-primacy-stage
-export OPS_PROJECT=applied-primacy-ops
+export REGION=${REGION:=us-central1}
 
-echo
-echo "$(tput bold)Building Images...$(tput sgr0)"
-echo
+# Check env variables are not empty strings
+if [[ -z "${PROD_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)PROD_PROJECT$(tput sgr0) variable"
+    exit 1
+elif [[ -z "${STAGE_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)STAGE_PROJECT$(tput sgr0) variable"
+    exit 1
+elif [[ -z "${OPS_PROJECT}" ]]; then
+    echo "Please set the $(tput bold)OPS_PROJECT$(tput sgr0) variable"
+    exit 1
+fi
 
-gcloud config set project $OPS_PROJECT
+echo "======================================================================"
+echo "$(tput bold)Building Lit and Auth container images...$(tput sgr0)"
+echo "======================================================================"
 
-export AUTH_BUILD_ID=$(gcloud builds submit --tag $REGION-docker.pkg.dev/$OPS_PROJECT/website/lit-auth-api ./server)
-export LIT_WEB_BUILD_ID=$(gcloud builds submit --tag $REGION-docker.pkg.dev/$OPS_PROJECT/website/lit-based-website .)
+export AUTH_BUILD_ID=$(gcloud builds submit --project "${OPS_PROJECT}" --tag "$REGION-docker.pkg.dev/$OPS_PROJECT/website/lit-auth-api" ./server)
+export LIT_WEB_BUILD_ID=$(gcloud builds submit --project "${OPS_PROJECT}" --tag "$REGION-docker.pkg.dev/$OPS_PROJECT/website/lit-based-website" .)
 
-echo
+echo "======================================================================"
 echo "$(tput bold)Deploying Cloud Run services...$(tput sgr0)"
-echo
+echo "======================================================================"
 
+# Deploys Auth container
 gcloud run deploy lit-auth-api \
-        --allow-unauthenticated \
-        --image "$REGION-docker.pkg.dev/$OPS_PROJECT/website/lit-auth-api:latest" \
-        --project "${OPS_PROJECT}" \
-        --region "${REGION}" \
-        --port 4000
+  --allow-unauthenticated \
+  --image "$REGION-docker.pkg.dev/$OPS_PROJECT/website/lit-auth-api:latest" \
+  --project "${STAGE_PROJECT}" \
+  --region "${REGION}" \
+  --port 4000
 
-export AUTH_URL=$(gcloud run services describe lit-auth-api \
-         --project "${OPS_PROJECT}" --region ${REGION} \
-         --format 'value(status.url)')
+export AUTH_URL=$(
+  gcloud run services describe lit-auth-api \
+    --project "${STAGE_PROJECT}" \
+    --region ${REGION} \
+    --format 'value(status.url)'
+)
 
+# Deploys Lit app container
 gcloud run deploy lit-based-website \
-        --allow-unauthenticated \
-        --image "$REGION-docker.pkg.dev/$OPS_PROJECT/website/lit-based-website:latest" \
-        --project "${STAGE_PROJECT}" \
-        --region "${REGION}" \
-        --port 8000
+  --allow-unauthenticated \
+  --image "$REGION-docker.pkg.dev/$OPS_PROJECT/website/lit-based-website:latest" \
+  --project "${STAGE_PROJECT}" \
+  --region "${REGION}" \
+  --port 8000
 
-export LIT_URL=$(gcloud run services describe lit-based-website \
-         --project "${STAGE_PROJECT}" \
-         --region ${REGION} \
-         --format 'value(status.url)')
+export LIT_URL=$(
+  gcloud run services describe lit-based-website \
+    --project "${STAGE_PROJECT}" \
+    --region ${REGION} \
+    --format 'value(status.url)'
+)
 
-echo
+echo "======================================================================"
 echo "$(tput bold)Updating Cloud Run services...$(tput sgr0)"
-echo
+echo "======================================================================"
 
 gcloud config set project $STAGE_PROJECT
 
@@ -72,11 +86,11 @@ gcloud run services update lit-based-website \
   --update-env-vars API_URL="${STAGING_API_URL}" \
   --update-env-vars AUTH_API_URL="${AUTH_URL}" \
   --update-env-vars SITE_URL="${LIT_URL}" \
-  --update-secrets CLIENT_ID="projects/39830469074/secrets/client_id_secret:latest" \
-  --update-secrets CLIENT_SECRET="projects/39830469074/secrets/client_secret_secret:latest"
+  --update-secrets CLIENT_ID="projects/${OPS_PROJECT_NUMBER}/secrets/client_id_secret:latest" \
+  --update-secrets CLIENT_SECRET="projects/${OPS_PROJECT_NUMBER}/secrets/client_secret_secret:latest"
 
 gcloud run services update lit-auth-api \
-  --project "${OPS_PROJECT}" \
+  --project "${STAGE_PROJECT}" \
   --update-env-vars JWT_SECRET="hello" \
   --update-env-vars REDIRECT_URI="${REDIRECT_URI}" \
   --update-env-vars SITE_URL="${LIT_URL}" \
