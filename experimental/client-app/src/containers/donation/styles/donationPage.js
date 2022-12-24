@@ -22,10 +22,6 @@ const campaignPage =  css`
       max-width: 48%;
     }
 
-    .leftPanel .description {
-      font-size: 16px;
-    }
-
     .title {
       font-size: 36px;
       font-weight: normal;
@@ -33,29 +29,21 @@ const campaignPage =  css`
 
     .about, 
     .website {
+      font-weight: 400;
+      font-size: 16px;
       display: flex;
       align-items: center;
       margin: 10px 0;
       border-bottom: 1px solid light-grey;
-      font-size: 14px;
-      color: #5C6063;
-      border-bottom: 1px solid #C2C6C9;
-    }
-
-    .aboutTitle,
-    .websiteTitle {
-      font-weight: 400;
-      font-size: 16px;
-      color: black;
     }
     
     .circle {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
-      min-width: 40px;
+      width: 50px;
+      height: 50px;
+      min-width: 50px;
       margin-right: 20px;
       background: linear-gradient(332.1deg, #86F7B1 14.81%, #2C67FF 62.34%);
       border-radius: 50px;
@@ -81,12 +69,6 @@ const campaignPage =  css`
 
     .donationHistory {
       width: 100%;
-      margin-top: 50px;
-    }
-    
-    .donationHistory .title {
-      font-weight: 400;
-      font-size: 18px;
     }
 
     .donationTableWrapper {
@@ -111,14 +93,6 @@ const campaignPage =  css`
       display: flex;
       justify-content: space-around;
       padding: 10px;
-    }
-    
-    table.donationTable td {
-      overflow: hidden;
-      whitespace: nowrap;
-      text-overflow: ellipsis;
-      width: 100%;
-      text-align: center;
     }
     
     table.donationTable tr:not(:last-child) {

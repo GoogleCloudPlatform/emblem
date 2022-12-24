@@ -20,20 +20,29 @@ const developmentUrl = getConfig().API_URL;
 export const fetchCampaign = createAsyncThunk(
   'fetchCampaign',
   async campaignId => {
-    let campaign;
+    let campaign = {};
+    let donations = [];
+
+    const headers = {
+      method: 'GET',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
+    };
+
     try {
-      const response = await fetch(`${developmentUrl}/campaigns/${campaignId}`, 
-        {
-          method: 'GET',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
-      campaign = await response.json();
+      // Fetch campaign
+      const campaignResponse = await fetch(`${developmentUrl}/campaigns/${campaignId}`, headers);
+      campaign = await campaignResponse.json();
+      // Fetch campaign donations
+      const donationResponse = await fetch(`${developmentUrl}/campaigns/${campaignId}/donations`, headers);
+      donations = await donationResponse.json();
+      campaign['donations'] = donations || [];
     } catch (e) {
       console.error(e);
     }
+
     return campaign;
   }
 );
@@ -55,6 +64,7 @@ export const fetchCampaignList = createAsyncThunk(
     } catch (e) {
       console.error(e);
     }
+
     return campaigns;
   }
 );

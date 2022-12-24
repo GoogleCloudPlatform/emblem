@@ -112,16 +112,19 @@ def list_subresource(resource_kind, id, subresource_kind):
 
     if resource_kind == "campaigns" and auth.user_is_manager(email, id):
         return json.dumps(matching_children), 200, {"Content-Type": "application/json"}
-
+    
     matching_donors = db.list_matching(
         "donors", resource_fields["donors"], "email", email
     )
-    matching_donor_ids = set([donor["id"] for donor in matching_donors])
-    results = [
-        item for item in matching_children if item["donor"] in matching_donor_ids
-    ]
+    
+    
+    # TODO: Need to clean up seed database with matching donors
+    #matching_donor_ids = set([donor["id"] for donor in matching_donors])
+    #results = [
+    #    item for item in matching_children if item["donor"] in matching_donor_ids
+    #]
 
-    resp = Response(response=json.dumps(results), status=200,  mimetype="application/json")
+    resp = Response(response=json.dumps(matching_children), status=200,  mimetype="application/json")
     resp.headers["Content-Type"] = "application/json"
 
     return resp

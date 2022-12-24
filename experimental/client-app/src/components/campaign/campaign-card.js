@@ -38,7 +38,7 @@ class CampaignCard extends LitElement {
             <div class="description">${this.item.description}</div>
           </div>
           <div class="actionWrapper">
-            <a class="fillButton button" href="/donate">Donate</a>
+            <a class="fillButton button" href="${path}/donate">Donate</a>
             <a class="button" href=${path}>Learn more</a>
           </div>
         </div>

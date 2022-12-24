@@ -31,6 +31,13 @@ export const initRouter = () => {
       }
     },
     {
+      path: 'campaigns/:campaignId/donate',
+      component: 'donation-page',
+      action: async () => {
+        await import('../containers/donation/donation-page.js');
+      }
+    },
+    {
       path: '/auth/:authPath',
       component: 'app-dashboard',
       action: async ({ params }) => {

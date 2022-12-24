@@ -18,6 +18,10 @@ import { getCampaignItem } from '../../selectors/campaigns.js';
 import { fetchCampaign } from '../../actions/campaigns.js';
 import store from '../../stores/base.js';
 import campaignStyles from './styles/campaignPage.js';
+
+const websiteIcon = new URL('../../../assets/website-icon.png', import.meta.url).href;
+const infoIcon = new URL('../../../assets/info-icon.png', import.meta.url).href;
+
 import '@material/mwc-tab-bar';
 import '@material/mwc-tab';
 
@@ -42,7 +46,7 @@ class CampaignPage extends connect(store)(LitElement) {
   render() {
     const { status, campaign } = this.campaign;
     const { donations } = campaign;
-
+  
     return html`
       <div class="campaignContainer">
         ${campaign.id ? (
@@ -54,23 +58,27 @@ class CampaignPage extends connect(store)(LitElement) {
                 ${campaign.description}
               </h3>
               <div class="about">
-                <div class="circle"></div>
+                <div class="circle">
+                  <img class="infoIcon" src=${infoIcon}></img>
+                </div>
                 <div>
-                  <h5>About this cause</h5>
+                  <div class="aboutTitle">About this cause</div>
                   <p>${campaign.description}</p>
                 </div>
               </div>
               ${campaign.url && html`
                 <div class="website">
-                  <div class="circle"></div>
+                  <div class="circle">
+                    <img class="websiteIcon" src=${websiteIcon}></img>
+                  </div>
                   <div>
-                    <h5>Website</h5>
+                    <div class="websiteTitle">Website</div>
                     <a href=${campaign.url}>${campaign.url}</a>
                   </div>
                 </div>
               `}
               <div class="donationHistory">
-                <h4>Donation history</h4>
+                <h4 class="title">Donation history</h4>
                 <div class="donationTableWrapper">
                   <table class="donationTable">
                     <tr class="tableHeader">
