@@ -21,14 +21,14 @@ const campaignStyles =  css`
       background-color: white;
       margin: 10px;
       border-radius: 10px;
-      font-size: 16px;
-      max-width: 450px;
+      font-size: 20px;
+      max-width: 440px;
       min-width: 400px;
       overflow: hidden;
     }
 
     .cardWrapper {
-      margin: 10px;
+      margin: 20px;
       display: flex;
       height: 250px;
       flex-direction: column;
@@ -36,7 +36,7 @@ const campaignStyles =  css`
     }
 
     .title {
-      font-size: 20px;
+      font-size: 28px;
       margin-bottom: 17px;
     }
 
@@ -47,7 +47,7 @@ const campaignStyles =  css`
     .actionWrapper {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: space-evenly;
       width: 100%;
     }
 
@@ -61,7 +61,7 @@ const campaignStyles =  css`
       box-shadow: 0 1px 2px #ccc;
       color: #2C67FF;
       text-decoration: none;
-      font-size: 16px;
+      font-size: 20px;
       font-family: 'Google Sans';
     }
 

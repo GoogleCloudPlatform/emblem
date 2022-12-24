@@ -19,7 +19,12 @@ const campaignPage =  css`
     .leftPanel,
     .rightPanel {
       width: inherit;
-      max-width: 50%;
+      max-width: 48%;
+    }
+
+    .title {
+      font-size: 36px;
+      font-weight: normal;
     }
 
     .about, 
@@ -28,6 +33,7 @@ const campaignPage =  css`
       align-items: center;
       margin: 10px 0;
       border-bottom: 1px solid light-grey;
+      font-weight: normal;
     }
     
     .circle {
@@ -44,6 +50,7 @@ const campaignPage =  css`
       justify-content: center;
       margin: 30px auto;
       font-family: "Google Sans";
+      font-weight: normal;
       width: 100%;
     }
     
@@ -55,25 +62,35 @@ const campaignPage =  css`
       width: inherit;
     }
 
-    table.donationTable {
+    .donationHistory {
+      width: 100%;
+    }
+
+    .donationTableWrapper {
       border: 1px solid lightgray;
       border-radius: 5px;
-      min-width: 640px;
       margin: 10px 0;
     }
 
-    table.donationTable .tableHeader {
-      background-color: lightgray;
+    table.donationTable {
+      width: 100%;
+      text-align: left;
+      border-collapse: collapse;
     }
-    
-    table.donationTable .tableHeader th {
-      background-color: lightgray;
-      padding: 7px;
+
+    table.donationTable .tableHeader {
+      background-color: #F5F5F5;
+      padding: 10px;
     }
     
     table.donationTable tr {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+    }
+    
+    table.donationTable tr:not(:last-child) {
       border-bottom: 1px solid lightgray;
-      padding: 7px;
     }
 `;
 /* stylelint-enable font-family-no-missing-generic-family-keyword */

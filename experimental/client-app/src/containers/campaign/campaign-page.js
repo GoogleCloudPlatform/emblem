@@ -71,30 +71,30 @@ class CampaignPage extends connect(store)(LitElement) {
               `}
               <div class="donationHistory">
                 <h4>Donation history</h4>
-                <table class="donationTable">
-                  <tr class="tableHeader">
-                    <th>Name</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                  </tr>
-                  ${donations && donations.length 
-                    ? donations.map((d, i) => html`
-                        <tr>
-                          <td>${d.donor}</td>
-                          <td>${d.amount}</td>
-                          <td>${d.timeCreated}</td>
-                        </tr>
-                      `) 
-                      : html`<tr><td>No donations yet.</td></tr>`}
-                </table>
+                <div class="donationTableWrapper">
+                  <table class="donationTable">
+                    <tr class="tableHeader">
+                      <th>Name</th>
+                      <th>Amount</th>
+                      <th>Date</th>
+                    </tr>
+                    ${donations && donations.length 
+                      ? donations.map((d, i) => html`
+                          <tr>
+                            <td>${d.donor}</td>
+                            <td>${d.amount}</td>
+                            <td>${d.timeCreated}</td>
+                          </tr>
+                        `) 
+                        : html`<tr><td>No donations yet.</td></tr>`}
+                  </table>
+                </div>
               </div>
             </div>
             <!------ right panel ----->
             <div class="rightPanel">
               <mwc-tab-bar>
                 <mwc-tab label="CURRENT CAMPAIGNS"></mwc-tab>
-                <mwc-tab label="UPCOMING CAMPAIGNS"></mwc-tab>
-                <mwc-tab label="PAST CAMPAIGNS"></mwc-tab>
               </mwc-tab-bar>
               <div class="tabBody"></div>
             </div>
