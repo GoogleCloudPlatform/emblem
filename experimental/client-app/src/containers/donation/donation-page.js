@@ -16,6 +16,7 @@ import { LitElement, html } from 'lit';
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import store from '../../stores/base.js';
 import donationStyles from './styles/DonationPage.js';
+import DonationForm from '../../components/form/donation.js';
 
 const websiteIcon = new URL('../../assets/website-icon.png', import.meta.url).href;
 const infoIcon = new URL('../../assets/info-icon.png', import.meta.url).href;
@@ -35,7 +36,8 @@ class DonationPage extends connect(store)(LitElement) {
       <div class="donationContainer">
         ${true ? (
           html`<div class="donationWrapper">
-            Donation Page
+            <h2>Donation Page</h2>
+            <donation-form></donation-form>
           </div>`
         ): html`<div>loading...</div>`}
       </div>

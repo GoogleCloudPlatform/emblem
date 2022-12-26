@@ -19,6 +19,7 @@
     "@material/mwc-icon-button": "^0.27.0",
     "@material/mwc-tab": "^0.27.0",
     "@material/mwc-tab-bar": "^0.27.0",
+    "@material/mwc-textfield": "^0.27.0",
     "@material/mwc-top-app-bar": "^0.27.0",
     "@reduxjs/toolkit": "1.8.5",
     "@vaadin/router": "^1.7.4",
@@ -26,6 +27,7 @@
     "express": "^4.18.1",
     "http-proxy-middleware": "^2.0.6",
     "lit": "^2.3.1",
+    "lite-form": "^1.1.1",
     "morgan": "^1.10.0",
     "pwa-helpers": "^0.9.1"
   },
