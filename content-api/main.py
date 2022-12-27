@@ -25,7 +25,7 @@ from opentelemetry import trace
 
 from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
-from opentelemetry.propagators.cloud_trace_propagator import CloudTraceFormatPropagator
+from opentelemetry.propagators.cloud_trace_propagator import CloudTraceOneWayPropagator
 from opentelemetry.propagators.composite import CompositePropagator
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.sdk.trace import TracerProvider
@@ -38,12 +38,14 @@ provider.add_span_processor(processor)
 # Note: Because of the behavior of the XCTC 'force trace' bit, this will cause
 # all downstream services to force tracing, resulting in larger than expected
 # storage costs.
-# TODO: replace this with a one-way propagator when available.
-propagate.set_global_textmap(CompositePropagator([
-    CloudTraceFormatPropagator(),
-    propagate.get_global_textmap()
-]
-))
+propagate.set_global_textmap(
+    CompositePropagator(
+        [
+            propagate.get_global_textmap(),
+            CloudTraceOneWayPropagator(),
+        ]
+    )
+)
 
 # Sets the global default tracer provider
 trace.set_tracer_provider(provider)

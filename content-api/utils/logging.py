@@ -63,7 +63,8 @@ def log(message, severity="DEFAULT", **kwargs):
 
     if request:  # Usually will be in a request context, but not always
         traceid = trace.format_trace_id(
-            trace.get_current_span().get_span_context().trace_id)
+            trace.get_current_span().get_span_context().trace_id
+        )
 
         if traceid is not None:
             logStruct[
