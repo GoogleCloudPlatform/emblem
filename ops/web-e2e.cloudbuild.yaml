@@ -23,10 +23,10 @@ steps:
       - '-c'
       - |
         cp -R ../client-libs/ client-libs
-        pip install -r ../website/requirements.txt
+        pip install -r requirements.txt
         python -m flask run --port ${_FLASK_PORT} &
-        cd website-e2e && npm install && npm test
-    dir: 'testing'
+        cd ../testing/website-e2e && npm install && npm test
+    dir: 'website'
     env:
       - "EMBLEM_URL=${_EMBLEM_URL}"
       - "EMBLEM_SESSION_BUCKET=${_EMBLEM_SESSION_BUCKET}"
