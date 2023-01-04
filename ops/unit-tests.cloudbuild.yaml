@@ -27,7 +27,7 @@ steps:
     entrypoint: pip
     args: ["install", "-r", "requirements-test.txt", "--user"]
 
-  # Get identity token
+  # Get identity token. The Cloud Build service account must have Service Account Token Creator role.
   - id: "Get identity token"
     name: gcr.io/cloud-builders/gcloud
     dir: ${_DIR}
