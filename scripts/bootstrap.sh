@@ -40,6 +40,9 @@ STATE_GCS_BUCKET_NAME="$OPS_PROJECT-tf-states"
 OPS_IAM="bindings:
 - members:
   - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/run.developer
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
   role: roles/cloudbuild.builds.editor
 - members:
   - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
