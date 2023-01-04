@@ -54,6 +54,7 @@ project_id = "${OPS_PROJECT}"
 setup_cd_system="true"
 repo_owner="${REPO_OWNER}"
 repo_name="${REPO_NAME}"
+app_project_id="${STAGE_PROJECT}"
 EOF
 
 gcloud builds submit ./terraform --project="$OPS_PROJECT" \

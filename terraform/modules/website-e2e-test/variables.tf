@@ -18,3 +18,8 @@ variable "repo_name" {
   description = "Repo Name (emblem)"
   type        = string
 }
+
+variable "content_api_url" {
+  type        = string
+  description = "A URL pointing to the Content API deployment (staging *or* prod) to test against."
+}

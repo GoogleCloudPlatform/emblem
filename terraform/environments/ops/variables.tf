@@ -3,6 +3,11 @@ variable "project_id" {
   description = ""
 }
 
+variable "app_project_id" {
+  type        = string
+  description = ""
+}
+
 variable "region" {
   type        = string
   default     = "us-central1"
@@ -24,12 +29,6 @@ variable "repo_owner" {
 variable "repo_name" {
   type        = string
   description = ""
-  default     = ""
-}
-
-variable "content_api_url" {
-  type        = string
-  description = "The URL of the `staging` project's content API."
   default     = ""
 }
 
