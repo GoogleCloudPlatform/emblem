@@ -38,9 +38,6 @@ resource "google_cloudbuild_trigger" "web_new_build" {
     "website/*/*",
     "client-libs/python/*"
   ]
-  ignored_files = [
-    "website/e2e-test/*",
-  ]
   github {
     owner = var.repo_owner
     name  = var.repo_name
