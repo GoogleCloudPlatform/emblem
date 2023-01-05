@@ -7,7 +7,10 @@ module "emblem_ops" {
   repo_name       = var.repo_name
 }
 
-data "google_cloud_run_service" "website_e2e_test_content_api" {
+##############################
+# Website end-to-end testing #
+##############################
+data "google_cloud_run_service" "content_api" {
   project  = var.app_project_id
   name     = "content-api"
   location = var.region
@@ -20,5 +23,5 @@ module "website_e2e_test" {
   region          = var.region
   repo_owner      = var.repo_owner
   repo_name       = var.repo_name
-  content_api_url = data.google_cloud_run_service.website_e2e_test_content_api.status[0].url
+  content_api_url = data.google_cloud_run_service.content_api.status[0].url
 }
