@@ -25,6 +25,8 @@ from google.oauth2 import id_token
 # Use unique testing prefixes with collection names
 os.environ["EMBLEM_DB_ENVIRONMENT"] = "TEST"
 
+# just run the tests, please!
+
 import main
 from data import cloud_firestore as db
 from resources import methods
