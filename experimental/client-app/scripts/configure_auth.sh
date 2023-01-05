@@ -32,7 +32,7 @@ export REGION=${REGION:=us-central1}
 
 # Declare variables (calculated from env-var inputs)
 STAGE_AUTH_API_URL=$(gcloud run services describe lit-auth-api --project "${STAGE_PROJECT}" --region "${REGION}" --format "value(status.address.url)")
-STAGE_CALLBACK_URL="${STAGE_WEBSITE_URL}/auth/google"
+STAGE_CALLBACK_URL="${STAGE_AUTH_API_URL}/auth/google"
 
 AUTH_CLIENT_CREATION_URL="https://console.cloud.google.com/apis/credentials/oauthclient?project=${OPS_PROJECT}"
 AUTH_CLIENT_CONSENT_SCREEN_URL="https://console.cloud.google.com/apis/credentials/consent?project=${OPS_PROJECT}"

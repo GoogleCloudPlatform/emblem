@@ -70,6 +70,25 @@ export LIT_URL=$(
     --format 'value(status.url)'
 )
 
+wait 
+
+echo "======================================================================"
+echo "$(tput bold)Configuring authentication is required.$(tput sgr0)"
+echo "======================================================================"
+
+# Adds secret accessor to default compute service account
+
+STAGE_COMPUTE_SA=$(gcloud iam service-accounts list --filter='displayName:compute' --format='value(email)' --project=$STAGE_PROJECT)
+
+echo $STAGE_COMPUTE_SA
+
+gcloud projects add-iam-policy-binding $OPS_PROJECT \
+  --member="serviceAccount:${STAGE_COMPUTE_SA}" \
+  --role="roles/secretmanager.secretAccessor"
+
+# Start configure auth script
+sh ./scripts/configure_auth.sh
+
 echo "======================================================================"
 echo "$(tput bold)Updating Cloud Run services...$(tput sgr0)"
 echo "======================================================================"
@@ -96,11 +115,3 @@ gcloud run services update lit-auth-api \
   --update-env-vars SITE_URL="${LIT_URL}" \
   --update-secrets CLIENT_ID="projects/${OPS_PROJECT_NUMBER}/secrets/client_id_secret:latest" \
   --update-secrets CLIENT_SECRET="projects/${OPS_PROJECT_NUMBER}/secrets/client_secret_secret:latest"
-
-echo "======================================================================"
-echo "$(tput bold)Configuring authentication is required.$(tput sgr0)"
-echo "======================================================================"
-
-./scripts/configure_auth.sh
-
-
