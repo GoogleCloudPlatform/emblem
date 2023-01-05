@@ -3,7 +3,10 @@ variable "project_id" {
   description = ""
 }
 
-variable "app_project_id" {
+# Test against the `prod` version of the Content API
+# - We care primarily about testing the **website** component, not the API itself.
+# - If you want to test the API as well, you can use the `stage` API version instead.
+variable "prod_project_id" {
   type        = string
   description = ""
 }

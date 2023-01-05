@@ -73,7 +73,7 @@ export STATE_GCS_BUCKET_NAME="${OPS_PROJECT}-tf-states"
 OPS_ENVIRONMENT_DIR=terraform/environments/ops
 cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
     project_id = "${OPS_PROJECT}"
-    app_project_id = "${STAGE_PROJECT}"
+    prod_project_id = "${STAGE_PROJECT}"
 EOF
 
 gcloud builds submit ./terraform --project="$OPS_PROJECT" \

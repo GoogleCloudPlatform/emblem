@@ -11,7 +11,7 @@ module "emblem_ops" {
 # Website end-to-end testing #
 ##############################
 data "google_cloud_run_service" "content_api" {
-  project  = var.app_project_id
+  project  = var.prod_project_id
   name     = "content-api"
   location = var.region
 }
