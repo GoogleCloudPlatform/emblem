@@ -5,7 +5,7 @@ steps:
     args: ["install", "-r", "requirements.txt", "--user"]
   - id: Seed or unseed test user data
     name: python
-    entrypoint: echo
+    entrypoint: python
     args: ["seed_database.py", "$_SEED_OR_UNSEED", "$_APPROVER_EMAIL"]
     env:
     - "GOOGLE_CLOUD_PROJECT=$_FIREBASE_PROJECT"
