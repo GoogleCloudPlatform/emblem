@@ -2,6 +2,7 @@ locals {
   services = var.enable_apis ? [
     "cloudbuild.googleapis.com",
     "pubsub.googleapis.com",
+    "run.googleapis.com",
     "secretmanager.googleapis.com",
     "cloudscheduler.googleapis.com",
     "cloudresourcemanager.googleapis.com",
