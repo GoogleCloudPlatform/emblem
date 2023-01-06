@@ -14,6 +14,7 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import { campaignReducer, campaignListReducer } from './campaigns.js';
+import { donationReducer } from './donations.js';
 import loggerMiddleware from '../middleware/logger.js';
 
 export default configureStore({
@@ -22,5 +23,6 @@ export default configureStore({
   reducer: {
     campaign: campaignReducer,
     campaignList: campaignListReducer,
+    donation: donationReducer,
   },
 });

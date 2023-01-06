@@ -15,6 +15,7 @@
 import { LitElement, html } from 'lit';
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import store from '../../stores/base.js';
+import { saveDonation } from '../../actions/donations.js';
 import donationStyles from './styles/DonationPage.js';
 import DonationForm from '../../components/form/donation.js';
 
@@ -31,13 +32,29 @@ class DonationPage extends connect(store)(LitElement) {
     super();
   }
   
+  submitForm(form) {
+    const formData = new FormData(form || {});
+    const campaignId = location.pathname.split('/campaigns/')[1].split('/donate')[0];
+
+    const donation = {
+      campaign: campaignId,
+      name: formData.get('name')
+    };
+
+    store.dispatch(saveDonation(donation));
+    
+    window.setTimeout(() => {
+      form.reset(); // resets form
+    }, 2000);
+  }
+
   render() {
     return html`
       <div class="donationContainer">
         ${true ? (
           html`<div class="donationWrapper">
             <h2>Donation Page</h2>
-            <donation-form></donation-form>
+            <donation-form .onSubmit=${this.submitForm}></donation-form>
           </div>`
         ): html`<div>loading...</div>`}
       </div>

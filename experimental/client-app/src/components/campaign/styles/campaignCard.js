@@ -50,7 +50,6 @@ const campaignStyles =  css`
       justify-content: space-evenly;
       width: 100%;
     }
-
     
     .button {
       cursor: pointer;

@@ -15,26 +15,39 @@
 import { css } from 'lit';
 
 /* stylelint-disable font-family-no-missing-generic-family-keyword */
-const donationPage =  css`
-    .donationContainer {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 30px auto;
-      font-family: "Google Sans";
-      font-weight: normal;
-      width: 100%;
-    }
+const donationForm =  css`
+  .formControls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  mwc-textfield {
+    width: 100%;
+  }
     
-    .donationWrapper {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      margin: auto 30px;
-      width: inherit;
-      flex-direction: column;
-    }
+  .button {
+    cursor: pointer;
+    background: white;
+    border-radius: 50px;
+    border: 2px solid #2C67FF;
+    padding: 20px;
+    box-shadow: 0 1px 2px #ccc;
+    color: #2C67FF;
+    text-decoration: none;
+    font-size: 20px;
+    font-family: 'Google Sans';
+  }
+
+  .fillButton {
+    color: #fff !important;
+    background: #2C67FF !important;
+    border: 2px solid #2C67FF;
+  }
 `;
 /* stylelint-enable font-family-no-missing-generic-family-keyword */
 
-export default donationPage;
+export default donationForm;
+

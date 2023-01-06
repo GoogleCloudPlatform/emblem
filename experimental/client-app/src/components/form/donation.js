@@ -13,18 +13,27 @@
 // limitations under the License.
 
 import { LitElement, html } from 'lit';
+import donationFormStyles from './styles/donationForm.js';
 
 import '@material/mwc-button';
 import '@material/mwc-textfield';
 
 class DonationForm extends LitElement {
+  static properties = {
+    onSubmit: {type: Function},
+  };
+
+  static styles = donationFormStyles;
+
+  constructor() {
+    super();
+    this.onSubmit = () => {};
+    this.submitForm = this.submitForm.bind(this);
+  }
+
   submitForm(e) {
-    e.preventDefault();
-    const form = this.shadowRoot.querySelector("form");
-    const formData = new FormData(form);
-    window.setTimeout(() => {
-      form.reset(); // resets form
-    }, 2000);
+    e && e.preventDefault();
+    this.onSubmit(this.shadowRoot.querySelector("form"));
   }
 
   render() {
