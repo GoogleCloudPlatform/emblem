@@ -33,7 +33,7 @@ steps:
   # Run E2E tests
   # These DO NOT use auth, so we can use a
   # "dummy value" for EMBLEM_SESSION_BUCKET
-  - id 'Run E2E tests'
+  - id: 'Run E2E tests'
     name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-testing/runner:${_E2E_RUNNER_SHA}'
     entrypoint: /bin/bash
     args:
