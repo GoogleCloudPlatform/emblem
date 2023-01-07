@@ -21,7 +21,7 @@ steps:
     dir: 'website'
   - name: python
     entrypoint: pip
-    args: ["install", "-r", "requirements.txt", "--target", "."]
+    args: ['install', '-r', 'requirements.txt', '--target', '.']
     dir: 'website'
   - name: node
     entrypoint: npm
