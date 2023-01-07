@@ -14,18 +14,33 @@
 
 
 steps:
+  - id: 'Copy client libraries directory'
+    name: bash
+    script: |
+      #!/usr/bin/env bash
+      cp -R ../client-libs/ client-libs
+    dir: 'website'
+  - id: 'Install Python packages'
+    name: python
+    entrypoint: pip
+    args: ['install', '-r', 'requirements.txt', '--target', '.']
+    dir: 'website'
+  - id: 'Install npm packages'
+    name: node
+    entrypoint: npm
+    args: ['install']
+    dir: 'testing/website-e2e'
   # Run E2E tests
   # These DO NOT use auth, so we can use a
   # "dummy value" for EMBLEM_SESSION_BUCKET
-  - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-testing/runner:${_E2E_RUNNER_SHA}'
+  - id: 'Run E2E tests'
+    name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-testing/runner:${_E2E_RUNNER_SHA}'
     entrypoint: /bin/bash
     args:
       - '-c'
       - |
-        cp -R ../client-libs/ client-libs
-        pip install -r requirements.txt
         python -m flask run --port ${_FLASK_PORT} &
-        cd ../testing/website-e2e && npm install && npm test
+        cd ../testing/website-e2e && npm test
     dir: 'website'
     env:
       - "EMBLEM_URL=${_EMBLEM_URL}"
