@@ -14,23 +14,27 @@
 
 
 steps:
-  - name: bash
+  - id: 'Copy client libraries directory'
+    name: bash
     script: |
       #!/usr/bin/env bash
       cp -R ../client-libs/ client-libs
     dir: 'website'
-  - name: python
+  - id: 'Install Python packages'
+    name: python
     entrypoint: pip
     args: ['install', '-r', 'requirements.txt', '--target', '.']
     dir: 'website'
-  - name: node
+  - id: 'Install npm packages'
+    name: node
     entrypoint: npm
     args: ['install']
     dir: 'testing/website-e2e'
   # Run E2E tests
   # These DO NOT use auth, so we can use a
   # "dummy value" for EMBLEM_SESSION_BUCKET
-  - name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-testing/runner:${_E2E_RUNNER_SHA}'
+  - id 'Run E2E tests'
+    name: '${_REGION}-docker.pkg.dev/${_PROJECT}/e2e-testing/runner:${_E2E_RUNNER_SHA}'
     entrypoint: /bin/bash
     args:
       - '-c'
