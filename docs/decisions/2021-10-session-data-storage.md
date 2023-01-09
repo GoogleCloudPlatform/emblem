@@ -1,6 +1,6 @@
 # Session Data Storage
 
-* **Status:** draft
+* **Status:** proposed
 * **Last Updated:** 2021-10
 * **Objective:** Maintain session data such as users' identity tokens
 

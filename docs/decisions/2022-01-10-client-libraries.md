@@ -1,6 +1,6 @@
 # Keep generated client libraries in GitHub repository
 
-- Status: pending
+- Status: proposed
 - Last updated: 2022-01
 - Objective: Decide whether to generate client libs on each deploy or not
 

@@ -20,7 +20,6 @@ This project features:
     * Artifact Registry
     * Pub/Sub
 
-
 Go deeper into project details in the [documentation](./docs) or read through the [technical decisions](docs/decisions/README.md) that got us where we are today.
 
 ## Service architecture
@@ -30,7 +29,7 @@ Go deeper into project details in the [documentation](./docs) or read through th
 ## Project Status
 
 * **Release Stage:** Alpha
-* **Self-service / Independent Setup:** Follow the instructions to set up Emblem by reading the [setup quickstart](./docs/tutorials/setup-quickstart.md), or by launching the [Interactive Walkthrough](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2FGoogleCloudPlatform%2Femblem&cloudshell_tutorial=docs%2Ftutorials%2Fsetup-walkthrough.md) on Cloud Shell.
+* **Self-service / Independent Setup:** Follow the instructions to set up Emblem in the [Getting Started](#getting-started) section below. 
 
 ## Contributing
 
@@ -39,7 +38,7 @@ Go deeper into project details in the [documentation](./docs) or read through th
 
 ## Getting Started
 
-Emblem is made of a combination of resources created and managed by Terraform and resources created via the Google Cloud CLI or Google Cloud Console. You may deploy Emblem by either running `setup.sh` (see [streamlined setup instructions](#streamlined-setup)) or by following the [manual steps below](#manual-setup). 
+Emblem is made of a combination of resources created and managed by Terraform and resources created via the Google Cloud CLI or Google Cloud Console. You may deploy Emblem by running `setup.sh` (see [streamlined setup instructions](#streamlined-setup)). 
 
 ### Prerequisites
 
@@ -60,7 +59,11 @@ We recommend running through setup steps using Google Cloud Shell, which has the
 
 1. **Connect a fork of this Github repo to your Emblem ops project**
    
-   Connect your repository to your Google Cloud Project via the [Cloud Build triggers page in the Google Cloud Console](https://console.cloud.google.com/cloud-build/triggers/connect). Make sure you are working from your **ops** project. This will require you to authenticate with your Github account.
+   Connect your repository to your Google Cloud Project via the [Cloud Build triggers page in the Google Cloud Console](https://console.cloud.google.com/cloud-build/triggers/connect). Make sure you are working from your **ops** project. This will require you to enable the Cloud Build API and authenticate with your Github account.
+
+   ```
+   gcloud services enable cloudbuild.googleapis.com
+   ```
 
    Principals with access to your Google Cloud project will be able to create and run triggers on the repository you use.
 
@@ -69,6 +72,7 @@ We recommend running through setup steps using Google Cloud Shell, which has the
    The streamlined setup uses `setup.sh` to deploy Emblem resources via Terraform and the `gcloud` CLI.
 
    Create three environment variables (PROD_PROJECT, STAGE_PROJECT, OPS_PROJECT) with their respective project id's.
+   
    ```
    export PROD_PROJECT=<YOUR_PROD_PROJECT_ID>
    export STAGE_PROJECT=<YOUR_STAGE_PROJECT_ID>
@@ -89,14 +93,42 @@ We recommend running through setup steps using Google Cloud Shell, which has the
    ```
    ./setup.sh
    ```
-   Once complete you will have a deployed instance of Emblem.  
 
-### Manual setup
+   Once complete you will have a deployed instance of Emblem.
 
-```
+   To see which Google services and apis got installed in your projects, check out below:
 
-```
+   ```mermaid
+   stateDiagram
+       Operations --> Staging
+       Operations --> Production
 
+       state Operations {
+         state "IAM" as a0
+         state "Secret Manager" as a1
+         state "Cloud Build" as a2
+         state "Artifact Registry" as a3
+         state "Cloud Firestore" as a4
+         state "Cloud Scheduler" as a5
+         state "Pub/Sub" as a6
+       }
+
+       state Staging {
+         direction LR
+         state "Cloud Firestore" as b0
+         state "Cloud Storage" as b1
+         state "Cloud Run" as b2
+         state "Cloud Logging" as b3
+       }
+
+       state Production {
+         direction LR
+         state "Cloud Firestore" as c0
+         state "Cloud Storage" as c1
+         state "Cloud Run" as c2
+         state "Cloud Logging" as c3
+       }
+   ```
 ---
 
 This is not an official Google project.

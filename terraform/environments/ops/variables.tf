@@ -3,6 +3,14 @@ variable "project_id" {
   description = ""
 }
 
+# Test against the `prod` version of the Content API
+# - We care primarily about testing the **website** component, not the API itself.
+# - If you want to test the API as well, you can use the `stage` API version instead.
+variable "prod_project_id" {
+  type        = string
+  description = ""
+}
+
 variable "region" {
   type        = string
   default     = "us-central1"
@@ -27,3 +35,8 @@ variable "repo_name" {
   default     = ""
 }
 
+variable "setup_e2e_tests" {
+  type        = bool
+  default     = false
+  description = "Create E2E testing triggers for the Website component. Enable only if Cloud Build has been granted GitHub access."
+}

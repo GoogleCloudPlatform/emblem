@@ -2,6 +2,7 @@ locals {
   services = var.enable_apis ? [
     "cloudbuild.googleapis.com",
     "pubsub.googleapis.com",
+    "run.googleapis.com",
     "secretmanager.googleapis.com",
     "cloudscheduler.googleapis.com",
     "cloudresourcemanager.googleapis.com",
@@ -31,6 +32,13 @@ resource "google_project_service" "emblem_ops_beta_services" {
 }
 
 resource "time_sleep" "wait_for_cloud_build_service" {
+  create_duration = "20s"
+  depends_on = [
+    google_project_service.emblem_ops_services
+  ]
+}
+
+resource "time_sleep" "wait_for_iam_service" {
   create_duration = "20s"
   depends_on = [
     google_project_service.emblem_ops_services

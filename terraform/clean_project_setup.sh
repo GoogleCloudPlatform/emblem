@@ -53,10 +53,11 @@ gcloud projects create $PROD_PROJECT --organization $EMBLEM_ORGANIZATION -q | \
 gcloud projects create $STAGE_PROJECT --organization $EMBLEM_ORGANIZATION -q | \
 gcloud projects create $OPS_PROJECT --organization $EMBLEM_ORGANIZATION -q
 
-# Link billing accounts
-gcloud alpha billing projects link $PROD_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
-gcloud alpha billing projects link $STAGE_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
-gcloud alpha billing projects link $OPS_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
+# Link billing accounts 
+# Reference https://cloud.google.com/sdk/gcloud/reference/beta/billing/projects/link
+gcloud beta billing projects link $PROD_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
+gcloud beta billing projects link $STAGE_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
+gcloud beta billing projects link $OPS_PROJECT --billing-account $EMBLEM_BILLING_ACCOUNT
 
 # Run setup script
 pushd ..
