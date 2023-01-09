@@ -56,61 +56,59 @@ resource "google_project_iam_member" "cloudbuild_role_run_admin" {
 ## Start Deploy ##
 
 resource "google_cloudbuild_trigger" "web_deploy" {
-  count   = var.setup_cd_system ? 1 : 0
-  project = var.ops_project_id
-  name    = "web-deploy-${var.environment}"
+  count       = var.setup_cd_system ? 1 : 0
+  project     = var.ops_project_id
+  name        = "web-deploy-${var.environment}"
+  description = "Triggers on any new website build to Artifact Registry. Begins container deployment for staging/prod environment."
   pubsub_config {
     topic = var.deploy_trigger_topic_id
   }
   approval_config {
     approval_required = var.require_deploy_approval
   }
-  filter = "_IMAGE_NAME.matches('website')"
+  filter   = "_IMAGE_NAME.matches('website')"
+  filename = "ops/deploy.cloudbuild.yaml"
   substitutions = {
+    _BODY           = "$(body)"
+    _ENV            = var.environment
     _IMAGE_NAME     = var.gcr_pubsub_format ? "$(body.message.data.tag)" : "$(body.message.attributes._IMAGE_NAME)"
     _REGION         = var.region
     _REVISION       = var.gcr_pubsub_format ? "$(body.message.messageId)" : "$(body.message.attributes._REVISION)"
     _SERVICE        = "website"
     _TARGET_PROJECT = var.project_id
-    _ENV            = var.environment
   }
   source_to_build {
     uri       = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
     ref       = "refs/heads/main"
     repo_type = "GITHUB"
   }
-  git_file_source {
-    path      = "ops/deploy.cloudbuild.yaml"
-    repo_type = "GITHUB"
-  }
 }
 
 resource "google_cloudbuild_trigger" "api_deploy" {
-  count   = var.setup_cd_system ? 1 : 0
-  project = var.ops_project_id
-  name    = "api-deploy-${var.environment}"
+  count       = var.setup_cd_system ? 1 : 0
+  project     = var.ops_project_id
+  name        = "api-deploy-${var.environment}"
+  description = "Triggers on any new content-api build to Artifact Registry. Begins container deployment for staging/prod environment."
   pubsub_config {
     topic = var.deploy_trigger_topic_id
   }
   approval_config {
     approval_required = var.require_deploy_approval
   }
-  filter = "_IMAGE_NAME.matches('content-api')"
+  filter   = "_IMAGE_NAME.matches('content-api')"
+  filename = "ops/deploy.cloudbuild.yaml"
   substitutions = {
+    _BODY           = "$(body)"
+    _ENV            = var.environment
     _IMAGE_NAME     = var.gcr_pubsub_format ? "$(body.message.data.tag)" : "$(body.message.attributes._IMAGE_NAME)"
     _REGION         = var.region
     _REVISION       = var.gcr_pubsub_format ? "$(body.message.messageId)" : "$(body.message.attributes._REVISION)"
     _SERVICE        = "content-api"
     _TARGET_PROJECT = var.project_id
-    _ENV            = var.environment
   }
   source_to_build {
     uri       = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
     ref       = "refs/heads/main"
-    repo_type = "GITHUB"
-  }
-  git_file_source {
-    path      = "ops/deploy.cloudbuild.yaml"
     repo_type = "GITHUB"
   }
 }
@@ -118,63 +116,61 @@ resource "google_cloudbuild_trigger" "api_deploy" {
 ## Canary Traffic ##
 
 resource "google_cloudbuild_trigger" "web_canary" {
-  count   = var.setup_cd_system ? 1 : 0
-  project = var.ops_project_id
-  name    = "web-canary-${var.environment}"
+  count       = var.setup_cd_system ? 1 : 0
+  project     = var.ops_project_id
+  name        = "web-canary-${var.environment}"
+  description = "Triggers on initial environment (staging, prod) deployment for website container. Performs general health check before increasing traffic."
   pubsub_config {
     topic = google_pubsub_topic.canary.id
   }
   approval_config {
     approval_required = false
   }
-  filter = format("_SERVICE.matches('%s')", "website")
+  filter   = format("_SERVICE.matches('%s')", "website")
+  filename = "ops/canary.cloudbuild.yaml"
   substitutions = {
+    _BODY           = "$(body)"
+    _ENV            = var.environment
     _IMAGE_NAME     = "$(body.message.attributes._IMAGE_NAME)"
     _REGION         = var.region
     _REVISION       = "$(body.message.attributes._REVISION)"
-    _TRAFFIC        = "$(body.message.attributes._TRAFFIC)"
-    _SERVICE        = "website"
+    _SERVICE        = "$(body.message.attributes._SERVICE)"
     _TARGET_PROJECT = var.project_id
-    _ENV            = var.environment
+    _TRAFFIC        = "$(body.message.attributes._TRAFFIC)"
   }
   source_to_build {
     uri       = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
     ref       = "refs/heads/main"
-    repo_type = "GITHUB"
-  }
-  git_file_source {
-    path      = "ops/canary.cloudbuild.yaml"
     repo_type = "GITHUB"
   }
 }
 
 resource "google_cloudbuild_trigger" "api_canary" {
-  count   = var.setup_cd_system ? 1 : 0
-  project = var.ops_project_id
-  name    = "api-canary-${var.environment}"
+  count       = var.setup_cd_system ? 1 : 0
+  project     = var.ops_project_id
+  name        = "api-canary-${var.environment}"
+  description = "Triggers on initial environment (staging, prod) deployment for content-api container. Performs general health check before increasing traffic."
   pubsub_config {
     topic = google_pubsub_topic.canary.id
   }
   approval_config {
     approval_required = false
   }
-  filter = format("_SERVICE.matches('%s')", "content-api")
+  filter   = format("_SERVICE.matches('%s')", "content-api")
+  filename = "ops/canary.cloudbuild.yaml"
   substitutions = {
+    _BODY           = "$(body)"
+    _ENV            = var.environment
     _IMAGE_NAME     = "$(body.message.attributes._IMAGE_NAME)"
     _REGION         = var.region
     _REVISION       = "$(body.message.attributes._REVISION)"
-    _TRAFFIC        = "$(body.message.attributes._TRAFFIC)"
-    _SERVICE        = "content-api"
+    _SERVICE        = "$(body.message.attributes._SERVICE)"
     _TARGET_PROJECT = var.project_id
-    _ENV            = var.environment
+    _TRAFFIC        = "$(body.message.attributes._TRAFFIC)"
   }
   source_to_build {
     uri       = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
     ref       = "refs/heads/main"
-    repo_type = "GITHUB"
-  }
-  git_file_source {
-    path      = "ops/canary.cloudbuild.yaml"
     repo_type = "GITHUB"
   }
 }

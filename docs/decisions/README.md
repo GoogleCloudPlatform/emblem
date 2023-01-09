@@ -2,13 +2,25 @@
 
 In this project we capture important decisions with [architectural decision records](https://adr.github.io/).
 
-These records provide context, trade-offs, and reasoning taken at our community & technical cross-roads. Our goal is to preserve the understanding of how the project has grown, and capture enough insight to effectively revisit prevision decisions.
+These records provide context, trade-offs, and reasoning taken at our community & technical cross-roads. Our goal is to preserve the understanding of how the project has grown, and capture enough insight to effectively revisit previous decisions.
 
 Get started created a new decision record with the template:
 
 ```sh
 cp template.md NN-title-with-dashes.md
 ```
+
+## Team Structure
+
+[Conway's Law](https://en.wikipedia.org/wiki/Conway%27s_law)
+posits that software design is a function of organizational design. Emblem was
+developed by a group of core contributors working on a single team within a 
+large software company (Google), with supporting contributions from members of
+other teams both internal and external to the company.
+
+While we've done our best to make Emblem applicable to a wide variety of
+organizational structures, Emblem may require some adaptation to properly
+account for aspects unique to your organization.
 
 ## Evolving Decisions
 

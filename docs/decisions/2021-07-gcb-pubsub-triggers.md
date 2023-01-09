@@ -2,7 +2,7 @@
 
 * **Status:** approved
 * **Last Updated:** 2021-07
-* **Builds on:** Canary Rollouts](2021-04-cloud-build.md), [Using Cloud Build](2021-05-pipelines.md)
+* **Builds on:** [Canary Rollouts for Continuous Delivery Pipeline](2021-04-cloud-build.md), [Use Cloud Build for Cloud Resource management](2021-05-pipelines.md)
 
 In order to handle cross-project triggers and canary rollouts, we are using the **alpha Cloud Build Pub/Sub triggers**.
 

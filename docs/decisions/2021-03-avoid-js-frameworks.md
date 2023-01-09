@@ -1,6 +1,6 @@
 # Avoid frontend JS frameworks
 
-* **Status:** superceded by [2022-02-revisting-js-framework decision](2022-02-revisting-js-framework decision.md)
+* **Status:** superceded by [2022-02-revisting-js-framework decision](./2022-02-revisiting-js-framework.md)
 * **Last Updated:** 2021-03
 * **Objective:** Deliberate frontend strategy by a mostly full-stack/backend team.
 

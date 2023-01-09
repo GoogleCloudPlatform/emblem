@@ -66,7 +66,7 @@ Navigate to the URI provided upon successful deployment.
 
 To enable end-user authentication within the application, you'll need to create an [OAuth client ID](https://console.cloud.google.com/apis/credentials/oauthclient) and configure an [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent).
 
-If you don't already have an OAuth client set up, you can run the Emblem [configure_auth](./scripts/configure_auth.sh) script in your terminal:
+If you don't already have an OAuth client set up, you can run the Emblem [configure_auth](../scripts/configure_auth.sh) script in your terminal:
 
 ```sh
 sh ./scripts/configure_auth.sh

@@ -13,6 +13,14 @@
 # limitations under the License.
 
 steps:
+  # Print the full Pub/Sub message for debugging.
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: /bin/bash
+    args:
+      - '-c'
+      - |
+        echo ${_BODY}
+
   # Cloud Run Deploy
   - name: gcr.io/cloud-builders/gcloud
     args:
@@ -25,7 +33,6 @@ steps:
       - --project=${_TARGET_PROJECT}
       - --allow-unauthenticated
       - --no-traffic
-      - --update-env-vars=${_ENV_VARS}
       - --tag=latest
 
   # Send message to pub/sub to start canary rollout process
@@ -36,7 +43,7 @@ steps:
       - publish
       - canary-${_ENV}
       - --message="Ready for ${_SERVICE}-${_REVISION} rollout"
-      - --attribute=_TARGET_PROJECT=${_TARGET_PROJECT},_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION},_TRAFFIC=5
+      - --attribute=_TARGET_PROJECT=${_TARGET_PROJECT},_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION},_TRAFFIC=20
 
 options:
     substitution_option: 'ALLOW_LOOSE'

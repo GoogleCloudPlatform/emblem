@@ -1,0 +1,25 @@
+${jsonencode({
+    name = {
+        stringValue = name
+    }
+    description = {
+        stringValue = description
+    }
+    cause = {
+        stringValue = cause
+    }
+    managers = {
+        arrayValue = {
+            values =  [ for email in split(",", managers) : { "stringValue": email } ]
+        }
+    }
+    goal = {
+        integerValue = goal
+    }
+    imageUrl = {
+        stringValue = imageUrl
+    }
+    active = {
+        booleanValue = active
+    }
+})}
