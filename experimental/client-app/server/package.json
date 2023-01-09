@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^9.0.0"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js"
+  }
+}
