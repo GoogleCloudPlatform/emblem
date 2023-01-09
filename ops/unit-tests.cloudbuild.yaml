@@ -15,14 +15,14 @@
 steps:
   # Install dependencies
   - id: "Install Dependencies"
-    name: python:3.10-slim
+    name: python:3.11-slim
     dir: ${_DIR}
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
 
   # Install test requirements
   - id: "Install Pytest"
-    name: python:3.10-slim
+    name: python:3.11-slim
     dir: ${_DIR}
     entrypoint: pip
     args: ["install", "-r", "requirements-test.txt", "--user"]
