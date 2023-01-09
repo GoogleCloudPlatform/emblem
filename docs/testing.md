@@ -20,11 +20,12 @@ The [Website](/docs/website.md) component is covered by automatic **End-to-End (
   
 These tests run the website in a [Docker container](/ops/e2e-runner), and check that the website's routes load without any errors.
 
-> **Note:** this Docker container is rebuilt [nightly](/terraform/modules/ops/testing.tf#:~:text=resource%20%22google_cloudbuild_trigger%22%20%22e2e_nightly_tests%22) _and_ [on pushes/merges to `main`](/terraform/modules/ops/testing.tf#:~:text=resource%20%22google_cloudbuild_trigger%22%20%22e2e_testing_build_runner%22).
+> **Note:** this Docker container is rebuilt [nightly](/terraform/modules/website-e2e-test/build.tf#:~:text=testing_web_e2e_build_container_trigger).
 >
 > We kept nightly {container builds, test runs} separate so that E2E tests run even if the container build fails.
 
-These tests run automatically [on pull requests to `main`](/terraform/modules/ops/testing.tf#:~:text=resource%20%22google_cloudbuild_trigger%22%20%22web_e2e_test%22).
+
+These tests run automatically [on pull requests to `main`](/terraform/modules/website-e2e-test/testing.tf#:~:text=testing_web_e2e_run_tests_trigger).
 
 
 > **Note:** we are working on adding a nightly test runner as well
@@ -93,5 +94,5 @@ gcloud builds submit --tag \
 
 ## Terraform Testing
 
-Use `terraform/clean_project_setup.sh` to create a new projects and run through
+Use `setup.sh` to create a new projects and run through
 the end-to-end setup process.
