@@ -9,7 +9,7 @@ This folder contains resources used to test that Emblem is correctly provisioned
 
 ## Prerequisites
 
-Make sure you've [set up an Emblem instance](/docs/tutorials/setup-quickstart.md) **before** following this tutorial.
+Make sure you've [set up an Emblem instance](/README.md#streamlined-setup) **before** following this tutorial.
 
 ## Setup
 Follow the steps below to set up these tests.

@@ -20,6 +20,11 @@ on:
       - main
     paths:
       - '**.tf'
+
+permissions:
+  checks: write
+  pull-requests: read
+
 jobs:
   terraform-fmt:
     runs-on: ubuntu-latest
