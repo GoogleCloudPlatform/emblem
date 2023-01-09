@@ -46,7 +46,7 @@ steps:
 
   # Run unit tests
   - id: "Unit Tests"
-    name: python:3.10-slim
+    name: python:3.11-slim
     dir: ${_DIR}
     entrypoint: /bin/bash
     args: 
