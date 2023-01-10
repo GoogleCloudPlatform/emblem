@@ -90,3 +90,9 @@ EOF
     --config=./ops/terraform.cloudbuild.yaml \
     --substitutions=_ENV="prod",_STATE_GCS_BUCKET_NAME=$STATE_GCS_BUCKET_NAME,_TF_SERVICE_ACCT=$TERRAFORM_SERVICE_ACCOUNT
 fi
+
+# Build container for running E2E tests
+E2E_RUNNER_TAG="latest"
+E2E_BUILD_ID=$(gcloud builds submit "ops/e2e-runner" --async \
+    --config=ops/e2e-runner-build.cloudbuild.yaml \
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG" --format='value(ID)')

@@ -85,7 +85,6 @@ gcloud builds submit ./terraform --project="$OPS_PROJECT" \
 ####################
 
 SETUP_IMAGE_TAG="setup"
-E2E_RUNNER_TAG="latest"
 
 if [[ -z "$SKIP_BUILD" ]]; then
 
@@ -101,10 +100,6 @@ WEB_BUILD_ID=$(gcloud builds submit \
     --config=ops/web-build.cloudbuild.yaml --async \
     --ignore-file=ops/web-build.gcloudignore \
     --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$SETUP_IMAGE_TAG" --format='value(ID)')
-
-E2E_BUILD_ID=$(gcloud builds submit "ops/e2e-runner" --async \
-    --config=ops/e2e-runner-build.cloudbuild.yaml \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG" --format='value(ID)')
 
 fi # skip build
 
@@ -229,6 +224,8 @@ if [[ -z "$SKIP_DEPLOY" ]]; then
         --service-account "website-manager@${STAGE_PROJECT}.iam.gserviceaccount.com" \
         --update-env-vars "EMBLEM_SESSION_BUCKET=${STAGE_PROJECT}-sessions" \
         --update-env-vars "EMBLEM_API_URL=${STAGING_API_URL}" \
+        --update-env-vars "OTEL_TRACES_EXPORTER=gcp_trace" \
+        --update-env-vars "OTEL_METRICS_EXPORTER=none" \
         --project "${STAGE_PROJECT}" \
         --region "${REGION}" \
         --tag "latest""
@@ -252,6 +249,8 @@ if [[ -z "$SKIP_DEPLOY" ]]; then
             --service-account "website-manager@${PROD_PROJECT}.iam.gserviceaccount.com" \
             --update-env-vars "EMBLEM_SESSION_BUCKET=${PROD_PROJECT}-sessions" \
             --update-env-vars "EMBLEM_API_URL=${PROD_API_URL}" \
+            --update-env-vars "OTEL_TRACES_EXPORTER=gcp_trace" \
+            --update-env-vars "OTEL_METRICS_EXPORTER=none" \
             --project "${PROD_PROJECT}" \
             --region "${REGION}" \
             --tag "latest""
