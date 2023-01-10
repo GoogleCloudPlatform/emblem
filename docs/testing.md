@@ -6,14 +6,6 @@ These tests run automatically once you have set up a working instance of Emblem.
 
 Content API unit tests run automatically [on pull requests to `main`](/terraform/modules/ops/testing.tf#:~:text=resource%20%22google_cloudbuild_trigger%22%20%22api_unit_tests%22).
 
-## Pipelines / Delivery System
-  
-The **delivery system** can _optionally_ be covered by an automatic **End-to-End (E2E) Test**.
-
-This test uses Cloud Build to run the [setup/deployment script](/setup.sh) on a nightly basis, and checks that it completes without any errors.
-  
-Follow the [instructions](/installation-testing/README.md) in the `installation-testing` directory to enable this test.
-
 ## Website
 
 The [Website](/docs/website.md) component is covered by automatic **End-to-End (E2E) Tests**.
