@@ -3,6 +3,14 @@ variable "project_id" {
   description = ""
 }
 
+# Test against the `prod` version of the Content API
+# - We care primarily about testing the **website** component, not the API itself.
+# - If you want to test the API as well, you can use the `stage` API version instead.
+variable "prod_project_id" {
+  type        = string
+  description = ""
+}
+
 variable "region" {
   type        = string
   default     = "us-central1"
@@ -24,12 +32,6 @@ variable "repo_owner" {
 variable "repo_name" {
   type        = string
   description = ""
-  default     = ""
-}
-
-variable "content_api_url" {
-  type        = string
-  description = "The URL of the `staging` project's content API."
   default     = ""
 }
 

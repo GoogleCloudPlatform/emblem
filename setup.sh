@@ -73,6 +73,7 @@ export STATE_GCS_BUCKET_NAME="${OPS_PROJECT}-tf-states"
 OPS_ENVIRONMENT_DIR=terraform/environments/ops
 cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
     project_id = "${OPS_PROJECT}"
+    prod_project_id = "${PROD_PROJECT}"
 EOF
 
 gcloud builds submit ./terraform --project="$OPS_PROJECT" \
@@ -190,12 +191,12 @@ if [[ -z "${SKIP_SEEDING}" ]]; then
     approver="${approver:-$account}"
 
     check_for_build_then_run $STAGE_BUILD_ID "gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
-    --substitutions=_FIREBASE_PROJECT="${STAGE_PROJECT}",_APPROVER_EMAIL="${approver}" \
+    --substitutions=_FIREBASE_PROJECT="${STAGE_PROJECT}",_SEED_OR_UNSEED=seed,_APPROVER_EMAIL="${approver}" \
     --config=./content-api/data/cloudbuild.yaml"
 
     if [ "${PROD_PROJECT}" != "${STAGE_PROJECT}" ]; then
         check_for_build_then_run $PROD_BUILD_ID "gcloud builds submit content-api/data  --project="$OPS_PROJECT" --async \
-        --substitutions=_FIREBASE_PROJECT="${PROD_PROJECT}",_APPROVER_EMAIL="${approver}" \
+        --substitutions=_FIREBASE_PROJECT="${PROD_PROJECT}",_SEED_OR_UNSEED=seed,_APPROVER_EMAIL="${approver}" \
         --config=./content-api/data/cloudbuild.yaml"
     fi
 fi # skip seeding

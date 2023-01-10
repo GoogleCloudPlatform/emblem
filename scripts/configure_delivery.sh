@@ -52,8 +52,10 @@ OPS_ENVIRONMENT_DIR=terraform/environments/ops
 cat > "${OPS_ENVIRONMENT_DIR}/terraform.tfvars" <<EOF
 project_id = "${OPS_PROJECT}"
 setup_cd_system="true"
+setup_e2e_tests="true"
 repo_owner="${REPO_OWNER}"
 repo_name="${REPO_NAME}"
+prod_project_id="${PROD_PROJECT}"
 EOF
 
 gcloud builds submit ./terraform --project="$OPS_PROJECT" \

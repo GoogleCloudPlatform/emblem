@@ -77,6 +77,9 @@ APP_IAM="bindings:
   role: roles/iam.serviceAccountAdmin
 - members:
   - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
+  role: roles/run.developer
+- members:
+  - serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}
   role: roles/firebase.managementServiceAgent"
 
 # Services needed for Terraform to manage resources via service account 
