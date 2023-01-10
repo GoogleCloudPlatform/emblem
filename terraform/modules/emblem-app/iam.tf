@@ -28,6 +28,18 @@ resource "google_project_iam_member" "project" {
   member  = "serviceAccount:${google_service_account.api_manager.email}"
 }
 
+# Cloud Trace Agent: used to create trace spans from content-api
+resource "google_project_iam_member" "api_manager_trace_agent" {
+  project = var.project_id
+  role    = "roles/cloudtrace.agent"
+  member  = "serviceAccount:${google_service_account.api_manager.email}"
+}
+resource "google_project_iam_member" "website_manager_trace_agent" {
+  project = var.project_id
+  role    = "roles/cloudtrace.agent"
+  member  = "serviceAccount:${google_service_account.website_manager.email}"
+}
+
 resource "google_secret_manager_secret_iam_member" "secret_access_iam_client_id" {
   project   = var.ops_project_id
   secret_id = "client_id_secret" // this previously was contrived from ops remote state

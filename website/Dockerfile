@@ -43,4 +43,4 @@ COPY . ./
 # For environments with multiple CPU cores, increase the number of workers
 # to be equal to the cores available. To increase CPU cores in Cloud Run, see 
 # https://cloud.google.com/run/docs/configuring/cpu
-CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 app:app
+CMD exec opentelemetry-instrument gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 app:app
