@@ -16,7 +16,7 @@ import { LitElement, html } from 'lit';
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import store from '../../stores/base.js';
 import { saveDonation } from '../../actions/donations.js';
-import donationStyles from './styles/DonationPage.js';
+import donationStyles from './styles/donationPage.js';
 import DonationForm from '../../components/form/donation.js';
 
 const websiteIcon = new URL('../../assets/website-icon.png', import.meta.url).href;

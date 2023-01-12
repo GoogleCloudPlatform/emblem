@@ -86,9 +86,6 @@ gcloud projects add-iam-policy-binding $OPS_PROJECT \
   --member="serviceAccount:${STAGE_COMPUTE_SA}" \
   --role="roles/secretmanager.secretAccessor"
 
-# Start configure auth script
-sh ./scripts/configure_auth.sh
-
 echo "======================================================================"
 echo "$(tput bold)Updating Cloud Run services...$(tput sgr0)"
 echo "======================================================================"

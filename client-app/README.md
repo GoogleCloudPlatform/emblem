@@ -46,7 +46,7 @@ Verify the backend is running correctly by heading to your browser and seeing th
 
 ```bash
 npm install // Install app dependencies
-npm build  // Bundle the app
+npm run build  // Bundle the app
 npm run start // Runs the app locally!
 ```
 
@@ -103,10 +103,16 @@ stateDiagram
       }
 ```
 
+Configure authentication by running the following script and following instructions.
+
+```bash
+./scripts/configure_auth.sh
+```
+
 Leverage the start shell script to deploy and build the containers on your behalf.
 
 ```bash
-./start.sh
+./scripts/start.sh
 ```
 
 If you would like to manually build & deploy, read on.
