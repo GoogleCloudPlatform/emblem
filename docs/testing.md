@@ -10,11 +10,11 @@ Content API unit tests run automatically [on pull requests to `main`](/terraform
 
 The [website](/docs/website.md) component is covered by automatic **end-to-end (E2E) Tests**.
   
-These tests run the website in a [Docker container](/ops/e2e-runner), and check that the website's routes load without any errors.
+These tests run the website using [Playwright](https://playwright.dev/) in a [Docker container](/ops/e2e-runner), and check that the website's routes load without any errors.
 
 > **Note:** this Docker container is rebuilt [nightly](/terraform/modules/website-e2e-test/build.tf#:~:text=testing_web_e2e_build_container_trigger).
 >
-> We kept nightly {container builds, test runs} separate so that E2E tests run even if the container build fails.
+> We keep nightly {container builds, test runs} separate so that E2E tests run even if the container build fails.
 
 
 These tests run automatically [on pull requests to `main`](/terraform/modules/website-e2e-test/testing.tf#:~:text=testing_web_e2e_run_tests_trigger).
