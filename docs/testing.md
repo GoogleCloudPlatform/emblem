@@ -8,7 +8,7 @@ Content API unit tests run automatically [on pull requests to `main`](/terraform
 
 ## Website
 
-The [Website](/docs/website.md) component is covered by automatic **End-to-End (E2E) Tests**.
+The [website](/docs/website.md) component is covered by automatic **end-to-end (E2E) Tests**.
   
 These tests run the website in a [Docker container](/ops/e2e-runner), and check that the website's routes load without any errors.
 
