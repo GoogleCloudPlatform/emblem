@@ -4,29 +4,20 @@ These tests run automatically once you have set up a working instance of Emblem.
 
 ## Content API
 
-Content API unit tests run automatically under two circumstances:
-* [nightly against `main`](/terraform/ops/triggers/cloud_build_triggers.tf#:~:text=api_unit_tests_build_trigger)
-* [on pull requests to `main`](/terraform/ops/triggers/cloud_build_triggers.tf#:~:text=api_push_to_main_build_trigger)
-
-## Pipelines / Delivery System
-  
-The **delivery system** can _optionally_ be covered by an automatic **End-to-End (E2E) Test**.
-
-This test uses Cloud Build to run the [setup/deployment script](/setup.sh) on a nightly basis, and checks that it completes without any errors.
-  
-Follow the [instructions](/installation-testing/README.md) in the `installation-testing` directory to enable this test.
+Content API unit tests run automatically [on pull requests to `main`](/terraform/modules/ops/testing.tf#:~:text=resource%20%22google_cloudbuild_trigger%22%20%22api_unit_tests%22).
 
 ## Website
 
-The [Website](/docs/website.md) component is covered by automatic **End-to-End (E2E) Tests**.
+The [website](/docs/website.md) component is covered by automatic **end-to-end (E2E) Tests**.
   
-These tests run the website in a [Docker container](/ops/e2e-runner), and check that the website's routes load without any errors.
+These tests run the website using [Playwright](https://playwright.dev/) in a [Docker container](/ops/e2e-runner), and check that the website's routes load without any errors.
 
-These tests run automatically under two circumstances:
-* [nightly against `main`](/terraform/ops/testing.tf#:~:text=e2e_nightly_tests)
-* [when the `main` branch is updated](/terraform/modules/ops/build.tf#:~:text=e2e_testing_build_runner).
+> **Note:** this Docker container is rebuilt [nightly](/terraform/modules/website-e2e-test/build.tf#:~:text=testing_web_e2e_build_container_trigger).
+>
+> We keep nightly container builds and test runs separate so that E2E tests run even if the container build fails.
 
-> **Note:** we are working on adding a pull-request runner as well
+
+These tests run automatically [on pull requests to `main`](/terraform/modules/website-e2e-test/testing.tf#:~:text=testing_web_e2e_run_tests_trigger).
 
 # Manually Running Tests
 
@@ -89,8 +80,3 @@ cp -R client-libs client-libs
 gcloud builds submit --tag \
   ${_REGION}-docker.pkg.dev/${PROJECT_ID}/website/website:manual
 ```
-
-## Terraform Testing
-
-Use `terraform/clean_project_setup.sh` to create a new projects and run through
-the end-to-end setup process.
