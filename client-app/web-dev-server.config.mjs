@@ -20,8 +20,10 @@ const hmr = process.argv.includes('--hmr');
 const theme = process.env.THEME;
 
 export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
-  open: '/',
   watch: !hmr,
+  port: 8081,
+  open: true,
+  appIndex: 'index.html',
   nodeResolve: {
     exportConditions: ['browser', 'development']
   },
