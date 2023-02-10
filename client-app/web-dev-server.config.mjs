@@ -23,6 +23,8 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
   watch: !hmr,
   port: 8081,
   open: true,
+  rootDir: '.',
+  basePath: '/',
   appIndex: 'index.html',
   nodeResolve: {
     exportConditions: ['browser', 'development']
