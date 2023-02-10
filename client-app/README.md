@@ -1,4 +1,4 @@
-# Emblem Giving frontend application
+# Emblem Giving frontend application ⚠️  (Migration pending)
 
 ## Quicklinks
 * [Requirements](requirements)
@@ -124,7 +124,7 @@ If you would like to manually build & deploy, read on.
 ```bash
 cd client-app/
 gcloud set project $OPS_PROJECT // All images are in this registry
-gcloud builds submit --tag $REGION-docker.pkg.dev/ $OPS_PROJECT/website/lit-based-website
+gcloud builds submit --tag $REGION-docker.pkg.dev/$OPS_PROJECT/website/lit-based-website
 ```
 
 ### Auth server container
@@ -151,7 +151,7 @@ gcloud run deploy --image=$REGION-docker.pkg.dev/$OPS_PROJECT/website/lit-based-
 ```bash
 cd server/
 gcloud set project $OPS_PROJECT 
-gcloud run deploy --image=$REGION-docker.pkg.dev$OPS_PROJECT/website/lit-auth-api --port 4000
+gcloud run deploy --image=$REGION-docker.pkg.dev/$OPS_PROJECT/website/lit-auth-api --port 4000
 ```
 
 List of required environment variables and secrets needed to update each Cloud Run container in order to function properly. 
