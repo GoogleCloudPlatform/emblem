@@ -42,7 +42,7 @@
     "@web/dev-server-rollup": "0.3.19",
     "@web/rollup-plugin-copy": "0.3.0",
     "@web/rollup-plugin-html": "1.11.0",
-    "eslint": "8.24.0",
+    "eslint": "8.34.0",
     "eslint-config-prettier": "8.5.0",
     "husky": "8.0.1",
     "lint-staged": "13.1.0",
