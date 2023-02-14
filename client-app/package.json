@@ -24,7 +24,7 @@
     "@reduxjs/toolkit": "1.9.1",
     "@vaadin/router": "1.7.4",
     "cors": "2.8.5",
-    "express": "4.18.1",
+    "express": "4.18.2",
     "http-proxy-middleware": "2.0.6",
     "lit": "2.6.1",
     "lite-form": "1.1.1",
