@@ -5,6 +5,7 @@
   "ignorePaths": [
     "experimental/**"
   ],
+  "masterIssue": true,
   "rangeStrategy": "pin",
   "schedule": "before 10am every 3 weeks on Monday", 
   "packageRules": [
