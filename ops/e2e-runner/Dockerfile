@@ -16,7 +16,7 @@
 # This Dockerfile is used to run the website for Playwright tests #
 ###################################################################
 
-FROM mcr.microsoft.com/playwright:v1.29.2-focal-amd64
+FROM mcr.microsoft.com/playwright:v1.30.1-focal-amd64
 RUN apt-get update && \
     apt-get install -y software-properties-common && \
     add-apt-repository ppa:deadsnakes/ppa -y && \
