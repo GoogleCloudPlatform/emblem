@@ -8,7 +8,8 @@ resource "google_cloudbuild_trigger" "testing_web_e2e_run_tests_trigger" {
   included_files = [
     "website/**",
     "ops/web-e2e.cloudbuild.yaml",
-    "terraform/modules/website-e2e-test/**"
+    "terraform/modules/website-e2e-test/**",
+    "testing/website-e2e/**"
   ]
   substitutions = {
     _DIR            = "website"
