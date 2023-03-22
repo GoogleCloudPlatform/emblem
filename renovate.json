@@ -19,5 +19,9 @@
       "groupName": "Playwright",
       "matchPackageNames": ["playwright", "@playwright/test", "mcr.microsoft.com/playwright"]
     },
+    {
+      "groupName": "OpenTelemetry",
+      "matchPackageNames": ["opentelemetry-*"]
+    },
   ]
 }
