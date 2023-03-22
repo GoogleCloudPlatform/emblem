@@ -13,6 +13,10 @@
         "client-libs/"
       ],
       "rangeStrategy": "replace"
-    }
+    },
+    {
+      "groupName": "OpenTelemetry",
+      "matchPackageNames": ["opentelemetry-*"]
+    },
   ]
 }
