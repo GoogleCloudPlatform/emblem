@@ -22,7 +22,7 @@
     "@material/mwc-textfield": "0.27.0",
     "@material/mwc-top-app-bar": "0.27.0",
     "@reduxjs/toolkit": "1.9.3",
-    "@vaadin/router": "1.7.4",
+    "@vaadin/router": "1.7.5",
     "cors": "2.8.5",
     "express": "4.18.2",
     "http-proxy-middleware": "2.0.6",
