@@ -1,22 +1,30 @@
-// See https://json5.org/ for syntax differences from JSON.
+// Dependency Update Configuration
+//
+// See https://github.com/GoogleCloudPlatform/emblem/tree/main/docs/decisions/2023-03-dependency-updates.md
+// See https://docs.renovatebot.com/configuration-options/
+// See https://json5.org/ for JSON5 syntax.
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:base",
+    "docker:enableMajor",
   ],
   "ignorePaths": [
     // Do not run on experiments.
-    "experimental/**"
+    "experimental/**",
   ],
 
   // Schedule updates to generate a batch of work per sprint.
+  // The schedule is designed to complete most updates on Saturday, when our
+  // global extended team is not working. Timing is meant to avoid disrupting
+  // a Saturday morning for anyone that forgot to disable work notifications.
   "schedule": "after 11am every 2 weeks on Saturday",
   "timezone": "America/Los_Angeles",
 
   // Control pace and priority of scheduled updates.
-  "stabilityDays": 3,
-  "prConcurrentLimit": 24,
-  "prHourlyLimit": 4,
+  "stabilityDays": 3, // in case package maintainers need to fix a mistake
+  "prConcurrentLimit": 0, // unlimited concurrently open PRs
+  "prHourlyLimit": 4, // 60/4 = 15 minute test window for synchronous testing
 
   // Pin versions for increased stability in apps.
   "rangeStrategy": "pin",
@@ -27,41 +35,40 @@
       // Client library may have wider range of dependents.
       // Avoid creating conflicts with app dependencies.
       "matchPaths": ["client-libs/**"],
-      "rangeStrategy": "replace"
+      "rangeStrategy": "replace",
     },
 
-    // Indicate impact of a dependency update via PR label.
+    // Report impact of a dependency update via PR label.
     {
       "matchUpdateTypes": ["patch"],
-       "labels": ["semver: patch"]
+       "labels": ["semver: patch"],
     },
     {
       "matchUpdateTypes": ["minor"],
-       "labels": ["semver: minor"]
+       "labels": ["semver: minor"],
     },
     {
       "matchUpdateTypes": ["major"],
-       "labels": ["semver: major"]
+       "labels": ["semver: major"],
     },
 
     // Grouping dependency updates
     {
       // Group runtime updates.
       // This should apply to all Dockerfiles, cloudbuild.yaml.
-      // TODO: Extend to language references in GitHub Workflows.
       "groupName": "Language & Runtimes",
-      "matchDatasources": ["docker"]
+      "matchDatasources": ["docker"],
     },
     {
       // Group terraform updates together.
       "groupName": "Terraform",
-      "matchManagers": ["terraform"]
+      "matchManagers": ["terraform"],
     },
     {
        // Group GitHub Actions and pin digests for immutable use.
        "groupName": "GitHub Actions",
        "matchManagers": ["github-actions"],
-       "pinDigests": true
+       "pinDigests": true,
     },
     {
       // Bundle non-major dependencies for Website Python code.
@@ -82,10 +89,11 @@
       "matchLanguages": ["javascript"],
       "matchUpdateTypes": ["minor", "patch"],
       // Scope the code to what we use in production operation
-       "matchDepTypes": ["dependencies"],
+      "matchDepTypes": ["dependencies"],
       "excludePackageNames": ["lit"],
     },
     {
+      // Bundle non-major dependencies for Website JS code.
       "groupName": "Website (JS Build)",
       "matchPaths": ["website/**", "client-libs/**", "client-app/**"],
       "matchLanguages": ["javascript"],
@@ -94,7 +102,6 @@
       // and build processes.
       "matchDepTypes": ["devDependencies"],
     },
-
     {
       // Bundle non-major dependencies for Content API Python code.
       // Exclude frameworks and libraries where our usage
@@ -111,12 +118,12 @@
     {
       // Playwright dependencies require tight alignment
       "groupName": "Playwright",
-      "matchPackageNames": ["playwright", "@playwright/test", "mcr.microsoft.com/playwright"]
+      "matchPackageNames": ["playwright", "@playwright/test", "mcr.microsoft.com/playwright"],
     },
     {
       // OpenTelemetry dependencies require tight alignment
       "groupName": "OpenTelemetry",
-      "matchPackagePrefixes": ["opentelemetry-"]
-    }
-  ]
+      "matchPackagePrefixes": ["opentelemetry-"],
+    },
+  ],
 }
