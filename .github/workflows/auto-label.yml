@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Conventional Release Labels
-        uses: bcoe/conventional-release-labels@v1
+        uses: bcoe/conventional-release-labels@886f696738527c7be444262c327c89436dfb95a8 # v1
         with:
           type_labels: '{"feat": "type: feature request", "fix": "type: bug", "breaking": "semver: major"}'
 
@@ -37,6 +37,6 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-    - uses: actions/labeler@v4
+    - uses: actions/labeler@ba790c862c380240c6d5e7427be5ace9a05c754b # v4
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
