@@ -154,7 +154,7 @@ gsutil iam ch serviceAccount:${EMBLEM_TF_SERVICE_ACCOUNT}:admin \
   gs://${STATE_GCS_BUCKET_NAME}
 
 # Add GitHub repo to ops project
-echo -e "\n${GREEN}\xE2\x9E\xA8 Connect a fork of the Emblem GitHub repo to your ops project via the Cloud Console:${NC} $(tput bold)${REPO_CONNECT_URL}$(tput sgr0) \n"
+echo -e "\n${GREEN}\xE2\x9E\xA8 Connect a fork of the Emblem GitHub repo to your ops project (making sure to specify region Global) via the Cloud Console:${NC} $(tput bold)${REPO_CONNECT_URL}$(tput sgr0) \n"
 read -n 1 -r -s -p $'Once your forked Emblem repo is connected, please type any key to continue.\n'
 
 continue=1

@@ -59,7 +59,7 @@ We recommend running through setup steps using Google Cloud Shell, which has the
 
 1. **Connect a fork of this Github repo to your Emblem ops project**
    
-   Connect your repository to your Google Cloud Project via the [Cloud Build triggers page in the Google Cloud Console](https://console.cloud.google.com/cloud-build/triggers/connect). Make sure you are working from your **ops** project. This will require you to enable the Cloud Build API and authenticate with your Github account.
+   Connect your repository to your Google Cloud Project via the [Cloud Build triggers page in the Google Cloud Console](https://console.cloud.google.com/cloud-build/triggers/connect). Make sure you are working from your **ops** project and make sure you select region "Global (non-regional)" when connecting your repo. This will require you to enable the Cloud Build API and authenticate with your Github account.
 
    ```
    gcloud services enable cloudbuild.googleapis.com
