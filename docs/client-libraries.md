@@ -16,11 +16,10 @@ options for installing the tool.
 Once the tool is generated, open a shell and navigate to the
 (client-libs/python)[../client-libs/python] directory, and run the command:
 
-    rm -rf generated && openapi-generator-cli generate -g python -i openapi.yaml
+    rm -rf generated && openapi-generator-cli generate -g python -i ../../content-api/openapi.yaml
 
 Python programs can directly import from the newly generated library, or use
 an Emblem-specific shim that imports and wraps that library:
 
     import emblem_client
     client = emblem_client.EmblemClient(API_SERVER_URL, **kwargs)
-    
