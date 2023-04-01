@@ -13,11 +13,18 @@
 # limitations under the License.
 
 # Name: Web E2E Test
-# Description: This test confirms a locally run instance of the website behaves as expected.
+#
+# This test confirms a locally run instance of the website behaves as expected.
 # Triggers: testing-web-e2e-run-tests-trigger (PR trigger)
+#
 # Limitations:
 # - Relies on an existing instance of the Emblem Content API.
 # - User authentication is not in scope of this test.
+#
+# Run it locally:
+#   gcloud builds submit \
+#     --config ops/build-test.cloudbuild.yaml \
+#     --substitutions="_EMBLEM_API_URL=http://example"
 
 steps:
   # Prepare to run website "locally" inside Cloud Build.
@@ -43,10 +50,19 @@ steps:
       npm install
     dir: 'testing/website-e2e'
 
+  # Prepare Playwright test runner
+  # https://cloud.google.com/build/docs/optimize-builds/kaniko-cache
+  - id: 'Build Test Runner
+    name: 'gcr.io/kaniko-project/executor:latest'
+    args:
+    - "--destination=${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:kaniko-${_E2E_RUNNER_SHA}"
+    - "--cache=true"
+    dir: ops/e2e-runner
+
   # Run E2E tests
   # Filesystem from previously executed steps is automatically available.
   - id: 'Run E2E tests'
-    name: 'mcr.microsoft.com/playwright/python:v1.32.1-focal'
+    name: "${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:kaniko-${_E2E_RUNNER_SHA}"
     script: |
       #!/usr/bin/env bash
       python -m flask run --port ${_FLASK_PORT} &
@@ -55,11 +71,13 @@ steps:
     env:
       - "EMBLEM_URL=${_EMBLEM_URL}" # for tests to target the website
       - "EMBLEM_SESSION_BUCKET=${_EMBLEM_SESSION_BUCKET}" # only needed for auth
-      - "EMBLEM_API_URL=${_EMBLEM_API_URL}" # Target running Content API service
-      - "FLASK_PORT=${_FLASK_PORT}" # Configure flask for local use
+      - "EMBLEM_API_URL=${_EMBLEM_API_URL}" # target running Content API service
+      - "FLASK_PORT=${_FLASK_PORT}" # configure flask for local use
 
 # Specify a default value for optional variables.
 substitutions:
+  _E2E_RUNNER_SHA: latest
   _EMBLEM_SESSION_BUCKET: nonexistent-bucket # no-op placeholder value
-  _REGION: us-central1
+  _EMBLEM_URL: "http://localhost:8080"
   _FLASK_PORT: "8080"
+  _REGION: us-central1
