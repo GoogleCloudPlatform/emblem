@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:17.3.0 as client-app-build
+FROM --platform=linux/amd64 node:19.8.1 as client-app-build
 
 USER root
 WORKDIR /usr/src/app
