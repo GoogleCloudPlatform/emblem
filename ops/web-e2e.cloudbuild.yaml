@@ -50,16 +50,16 @@ steps:
       npm install
     dir: 'testing/website-e2e'
 
-  # Prepare Playwright test runner
+  # Prepare Playwright test runner.
   # https://cloud.google.com/build/docs/optimize-builds/kaniko-cache
-  - id: 'Build Test Runner
+  - id: 'Build Test Runner'
     name: 'gcr.io/kaniko-project/executor:latest'
     args:
-    - "--destination=${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:kaniko-${_E2E_RUNNER_SHA}"
-    - "--cache=true"
+      - "--destination=${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:kaniko-${_E2E_RUNNER_SHA}"
+      - "--cache=true"
     dir: ops/e2e-runner
 
-  # Run E2E tests
+  # Run E2E tests.
   # Filesystem from previously executed steps is automatically available.
   - id: 'Run E2E tests'
     name: "${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:kaniko-${_E2E_RUNNER_SHA}"

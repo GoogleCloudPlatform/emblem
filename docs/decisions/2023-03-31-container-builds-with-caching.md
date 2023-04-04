@@ -47,8 +47,8 @@ minimized build time, we will use Kaniko to build the container image.
   - id: 'Build Test Runner (Kaniko)'
     name: 'gcr.io/kaniko-project/executor:latest'
     args:
-    - "--destination=${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:kaniko-${_E2E_RUNNER_SHA}"
-    - "--cache=true"
+      - "--destination=${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:kaniko-${_E2E_RUNNER_SHA}"
+      - "--cache=true"
     dir: ops/e2e-runner
 ```
 
@@ -64,9 +64,9 @@ minimized build time, we will use Kaniko to build the container image.
       docker push "${REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:docker-${E2E_RUNNER_SHA}"
     dir: ops/e2e-runner
     env:
-    - "REGION=${_REGION}"
-    - "E2E_RUNNER_SHA=${_E2E_RUNNER_SHA}"
-    - "PROJECT_ID=${PROJECT_ID}"
+      - "REGION=${_REGION}"
+      - "E2E_RUNNER_SHA=${_E2E_RUNNER_SHA}"
+      - "PROJECT_ID=${PROJECT_ID}"
 ```
 
 ### Analysis
