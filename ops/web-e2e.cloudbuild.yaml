@@ -28,22 +28,15 @@
 
 steps:
   # Prepare to run website "locally" inside Cloud Build.
-  - id: 'Copy client libraries directory'
+  - id: 'client-lib-setup'
     name: bash
     script: |
       #!/usr/bin/env bash
       cp -R ../client-libs/ client-libs
     dir: 'website'
 
-  - id: 'Install Python packages'
-    name: python # use latest to match Playwright container image
-    script: |
-      #!/usr/bin/env bash
-      pip install -r requirements.txt --target .
-    dir: 'website'
-  
   # Prepare to run tests.
-  - id: 'Setup node.js-based test suite'
+  - id: 'e2e-test-setup'
     name: node:18-slim
     script: |
       #!/usr/bin/env bash
@@ -52,19 +45,21 @@ steps:
 
   # Prepare Playwright test runner.
   # https://cloud.google.com/build/docs/optimize-builds/kaniko-cache
-  - id: 'Build Test Runner'
+  - id: 'test-runner-build'
     name: 'gcr.io/kaniko-project/executor:latest'
     args:
-      - "--destination=${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:kaniko-${_E2E_RUNNER_SHA}"
+      - "--destination=${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:${_E2E_RUNNER_SHA}"
       - "--cache=true"
     dir: ops/e2e-runner
-
+  
   # Run E2E tests.
   # Filesystem from previously executed steps is automatically available.
-  - id: 'Run E2E tests'
-    name: "${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:kaniko-${_E2E_RUNNER_SHA}"
+  - id: 'run-e2e-tests'
+    name: "${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:${_E2E_RUNNER_SHA}"
     script: |
       #!/usr/bin/env bash
+      # cryptography library dependencies must be installed in an environment compatible with test runner.
+      pip install -r requirements.txt --target .
       python -m flask run --port ${FLASK_PORT} &
       cd ../testing/website-e2e && npm test
     dir: 'website'
