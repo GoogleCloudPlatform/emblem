@@ -16,16 +16,12 @@
 # This Dockerfile is used to run the website for Playwright tests #
 ###################################################################
 
-FROM mcr.microsoft.com/playwright:v1.32.1-focal
+FROM mcr.microsoft.com/playwright:v1.32.1-focal-amd64
 RUN apt-get update && \
     apt-get install -y software-properties-common && \
     add-apt-repository ppa:deadsnakes/ppa -y && \
     apt-get update && \
-    apt-get install -y python3.11 python3-setuptools python3-pip \
-      # Address playwright runtime error for python service:
-      # ModuleNotFoundError: No module named '_cffi_backend' traced to
-      # Rust build for cryptography.hazmat.bindings.
-      libffi-dev
+    apt-get install -y python3.11 python3-setuptools python3-pip
 
 # NOTE: Playwright NPM packages ***CAN NOT*** be installed here,
 # and must be installed within Cloud Build itself. This is because:
