@@ -65,7 +65,7 @@ steps:
     name: "${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:kaniko-${_E2E_RUNNER_SHA}"
     script: |
       #!/usr/bin/env bash
-      python -m flask run --port ${_FLASK_PORT} &
+      python -m flask run --port ${FLASK_PORT} &
       cd ../testing/website-e2e && npm test
     dir: 'website'
     env:
