@@ -11,8 +11,6 @@ resource "google_cloudbuild_trigger" "testing_web_e2e_run_tests_trigger" {
     "terraform/modules/website-e2e-test/**"
   ]
   substitutions = {
-    _DIR            = "website"
-    _EMBLEM_URL     = "http://localhost:8080"
     _EMBLEM_API_URL = var.content_api_url
   }
   github {

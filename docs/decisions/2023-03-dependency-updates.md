@@ -2,6 +2,7 @@
 
 * **Status:** approved
 * **Last Updated:** 2023-03-27
+* **Builds On:** [Automate Dependency Updates](2022-06-automate-dependencies.md), [Pin App dependencies](2022-06-pin-dependencies.md)
 * **Objective:** Find ways to maximize the value and minimize the human effort around automated dependency updates.
 
 ## Context & Problem Statement

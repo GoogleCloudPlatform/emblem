@@ -12,50 +12,67 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Name: Web E2E Test
+#
+# This test confirms a locally run instance of the website behaves as expected.
+# Triggers: testing-web-e2e-run-tests-trigger (PR trigger)
+#
+# Limitations:
+# - Relies on an existing instance of the Emblem Content API.
+# - User authentication is not in scope of this test.
+#
+# Run it locally:
+#   gcloud builds submit \
+#     --config ops/build-test.cloudbuild.yaml \
+#     --substitutions="_EMBLEM_API_URL=http://example"
 
 steps:
-  - id: 'Copy client libraries directory'
+  # Prepare to run website "locally" inside Cloud Build.
+  - id: 'client-lib-setup'
     name: bash
     script: |
       #!/usr/bin/env bash
       cp -R ../client-libs/ client-libs
     dir: 'website'
-  - id: 'Install Python packages'
-    name: python
-    entrypoint: pip
-    args: ['install', '-r', 'requirements.txt', '--target', '.']
-    dir: 'website'
-  - id: 'Install npm packages'
-    name: node
-    entrypoint: npm
-    args: ['install']
+
+  # Prepare to run tests.
+  - id: 'e2e-test-setup'
+    name: node:18-slim
+    script: |
+      #!/usr/bin/env bash
+      npm install
     dir: 'testing/website-e2e'
-  # Run E2E tests
-  # These DO NOT use auth, so we can use a
-  # "dummy value" for EMBLEM_SESSION_BUCKET
-  - id: 'Run E2E tests'
-    name: '${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:${_E2E_RUNNER_SHA}'
-    entrypoint: /bin/bash
+
+  # Prepare Playwright test runner.
+  # https://cloud.google.com/build/docs/optimize-builds/kaniko-cache
+  - id: 'test-runner-build'
+    name: 'gcr.io/kaniko-project/executor:latest'
     args:
-      - '-c'
-      - |
-        python -m flask run --port ${_FLASK_PORT} &
-        cd ../testing/website-e2e && npm test
+      - "--destination=${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:${_E2E_RUNNER_SHA}"
+      - "--cache=true"
+    dir: ops/e2e-runner
+  
+  # Run E2E tests.
+  # Filesystem from previously executed steps is automatically available.
+  - id: 'run-e2e-tests'
+    name: "${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:${_E2E_RUNNER_SHA}"
+    script: |
+      #!/usr/bin/env bash
+      # cryptography library dependencies must be installed in an environment compatible with test runner.
+      pip install -r requirements.txt --target .
+      python -m flask run --port ${FLASK_PORT} &
+      cd ../testing/website-e2e && npm test
     dir: 'website'
     env:
-      - "EMBLEM_URL=${_EMBLEM_URL}"
-      - "EMBLEM_SESSION_BUCKET=${_EMBLEM_SESSION_BUCKET}"
+      - "EMBLEM_URL=${_EMBLEM_URL}" # for tests to target the website
+      - "EMBLEM_SESSION_BUCKET=${_EMBLEM_SESSION_BUCKET}" # only needed for auth
+      - "EMBLEM_API_URL=${_EMBLEM_API_URL}" # target running Content API service
+      - "FLASK_PORT=${_FLASK_PORT}" # configure flask for local use
 
-      # This allows us to test Emblem instances
-      # running both locally **and** remotely.
-      - "EMBLEM_API_URL=${_EMBLEM_API_URL}"
-
-      # Used when running the Flask website locally
-      - "FLASK_PORT=${_FLASK_PORT}"
-
-# Specify a default value for optional variables
+# Specify a default value for optional variables.
 substitutions:
-  _EMBLEM_SESSION_BUCKET: nonexistent-bucket
-  _REGION: us-central1
   _E2E_RUNNER_SHA: latest
+  _EMBLEM_SESSION_BUCKET: nonexistent-bucket # no-op placeholder value
+  _EMBLEM_URL: "http://localhost:8080"
   _FLASK_PORT: "8080"
+  _REGION: us-central1
