@@ -29,10 +29,10 @@ resource "google_service_account" "test_approver" {
 #######################
 
 resource "google_cloudbuild_trigger" "api_unit_tests" {
-  project        = var.project_id
-  count          = var.setup_cd_system ? 1 : 0
-  name           = "api-unit-tests"
-  filename       = "ops/unit-tests.cloudbuild.yaml"
+  project  = var.project_id
+  count    = var.setup_cd_system ? 1 : 0
+  name     = "api-unit-tests"
+  filename = "ops/unit-tests.cloudbuild.yaml"
   included_files = [
     "content-api/**",
     "ops/unit-tests.cloudbuild.yaml"
