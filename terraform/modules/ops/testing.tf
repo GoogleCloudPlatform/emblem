@@ -33,7 +33,10 @@ resource "google_cloudbuild_trigger" "api_unit_tests" {
   count          = var.setup_cd_system ? 1 : 0
   name           = "api-unit-tests"
   filename       = "ops/unit-tests.cloudbuild.yaml"
-  included_files = ["content-api/**"]
+  included_files = [
+    "content-api/**",
+    "ops/unit-tests.cloudbuild.yaml"
+  ]
   substitutions = {
     _DIR             = "content-api"
     _SERVICE_ACCOUNT = google_service_account.test_user.email
