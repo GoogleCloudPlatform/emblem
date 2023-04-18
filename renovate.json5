@@ -72,43 +72,20 @@
     },
     {
       // Bundle non-major dependencies for Website Python code.
-      // Exclude frameworks and libraries where our usage
-      // lacks test coverage.
+      // Exclude frameworks and libraries where our usage lacks test coverage.
       "groupName": "Website (Python)",
       "matchPaths": ["website/**", "client-libs/**", "client-app/**"],
       "matchLanguages": ["python"],
       "matchUpdateTypes": ["minor", "patch"],
+      // Excluding flask from Website and Content API is by design:
+      // framework changes are significant and we group them across components.
       "excludePackageNames": ["flask"],
     },
     {
-      // Bundle non-major dependencies for Website JS code.
-      // Exclude frameworks and libraries where our usage
-      // lacks test coverage.
-      "groupName": "Website (JS Runtime)",
-      "matchPaths": ["website/**", "client-libs/**", "client-app/**"],
-      "matchLanguages": ["javascript"],
-      "matchUpdateTypes": ["minor", "patch"],
-      // Scope the code to what we use in production operation
-      "matchDepTypes": ["dependencies"],
-      "excludePackageNames": ["lit"],
-    },
-    {
-      // Bundle non-major dependencies for Website JS code.
-      "groupName": "Website (JS Build)",
-      "matchPaths": ["website/**", "client-libs/**", "client-app/**"],
-      "matchLanguages": ["javascript"],
-      "matchUpdateTypes": ["minor", "patch"],
-      // Scope the code to what we use during development
-      // and build processes.
-      "matchDepTypes": ["devDependencies"],
-    },
-    {
       // Bundle non-major dependencies for Content API Python code.
-      // Exclude frameworks and libraries where our usage
-      // lacks test coverage.
+      // Exclude frameworks and libraries where our usage lacks test coverage.
       //
-      // Currently the only API package under test
-      // is google-cloud-firestore.
+      // Currently the only API package under test is google-cloud-firestore.
       "groupName": "Content API",
       "matchPaths": ["content-api/**"],
       "matchLanguages": ["python"],
@@ -116,14 +93,47 @@
       "matchPackageNames": ["google-cloud-firestore"],
     },
     {
-      // Playwright dependencies require tight alignment
-      "groupName": "Playwright",
-      "matchPackageNames": ["playwright", "@playwright/test", "mcr.microsoft.com/playwright"],
+      // Bundle non-major dependencies for Website JS code.
+      // Exclude frameworks and libraries where our usage lacks test coverage.
+      "groupName": "Website (JS Runtime)",
+      "matchPaths": ["website/**", "client-libs/**", "client-app/**"],
+      "matchLanguages": ["js", "node"],
+      "matchUpdateTypes": ["minor", "patch"],
+      // Scope the code to what we use in production operation.
+      "matchDepTypes": ["dependencies"],
+      "excludePackageNames": ["lit"],
     },
     {
-      // OpenTelemetry dependencies require tight alignment
+      // Bundle dependencies for Website JS build code.
+      "groupName": "Website (JS Build)",
+      "matchPaths": ["website/**", "client-libs/**", "client-app/**"],
+      "matchLanguages": ["js", "node"],
+      // Scope the code to what we use during development and build processes.
+      "matchDepTypes": ["devDependencies"],
+    },
+    {
+      // Playwright dependencies require tight alignment.
+      "groupName": "Playwright",
+      "matchPackageNames": ["playwright", "@playwright/test", "mcr.microsoft.com/playwright"],
+      // Run daily as a low-impact check for group updates.
+      "schedule": "before 6am every day",
+      "prBodyNotes": [
+        ":warning: Playwright dependencies may roll out on a staggered schedule.",
+        "If tests are not passing due to version conflict, wait for other packages",
+        "and re-run renovate on this PR to retry the update.",
+      ],
+    },
+    {
+      // OpenTelemetry dependencies require tight alignment.
       "groupName": "OpenTelemetry",
       "matchPackagePrefixes": ["opentelemetry-"],
+      // Run daily as a low-impact check for group updates.
+      "schedule": "before 6am every day",
+      "prBodyNotes": [
+        ":warning: OpenTelemetry dependencies may roll out on a staggered schedule.",
+        "If tests are not passing due to version conflict, wait for other packages",
+        "and re-run renovate on this PR to retry the update.",
+      ],
     },
   ],
 }

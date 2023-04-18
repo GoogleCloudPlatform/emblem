@@ -76,3 +76,4 @@ not have as part of the available time for maintenance improvements.
 ## Links
 
 * [#822](https://github.com/GoogleCloudPlatform/emblem/pull/822)
+* [#847](https://github.com/GoogleCloudPlatform/emblem/issues/847)
