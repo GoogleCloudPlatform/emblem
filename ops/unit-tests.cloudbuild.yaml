@@ -52,6 +52,7 @@ steps:
     args: 
       - '-c'
       - |
+        set -e
         export ID_TOKEN=$(cat _id_token)
         python -m pytest
 
