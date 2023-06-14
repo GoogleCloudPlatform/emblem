@@ -15,22 +15,18 @@
 steps:
   # Print the full Pub/Sub message for debugging.
   - name: gcr.io/cloud-builders/gcloud
-    entrypoint: /bin/bash
-    args:
-      - '-c'
-      - |
-        echo ${_BODY}
+    script: |
+      #!/usr/bin/env bash
+      echo ${_BODY}
 
   # Simple health check, index should return 200.
   - name: gcr.io/cloud-builders/gcloud
-    entrypoint: /bin/bash
-    args:
-      - '-c'
-      - |
-        URL=$(gcloud run services describe website --format "value(status.url)" --region=${_REGION} --project=${_TARGET_PROJECT})
-        latest=$(echo "${URL/https:\/\//latest---}")
-        set -e
-        curl -si --fail --show-error https://$latest
+    script: |
+      #!/usr/bin/env bash
+      URL=$(gcloud run services describe website --format "value(status.url)" --region=${_REGION} --project=${_TARGET_PROJECT})
+      latest=$(echo "${URL/https:\/\//latest---}")
+      set -e
+      curl -si --fail --show-error https://$latest
   
   # Failure will halt the pipeline progress 
   # and traffic percentage will remain same
@@ -54,16 +50,14 @@ steps:
   # increase traffic until it reaches 100%.
   # Once this is complete, this build will start the canary rollout to prod.
   - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: /bin/bash
-    args:
-      - -c
-      - |
-        if [ ${_TRAFFIC} -lt 100 ]
-        then gcloud pubsub topics publish canary-${_ENV} \
-        --message="Increase ${_SERVICE}-${_REVISION} traffic to $((${_TRAFFIC}+20))" \
-        --attribute=_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION},_TRAFFIC=$((${_TRAFFIC}+20))
-        else
-        gcloud pubsub topics publish deploy-completed-${_ENV} \
-        --message="Deployed ${_SERVICE}-${_REVISION} [${_ENV}] to ${_TARGET_PROJECT}" \
-        --attribute=_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION}
-        fi
+    script: |
+      #!/usr/bin/env bash
+      if [ ${_TRAFFIC} -lt 100 ]
+      then gcloud pubsub topics publish canary-${_ENV} \
+      --message="Increase ${_SERVICE}-${_REVISION} traffic to $((${_TRAFFIC}+20))" \
+      --attribute=_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION},_TRAFFIC=$((${_TRAFFIC}+20))
+      else
+      gcloud pubsub topics publish deploy-completed-${_ENV} \
+      --message="Deployed ${_SERVICE}-${_REVISION} [${_ENV}] to ${_TARGET_PROJECT}" \
+      --attribute=_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION}
+      fi

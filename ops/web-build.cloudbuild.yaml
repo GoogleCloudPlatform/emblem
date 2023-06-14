@@ -17,14 +17,12 @@ steps:
   # Docker Build 
   # Copying the client-libs for Docker context
   - name: gcr.io/cloud-builders/docker
-    entrypoint: /bin/bash
-    args: 
-      - '-c'
-      - |
-        cp -R client-libs/ website/client-libs
-        docker build -t \
-        ${_REGION}-docker.pkg.dev/${PROJECT_ID}/website/website:${_IMAGE_TAG} \
-        website/. 
+    script: |
+      #!/usr/bin/env bash
+      cp -R client-libs/ website/client-libs
+      docker build -t \
+      ${_REGION}-docker.pkg.dev/${PROJECT_ID}/website/website:${_IMAGE_TAG} \
+      website/. 
 
 # Default to us-central1 
 substitutions:
