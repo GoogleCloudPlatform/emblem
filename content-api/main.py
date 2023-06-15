@@ -23,7 +23,6 @@ from resources import methods
 
 from opentelemetry import propagate
 from opentelemetry import trace
-
 from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.propagators.cloud_trace_propagator import CloudTraceOneWayPropagator
