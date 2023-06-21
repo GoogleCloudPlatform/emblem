@@ -94,5 +94,5 @@ fi
 # Build container for running E2E tests
 E2E_RUNNER_TAG="latest"
 E2E_BUILD_ID=$(gcloud builds submit "ops/e2e-runner" --async \
-    --config=ops/e2e-runner-build.cloudbuild.yaml \
-    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_IMAGE_TAG="$E2E_RUNNER_TAG" --format='value(ID)')
+    --config=ops/web-e2e.cloudbuild.yaml \
+    --project="$OPS_PROJECT" --substitutions=_REGION="$REGION",_E2E_RUNNER_SHA="$E2E_RUNNER_TAG," --format='value(ID)')

@@ -74,5 +74,6 @@ substitutions:
   _E2E_RUNNER_SHA: latest
   _EMBLEM_SESSION_BUCKET: nonexistent-bucket # no-op placeholder value
   _EMBLEM_URL: "http://localhost:8080"
+  _EMBLEM_API_URL: point-to-prod-url # no-op placeholder value (added via terraform/modules/website-e2e-test/testing.tf)
   _FLASK_PORT: "8080"
   _REGION: us-central1
