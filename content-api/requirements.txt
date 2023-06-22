@@ -2,7 +2,7 @@ flask==2.2.5
 google-cloud-firestore==2.10.0
 Flask-Cors==3.0.10
 gunicorn==20.1.0
-google.auth==2.16.0
+google-auth==2.16.0
 requests==2.31.0
 # opentelemetry libraries
 opentelemetry-api==1.18.0
