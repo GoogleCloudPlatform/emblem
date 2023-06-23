@@ -29,6 +29,10 @@ steps:
   - id: "Get identity token"
     name: gcr.io/cloud-builders/gcloud
     dir: ${_DIR}
+    env:
+      - 'gcloud auth print-access-token=$gcloud auth print-access-token'
+      - '_SERVICE_ACCOUNT=$_SERVICE_ACCOUNT'
+      - 'get_id_token=$get_id_token'
     script: |
       #!/usr/bin/env bash
       get_id_token() {
@@ -44,6 +48,7 @@ steps:
   - id: "Unit Tests"
     name: python:3.11-slim
     dir: ${_DIR}
+    env: 'cat _id_token=$cat _id_token'
     script: |
       #!/usr/bin/env bash
       set -e

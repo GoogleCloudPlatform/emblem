@@ -16,6 +16,7 @@ steps:
 # Echo environment name
   - id: 'environment name'
     name: 'alpine'
+    env: '_ENV=$_ENV'
     script: |
       #!/bin/sh
       echo "***********************"
@@ -27,6 +28,8 @@ steps:
     name: 'hashicorp/terraform:1.0.0'
     env:
       - 'GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=$_TF_SERVICE_ACCT'
+      - '_ENV=$_ENV'
+      - '_STATE_GCS_BUCKET_NAME=$_STATE_GCS_BUCKET_NAME'
     script: |
       #!/bin/sh
       if [ -d "environments/$_ENV/" ]; then
@@ -44,6 +47,7 @@ steps:
     name: 'hashicorp/terraform:1.0.0'
     env:
       - 'GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=$_TF_SERVICE_ACCT'
+      - '_ENV=$_ENV'
     script: |
       #!/bin/sh
       if [ -d "environments/$_ENV/" ]; then
@@ -61,6 +65,7 @@ steps:
     name: 'hashicorp/terraform:1.0.0'
     env:
       - 'GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=$_TF_SERVICE_ACCT'
+      - '_ENV=$_ENV'
     script: |
       #!/bin/sh
       if [ -d "environments/$_ENV/" ]; then

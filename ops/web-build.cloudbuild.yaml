@@ -17,6 +17,10 @@ steps:
   # Docker Build 
   # Copying the client-libs for Docker context
   - name: gcr.io/cloud-builders/docker
+    env:
+      - '_REGION=$_REGION'
+      - '_PROJECT_ID=$_PROJECT_ID'
+      - '_IMAGE_TAG=$_IMAGE_TAG'
     script: |
       #!/usr/bin/env bash
       cp -R client-libs/ website/client-libs
