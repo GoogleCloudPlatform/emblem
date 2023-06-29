@@ -173,167 +173,190 @@ def data():
 
 @pytest.fixture
 def client():
-    return main.app.test_client()
+    try:
+        return main.app.test_client()
+    except Exception as e:
+        assert False, f"Exception raised: {e}"
 
 
 # List every kind of resource
 @pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
 def test_list_with_authentication(client):
+    try:
+        # Should never work
+        for kind in ["approvers"]:
+            r = client.get(f"/{kind}", headers=headers)
+            assert r.status_code == 403
 
-    # Should never work
-    for kind in ["approvers"]:
-        r = client.get(f"/{kind}", headers=headers)
-        assert r.status_code == 403
+        # Should always work
+        for kind in ["campaigns", "causes"]:
+            r = client.get(f"/{kind}", headers=headers)
+            assert r.status_code == 200
+            assert r.headers.get("Content-Type") == "application/json"
+            payload = json.loads(r.data)
+            assert type(payload) == list
 
-    # Should always work
-    for kind in ["campaigns", "causes"]:
-        r = client.get(f"/{kind}", headers=headers)
-        assert r.status_code == 200
-        assert r.headers.get("Content-Type") == "application/json"
-        payload = json.loads(r.data)
-        assert type(payload) == list
+        # Should always work, but only for certain records
+        for kind in ["donors", "donations"]:
+            r = client.get(f"/{kind}", headers=headers)
+            assert r.status_code == 200
+            assert r.headers.get("Content-Type") == "application/json"
+            payload = json.loads(r.data)
+            assert type(payload) == list
 
-    # Should always work, but only for certain records
-    for kind in ["donors", "donations"]:
-        r = client.get(f"/{kind}", headers=headers)
-        assert r.status_code == 200
-        assert r.headers.get("Content-Type") == "application/json"
-        payload = json.loads(r.data)
-        assert type(payload) == list
+            for item in payload:
+                if kind == "donors":
+                    assert item["id"] == TEST_DONORS[EMAIL]["id"]
+                elif kind == "donations":
+                    assert item["id"] == TEST_DONATIONS[EMAIL]["id"]
+    except Exception as e:
+        assert False, f"Exception raised: {e}"
 
-        for item in payload:
-            if kind == "donors":
-                assert item["id"] == TEST_DONORS[EMAIL]["id"]
-            elif kind == "donations":
-                assert item["id"] == TEST_DONATIONS[EMAIL]["id"]
-
-
-# List every subresource (donations for donors and campaigns)
-@pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
-def test_list_subresources_with_authentication(client):
-
-    # Case: campaign where user with EMAIL is a manager
-    campaign_id = TEST_CAMPAIGNS[EMAIL]["id"]
-    r = client.get(f"/campaigns/{campaign_id}/donations", headers=headers)
-    assert r.status_code == 200
-    assert r.headers.get("Content-Type") == "application/json"
-    payload = json.loads(r.data)
-    assert type(payload) == list
-    assert len(payload) == 1
-    for item in payload:
-        assert item["campaign"] == campaign_id
-
-    # Case: campaign where user with EMAIL is NOT manager
-    campaign_id = TEST_CAMPAIGNS["nobody@example.com"]["id"]
-    r = client.get(f"/campaigns/{campaign_id}/donations", headers=headers)
-    assert r.status_code == 200
-    assert r.headers.get("Content-Type") == "application/json"
-    payload = json.loads(r.data)
-    assert type(payload) == list
-    assert len(payload) == 0  # user EMAIL has no donations here
-
-    # Case: see donors and donations for their own records
-    donor_id = TEST_DONORS[EMAIL]["id"]
-    r = client.get(f"/donors/{donor_id}/donations", headers=headers)
-    assert r.status_code == 200
-    assert r.headers.get("Content-Type") == "application/json"
-    payload = json.loads(r.data)
-    assert type(payload) == list
-    assert len(payload) == 1  # user EMAIL has no donations here
-
-    # Case: can't see donors and donations for others' records
-    donor_id = TEST_DONORS["nobody@example.com"]["id"]
-    r = client.get(f"/donors/{donor_id}/donations", headers=headers)
-    assert r.status_code == 200
-    assert r.headers.get("Content-Type") == "application/json"
-    payload = json.loads(r.data)
-    assert type(payload) == list
-    assert len(payload) == 0  # user EMAIL has no donations here
-
-
-@pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
-def test_insert_with_authentication(client):
-
-    # Approvers should never work
-    testapprover = {
-        "name": "Should never get into DB",
-        "email": "bad email @ bad domain",
-        "active": True,
-    }
-    r = client.post(f"/approvers", headers=headers, json=testapprover)
-    assert r.status_code == 403
-
-    # Campaigns should only work for approvers, which test user is not
-    r = client.post(f"/campaigns", headers=headers, json=TEST_CAMPAIGNS[EMAIL])
-    assert r.status_code == 403
-
-    # Causes should only work for approvers, which test user is not
-    r = client.post(f"/causes", headers=headers, json=TEST_CAUSE)
-    assert r.status_code == 403
-
-    # Donors should work for donor == test user
-    r = client.post(f"/donors", headers=headers, json=TEST_DONORS[EMAIL])
-    assert r.status_code == 201
-    assert r.headers.get("Content-Type") == "application/json"
-    payload = json.loads(r.data)
-    assert type(payload) == dict
-    assert r.status_code == 201
-
-    # Fail to create a donor without the logged in user's email address
-    r = client.post(f"/donors", headers=headers, json=TEST_DONORS["nobody@example.com"])
-    assert r.status_code == 403
-
-    # Donations should work for donor == test user, otherwise not
-    r = client.post(f"/donations", headers=headers, json=TEST_DONATIONS[EMAIL])
-    assert r.headers.get("Content-Type") == "application/json"
-    payload = json.loads(r.data)
-    assert type(payload) == dict
-    assert r.status_code == 201
-
-    # Clean up new donation
-    r = client.delete(f"/donations/{payload['id']}")
-    assert r.status_code == 204
-
-    # Clean up new donor
-    r = client.delete(f"/donors/{payload['donor']}")
-
-    # Fail to create a donation for donor with non-matching email address
-    r = client.post(
-        f"/donations", headers=headers, json=TEST_DONATIONS["nobody@example.com"]
+    # List every subresource (donations for donors and campaigns)
+    @pytest.mark.skipif(
+        id_token is None, reason="CI build not yet including auth token"
     )
-    assert r.status_code == 403
+    def test_list_subresources_with_authentication(client):
+        try:
+            # Case: campaign where user with EMAIL is a manager
+            campaign_id = TEST_CAMPAIGNS[EMAIL]["id"]
+            r = client.get(f"/campaigns/{campaign_id}/donations", headers=headers)
+            assert r.status_code == 200
+            assert r.headers.get("Content-Type") == "application/json"
+            payload = json.loads(r.data)
+            assert type(payload) == list
+            assert len(payload) == 1
+            for item in payload:
+                assert item["campaign"] == campaign_id
+
+            # Case: campaign where user with EMAIL is NOT manager
+            campaign_id = TEST_CAMPAIGNS["nobody@example.com"]["id"]
+            r = client.get(f"/campaigns/{campaign_id}/donations", headers=headers)
+            assert r.status_code == 200
+            assert r.headers.get("Content-Type") == "application/json"
+            payload = json.loads(r.data)
+            assert type(payload) == list
+            assert len(payload) == 0  # user EMAIL has no donations here
+
+            # Case: see donors and donations for their own records
+            donor_id = TEST_DONORS[EMAIL]["id"]
+            r = client.get(f"/donors/{donor_id}/donations", headers=headers)
+            assert r.status_code == 200
+            assert r.headers.get("Content-Type") == "application/json"
+            payload = json.loads(r.data)
+            assert type(payload) == list
+            assert len(payload) == 1  # user EMAIL has no donations here
+
+            # Case: can't see donors and donations for others' records
+            donor_id = TEST_DONORS["nobody@example.com"]["id"]
+            r = client.get(f"/donors/{donor_id}/donations", headers=headers)
+            assert r.status_code == 200
+            assert r.headers.get("Content-Type") == "application/json"
+            payload = json.loads(r.data)
+            assert type(payload) == list
+            assert len(payload) == 0  # user EMAIL has no donations here
+        except Exception as e:
+            assert False, f"Exception raised: {e}"
+
+        @pytest.mark.skipif(
+            id_token is None, reason="CI build not yet including auth token"
+        )
+        def test_insert_with_authentication(client):
+            try:
+                # Approvers should never work
+                testapprover = {
+                    "name": "Should never get into DB",
+                    "email": "bad email @ bad domain",
+                    "active": True,
+                }
+                r = client.post(f"/approvers", headers=headers, json=testapprover)
+                assert r.status_code == 403
+
+                # Campaigns should only work for approvers, which test user is not
+                r = client.post(
+                    f"/campaigns", headers=headers, json=TEST_CAMPAIGNS[EMAIL]
+                )
+                assert r.status_code == 403
+
+                # Causes should only work for approvers, which test user is not
+                r = client.post(f"/causes", headers=headers, json=TEST_CAUSE)
+                assert r.status_code == 403
+
+                # Donors should work for donor == test user
+                r = client.post(f"/donors", headers=headers, json=TEST_DONORS[EMAIL])
+                assert r.status_code == 201
+                assert r.headers.get("Content-Type") == "application/json"
+                payload = json.loads(r.data)
+                assert type(payload) == dict
+                assert r.status_code == 201
+
+                # Fail to create a donor without the logged in user's email address
+                r = client.post(
+                    f"/donors",
+                    headers=headers,
+                    json=TEST_DONORS["nobody@example.com"],
+                )
+                assert r.status_code == 403
+
+                # Donations should work for donor == test user, otherwise not
+                r = client.post(
+                    f"/donations", headers=headers, json=TEST_DONATIONS[EMAIL]
+                )
+                assert r.headers.get("Content-Type") == "application/json"
+                payload = json.loads(r.data)
+                assert type(payload) == dict
+                assert r.status_code == 201
+
+                # Clean up new donation
+                r = client.delete(f"/donations/{payload['id']}")
+                assert r.status_code == 204
+
+                # Clean up new donor
+                r = client.delete(f"/donors/{payload['donor']}")
+
+                # Fail to create a donation for donor with non-matching email address
+                r = client.post(
+                    f"/donations",
+                    headers=headers,
+                    json=TEST_DONATIONS["nobody@example.com"],
+                )
+                assert r.status_code == 403
+            except Exception as e:
+                assert False, f"Exception raised: {e}"
 
 
 # Create a donor, and then a donation for them
 @pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
 def test_donation(client):
+    try:
+        # Create a donor
+        donor_representation = {"name": "test donor", "email": EMAIL}
 
-    # Create a donor
-    donor_representation = {"name": "test donor", "email": EMAIL}
+        r = client.post("/donors", json=donor_representation, headers=headers)
+        assert r.status_code == 201
+        donor = r.get_json(r.data)
+        assert type(donor) == dict
+        assert donor["name"] == donor_representation["name"]
+        assert donor["email"] == EMAIL
 
-    r = client.post("/donors", json=donor_representation, headers=headers)
-    assert r.status_code == 201
-    donor = r.get_json(r.data)
-    assert type(donor) == dict
-    assert donor["name"] == donor_representation["name"]
-    assert donor["email"] == EMAIL
+        # Create a donation for that campaign donor doesn't manage
+        donation_representation = {
+            "campaign": TEST_CAMPAIGNS["nobody@example.com"]["id"],
+            "donor": donor["id"],
+            "amount": 50,
+        }
 
-    # Create a donation for that campaign donor doesn't manage
-    donation_representation = {
-        "campaign": TEST_CAMPAIGNS["nobody@example.com"]["id"],
-        "donor": donor["id"],
-        "amount": 50,
-    }
+        r = client.post("/donations", json=donation_representation, headers=headers)
+        assert r.status_code == 201
+        donation = r.get_json(r.data)
+        assert type(donation) == dict
+        assert donation["campaign"] == donation_representation["campaign"]
+        assert donation["donor"] == donation_representation["donor"]
 
-    r = client.post("/donations", json=donation_representation, headers=headers)
-    assert r.status_code == 201
-    donation = r.get_json(r.data)
-    assert type(donation) == dict
-    assert donation["campaign"] == donation_representation["campaign"]
-    assert donation["donor"] == donation_representation["donor"]
-
-    # Clean up the new resources
-    r = client.delete("/donations/{}".format(donation["id"]), headers=headers)
-    assert r.status_code == 204
-    r = client.delete("/donors/{}".format(donor["id"]), headers=headers)
-    assert r.status_code == 204
+        # Clean up the new resources
+        r = client.delete("/donations/{}".format(donation["id"]), headers=headers)
+        assert r.status_code == 204
+        r = client.delete("/donors/{}".format(donor["id"]), headers=headers)
+        assert r.status_code == 204
+    except Exception as e:
+        assert False, f"Exception raised: {e}"

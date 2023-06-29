@@ -87,165 +87,179 @@ def data():
 
 @pytest.fixture
 def client():
-    return main.app.test_client()
+    try:
+        return main.app.test_client()
+    except Exception as e:
+        assert False, f"Exception raised: {e}"
 
 
 # List every kind of resource
 @pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
 def test_list_with_authentication(client):
-    for kind in KINDS:
-        r = client.get(f"/{kind}", headers=headers)
-        assert r.status_code == 200
-        assert r.headers.get("Content-Type") == "application/json"
-        payload = json.loads(r.data)
-        assert type(payload) == list
+    try:
+        for kind in KINDS:
+            r = client.get(f"/{kind}", headers=headers)
+            assert r.status_code == 200
+            assert r.headers.get("Content-Type") == "application/json"
+            payload = json.loads(r.data)
+            assert type(payload) == list
+    except Exception as e:
+        assert False, f"Exception raised: {e}"
 
 
 # Create, fetch, modify, and delete resources
 @pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
 def test_lifecycle(client):
-    for kind in KINDS:
-        if kind == "donations":  # Special case for later
-            continue
+    try:
+        for kind in KINDS:
+            if kind == "donations":  # Special case for later
+                continue
 
-        # Create a resource. Note that only the name field is usually mandatory
-        representation = {"name": "test name"}
-        if kind == "donors":
-            representation["email"] = "nobody@example.com"
-        r = client.post(f"/{kind}", json=representation, headers=headers)
-        assert r.status_code == 201
-        resource = r.get_json(r.data)
-        assert type(resource) == dict
-        assert resource["name"] == representation["name"]
+            # Create a resource. Note that only the name field is usually mandatory
+            representation = {"name": "test name"}
+            if kind == "donors":
+                representation["email"] = "nobody@example.com"
+            r = client.post(f"/{kind}", json=representation, headers=headers)
+            assert r.status_code == 201
+            resource = r.get_json(r.data)
+            assert type(resource) == dict
+            assert resource["name"] == representation["name"]
 
-        etag, _ = r.get_etag()
-        id = resource["id"]
+            etag, _ = r.get_etag()
+            id = resource["id"]
 
-        # Check that the id is in the list response for that resource kind
-        r = client.get(f"/{kind}", headers=headers)
-        assert r.status_code == 200
-        payload = r.get_json(r.data)
-        assert id in [item["id"] for item in payload]
+            # Check that the id is in the list response for that resource kind
+            r = client.get(f"/{kind}", headers=headers)
+            assert r.status_code == 200
+            payload = r.get_json(r.data)
+            assert id in [item["id"] for item in payload]
 
-        # Update only if same etag, given wrong etag
-        representation = {"name": "changed name"}
-        patch_headers = headers.copy()
-        patch_headers["If-Match"] = "wrong etag"
-        r = client.patch(
-            f"/{kind}/{id}",
-            json=representation,
-            headers=patch_headers,
-        )
-        assert r.status_code == 409
+            # Update only if same etag, given wrong etag
+            representation = {"name": "changed name"}
+            patch_headers = headers.copy()
+            patch_headers["If-Match"] = "wrong etag"
+            r = client.patch(
+                f"/{kind}/{id}",
+                json=representation,
+                headers=patch_headers,
+            )
+            assert r.status_code == 409
 
-        # Update only if same etag, given right etag
-        representation = {"name": "changed name"}
-        patch_headers = headers.copy()
-        patch_headers["If-Match"] = etag
+            # Update only if same etag, given right etag
+            representation = {"name": "changed name"}
+            patch_headers = headers.copy()
+            patch_headers["If-Match"] = etag
 
-        r = client.patch(
-            f"/{kind}/{id}",
-            json=representation,
-            headers=patch_headers,
-        )
-        assert r.status_code == 201
-        resource = r.get_json(r.data)
-        assert type(resource) == dict
-        assert resource["name"] == representation["name"]
+            r = client.patch(
+                f"/{kind}/{id}",
+                json=representation,
+                headers=patch_headers,
+            )
+            assert r.status_code == 201
+            resource = r.get_json(r.data)
+            assert type(resource) == dict
+            assert resource["name"] == representation["name"]
 
-        # Fetch updated resource
-        r = client.get(f"/{kind}/{id}", headers=headers)
-        assert r.status_code == 200
-        resource = r.get_json(r.data)
-        assert type(resource) == dict
-        assert resource["name"] == representation["name"]
+            # Fetch updated resource
+            r = client.get(f"/{kind}/{id}", headers=headers)
+            assert r.status_code == 200
+            resource = r.get_json(r.data)
+            assert type(resource) == dict
+            assert resource["name"] == representation["name"]
 
-        new_etag, _ = r.get_etag()
+            new_etag, _ = r.get_etag()
 
-        # Try to delete, given old etag
-        delete_headers = headers.copy()
-        delete_headers["If-Match"] = etag
-        r = client.delete(
-            f"/{kind}/{id}",
-            headers=delete_headers,
-        )
-        assert r.status_code == 409
+            # Try to delete, given old etag
+            delete_headers = headers.copy()
+            delete_headers["If-Match"] = etag
+            r = client.delete(
+                f"/{kind}/{id}",
+                headers=delete_headers,
+            )
+            assert r.status_code == 409
 
-        # Try to delete, given correct etag
-        delete_headers = headers.copy()
-        delete_headers["If-Match"] = new_etag
-        r = client.delete(
-            f"/{kind}/{id}",
-            headers=delete_headers,
-        )
-        assert r.status_code == 204
+            # Try to delete, given correct etag
+            delete_headers = headers.copy()
+            delete_headers["If-Match"] = new_etag
+            r = client.delete(
+                f"/{kind}/{id}",
+                headers=delete_headers,
+            )
+            assert r.status_code == 204
 
-        # Try to fetch deleted resource
-        r = client.get(f"/{kind}/{id}", headers=headers)
-        assert r.status_code == 404
+            # Try to fetch deleted resource
+            r = client.get(f"/{kind}/{id}", headers=headers)
+            assert r.status_code == 404
+    except Exception as e:
+        assert False, f"Exception raised: {e}"
 
 
 # Create a campaign and donor, and then a donation for them
 @pytest.mark.skipif(id_token is None, reason="CI build not yet including auth token")
 def test_donation(client):
-    # Create a campaign
-    campaign_representation = {"name": "test campaign"}
-    r = client.post("/campaigns", json=campaign_representation, headers=headers)
-    assert r.status_code == 201
-    campaign = r.get_json(r.data)
-    assert type(campaign) == dict
-    assert campaign["name"] == campaign_representation["name"]
+    try:
+        # Create a campaign
+        campaign_representation = {"name": "test campaign"}
+        r = client.post("/campaigns", json=campaign_representation, headers=headers)
+        assert r.status_code == 201
+        campaign = r.get_json(r.data)
+        assert type(campaign) == dict
+        assert campaign["name"] == campaign_representation["name"]
 
-    # Create a donor
-    donor_representation = {"name": "a repeat donor", "email": EMAIL}
-    r = client.post("/donors", json=donor_representation, headers=headers)
-    assert r.status_code == 201
-    donor = r.get_json(r.data)
-    assert type(donor) == dict
-    assert donor["name"] == donor_representation["name"]
-    assert donor["email"] == EMAIL
+        # Create a donor
+        donor_representation = {"name": "a repeat donor", "email": EMAIL}
+        r = client.post("/donors", json=donor_representation, headers=headers)
+        assert r.status_code == 201
+        donor = r.get_json(r.data)
+        assert type(donor) == dict
+        assert donor["name"] == donor_representation["name"]
+        assert donor["email"] == EMAIL
 
-    # Create the only donation for that campaign or donor
-    donation_representation = {
-        "campaign": campaign["id"],
-        "donor": donor["id"],
-        "amount": 50,
-    }
-    r = client.post("/donations", json=donation_representation, headers=headers)
-    assert r.status_code == 201
-    donation = r.get_json(r.data)
-    assert type(donation) == dict
-    assert donation["campaign"] == donation_representation["campaign"]
-    assert donation["donor"] == donation_representation["donor"]
+        # Create the only donation for that campaign or donor
+        donation_representation = {
+            "campaign": campaign["id"],
+            "donor": donor["id"],
+            "amount": 50,
+        }
+        r = client.post("/donations", json=donation_representation, headers=headers)
+        assert r.status_code == 201
+        donation = r.get_json(r.data)
+        assert type(donation) == dict
+        assert donation["campaign"] == donation_representation["campaign"]
+        assert donation["donor"] == donation_representation["donor"]
 
-    # List of donations to campaign should have exactly one element
-    r = client.get("/campaigns/{}/donations".format(campaign["id"]), headers=headers)
-    assert r.status_code == 200
-    assert r.headers.get("Content-Type") == "application/json"
-    payload = json.loads(r.data)
-    assert type(payload) == list
-    assert len(payload) == 1
-    resource = payload[0]
-    assert resource["amount"] == 50
-    assert resource["campaign"] == campaign["id"]
-    assert resource["donor"] == donor["id"]
+        # List of donations to campaign should have exactly one element
+        r = client.get(
+            "/campaigns/{}/donations".format(campaign["id"]), headers=headers
+        )
+        assert r.status_code == 200
+        assert r.headers.get("Content-Type") == "application/json"
+        payload = json.loads(r.data)
+        assert type(payload) == list
+        assert len(payload) == 1
+        resource = payload[0]
+        assert resource["amount"] == 50
+        assert resource["campaign"] == campaign["id"]
+        assert resource["donor"] == donor["id"]
 
-    # List of donations from donor should have exactly one element
-    r = client.get("/donors/{}/donations".format(donor["id"]), headers=headers)
-    assert r.status_code == 200
-    assert r.headers.get("Content-Type") == "application/json"
-    payload = json.loads(r.data)
-    assert type(payload) == list
-    assert len(payload) == 1
-    resource = payload[0]
-    assert resource["amount"] == 50
-    assert resource["campaign"] == campaign["id"]
-    assert resource["donor"] == donor["id"]
+        # List of donations from donor should have exactly one element
+        r = client.get("/donors/{}/donations".format(donor["id"]), headers=headers)
+        assert r.status_code == 200
+        assert r.headers.get("Content-Type") == "application/json"
+        payload = json.loads(r.data)
+        assert type(payload) == list
+        assert len(payload) == 1
+        resource = payload[0]
+        assert resource["amount"] == 50
+        assert resource["campaign"] == campaign["id"]
+        assert resource["donor"] == donor["id"]
 
-    # Clean up the three new resource
-    r = client.delete("/donations/{}".format(donation["id"]), headers=headers)
-    assert r.status_code == 204
-    r = client.delete("/campaigns/{}".format(campaign["id"]), headers=headers)
-    assert r.status_code == 204
-    r = client.delete("/donors/{}".format(donor["id"]), headers=headers)
-    assert r.status_code == 204
+        # Clean up the three new resource
+        r = client.delete("/donations/{}".format(donation["id"]), headers=headers)
+        assert r.status_code == 204
+        r = client.delete("/campaigns/{}".format(campaign["id"]), headers=headers)
+        assert r.status_code == 204
+        r = client.delete("/donors/{}".format(donor["id"]), headers=headers)
+        assert r.status_code == 204
+    except Exception as e:
+        assert False, f"Exception raised: {e}"
