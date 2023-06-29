@@ -16,7 +16,8 @@ steps:
 # Echo environment name
   - id: 'environment name'
     name: 'alpine'
-    env: '_ENV=$_ENV'
+    env: 
+      - '_ENV=$_ENV'
     script: |
       #!/bin/sh
       echo "***********************"

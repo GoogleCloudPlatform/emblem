@@ -48,7 +48,8 @@ steps:
   - id: "Unit Tests"
     name: python:3.11-slim
     dir: ${_DIR}
-    env: 'cat _id_token=$cat _id_token'
+    env: 
+      - 'cat _id_token=$cat _id_token'
     script: |
       #!/usr/bin/env bash
       set -e
