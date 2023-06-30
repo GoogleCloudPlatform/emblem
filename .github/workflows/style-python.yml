@@ -37,10 +37,10 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
-      - name: Set up Python 3.9
+      - name: Set up Python 3.10
         uses: actions/setup-python@bd6b4b6205c4dbad673328db7b31b7fab9e241c0 # v4
         with:
-          python-version: 3.9
+          python-version: 3.10
       - name: Install Black
         run: pip install black
       - name: Run black
