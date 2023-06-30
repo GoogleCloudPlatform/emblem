@@ -151,6 +151,9 @@ node_modules/
 # Mac stuff
 .DS_Store
 
+# VSCode
+.vscode
+
 # Vim temp files
 *.swo
 *.swp

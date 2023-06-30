@@ -4,6 +4,7 @@ Flask-Cors==3.0.10
 gunicorn==20.1.0
 google-auth==2.20.0
 requests==2.31.0
+pytest-is-running==1.4.0
 # opentelemetry libraries
 opentelemetry-api==1.18.0
 opentelemetry-sdk==1.18.0

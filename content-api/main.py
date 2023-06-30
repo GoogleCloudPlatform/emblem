@@ -13,6 +13,8 @@
 # limitations under the License.
 
 from os import set_inheritable
+import pytest_is_running
+
 from flask import Response, Flask, g, request
 from flask_cors import CORS
 
@@ -31,25 +33,25 @@ from opentelemetry.propagators.composite import CompositePropagator
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.sdk.trace import TracerProvider
 
-provider = TracerProvider()
-processor = BatchSpanProcessor(CloudTraceSpanExporter())
-provider.add_span_processor(processor)
-
-# Add the X-Cloud-Trace-Context propagator.
-# Note: Because of the behavior of the XCTC 'force trace' bit, this will cause
-# all downstream services to force tracing, resulting in larger than expected
-# storage costs.
-propagate.set_global_textmap(
-    CompositePropagator(
-        [
-            propagate.get_global_textmap(),
-            CloudTraceOneWayPropagator(),
-        ]
+# Avoid triggering otel during pytest runs
+if not pytest_is_running.is_running():
+    provider = TracerProvider()
+    processor = BatchSpanProcessor(CloudTraceSpanExporter())
+    provider.add_span_processor(processor)
+    # Add the X-Cloud-Trace-Context propagator.
+    # Note: Because of the behavior of the XCTC 'force trace' bit, this will cause
+    # all downstream services to force tracing, resulting in larger than expected
+    # storage costs.
+    propagate.set_global_textmap(
+        CompositePropagator(
+            [
+                propagate.get_global_textmap(),
+                CloudTraceOneWayPropagator(),
+            ]
+        )
     )
-)
-
-# Sets the global default tracer provider
-trace.set_tracer_provider(provider)
+    # Sets the global default tracer provider
+    trace.set_tracer_provider(provider)
 
 resource = [
     "approvers",
@@ -63,6 +65,7 @@ app = Flask(__name__)
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 FlaskInstrumentor().instrument_app(app)
+
 
 # Check authentication and remember result in global request context
 #

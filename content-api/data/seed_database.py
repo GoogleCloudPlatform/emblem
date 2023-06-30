@@ -33,7 +33,6 @@ def seed_approver(email):
 
 
 def seed_database(content):
-
     client = firestore.Client()
     print("Seeding data into Google Cloud Project '{}'.".format(client.project))
     print("This may take a few minutes...")
@@ -49,7 +48,6 @@ def seed_database(content):
 
 
 def unseed_database():
-
     client = firestore.Client()
     print("Deleting seed data from Google Cloud Project '{}'.".format(client.project))
     print("This may take a few minutes...")
