@@ -25,7 +25,7 @@ steps:
       #!/usr/bin/env bash
       cp -R client-libs/ website/client-libs
       docker build -t \
-      ${_REGION}-docker.pkg.dev/${PROJECT_ID}/website/website:${_IMAGE_TAG} \
+      ${_REGION}-docker.pkg.dev/${_PROJECT_ID}/website/website:${_IMAGE_TAG} \
       website/. 
 
 # Default to us-central1 
