@@ -16,66 +16,65 @@ steps:
 # Echo environment name
   - id: 'environment name'
     name: 'alpine'
-    entrypoint: 'sh'  
-    args: 
-      - '-c'
-      - | 
-        echo "***********************"
-        echo "Setting up Emblem $_ENV infrastructure"
-        echo "***********************"
+    env: 
+      - '_ENV=$_ENV'
+    script: |
+      #!/bin/sh
+      echo "***********************"
+      echo "Setting up Emblem $_ENV infrastructure"
+      echo "***********************"
 
 # Initialize Terraform
   - id: 'tf init'
     name: 'hashicorp/terraform:1.0.0'
-    entrypoint: 'sh'
     env:
       - 'GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=$_TF_SERVICE_ACCT'
-    args: 
-      - '-c'
-      - |
-        if [ -d "environments/$_ENV/" ]; then
-          cd environments/$_ENV
-          terraform init -backend-config="bucket=${_STATE_GCS_BUCKET_NAME}" -backend-config="prefix=$_ENV"
-        else
-          echo "*************** TERRAFORM INIT ******************"
-          echo "******* Environment $_ENV not found. ********"
-          echo "*************************************************"
-          exit 1
-        fi 
+      - '_ENV=$_ENV'
+      - '_STATE_GCS_BUCKET_NAME=$_STATE_GCS_BUCKET_NAME'
+    script: |
+      #!/bin/sh
+      if [ -d "environments/$_ENV/" ]; then
+        cd environments/$_ENV
+        terraform init -backend-config="bucket=${_STATE_GCS_BUCKET_NAME}" -backend-config="prefix=$_ENV"
+      else
+        echo "*************** TERRAFORM INIT ******************"
+        echo "******* Environment $_ENV not found. ********"
+        echo "*************************************************"
+        exit 1
+      fi 
 
 # Generate speculative Terraform plan
   - id: 'tf plan'
     name: 'hashicorp/terraform:1.0.0'
-    entrypoint: 'sh'
     env:
       - 'GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=$_TF_SERVICE_ACCT'
-    args: 
-    - '-c'
-    - | 
-        if [ -d "environments/$_ENV/" ]; then
-          cd environments/$_ENV
-          terraform plan
-        else
-          echo "*************** TERRAFORM PLAN ******************"
-          echo "******* Environment $_ENV not found. ********"
-          echo "*************************************************"
-          exit 1
-        fi 
+      - '_ENV=$_ENV'
+    script: |
+      #!/bin/sh
+      if [ -d "environments/$_ENV/" ]; then
+        cd environments/$_ENV
+        terraform plan
+      else
+        echo "*************** TERRAFORM PLAN ******************"
+        echo "******* Environment $_ENV not found. ********"
+        echo "*************************************************"
+        exit 1
+      fi 
 
 # Apply Terraform configuration
   - id: 'tf apply'
     name: 'hashicorp/terraform:1.0.0'
-    entrypoint: 'sh'
     env:
       - 'GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=$_TF_SERVICE_ACCT'
-    args: 
-    - '-c'
-    - | 
-        if [ -d "environments/$_ENV/" ]; then
-          cd environments/$_ENV    
-          terraform apply -auto-approve
-        else
-          echo "***************************** SKIPPING APPLYING *******************************"
-          echo "******* Environment $_ENV not found. ********"
-          echo "*******************************************************************************"
-        fi
+      - '_ENV=$_ENV'
+    script: |
+      #!/bin/sh
+      if [ -d "environments/$_ENV/" ]; then
+        cd environments/$_ENV    
+        terraform apply -auto-approve
+      else
+        echo "***************************** SKIPPING APPLYING *******************************"
+        echo "******* Environment $_ENV not found. ********"
+        echo "*******************************************************************************"
+      fi
+    

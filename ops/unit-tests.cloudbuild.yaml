@@ -17,42 +17,42 @@ steps:
   - id: "Install Dependencies"
     name: python:3.11-slim
     dir: ${_DIR}
-    entrypoint: pip
-    args: ["install", "-r", "requirements.txt", "--user"]
+    script: pip install -r requirements-test.txt --user
 
   # Install test requirements
   - id: "Install Pytest"
     name: python:3.11-slim
     dir: ${_DIR}
-    entrypoint: pip
-    args: ["install", "-r", "requirements-test.txt", "--user"]
+    script: pip install -r requirements-test.txt --user
 
   # Get identity token
   - id: "Get identity token"
     name: gcr.io/cloud-builders/gcloud
     dir: ${_DIR}
-    entrypoint: /bin/bash
-    args:
-      - '-c'
-      - |
-        get_id_token() {
-          curl -X POST -H "content-type: application/json" \
-          -H "Authorization: Bearer $(gcloud auth print-access-token)" \
-          -d "{\"audience\": \"${_SERVICE_ACCOUNT}\", \"includeEmail\": true}" \
-           "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${_SERVICE_ACCOUNT}:generateIdToken" | \
-           python3 -c "import sys, json; print(json.load(sys.stdin)['token'])"
-        }
-        echo $(get_id_token) > _id_token
+    env:
+      - 'gcloud auth print-access-token=$gcloud auth print-access-token'
+      - '_SERVICE_ACCOUNT=$_SERVICE_ACCOUNT'
+      - 'get_id_token=$get_id_token'
+    script: |
+      #!/usr/bin/env bash
+      get_id_token() {
+        curl -X POST -H "content-type: application/json" \
+        -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+        -d "{\"audience\": \"${_SERVICE_ACCOUNT}\", \"includeEmail\": true}" \
+          "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${_SERVICE_ACCOUNT}:generateIdToken" | \
+          python3 -c "import sys, json; print(json.load(sys.stdin)['token'])"
+      }
+      echo $(get_id_token) > _id_token
 
   # Run unit tests
   - id: "Unit Tests"
     name: python:3.11-slim
     dir: ${_DIR}
-    entrypoint: /bin/bash
-    args: 
-      - '-c'
-      - |
-        set -e
-        export ID_TOKEN=$(cat _id_token)
-        python -m pytest
+    env: 
+      - 'cat _id_token=$cat _id_token'
+    script: |
+      #!/usr/bin/env bash
+      set -e
+      export ID_TOKEN=$(cat _id_token)
+      python -m pytest
 

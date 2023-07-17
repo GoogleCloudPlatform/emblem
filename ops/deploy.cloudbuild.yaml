@@ -15,11 +15,9 @@
 steps:
   # Print the full Pub/Sub message for debugging.
   - name: gcr.io/cloud-builders/gcloud
-    entrypoint: /bin/bash
-    args:
-      - '-c'
-      - |
-        echo ${_BODY}
+    script: |
+      #!/usr/bin/env bash
+      echo ${_BODY}
 
   # Cloud Run Deploy
   - name: gcr.io/cloud-builders/gcloud
@@ -37,6 +35,12 @@ steps:
 
   # Send message to pub/sub to start canary rollout process
   - name: 'gcr.io/cloud-builders/gcloud'
+    env:
+      - '_ENV=$_ENV'
+      - '_SERVICE=$_SERVICE'
+      - '_REVISION=$_REVISION'
+      - '_IMAGE_NAME=$_IMAGE_NAME'
+      - '_TARGET_PROJECT=$_TARGET_PROJECT'
     args:
       - pubsub
       - topics
