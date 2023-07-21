@@ -1,6 +1,6 @@
 flask==2.3.2
 google-cloud-firestore==2.10.0
-Flask-Cors==3.0.10
+Flask-Cors==4.0.0
 gunicorn==20.1.0
 google-auth==2.21.0
 requests==2.31.0
