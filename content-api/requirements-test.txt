@@ -1,2 +1,2 @@
 pytest==7.4.0
-pyjwt==2.7.0
+pyjwt==2.8.0
