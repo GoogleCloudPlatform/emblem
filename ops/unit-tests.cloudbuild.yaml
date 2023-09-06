@@ -17,7 +17,7 @@ steps:
   - id: "Install Dependencies"
     name: python:3.11-slim
     dir: ${_DIR}
-    script: pip install -r requirements-test.txt --user
+    script: pip install -r requirements.txt --user
 
   # Install test requirements
   - id: "Install Pytest"
