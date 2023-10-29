@@ -12,13 +12,13 @@ stages:
 
 test-3.6:
   extends: .tests
-  image: python:3.11-alpine
+  image: python:3.12-alpine
 test-3.7:
   extends: .tests
-  image: python:3.11-alpine
+  image: python:3.12-alpine
 test-3.8:
   extends: .tests
-  image: python:3.11-alpine
+  image: python:3.12-alpine
 test-3.9:
   extends: .tests
-  image: python:3.11-alpine
+  image: python:3.12-alpine
