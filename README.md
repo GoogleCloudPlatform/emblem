@@ -48,7 +48,7 @@ To deploy Emblem, you will need:
 
 The machine that you will run the setup from will need the following installed:
   * [Google Cloud CLI](https://cloud.google.com/sdk/docs/install)
-  * [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+  * [Terraform](https://developer.hashicorp.com/terraform/tutorials/gcp-get-started/install-cli)
   * [Python3](https://www.python.org/downloads)
 
 We recommend running through setup steps using Google Cloud Shell, which has the required softare pre-installed. The following will open Cloud Shell Editor and clone this repo:
