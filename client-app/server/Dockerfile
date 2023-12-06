@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:21.1.0 as auth-api-build
+FROM --platform=linux/amd64 node:21.3.0 as auth-api-build
 
 USER root
 WORKDIR /usr/src/server
