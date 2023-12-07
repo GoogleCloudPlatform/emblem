@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/googlecloudplatform/emblem#readme",
   "devDependencies": {
-    "@playwright/test": "1.39.0"
+    "@playwright/test": "1.40.1"
   }
 }
