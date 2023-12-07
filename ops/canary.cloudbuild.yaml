@@ -51,16 +51,15 @@ steps:
   # Once this is complete, this build will start the canary rollout to prod.
   - name: 'gcr.io/cloud-builders/gcloud'
     env:
-      - '_TRAFFIC=$_NEW_TRAFFIC'
+      - '_TRAFFIC=$_TRAFFIC'
       - '_ENV=$_ENV'
       - '_SERVICE=$_SERVICE'
       - '_REVISION=$_REVISION'
       - '_IMAGE_NAME=$_IMAGE_NAME'
-      - '_NEW_TRAFFIC=$_NEW_TRAFFIC'
       - '_TARGET_PROJECT=$_TARGET_PROJECT'
     script: |
       #!/usr/bin/env bash
-      if [ ${_NEW_TRAFFIC} -lt 100 ]
+      if [ ${_TRAFFIC} -lt 100 ]
       then gcloud pubsub topics publish canary-${_ENV} \
       --message="Increase ${_SERVICE}-${_REVISION} traffic to ${_NEW_TRAFFIC}" \
       --attribute=_IMAGE_NAME=${_IMAGE_NAME},_ENV=${_ENV},_SERVICE=${_SERVICE},_REVISION=${_REVISION},_TRAFFIC=${_NEW_TRAFFIC}
