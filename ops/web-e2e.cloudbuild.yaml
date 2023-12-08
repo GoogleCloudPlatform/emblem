@@ -46,7 +46,7 @@ steps:
   # Prepare Playwright test runner.
   # https://cloud.google.com/build/docs/optimize-builds/kaniko-cache
   - id: 'test-runner-build'
-    name: 'gcr.io/kaniko-project/executor:latest'
+    name: 'gcr.io/kaniko-project/executor:debug'
     args:
       - "--destination=${_REGION}-docker.pkg.dev/${PROJECT_ID}/e2e-testing/runner:${_E2E_RUNNER_SHA}"
       - "--cache=true"
