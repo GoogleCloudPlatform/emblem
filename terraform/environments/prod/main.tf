@@ -16,6 +16,8 @@ module "emblem_prod" {
   repo_owner              = var.repo_owner
   repo_name               = var.repo_name
   deploy_trigger_topic_id = data.google_pubsub_topic.deploy_trigger.id
+  traffic_increment       = var.traffic_increment
   gcr_pubsub_format       = false
   require_deploy_approval = true
+  
 }
