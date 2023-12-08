@@ -32,6 +32,12 @@ variable "session_bucket_ttl_days" {
   default     = 14
 }
 
+variable "traffic_increment" {
+  type        = number
+  description = "Number of percentage for traffic increase every time in prod."
+  default     = 20
+}
+
 variable "setup_cd_system" {
   type        = bool
   default     = false

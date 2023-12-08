@@ -83,3 +83,9 @@ variable "seed_test_data" {
   description = "Toggle to seed test data into Firebase."
   default     = false
 }
+
+variable "traffic_increment" {
+  type        = number
+  description = "Number of percentage for traffic increase every time."
+  default     = 20 
+}
