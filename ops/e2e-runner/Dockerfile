@@ -16,6 +16,7 @@
 # This Dockerfile is used to run the website for Playwright tests #
 ###################################################################
 
+ARG VERBOSE=true
 FROM mcr.microsoft.com/playwright:v1.40.1-focal-amd64
 RUN apt-get update && \
     apt-get install -y software-properties-common && \
