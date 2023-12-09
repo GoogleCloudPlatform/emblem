@@ -84,8 +84,8 @@ variable "seed_test_data" {
   default     = false
 }
 
-variable "traffic_increment" {
-  type        = number
-  description = "Number of percentage for traffic increase every time."
-  default     = 20 
-}
+# variable "traffic_increment" {
+#   type        = number
+#   description = "Number of percentage for traffic increase every time."
+#   default     = 20 
+# }

@@ -56,7 +56,7 @@ steps:
       - '_SERVICE=$_SERVICE'
       - '_REVISION=$_REVISION'
       - '_IMAGE_NAME=$_IMAGE_NAME'
-      - '_NEW_TRAFFIC=$_TRAFFIC+$_TRAFFIC_INCREMENT'
+      - '_NEW_TRAFFIC=$_TRAFFIC+20'
       - '_TARGET_PROJECT=$_TARGET_PROJECT'
     script: |
       #!/usr/bin/env bash

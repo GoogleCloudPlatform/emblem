@@ -167,7 +167,7 @@ resource "google_cloudbuild_trigger" "api_canary" {
     _SERVICE        = "$(body.message.attributes._SERVICE)"
     _TARGET_PROJECT = var.project_id
     _TRAFFIC        = "$(body.message.attributes._TRAFFIC)"
-    _TRAFFIC_INCREMENT = var.traffic_increment
+    # _TRAFFIC_INCREMENT = var.traffic_increment
   }
   source_to_build {
     uri       = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
