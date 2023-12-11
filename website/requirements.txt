@@ -1,11 +1,11 @@
 Flask==2.3.3
-firebase-admin==6.2.0
+firebase-admin==6.3.0
 gunicorn==20.1.0
-google-auth==2.23.4
+google-auth==2.25.2
 requests==2.31.0
 pytz==2023.3.post1
 opentelemetry-distro==0.33b0
 opentelemetry-instrumentation-flask==0.33b0
 opentelemetry-exporter-gcp-trace==1.6.0
-importlib-metadata==6.8.0
+importlib-metadata==6.11.0
 ../client-libs/python
