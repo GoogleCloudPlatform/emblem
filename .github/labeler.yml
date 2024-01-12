@@ -15,48 +15,64 @@
 # Labeler assigns GitHub labels to PRs based on changed files.
 
 # component labels are used in release notes.
-'component: website':
-- 'website/*'
-- 'website/**/*'
-- 'client-libs/*'
-- 'client-libs/**/*'
-'component: content-api':
-- 'content-api/*'
-- 'content-api/**/*'
-- 'client-libs/*'
-- 'client-libs/**/*'
-'component: delivery':
-- 'terraform/*'
-- 'terraform/**/*'
-- 'ops/*'
-- 'ops/**/*'
-- 'scripts/*'
-- 'scripts/**/*'
-- 'setup.sh'
-'component: demo services':
-- 'docs/*'
-- 'docs/**/*'
-- 'content-api/data/*'
-- 'content-api/data/**/*'
-'component: experimental':
-- 'experimental/*'
-- 'experimental/**/*'
+"component: website":
+  - changed-files:
+      - any-glob-to-all-files:
+          - "website/*"
+          - "website/**/*"
+          - "client-libs/*"
+          - "client-libs/**/*"
+"component: content-api":
+  - changed-files:
+      - any-glob-to-all-files:
+          - "content-api/*"
+          - "content-api/**/*"
+          - "client-libs/*"
+          - "client-libs/**/*"
+"component: delivery":
+  - changed-files:
+      - any-glob-to-all-files:
+          - "terraform/*"
+          - "terraform/**/*"
+          - "ops/*"
+          - "ops/**/*"
+          - "scripts/*"
+          - "scripts/**/*"
+          - "setup.sh"
+"component: demo services":
+  - changed-files:
+      - any-glob-to-all-files:
+          - "docs/*"
+          - "docs/**/*"
+          - "content-api/data/*"
+          - "content-api/data/**/*"
+"component: experimental":
+  - changed-files:
+      - any-glob-to-all-files:
+          - "experimental/*"
+          - "experimental/**/*"
 
 # The following labels are under general use evaluation.
 
-'documentation':
-- '**/*.md'
-- 'docs/*'
-- 'docs/**/*'
+"documentation":
+  - changed-files:
+      - any-glob-to-all-files:
+          - "**/*.md"
+          - "docs/*"
+          - "docs/**/*"
 
-'tech: gha':
-- '.github/workflows/*'
-- '.github/labeler.yml'
-- '.github/release.yml'
+"tech: gha":
+  - changed-files:
+      - any-glob-to-all-files:
+          - ".github/workflows/*"
+          - ".github/labeler.yml"
+          - ".github/release.yml"
 
-'persona: maintainer':
-- '*.md'
-- 'CODEOWNERS'
-- '.git*'
-- '.github/*'
-- '.github/**/*'
+"persona: maintainer":
+  - changed-files:
+      - any-glob-to-all-files:
+          - "*.md"
+          - "CODEOWNERS"
+          - ".git*"
+          - ".github/*"
+          - ".github/**/*"
