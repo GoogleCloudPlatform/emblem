@@ -10,6 +10,3 @@ jobs:
       - uses: google-github-actions/release-please-action@cc61a07e2da466bebbc19b3a7dd01d6aecb20d1e # v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          release-type: simple
-          package-name: emblem
-          changelog-type: github
