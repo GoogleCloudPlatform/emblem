@@ -1,0 +1,9 @@
+{
+    "release-type": "simple",
+    "changelog-notes-type": "github",
+    "packages": {
+        ".": {
+            "package-name": "emblem"
+        }
+    }
+}
