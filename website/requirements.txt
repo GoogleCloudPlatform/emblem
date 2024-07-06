@@ -7,5 +7,5 @@ pytz==2023.4
 opentelemetry-distro==0.33b0
 opentelemetry-instrumentation-flask==0.33b0
 opentelemetry-exporter-gcp-trace==1.6.0
-importlib-metadata==6.11.0
+importlib-metadata==8.0.0
 ../client-libs/python
