@@ -17,7 +17,7 @@
 ###################################################################
 
 ARG VERBOSE=true
-FROM mcr.microsoft.com/playwright:v1.41.2-focal-amd64
+FROM mcr.microsoft.com/playwright:v1.45.3-focal-amd64
 RUN apt-get update && \
     apt-get install -y software-properties-common && \
     add-apt-repository ppa:deadsnakes/ppa -y && \
